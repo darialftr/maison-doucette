@@ -12,252 +12,271 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{
-    font-family:'Inter', sans-serif;
-    background:linear-gradient(135deg,#f5efe6,#e6d5c3);
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
+  font-family:'Inter', sans-serif;
+  background:linear-gradient(135deg,#f5efe6,#e6d5c3);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
 }
 .checkout-container{
-    width:100%;
-    max-width:900px;
-    background:#fffdf9;
-    padding:50px;
-    border-radius:20px;
-    box-shadow:0 20px 60px rgba(0,0,0,0.15);
+  width:100%;
+  max-width:900px;
+  background:#fffdf9;
+  padding:50px;
+  border-radius:20px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.15);
 }
 h2{
-    font-family:'Playfair Display', serif;
-    font-size:32px;
-    margin-bottom:30px;
-    color:#4b2e2b;
-    text-align:center;
+  font-family:'Playfair Display', serif;
+  font-size:32px;
+  margin-bottom:30px;
+  color:#4b2e2b;
+  text-align:center;
 }
 h3{
-    margin-top:30px;
-    font-family:'Playfair Display', serif;
-    color:#4b2e2b;
+  margin-top:30px;
+  font-family:'Playfair Display', serif;
+  color:#4b2e2b;
 }
 .cart-item{
-    background:#faf6f0;
-    padding:15px;
-    border-radius:15px;
-    margin-top:15px;
-    position:relative;
-    display:flex;
-    gap:15px;
+  background:#faf6f0;
+  padding:15px;
+  border-radius:15px;
+  margin-top:15px;
+  position:relative;
+  display:flex;
+  gap:15px;
+  align-items:flex-start;
 }
 .cart-item img{
-    width:80px;
-    height:80px;
-    object-fit:cover;
-    border-radius:10px;
+  width:80px;
+  height:80px;
+  object-fit:cover;
+  border-radius:10px;
+  border:1px solid #ead9c9;
+  background:#fff;
 }
 .cart-details{flex:1;font-size:14px;}
 .cart-details p{margin:3px 0;}
 .remove-item{
-    position:absolute;
-    top:10px;
-    right:12px;
-    cursor:pointer;
-    font-size:18px;
-    color:#8c6f63;
+  position:absolute;
+  top:10px;
+  right:12px;
+  cursor:pointer;
+  font-size:18px;
+  color:#8c6f63;
 }
 .remove-item:hover{color:#5a3e36;}
 .qty-controls{margin-top:8px;}
 .qty-controls button{
-    width:28px;
-    height:28px;
-    padding:0;
-    border-radius:50%;
-    font-size:16px;
-    margin:0 5px;
+  width:28px;
+  height:28px;
+  padding:0;
+  border-radius:50%;
+  font-size:16px;
+  margin:0 5px;
+  border:1px solid #d6c4b2;
+  background:#fff;
+  cursor:pointer;
 }
+.qty-controls button:hover{filter:brightness(0.96);}
 .empty-cart{
-    text-align:center;
-    padding:40px 20px;
-    border-radius:20px;
-    background:#f9f6f2;
-    margin-top:20px;
+  text-align:center;
+  padding:40px 20px;
+  border-radius:20px;
+  background:#f9f6f2;
+  margin-top:20px;
 }
 .empty-cart h3{
-    margin:10px 0 5px;
-    font-weight:600;
-    color:#4b2e2b;
+  margin:10px 0 5px;
+  font-weight:600;
+  color:#4b2e2b;
 }
 .empty-cart p{
-    font-size:14px;
-    color:#8c6f63;
-    margin-bottom:20px;
+  font-size:14px;
+  color:#8c6f63;
+  margin-bottom:20px;
 }
 .back-to-shop{
-    display:inline-block;
-    padding:12px 24px;
-    border-radius:30px;
-    text-decoration:none;
-    background:#5a3e36;
-    color:white;
-    font-size:14px;
-    transition:.3s;
+  display:inline-block;
+  padding:12px 24px;
+  border-radius:30px;
+  text-decoration:none;
+  background:#5a3e36;
+  color:white;
+  font-size:14px;
+  transition:.3s;
 }
 .back-to-shop:hover{background:#3e2723;}
 label{
-    display:block;
-    margin-top:20px;
-    font-size:14px;
-    color:#5a3e36;
+  display:block;
+  margin-top:20px;
+  font-size:14px;
+  color:#5a3e36;
 }
 input, select, textarea{
-    width:100%;
-    padding:12px;
-    margin-top:8px;
-    border-radius:10px;
-    border:1px solid #d6c4b2;
-    background:#faf6f0;
+  width:100%;
+  padding:12px;
+  margin-top:8px;
+  border-radius:10px;
+  border:1px solid #d6c4b2;
+  background:#faf6f0;
 }
 textarea{resize:none;height:100px;}
 .summary{
-    margin-top:30px;
-    padding:20px;
-    background:#f3e8dc;
-    border-radius:15px;
+  margin-top:30px;
+  padding:20px;
+  background:#f3e8dc;
+  border-radius:15px;
 }
 .summary p{margin:6px 0;}
 .total{
-    font-weight:bold;
-    font-size:18px;
-    margin-top:10px;
+  font-weight:bold;
+  font-size:18px;
+  margin-top:10px;
 }
 button{
-    margin-top:30px;
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:12px;
-    background:#5a3e36;
-    color:white;
-    font-size:16px;
-    cursor:pointer;
+  margin-top:30px;
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:#5a3e36;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
 }
 button:disabled{
-    background:#c5b7aa;
-    cursor:not-allowed;
+  background:#c5b7aa;
+  cursor:not-allowed;
 }
 #loadingMessage{
-    display:none;
-    margin-top:15px;
-    text-align:center;
-    font-style:italic;
-    color:#5a3e36;
+  display:none;
+  margin-top:15px;
+  text-align:center;
+  font-style:italic;
+  color:#5a3e36;
 }
 #errorMessage{
-    display:none;
-    margin-top:14px;
-    text-align:center;
-    color:#b34a4a;
-    font-size:14px;
+  display:none;
+  margin-top:14px;
+  text-align:center;
+  color:#b34a4a;
+  font-size:14px;
 }
 </style>
 </head>
+
 <body>
-
 <div class="checkout-container">
-<h2>Complete your order</h2>
+  <h2>Complete your order</h2>
 
-<h3>Your Cart</h3>
-<div id="cartItems"></div>
+  <h3>Your Cart</h3>
+  <div id="cartItems"></div>
 
-<div id="emptyCartMessage" class="empty-cart" style="display:none;">
-  <h3>Your cart is empty 🤍</h3>
-  <p>Looks like you haven’t added anything yet.</p>
-  <a href="https://sites.google.com/view/maisondoucette/our-collection" class="back-to-shop">
-    Go back to shop
-  </a>
-</div>
-
-<form id="checkout-form">
-
-  <label>Full Name</label>
-  <input type="text" name="name" required>
-
-  <label>Email</label>
-  <input type="email" name="email" required>
-
-  <label>Phone Number</label>
-  <input type="text" name="phone" required>
-
-  <label>Delivery Address</label>
-  <input type="text" name="address" required>
-
-  <label>Shipping Method</label>
-  <select name="delivery" required>
-    <option value="">Select shipping</option>
-    <option value="Standard (15 RON)">Standard (15 RON)</option>
-    <option value="Express (18 RON)">Express (18 RON)</option>
-    <option value="Local Pickup - Galați (Free)">Local Pickup - Galați (Free)</option>
-  </select>
-
-  <label>Payment Method</label>
-  <select name="payment" required>
-    <option value="">Select payment method</option>
-    <option value="Cash on Delivery">Cash on Delivery</option>
-    <option value="Bank Transfer">Bank Transfer</option>
-    <option value="Card (on delivery)">Card (on delivery)</option>
-  </select>
-
-  <label>Additional Notes <span style="font-size:12px;font-weight:normal;">(optional)</span></label>
-  <textarea name="notes"></textarea>
-
-  <!-- Hidden fields sent to EmailJS -->
-  <input type="hidden" name="cart_items" id="cart_items_field">
-  <input type="hidden" name="subtotal_value" id="subtotal_field">
-  <input type="hidden" name="shipping_value" id="shipping_field">
-  <input type="hidden" name="total_value" id="total_field">
-
-  <div class="summary">
-    <p>Subtotal: <span id="subtotal">0</span> RON</p>
-    <p>Shipping: <span id="shipping">0</span> RON</p>
-    <p class="total">Total: <span id="total">0</span> RON</p>
+  <div id="emptyCartMessage" class="empty-cart" style="display:none;">
+    <h3>Your cart is empty 🤍</h3>
+    <p>Looks like you haven’t added anything yet.</p>
+    <a href="https://sites.google.com/view/maisondoucette/our-collection" class="back-to-shop">
+      Go back to shop
+    </a>
   </div>
 
-  <button type="submit" id="placeOrderBtn" disabled>Place Order</button>
-  <p id="loadingMessage">Your handmade piece is being prepared with care 🤍</p>
-  <p id="errorMessage"></p>
+  <form id="checkout-form">
+    <label>Full Name</label>
+    <input type="text" name="name" required>
 
-</form>
+    <label>Email</label>
+    <input type="email" name="email" required>
+
+    <label>Phone Number</label>
+    <input type="text" name="phone" required>
+
+    <label>Delivery Address</label>
+    <input type="text" name="address" required>
+
+    <label>Shipping Method</label>
+    <select name="delivery" required>
+      <option value="">Select shipping</option>
+      <option value="Standard (15 RON)">Standard (15 RON)</option>
+      <option value="Express (18 RON)">Express (18 RON)</option>
+      <option value="Local Pickup - Galați (Free)">Local Pickup - Galați (Free)</option>
+    </select>
+
+    <label>Payment Method</label>
+    <select name="payment" required>
+      <option value="">Select payment method</option>
+      <option value="Cash on Delivery">Cash on Delivery</option>
+      <option value="Bank Transfer">Bank Transfer</option>
+      <option value="Card (on delivery)">Card (on delivery)</option>
+    </select>
+
+    <label>Additional Notes <span style="font-size:12px;font-weight:normal;">(optional)</span></label>
+    <textarea name="notes"></textarea>
+
+    <!-- Hidden fields for EmailJS -->
+    <input type="hidden" name="cart_items" id="cart_items_field">
+    <input type="hidden" name="subtotal_value" id="subtotal_field">
+    <input type="hidden" name="shipping_value" id="shipping_field">
+    <input type="hidden" name="total_value" id="total_field">
+
+    <div class="summary">
+      <p>Subtotal: <span id="subtotal">0</span> RON</p>
+      <p>Shipping: <span id="shipping">0</span> RON</p>
+      <p class="total">Total: <span id="total">0</span> RON</p>
+    </div>
+
+    <button type="submit" id="placeOrderBtn" disabled>Place Order</button>
+    <p id="loadingMessage">Your handmade piece is being prepared with care 🤍</p>
+    <p id="errorMessage"></p>
+  </form>
 </div>
 
 <script>
-/* =========================
-   EMAILJS CONFIG
-   =========================
-  */
-(function(){
-  emailjs.init("uXq_doL-7YdoXPSfK");
-})();
+/* ===== EmailJS init ===== */
+(function(){ emailjs.init("uXq_doL-7YdoXPSfK"); })();
 
-// !!! SCHIMBĂ astea două cu ale tale reale din EmailJS:
-const EMAILJS_SERVICE_ID  = "service_cqo3myr";
-const EMAILJS_TEMPLATE_ID = "template_m4kga7c";
-const EMAILJS_TEMPLATE_ID = "template_o7td3ak";
+// IMPORTANT: completeaza astea 2 din EmailJS
+const EMAILJS_SERVICE_ID  = "YOUR_SERVICE_ID";
+const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+/* ===== Cart ===== */
+let cart = [];
 let subtotal = 0;
 let shippingCost = 0;
 
-function money(n){
-  return Number(n || 0);
+function safeParseCart(){
+  try{
+    const raw = localStorage.getItem("cart");
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  }catch(e){
+    return [];
+  }
+}
+
+function n(val){
+  const num = Number(val);
+  return Number.isFinite(num) ? num : 0;
+}
+
+function getItemName(item){
+  return item?.name || item?.product || "Item";
+}
+
+function getItemImage(item){
+  // uneori poti avea image, alteori poate bodyImage etc.
+  return item?.image || item?.img || "";
 }
 
 function buildCartText(){
   if(!cart.length) return "Cart empty";
-
   return cart.map((item, i) => {
     const lines = [];
-    lines.push(`${i+1}. ${item.name || "Item"} x${item.quantity || 1}`);
-    if(item.price != null) lines.push(`   Unit: ${item.price} RON`);
+    lines.push(`${i+1}. ${getItemName(item)} x${n(item.quantity) || 1}`);
+    lines.push(`   Unit: ${n(item.price)} RON`);
     if(item.material) lines.push(`   Material: ${item.material}`);
     if(item.size) lines.push(`   Size: ${item.size}`);
     if(item.bodyColor) lines.push(`   Body Colour: ${item.bodyColor}`);
@@ -267,7 +286,7 @@ function buildCartText(){
     if(item.heartColor) lines.push(`   Heart Colour: ${item.heartColor}`);
     if(item.starColor) lines.push(`   Star Colour: ${item.starColor}`);
     if(item.bowColor) lines.push(`   Bow Colour: ${item.bowColor}`);
-    lines.push(`   Line total: ${money(item.price) * money(item.quantity)} RON`);
+    lines.push(`   Line total: ${n(item.price) * (n(item.quantity)||1)} RON`);
     return lines.join("\n");
   }).join("\n\n");
 }
@@ -275,6 +294,8 @@ function buildCartText(){
 function renderCart(){
   const container = document.getElementById("cartItems");
   const emptyMsg = document.getElementById("emptyCartMessage");
+
+  cart = safeParseCart();
   container.innerHTML = "";
   subtotal = 0;
 
@@ -284,41 +305,46 @@ function renderCart(){
     emptyMsg.style.display = "none";
   }
 
-  cart.forEach((item,index)=>{
-    subtotal += money(item.price) * money(item.quantity);
+  cart.forEach((item, index) => {
+    const qty = n(item.quantity) || 1;
+    const price = n(item.price);
+    subtotal += price * qty;
+
+    const img = getItemImage(item);
 
     container.innerHTML += `
       <div class="cart-item">
         <span class="remove-item" onclick="removeItem(${index})">✕</span>
-        ${item.image ? `<img src="${item.image}" alt="item">` : ""}
+        ${img ? `<img src="${img}" alt="item">` : ""}
         <div class="cart-details">
-          <strong>${item.name || "Item"}</strong>
-          <p>${money(item.price)} RON x ${money(item.quantity)}</p>
+          <strong>${getItemName(item)}</strong>
+          <p>${price} RON x ${qty}</p>
 
-          ${item.material ? `<p>Material: ${item.material}</p>`:""}
-          ${item.size ? `<p>Size: ${item.size}</p>`:""}
-          ${item.bodyColor ? `<p>Body Colour: ${item.bodyColor}</p>`:""}
+          ${item.material ? `<p>Material: ${item.material}</p>` : ""}
+          ${item.size ? `<p>Size: ${item.size}</p>` : ""}
+          ${item.bodyColor ? `<p>Body Colour: ${item.bodyColor}</p>` : ""}
 
-          ${item.baseColor ? `<p>Strawberry Colour: ${item.baseColor}</p>`:""}
-          ${item.chocolateColor ? `<p>Chocolate Colour: ${item.chocolateColor}</p>`:""}
+          ${item.baseColor ? `<p>Strawberry Colour: ${item.baseColor}</p>` : ""}
+          ${item.chocolateColor ? `<p>Chocolate Colour: ${item.chocolateColor}</p>` : ""}
 
-          ${item.accessory ? `<p>Accessory: ${item.accessory}</p>`:""}
-          ${item.heartColor ? `<p>Heart Colour: ${item.heartColor}</p>`:""}
-          ${item.starColor ? `<p>Star Colour: ${item.starColor}</p>`:""}
-          ${item.bowColor ? `<p>Bow Colour: ${item.bowColor}</p>`:""}
+          ${item.accessory ? `<p>Accessory: ${item.accessory}</p>` : ""}
+          ${item.heartColor ? `<p>Heart Colour: ${item.heartColor}</p>` : ""}
+          ${item.starColor ? `<p>Star Colour: ${item.starColor}</p>` : ""}
+          ${item.bowColor ? `<p>Bow Colour: ${item.bowColor}</p>` : ""}
 
           <div class="qty-controls">
             <button type="button" onclick="changeQty(${index},-1)">-</button>
             <button type="button" onclick="changeQty(${index},1)">+</button>
           </div>
         </div>
-      </div>`;
+      </div>
+    `;
   });
 
-  document.getElementById("subtotal").innerText = subtotal;
-  document.getElementById("total").innerText = subtotal + shippingCost;
+  document.getElementById("subtotal").innerText = String(subtotal);
+  document.getElementById("total").innerText = String(subtotal + shippingCost);
 
-  // update hidden fields for EmailJS
+  // hidden for email
   document.getElementById("cart_items_field").value = buildCartText();
   document.getElementById("subtotal_field").value = String(subtotal);
   document.getElementById("shipping_field").value = String(shippingCost);
@@ -327,26 +353,32 @@ function renderCart(){
   validateCheckout();
 }
 
-function changeQty(index,delta){
-  cart[index].quantity = money(cart[index].quantity) + delta;
-  if(cart[index].quantity <= 0) cart.splice(index,1);
+function changeQty(index, delta){
+  cart = safeParseCart();
+  if(!cart[index]) return;
+
+  cart[index].quantity = (n(cart[index].quantity) || 1) + delta;
+  if(cart[index].quantity <= 0) cart.splice(index, 1);
+
   localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
 }
 
 function removeItem(index){
-  cart.splice(index,1);
+  cart = safeParseCart();
+  cart.splice(index, 1);
   localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
 }
 
+/* ===== Shipping ===== */
 document.querySelector("select[name='delivery']").addEventListener("change", function(){
   if(this.value.includes("Standard")) shippingCost = 15;
   else if(this.value.includes("Express")) shippingCost = 18;
   else shippingCost = 0;
 
-  document.getElementById("shipping").innerText = shippingCost;
-  document.getElementById("total").innerText = subtotal + shippingCost;
+  document.getElementById("shipping").innerText = String(shippingCost);
+  document.getElementById("total").innerText = String(subtotal + shippingCost);
 
   document.getElementById("shipping_field").value = String(shippingCost);
   document.getElementById("total_field").value = String(subtotal + shippingCost);
@@ -354,17 +386,18 @@ document.querySelector("select[name='delivery']").addEventListener("change", fun
   validateCheckout();
 });
 
+/* ===== Validation ===== */
 function validateCheckout(){
   const requiredFields = document.querySelectorAll(
     "input[name='name'], input[name='email'], input[name='phone'], input[name='address'], select[name='delivery'], select[name='payment']"
   );
 
   let allFilled = true;
-  requiredFields.forEach(field=>{
+  requiredFields.forEach(field => {
     if(field.value.trim() === "") allFilled = false;
   });
 
-  const cartNotEmpty = cart.length > 0;
+  const cartNotEmpty = safeParseCart().length > 0;
   document.getElementById("placeOrderBtn").disabled = !(allFilled && cartNotEmpty);
 }
 
@@ -375,9 +408,7 @@ document.querySelectorAll(
   field.addEventListener("change", validateCheckout);
 });
 
-/* =========================
-   SUBMIT -> SEND EMAIL -> REDIRECT
-   ========================= */
+/* ===== Submit -> EmailJS -> Redirect ===== */
 document.getElementById("checkout-form").addEventListener("submit", async function(e){
   e.preventDefault();
 
@@ -388,44 +419,43 @@ document.getElementById("checkout-form").addEventListener("submit", async functi
   err.style.display = "none";
   err.textContent = "";
 
-  // safety: must have cart
+  cart = safeParseCart();
   if(cart.length === 0){
     err.textContent = "Your cart is empty.";
     err.style.display = "block";
     return;
   }
 
-  // must have service/template set
   if(EMAILJS_SERVICE_ID === "YOUR_SERVICE_ID" || EMAILJS_TEMPLATE_ID === "YOUR_TEMPLATE_ID"){
-    err.textContent = "EmailJS is not configured. Please set SERVICE_ID and TEMPLATE_ID in the code.";
+    err.textContent = "EmailJS is not configured. Set SERVICE_ID and TEMPLATE_ID in the code.";
     err.style.display = "block";
     return;
   }
+
+  // refresh hidden fields right before send
+  document.getElementById("cart_items_field").value = buildCartText();
+  document.getElementById("subtotal_field").value = String(subtotal);
+  document.getElementById("shipping_field").value = String(shippingCost);
+  document.getElementById("total_field").value = String(subtotal + shippingCost);
 
   btn.disabled = true;
   loading.style.display = "block";
 
   try{
-    // Ensure hidden fields are updated right before sending
-    document.getElementById("cart_items_field").value = buildCartText();
-    document.getElementById("subtotal_field").value = String(subtotal);
-    document.getElementById("shipping_field").value = String(shippingCost);
-    document.getElementById("total_field").value = String(subtotal + shippingCost);
-
     await emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, this);
 
-    // success: clear cart + redirect
+    // success
     localStorage.removeItem("cart");
-    cart = [];
 
-    // if you have a thankyou page:
+    // optional: also reset form
+    // this.reset();
+
     window.location.href = "thankyou.html";
   }catch(error){
     console.error("EmailJS error:", error);
     btn.disabled = false;
     loading.style.display = "none";
-    err.textContent =
-      "Something went wrong sending the email. Please check EmailJS settings (Service/Template/Public Key) and try again.";
+    err.textContent = "Email sending failed. Check EmailJS Service/Template/Public Key and try again.";
     err.style.display = "block";
   }
 });
