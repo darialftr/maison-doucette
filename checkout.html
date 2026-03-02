@@ -443,8 +443,8 @@ document.getElementById("checkout-form").addEventListener("submit", async functi
   loading.style.display = "block";
 
   try{
-    await emailjs.sendForm(service_cqo3myr, template_m4kga7c, this);
-    await emailjs.sendForm(service_cqo3myr, template_o7td3ak, this);
+    await emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_OWNER, this);
+    await emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_CLIENT, this);
 
     // success
     localStorage.removeItem("cart");
@@ -467,5 +467,6 @@ renderCart();
 
 </body>
 </html>
+
 
 
