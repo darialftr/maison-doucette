@@ -457,8 +457,8 @@ select:focus{
     position:absolute;
     display:none;
     opacity:0;
-    transform:translateY(10px) scale(0.98);
-    transition:opacity 0.35s ease, transform 0.35s ease;
+    transform:translateY(6px) scale(0.985);
+    transition:none;
     filter:drop-shadow(0 18px 28px rgba(0,0,0,0.12));
     z-index:2;
 }
@@ -471,8 +471,12 @@ select:focus{
     max-width:50%;
     filter:drop-shadow(0 10px 18px rgba(0,0,0,0.10));
     pointer-events:none;
+    opacity:0;
+    transform-origin:center;
+    transition:none;
 }
 
+/* Heart + Star centered in arms */
 #heartImg{
     top:64%;
     left:50%;
@@ -485,10 +489,21 @@ select:focus{
     width:350px;
     transform:translate(-50%,-50%);
 }
+
+/* Bow to right ear, tilted right */
 #bowImg{
     top:34%;
     left:64%;
     transform:translate(-50%,-50%) rotate(29deg);
+}
+
+/* Elegant quick appearance */
+.preview-appear{
+    animation:previewAppear 0.26s var(--ease) forwards;
+}
+
+.preview-appear-bow{
+    animation:previewAppearBow 0.26s var(--ease) forwards;
 }
 
 /* ===== TOAST ===== */
@@ -549,6 +564,39 @@ select:focus{
     to{
         opacity:1;
         transform:translateY(0);
+    }
+}
+
+@keyframes previewAppear{
+    0%{
+        opacity:0;
+        transform:translateY(6px) scale(0.985);
+    }
+    100%{
+        opacity:1;
+        transform:translateY(0) scale(1);
+    }
+}
+
+@keyframes previewAppearCenter{
+    0%{
+        opacity:0;
+        transform:translate(-50%,-47%) scale(0.985);
+    }
+    100%{
+        opacity:1;
+        transform:translate(-50%,-50%) scale(1);
+    }
+}
+
+@keyframes previewAppearBow{
+    0%{
+        opacity:0;
+        transform:translate(-50%,-47%) rotate(29deg) scale(0.985);
+    }
+    100%{
+        opacity:1;
+        transform:translate(-50%,-50%) rotate(29deg) scale(1);
     }
 }
 
@@ -682,7 +730,6 @@ select:focus{
 
     <div class="container">
 
-        <!-- OPTIONS -->
         <section class="controls-card card">
             <div class="controls-inner">
                 <h2 class="section-mini-title">Choose your details</h2>
@@ -729,7 +776,6 @@ select:focus{
             </div>
         </section>
 
-        <!-- PREVIEW -->
         <section class="preview-card card">
             <div class="preview-shell">
                 <h2 class="preview-title">Bunny Preview</h2>
@@ -746,7 +792,6 @@ select:focus{
             </div>
         </section>
 
-        <!-- PRICE / QTY / BUTTONS -->
         <section class="checkout-card card">
             <div class="checkout-inner">
                 <div class="price-box">
@@ -784,16 +829,13 @@ select:focus{
 <div id="toast" class="toast">Product added to cart successfully.</div>
 
 <script>
-/* ===== PRICES ===== */
 let basePrice = 45;
 let quantity = 1;
 
-/* ===== ACCESSORY COLOR STATE ===== */
 let heartColor = "";
 let starColor  = "";
 let bowColor   = "";
 
-/* ===== ELEMENTS ===== */
 const material = document.getElementById("material");
 const size = document.getElementById("size");
 const bodyColor = document.getElementById("bodyColor");
@@ -818,7 +860,6 @@ document.getElementById("plusBtn").addEventListener("click", () => changeQty(1))
 document.getElementById("checkoutBtn").addEventListener("click", goToCheckout);
 addBtn.addEventListener("click", addToCart);
 
-/* ===== IMAGE MAP ===== */
 const imageMap = {
   "Cream": "Bunny_Colors/bunny-cream.png",
   "Brown": "Bunny_Colors/bunny-brown.png",
@@ -829,7 +870,6 @@ const imageMap = {
   "Dark blue": "Bunny_Colors/bunny-dark-blue.png"
 };
 
-/* ===== ACCESSORY COLORS ===== */
 const colorOptionsHtml = `
   <option value="">Select colour...</option>
   <option value="Bright pink">Bright pink</option>
@@ -934,6 +974,20 @@ function syncColorsFromUI(){
   if(bowSel)   bowColor   = normalizeColorLabel(bowSel.value);
 }
 
+function animatePreviewElement(el, type = "default"){
+  el.classList.remove("preview-appear", "preview-appear-bow");
+
+  void el.offsetWidth;
+
+  if(type === "bow"){
+    el.classList.add("preview-appear-bow");
+  }else if(type === "centered"){
+    el.style.animation = "previewAppearCenter 0.26s cubic-bezier(.22,.61,.36,1) forwards";
+  }else{
+    el.classList.add("preview-appear");
+  }
+}
+
 async function renderAccessory(type, colorLabel){
   const mapEl = { heart: heartImg, star: starImg, bow: bowImg };
   const imgEl = mapEl[type];
@@ -942,6 +996,7 @@ async function renderAccessory(type, colorLabel){
   if(!colorLabel){
     imgEl.style.display="none";
     imgEl.removeAttribute("src");
+    imgEl.style.opacity = "0";
     return;
   }
 
@@ -952,6 +1007,15 @@ async function renderAccessory(type, colorLabel){
   if(type === "heart") showHint("heartHint", result.ok, example);
   if(type === "star")  showHint("starHint",  result.ok, example);
   if(type === "bow")   showHint("bowHint",   result.ok, example);
+
+  if(result.ok){
+    imgEl.style.opacity = "0";
+    if(type === "bow"){
+      animatePreviewElement(imgEl, "bow");
+    }else{
+      animatePreviewElement(imgEl, "centered");
+    }
+  }
 }
 
 async function renderAccessories(){
@@ -977,6 +1041,9 @@ function updateAccessoryOptions(){
     heartImg.style.display="none"; heartImg.removeAttribute("src");
     starImg.style.display="none";  starImg.removeAttribute("src");
     bowImg.style.display="none";   bowImg.removeAttribute("src");
+    heartImg.style.opacity = "0";
+    starImg.style.opacity = "0";
+    bowImg.style.opacity = "0";
     return;
   }
 
@@ -1037,6 +1104,13 @@ function updateAccessoryOptions(){
   renderAccessories();
 }
 
+function animateBunnyImage(){
+  bunnyImage.classList.remove("preview-appear");
+  bunnyImage.style.animation = "none";
+  void bunnyImage.offsetWidth;
+  bunnyImage.style.animation = "previewAppear 0.26s cubic-bezier(.22,.61,.36,1) forwards";
+}
+
 function updatePreview(){
   const selected = bodyColor.value;
 
@@ -1059,16 +1133,12 @@ function updatePreview(){
 
   previewMessage.style.display = "none";
 
-  bunnyImage.style.opacity = 0;
-  bunnyImage.style.transform = "translateY(10px) scale(0.98)";
   bunnyImage.style.display = "block";
+  bunnyImage.style.opacity = "0";
   bunnyImage.src = src;
 
   bunnyImage.onload = () => {
-    requestAnimationFrame(() => {
-      bunnyImage.style.opacity = 1;
-      bunnyImage.style.transform = "translateY(0) scale(1)";
-    });
+    animateBunnyImage();
   };
 
   bunnyImage.onerror = () => {
@@ -1150,7 +1220,10 @@ function goToCheckout(){
 
 material.addEventListener("change", () => { updatePrice(); validateForm(); });
 size.addEventListener("change", () => { updatePrice(); validateForm(); });
-bodyColor.addEventListener("change", () => { updatePreview(); validateForm(); });
+bodyColor.addEventListener("change", () => {
+  updatePreview();
+  validateForm();
+});
 accessory.addEventListener("change", () => {
   updateAccessoryOptions();
   updatePrice();
@@ -1182,7 +1255,6 @@ document.addEventListener("mouseenter", () => {
 window.addEventListener("scroll", handleHeaderShadow);
 window.addEventListener("load", handleHeaderShadow);
 
-/* ===== INITIAL ===== */
 updatePrice();
 updatePreview();
 updateAccessoryOptions();
