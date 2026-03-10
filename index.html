@@ -59,51 +59,52 @@
       font: inherit;
     }
 
-.sparkle-layer{
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.9;
-  background:
-    radial-gradient(circle at 12% 18%, rgba(255,255,255,0.20) 0 0, rgba(255,255,255,0.20) 0 18px, transparent 42px),
-    radial-gradient(circle at 24% 34%, rgba(255,248,242,0.16) 0 0, rgba(255,248,242,0.16) 0 14px, transparent 36px),
-    radial-gradient(circle at 38% 14%, rgba(255,255,255,0.18) 0 0, rgba(255,255,255,0.18) 0 16px, transparent 40px),
-    radial-gradient(circle at 56% 24%, rgba(255,250,245,0.16) 0 0, rgba(255,250,245,0.16) 0 20px, transparent 46px),
-    radial-gradient(circle at 74% 18%, rgba(255,255,255,0.18) 0 0, rgba(255,255,255,0.18) 0 16px, transparent 40px),
-    radial-gradient(circle at 88% 28%, rgba(255,248,242,0.15) 0 0, rgba(255,248,242,0.15) 0 18px, transparent 42px),
-    radial-gradient(circle at 18% 70%, rgba(255,255,255,0.14) 0 0, rgba(255,255,255,0.14) 0 20px, transparent 46px),
-    radial-gradient(circle at 42% 82%, rgba(255,248,242,0.14) 0 0, rgba(255,248,242,0.14) 0 16px, transparent 40px),
-    radial-gradient(circle at 68% 76%, rgba(255,255,255,0.16) 0 0, rgba(255,255,255,0.16) 0 18px, transparent 42px),
-    radial-gradient(circle at 84% 68%, rgba(255,250,245,0.13) 0 0, rgba(255,250,245,0.13) 0 22px, transparent 50px);
-  filter: blur(14px);
-  animation: shimmerBlur 6s ease-in-out infinite;
-}
+    .sparkle-layer{
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.9;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255,255,255,0.20) 0 0, rgba(255,255,255,0.20) 0 18px, transparent 42px),
+        radial-gradient(circle at 24% 34%, rgba(255,248,242,0.16) 0 0, rgba(255,248,242,0.16) 0 14px, transparent 36px),
+        radial-gradient(circle at 38% 14%, rgba(255,255,255,0.18) 0 0, rgba(255,255,255,0.18) 0 16px, transparent 40px),
+        radial-gradient(circle at 56% 24%, rgba(255,250,245,0.16) 0 0, rgba(255,250,245,0.16) 0 20px, transparent 46px),
+        radial-gradient(circle at 74% 18%, rgba(255,255,255,0.18) 0 0, rgba(255,255,255,0.18) 0 16px, transparent 40px),
+        radial-gradient(circle at 88% 28%, rgba(255,248,242,0.15) 0 0, rgba(255,248,242,0.15) 0 18px, transparent 42px),
+        radial-gradient(circle at 18% 70%, rgba(255,255,255,0.14) 0 0, rgba(255,255,255,0.14) 0 20px, transparent 46px),
+        radial-gradient(circle at 42% 82%, rgba(255,248,242,0.14) 0 0, rgba(255,248,242,0.14) 0 16px, transparent 40px),
+        radial-gradient(circle at 68% 76%, rgba(255,255,255,0.16) 0 0, rgba(255,255,255,0.16) 0 18px, transparent 42px),
+        radial-gradient(circle at 84% 68%, rgba(255,250,245,0.13) 0 0, rgba(255,250,245,0.13) 0 22px, transparent 50px);
+      filter: blur(14px);
+      animation: shimmerBlur 6s ease-in-out infinite;
+    }
 
-.sparkle-layer::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(circle at 16% 22%, rgba(255,255,255,0.12) 0 0, rgba(255,255,255,0.12) 0 34px, transparent 70px),
-    radial-gradient(circle at 48% 30%, rgba(255,248,242,0.10) 0 0, rgba(255,248,242,0.10) 0 28px, transparent 62px),
-    radial-gradient(circle at 76% 20%, rgba(255,255,255,0.11) 0 0, rgba(255,255,255,0.11) 0 32px, transparent 68px),
-    radial-gradient(circle at 30% 78%, rgba(255,248,242,0.09) 0 0, rgba(255,248,242,0.09) 0 30px, transparent 66px),
-    radial-gradient(circle at 72% 74%, rgba(255,255,255,0.10) 0 0, rgba(255,255,255,0.10) 0 36px, transparent 74px);
-  filter: blur(28px);
-  opacity: 0.7;
-}
+    .sparkle-layer::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 16% 22%, rgba(255,255,255,0.12) 0 0, rgba(255,255,255,0.12) 0 34px, transparent 70px),
+        radial-gradient(circle at 48% 30%, rgba(255,248,242,0.10) 0 0, rgba(255,248,242,0.10) 0 28px, transparent 62px),
+        radial-gradient(circle at 76% 20%, rgba(255,255,255,0.11) 0 0, rgba(255,255,255,0.11) 0 32px, transparent 68px),
+        radial-gradient(circle at 30% 78%, rgba(255,248,242,0.09) 0 0, rgba(255,248,242,0.09) 0 30px, transparent 66px),
+        radial-gradient(circle at 72% 74%, rgba(255,255,255,0.10) 0 0, rgba(255,255,255,0.10) 0 36px, transparent 74px);
+      filter: blur(28px);
+      opacity: 0.7;
+    }
 
-@keyframes shimmerBlur {
-  0%, 100% {
-    opacity: 0.45;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.85;
-    transform: scale(1.03);
-  }
-}
+    @keyframes shimmerBlur {
+      0%, 100% {
+        opacity: 0.45;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.85;
+        transform: scale(1.03);
+      }
+    }
+
     .cursor-glow {
       position: fixed;
       width: 360px;
@@ -246,6 +247,57 @@
     .dropdown-menu a:hover {
       background: #f7eee9;
       transform: translateX(2px);
+    }
+
+    .cart-icon {
+      position: relative;
+      margin-left: 6px;
+      flex-shrink: 0;
+    }
+
+    .cart-icon a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 247, 240, 0.88);
+      border: 1px solid rgba(188, 145, 130, 0.25);
+      box-shadow: 0 10px 18px rgba(91, 71, 63, 0.06);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+      padding: 0;
+    }
+
+    .cart-icon a:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 250, 246, 0.98);
+      box-shadow: 0 14px 24px rgba(91, 71, 63, 0.10);
+    }
+
+    .cart-icon svg {
+      width: 23px;
+      height: 23px;
+      stroke: var(--text);
+    }
+
+    #cart-count {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      min-width: 19px;
+      height: 19px;
+      padding: 0 5px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent-deep), var(--accent));
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 14px rgba(188,145,130,0.28);
+      line-height: 1;
     }
 
     .hero {
@@ -767,6 +819,10 @@
         font-size: 0.92rem;
       }
 
+      .cart-icon {
+        margin-left: 0;
+      }
+
       .container {
         width: min(var(--container), calc(100% - 24px));
       }
@@ -823,6 +879,17 @@
         </li>
         <li><a href="#about">About us</a></li>
         <li><a href="#contact">Contact us</a></li>
+
+        <li class="cart-icon">
+          <a href="cart.html" aria-label="View cart">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="9" cy="20" r="1"></circle>
+              <circle cx="18" cy="20" r="1"></circle>
+              <path d="M2 3h3l2.2 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.5L21 6H7.1"></path>
+            </svg>
+            <span id="cart-count">0</span>
+          </a>
+        </li>
       </ul>
     </div>
   </header>
@@ -972,6 +1039,7 @@
     const revealItems = document.querySelectorAll('.reveal');
     const cursorGlow = document.getElementById('cursorGlow');
     const heroCard = document.getElementById('heroCard');
+    const cartCount = document.getElementById('cart-count');
     let activeIndex = 0;
 
     function updateCarousel() {
@@ -1006,6 +1074,25 @@
       }
     }
 
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      let total = 0;
+
+      cart.forEach(item => {
+        total += Number(item.quantity || 1);
+      });
+
+      if (!cartCount) return;
+
+      cartCount.textContent = total;
+
+      if (total === 0) {
+        cartCount.style.display = 'none';
+      } else {
+        cartCount.style.display = 'flex';
+      }
+    }
+
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -1022,6 +1109,7 @@
     window.addEventListener('load', () => {
       updateCarousel();
       handleHeaderShadow();
+      updateCartCount();
     });
 
     window.addEventListener('resize', updateCarousel);
