@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ro">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,67 +8,273 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
+:root{
+    --bg:#f7f1eb;
+    --bg-soft:#fbf7f3;
+    --cream:#fffaf6;
+    --ocre:#d2b08d;
+    --ocre-deep:#b88e67;
+    --brown:#6a5145;
+    --brown-soft:#8b6f61;
+    --line:rgba(184,142,103,0.20);
+    --shadow:0 20px 50px rgba(106,81,69,0.12);
+    --shadow-soft:0 14px 28px rgba(106,81,69,0.08);
+    --shadow-strong:0 24px 54px rgba(106,81,69,0.18);
+    --radius-xl:36px;
+    --radius-lg:26px;
+    --radius-md:18px;
+    --ease:cubic-bezier(.22,.61,.36,1);
+}
+
+*{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+
 body{
     margin:0;
     font-family:'Inter',sans-serif;
-    background:#f6f2ed;
-    color:#3e3a36;
+    color:var(--brown);
+    background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.75), transparent 22%),
+        radial-gradient(circle at bottom right, rgba(210,176,141,0.10), transparent 25%),
+        linear-gradient(180deg, #f9f4ef 0%, #f4ece4 100%);
+    overflow-x:hidden;
 }
 
-header{
-    text-align:center;
-    padding:40px 20px 20px;
+a{ text-decoration:none; color:inherit; }
+img{ display:block; max-width:100%; }
+
+.cursor-glow{
+    position:fixed;
+    width:340px;
+    height:340px;
+    left:0;
+    top:0;
+    pointer-events:none;
+    z-index:0;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(210,176,141,0.16) 0%, rgba(210,176,141,0.08) 36%, rgba(210,176,141,0.02) 62%, transparent 74%);
+    transform:translate(-50%, -50%);
+    transition:opacity 0.25s ease;
+    mix-blend-mode:multiply;
+    opacity:0.9;
 }
 
-h1{
+.site-header{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:1000;
+    background:rgba(255,250,246,0.78);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+    transition:box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.site-header.scrolled{
+    background:rgba(255,250,246,0.86);
+    box-shadow:0 8px 22px rgba(106,81,69,0.08);
+}
+
+.nav{
+    max-width:1220px;
+    margin:auto;
+    min-height:88px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    padding:0 20px;
+    position:relative;
+    z-index:2;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    transition:transform 0.35s var(--ease);
+}
+
+.logo:hover{ transform:translateY(-1px); }
+
+.logo img{
+    width:58px;
+    height:58px;
+    object-fit:cover;
+    border-radius:50%;
+    background:rgba(255,255,255,0.95);
+    padding:4px;
+    box-shadow:0 8px 18px rgba(106,81,69,0.10);
+    transition:transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+
+.logo:hover img{
+    transform:scale(1.04);
+    box-shadow:0 12px 24px rgba(106,81,69,0.14);
+}
+
+.logo span{
     font-family:'Playfair Display',serif;
-    font-size:32px;
+    font-size:1.08rem;
+    letter-spacing:0.04em;
+}
+
+.menu{
+    display:flex;
+    gap:28px;
+    list-style:none;
+    margin:0;
+    padding:0;
+    font-size:0.96rem;
+}
+
+.menu a{
+    transition:opacity 0.25s ease, transform 0.25s ease;
+}
+
+.menu a:hover{
+    opacity:0.68;
+    transform:translateY(-1px);
+}
+
+.page-wrap{
+    max-width:1320px;
+    margin:auto;
+    padding:138px 20px 70px;
+    position:relative;
+    z-index:2;
+}
+
+.page-head{
+    text-align:center;
+    margin-bottom:28px;
+    opacity:0;
+    transform:translateY(22px);
+    animation:fadeUp 0.8s var(--ease) forwards 0.12s;
+}
+
+.page-head .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 16px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.72);
+    border:1px solid var(--line);
+    font-size:0.78rem;
+    text-transform:uppercase;
+    letter-spacing:0.16em;
+    color:var(--brown-soft);
+    box-shadow:0 8px 20px rgba(106,81,69,0.05);
+    margin-bottom:14px;
+}
+
+.page-head h1{
+    font-family:'Playfair Display',serif;
+    font-size:clamp(2rem,4vw,3rem);
     font-weight:500;
     margin:0;
 }
 
-/* ===== LAYOUT (DESKTOP) ===== */
 .container{
     display:grid;
-    grid-template-columns: 360px minmax(360px, 560px);
-    grid-template-rows: auto auto;
-    gap:100px 120px;
-    padding:40px 80px 80px;
-    max-width:1300px;
-    margin:0 auto;
+    grid-template-columns:380px minmax(380px, 600px);
+    grid-template-rows:auto auto;
+    gap:34px 46px;
     align-items:start;
     justify-content:center;
 }
-.controls{ grid-column:1; grid-row:1; }
-.checkout-area{ grid-column:1; grid-row:2; margin-top:6px; }
-.preview{ grid-column:2; grid-row:1 / span 2; }
 
-/* ===== FORM ===== */
+.controls-card{ grid-column:1; grid-row:1; }
+.checkout-card{ grid-column:1; grid-row:2; }
+.preview-card{ grid-column:2; grid-row:1 / span 2; }
+
+.card{
+    background:rgba(255,250,246,0.82);
+    border:1px solid var(--line);
+    border-radius:var(--radius-xl);
+    box-shadow:var(--shadow);
+    overflow:hidden;
+}
+
+.controls-card,
+.checkout-card,
+.preview-card{
+    opacity:0;
+    transform:translateY(26px);
+    animation:fadeUp 0.9s var(--ease) forwards;
+}
+
+.controls-card{ animation-delay:0.18s; }
+.preview-card{ animation-delay:0.28s; }
+.checkout-card{ animation-delay:0.38s; }
+
+.controls-inner,
+.checkout-inner,
+.preview-shell{
+    padding:28px;
+}
+
+.section-mini-title,
+.preview-title{
+    font-family:'Playfair Display',serif;
+    font-size:1.5rem;
+    margin:0 0 20px;
+    font-weight:500;
+}
+
+.preview-title{
+    text-align:center;
+    margin-bottom:18px;
+}
+
 label{
     font-size:12px;
     letter-spacing:1.5px;
     text-transform:uppercase;
-    margin-bottom:6px;
+    margin-bottom:7px;
     display:block;
+    color:var(--brown-soft);
 }
 
 select{
     width:100%;
-    padding:12px;
+    padding:14px;
     margin-bottom:22px;
-    border:1px solid #d8d2ca;
-    background:white;
-    font-family:'Inter';
+    border:1px solid #ddd3c8;
+    background:rgba(255,255,255,0.9);
+    font-family:'Inter',sans-serif;
     font-size:14px;
-    border-radius:8px;
+    border-radius:12px;
+    color:var(--brown);
+    outline:none;
+    transition:border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
-.price-box{
-    font-family:'Playfair Display';
-    font-size:26px;
-    margin-top:5px;
-    text-align:center;
+select:focus{
+    border-color:var(--ocre);
+    box-shadow:0 0 0 4px rgba(210,176,141,0.12);
 }
+
+.hint{
+    margin-top:-14px;
+    margin-bottom:18px;
+    font-size:12px;
+    color:#a39d95;
+    line-height:1.35;
+}
+
+.hint.error{ color:#b34a4a; }
+
+.price-box{
+    font-family:'Playfair Display',serif;
+    font-size:28px;
+    text-align:center;
+    color:var(--brown);
+}
+
+.quantity-wrap{ margin-top:20px; }
 
 .quantity-box{
     display:flex;
@@ -79,13 +285,20 @@ select{
 }
 
 .quantity-box button{
-    width:44px;
-    height:44px;
+    width:46px;
+    height:46px;
     border:1px solid #d8d2ca;
     background:white;
     font-size:20px;
     cursor:pointer;
-    border-radius:10px;
+    border-radius:12px;
+    color:var(--brown);
+    transition:transform 0.2s ease, box-shadow 0.25s ease;
+}
+
+.quantity-box button:hover{
+    transform:translateY(-1px);
+    box-shadow:0 10px 18px rgba(106,81,69,0.08);
 }
 
 .quantity-box span{
@@ -94,29 +307,35 @@ select{
     font-size:16px;
 }
 
-button{
+.action-btn{
     width:100%;
-    padding:14px;
+    padding:15px 18px;
     margin-top:14px;
     border:none;
-    font-family:'Inter';
+    font-family:'Inter',sans-serif;
     font-size:13px;
     letter-spacing:1px;
     cursor:pointer;
-    border-radius:10px;
+    border-radius:14px;
     transition:all 0.25s ease;
 }
 
 .add-btn{
-    background:#3e3a36;
+    background:linear-gradient(135deg, var(--ocre-deep), var(--ocre));
     color:white;
+    box-shadow:0 16px 30px rgba(184,142,103,0.22);
 }
-.add-btn:hover{ filter:brightness(0.95); }
+
+.add-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 22px 38px rgba(184,142,103,0.30);
+}
 
 .add-btn:disabled{
-    background:#cfc8c0;
+    background:#d7cfc6;
     cursor:not-allowed;
-    filter:none;
+    box-shadow:none;
+    transform:none;
 }
 
 .checkout-btn{
@@ -124,39 +343,30 @@ button{
     background:#3e3a36;
     color:white;
 }
-.checkout-btn:hover{ filter:brightness(0.95); }
+
+.checkout-btn:hover{
+    filter:brightness(0.95);
+    transform:translateY(-1px);
+}
 
 .continue-btn{
-    background:transparent;
-    border:1px solid #3e3a36;
-    color:#3e3a36;
+    background:rgba(255,255,255,0.72);
+    border:1px solid var(--line);
+    color:var(--brown);
 }
+
 .continue-btn:hover{
-    background:#3e3a36;
-    color:white;
+    background:#f3ebe4;
 }
 
-/* small helper under selects */
-.hint{
-    margin-top:-14px;
-    margin-bottom:18px;
-    font-size:12px;
-    color:#a39d95;
-    line-height:1.35;
-}
-.hint.error{
-    color:#b34a4a;
-}
-
-/* ===== PREVIEW ===== */
 .preview{
     position:relative;
     width:100%;
     aspect-ratio:1/1;
     padding:50px;
-    border-radius:28px;
+    border-radius:30px;
     background:
-    radial-gradient(circle at 50% 35%, rgba(255,255,255,0.92) 0%, rgba(252,247,240,0.92) 40%, rgba(241,232,221,1) 100%);
+      radial-gradient(circle at 50% 35%, rgba(255,255,255,0.94) 0%, rgba(252,247,240,0.94) 40%, rgba(241,232,221,1) 100%);
     box-shadow:0 25px 50px rgba(0,0,0,0.08);
     border:1px solid #efeae4;
     display:flex;
@@ -165,7 +375,18 @@ button{
     overflow:hidden;
 }
 
-/* studio floor shadow */
+.preview::before{
+    content:"";
+    position:absolute;
+    width:240px;
+    height:240px;
+    border-radius:50%;
+    background:rgba(210,176,141,0.10);
+    top:-80px;
+    right:-60px;
+    pointer-events:none;
+}
+
 .preview::after{
     content:"";
     position:absolute;
@@ -183,21 +404,20 @@ button{
     font-size:15px;
     padding:0 10px;
     z-index:2;
+    line-height:1.7;
 }
 
-#bearImage{
-    width:140%;
-    max-width:800px;
+#teddyImage{
+    width:180%;
+    max-width:1000px;
     position:absolute;
     display:none;
     opacity:0;
-    transform:translateY(10px) scale(0.98);
-    transition:opacity 0.35s ease, transform 0.35s ease;
+    transform:translateY(6px) scale(0.985);
     filter:drop-shadow(0 18px 28px rgba(0,0,0,0.12));
     z-index:2;
 }
 
-/* Accessory overlay images */
 .accessory-img{
     position:absolute;
     display:none;
@@ -206,28 +426,35 @@ button{
     max-width:50%;
     filter:drop-shadow(0 10px 18px rgba(0,0,0,0.10));
     pointer-events:none;
+    opacity:0;
 }
 
-/* Heart + Star centered in arms */
 #heartImg{
-    top:56%;
-    left:52%;
+    top:63%;
+    left:50%;
+    width:340px;
     transform:translate(-50%,-50%);
 }
 #starImg{
-    top:56%;
-    left:52%;
+    top:63%;
+    left:50%;
+    width:340px;
     transform:translate(-50%,-50%);
 }
-
-/* Bow to right ear, tilted right */
 #bowImg{
-    top:28%;
-    left:68%;
-    transform:translate(-50%,-50%) rotate(18deg);
+    top:32%;
+    left:64%;
+    transform:translate(-50%,-50%) rotate(22deg);
 }
 
-/* ===== TOAST ===== */
+.preview-appear{
+    animation:previewAppear 0.26s var(--ease) forwards;
+}
+
+.preview-appear-bow{
+    animation:previewAppearBow 0.26s var(--ease) forwards;
+}
+
 .toast{
     position:fixed;
     top:25px;
@@ -250,146 +477,245 @@ button{
     transform:translateY(0);
 }
 
-/* ===== TABLET ===== */
+.footer{
+    margin-top:60px;
+    padding:48px 20px 32px;
+    text-align:center;
+    color:var(--brown-soft);
+    background:linear-gradient(180deg, rgba(240,223,214,0.55), rgba(233,214,199,0.84));
+    border-top-left-radius:36px;
+    border-top-right-radius:36px;
+    position:relative;
+    z-index:2;
+}
+
+.footer-inner{
+    max-width:1220px;
+    margin:auto;
+}
+
+.footer-title{
+    font-family:'Playfair Display',serif;
+    font-size:1.9rem;
+    color:var(--brown);
+    margin:0 0 10px;
+}
+
+.footer p{
+    margin:0 0 8px;
+    line-height:1.8;
+}
+
+@keyframes fadeUp{
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes previewAppear{
+    0%{ opacity:0; transform:translateY(6px) scale(0.985); }
+    100%{ opacity:1; transform:translateY(0) scale(1); }
+}
+
+@keyframes previewAppearCenter{
+    0%{ opacity:0; transform:translate(-50%,-47%) scale(0.985); }
+    100%{ opacity:1; transform:translate(-50%,-50%) scale(1); }
+}
+
+@keyframes previewAppearBow{
+    0%{ opacity:0; transform:translate(-50%,-47%) rotate(22deg) scale(0.985); }
+    100%{ opacity:1; transform:translate(-50%,-50%) rotate(22deg) scale(1); }
+}
+
 @media (max-width: 1100px){
     .container{
         display:flex;
         flex-direction:column;
         align-items:center;
-        gap:42px;
-        padding:25px 20px 60px;
+        gap:28px;
     }
-    .controls, .checkout-area, .preview{
+
+    .controls-card,
+    .checkout-card,
+    .preview-card{
         width:100%;
-        max-width:560px;
+        max-width:650px;
     }
+
     .preview{ padding:42px; }
     .accessory-img{ width:170px; max-width:48%; }
 }
 
-/* ===== PHONE: options -> preview -> checkout ===== */
 @media (max-width: 768px){
-    h1{ font-size:24px; }
-    .controls{ order:1; }
-    .preview{ order:2; margin-top:8px; padding:34px; }
-    .checkout-area{ order:3; }
+    .cursor-glow{ display:none; }
 
-    button{ padding:16px; font-size:14px; }
+    .nav{
+        flex-direction:column;
+        justify-content:center;
+        padding:12px 20px;
+    }
+
+    .menu{
+        flex-wrap:wrap;
+        justify-content:center;
+        gap:16px;
+        font-size:0.92rem;
+    }
+
+    .page-wrap{ padding-top:170px; }
+    .page-head h1{ font-size:2rem; }
+    .preview{ padding:34px; }
+    .action-btn{ padding:16px; font-size:14px; }
     .quantity-box button{ width:48px; height:48px; }
     .price-box{ font-size:24px; margin-top:10px; }
-
     .accessory-img{ width:155px; max-width:56%; }
 }
 
 @media (max-width: 420px){
     .preview{ padding:22px; }
-    #bearImage{ width:118%; }
+    #teddyImage{ width:118%; }
     .accessory-img{ width:145px; max-width:60%; }
+    .controls-inner,
+    .checkout-inner,
+    .preview-shell{ padding:18px; }
 }
 </style>
 </head>
 
 <body>
 
-<header>
-    <h1>🤍 Customize your Teddy Bear 🤍</h1>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<header class="site-header" id="siteHeader">
+    <div class="nav">
+        <a href="Maison-doucette-homepage.html" class="logo">
+            <img src="images/logo.jpg" alt="Maison Doucette logo">
+            <span>Maison Doucette</span>
+        </a>
+
+        <ul class="menu">
+            <li><a href="Maison-doucette-homepage.html">Home</a></li>
+            <li><a href="Maison-doucette-homepage.html#shop">Our Collection</a></li>
+            <li><a href="Maison-doucette-homepage.html#about">About Us</a></li>
+            <li><a href="Maison-doucette-homepage.html#contact">Contact Us</a></li>
+        </ul>
+    </div>
 </header>
 
-<div class="container">
-
-    <!-- OPTIONS -->
-    <div class="controls">
-
-        <label>Material</label>
-        <select id="material">
-            <option value="">Select...</option>
-            <option value="Acrylic yarn">Acrylic yarn</option>
-            <option value="Fluffy yarn">Fluffy yarn</option>
-        </select>
-
-        <label>Size</label>
-        <select id="size">
-            <option value="">Select...</option>
-            <option value="0">Small (+0RON)</option>
-            <option value="15">Medium (+15RON)</option>
-            <option value="25">Large (+25RON)</option>
-        </select>
-
-        <label>Body Colour</label>
-        <select id="bodyColor">
-            <option value="">Select...</option>
-            <option value="Cream">Cream</option>
-            <option value="Brown">Brown</option>
-            <option value="Light brown">Light brown</option>
-            <option value="Light pink">Light pink</option>
-            <option value="Light yellow">Light yellow</option>
-            <option value="Light blue">Light blue</option>
-            <option value="Dark blue">Dark blue</option>
-        </select>
-
-        <label>Accessory</label>
-        <select id="accessory">
-            <option value="">Select...</option>
-            <option value="0">Nothing - 0RON</option>
-            <option value="7">Heart - 7RON</option>
-            <option value="3">Bow - 3RON</option>
-            <option value="9">Heart + Bow - 9RON</option>
-            <option value="8">Star - 8RON</option>
-            <option value="10">Star + Bow - 10RON</option>
-        </select>
-
-        <div id="accessoryColors"></div>
+<main class="page-wrap">
+    <div class="page-head">
+        <div class="eyebrow">Maison Doucette Atelier</div>
+        <h1>Customize your Teddy Bear</h1>
     </div>
 
-    <!-- PREVIEW -->
-    <div class="preview">
-        <div id="previewMessage">Select options to see your teddy 🧸</div>
+    <div class="container">
 
-        <img id="bearImage" alt="Teddy preview">
+        <section class="controls-card card">
+            <div class="controls-inner">
+                <h2 class="section-mini-title">Choose your details</h2>
 
-        <!-- accessory overlay images -->
-        <img id="heartImg" class="accessory-img" alt="Heart accessory">
-        <img id="starImg" class="accessory-img" alt="Star accessory">
-        <img id="bowImg" class="accessory-img" alt="Bow accessory">
+                <label>Material</label>
+                <select id="material">
+                    <option value="">Select...</option>
+                    <option value="Acrylic yarn">Acrylic yarn</option>
+                    <option value="Fluffy yarn">Fluffy yarn</option>
+                </select>
+
+                <label>Size</label>
+                <select id="size">
+                    <option value="">Select...</option>
+                    <option value="0">Small (+0RON)</option>
+                    <option value="15">Medium (+15RON)</option>
+                    <option value="25">Large (+25RON)</option>
+                </select>
+
+                <label>Body Colour</label>
+                <select id="bodyColor">
+                    <option value="">Select...</option>
+                    <option value="Cream">Cream</option>
+                    <option value="Brown">Brown</option>
+                    <option value="Light brown">Light brown</option>
+                    <option value="Light pink">Light pink</option>
+                    <option value="Light yellow">Light yellow</option>
+                    <option value="Light blue">Light blue</option>
+                    <option value="Dark blue">Dark blue</option>
+                </select>
+
+                <label>Accessory</label>
+                <select id="accessory">
+                    <option value="">Select...</option>
+                    <option value="0">Nothing - 0RON</option>
+                    <option value="7">Heart - 7RON</option>
+                    <option value="3">Bow - 3RON</option>
+                    <option value="9">Heart + Bow - 9RON</option>
+                    <option value="8">Star - 8RON</option>
+                    <option value="10">Star + Bow - 10RON</option>
+                </select>
+
+                <div id="accessoryColors"></div>
+            </div>
+        </section>
+
+        <section class="preview-card card">
+            <div class="preview-shell">
+                <h2 class="preview-title">Teddy Preview</h2>
+
+                <div class="preview">
+                    <div id="previewMessage">Select options to see your Teddy 🧸</div>
+
+                    <img id="teddyImage" alt="Teddy preview">
+                    <img id="heartImg" class="accessory-img" alt="Heart accessory">
+                    <img id="starImg" class="accessory-img" alt="Star accessory">
+                    <img id="bowImg" class="accessory-img" alt="Bow accessory">
+                </div>
+            </div>
+        </section>
+
+        <section class="checkout-card card">
+            <div class="checkout-inner">
+                <div class="price-box">
+                    Total: <span id="price">45</span> RON
+                </div>
+
+                <div class="quantity-wrap">
+                    <label>Quantity</label>
+                    <div class="quantity-box">
+                        <button type="button" id="minusBtn">−</button>
+                        <span id="quantity">1</span>
+                        <button type="button" id="plusBtn">+</button>
+                    </div>
+                </div>
+
+                <button class="action-btn add-btn" id="addBtn" disabled type="button">Add to cart</button>
+                <button class="action-btn checkout-btn" id="checkoutBtn" type="button">Go to cart →</button>
+                <button class="action-btn continue-btn" type="button" onclick="window.location.href='Maison-doucette-homepage.html#shop'">
+                    Continue shopping
+                </button>
+            </div>
+        </section>
+
     </div>
+</main>
 
-    <!-- PRICE / QTY / BUTTONS -->
-    <div class="checkout-area">
-
-        <div class="price-box">
-            Total: <span id="price">45</span> RON
-        </div>
-
-        <label>Quantity</label>
-        <div class="quantity-box">
-            <button type="button" id="minusBtn">−</button>
-            <span id="quantity">1</span>
-            <button type="button" id="plusBtn">+</button>
-        </div>
-
-        <button class="add-btn" id="addBtn" disabled type="button">Add to cart</button>
-        <button class="checkout-btn" id="checkoutBtn" type="button">Go to checkout →</button>
-        <button class="continue-btn" type="button"
-            onclick="window.location.href=index.html">
-            Continue shopping
-        </button>
+<footer class="footer">
+    <div class="footer-inner">
+        <h3 class="footer-title">Maison Doucette</h3>
+        <p>Handmade with love, softness and little details.</p>
+        <p>© Maison Doucette — handmade with love</p>
     </div>
-
-</div>
+</footer>
 
 <div id="toast" class="toast">Product added to cart successfully.</div>
 
 <script>
-/* ===== PRICES ===== */
 let basePrice = 45;
 let quantity = 1;
 
-/* ===== ACCESSORY COLOR STATE (saved into cart) ===== */
 let heartColor = "";
 let starColor  = "";
 let bowColor   = "";
 
-/* ===== ELEMENTS ===== */
 const material = document.getElementById("material");
 const size = document.getElementById("size");
 const bodyColor = document.getElementById("bodyColor");
@@ -400,29 +726,30 @@ const addBtn = document.getElementById("addBtn");
 
 const accessoryColorsWrap = document.getElementById("accessoryColors");
 const previewMessage = document.getElementById("previewMessage");
-const bearImage = document.getElementById("bearImage");
+const teddyImage = document.getElementById("teddyImage");
 
 const heartImg = document.getElementById("heartImg");
 const starImg  = document.getElementById("starImg");
 const bowImg   = document.getElementById("bowImg");
 
+const siteHeader = document.getElementById("siteHeader");
+const cursorGlow = document.getElementById("cursorGlow");
+
 document.getElementById("minusBtn").addEventListener("click", () => changeQty(-1));
 document.getElementById("plusBtn").addEventListener("click", () => changeQty(1));
-document.getElementById("checkoutBtn").addEventListener("click", goToCheckout);
+document.getElementById("checkoutBtn").addEventListener("click", goToCart);
 addBtn.addEventListener("click", addToCart);
 
-/* ===== IMAGE MAP (body images) ===== */
 const imageMap = {
-  "Cream": "Teddy_Bear_Colors/teddy-bear-cream.png",
-  "Brown": "Teddy_Bear_Colors/teddy-bear-brown.png",
-  "Light brown": "Teddy_Bear_Colors/teddy-bear-light-brown.png",
-  "Light pink": "Teddy_Bear_Colors/teddy-bear-light-pink.png",
-  "Light yellow": "Teddy_Bear_Colors/teddy-bear-light-yellow.png",
-  "Light blue": "Teddy_Bear_Colors/teddy-bear-light-blue.png",
-  "Dark blue": "Teddy_Bear_Colors/teddy-bear-dark-blue.png"
+  "Cream": "Teddy_Colors/teddy-cream.png",
+  "Brown": "Teddy_Colors/teddy-brown.png",
+  "Light brown": "Teddy_Colors/teddy-light-brown.png",
+  "Light pink": "Teddy_Colors/teddy-light-pink.png",
+  "Light yellow": "Teddy_Colors/teddy-light-yellow.png",
+  "Light blue": "Teddy_Colors/teddy-light-blue.png",
+  "Dark blue": "Teddy_Colors/teddy-dark-blue.png"
 };
 
-/* ===== ACCESSORY COLORS (dropdown) ===== */
 const colorOptionsHtml = `
   <option value="">Select colour...</option>
   <option value="Bright pink">Bright pink</option>
@@ -434,16 +761,15 @@ const colorOptionsHtml = `
   <option value="Burgundy">Burgundy</option>
 `;
 
-/* ===== helpers ===== */
 function normalizeColorLabel(v){
   return String(v || "").trim();
 }
 
 function slugVariants(colorLabel){
   const c = normalizeColorLabel(colorLabel);
-  const v1 = c.toLowerCase().replace(/\s+/g, "-"); // light-blue
-  const v2 = c.toLowerCase();                      // light blue
-  const v3 = c.toLowerCase().replace(/\s+/g, "_"); // light_blue
+  const v1 = c.toLowerCase().replace(/\s+/g, "-");
+  const v2 = c.toLowerCase();
+  const v3 = c.toLowerCase().replace(/\s+/g, "_");
   return Array.from(new Set([v1, v2, v3]));
 }
 
@@ -492,7 +818,6 @@ function trySetImage(imgEl, candidates){
 function showHint(id, ok, example){
   const el = document.getElementById(id);
   if(!el) return;
-
   if(ok){
     el.textContent = "";
     el.classList.remove("error");
@@ -518,64 +843,6 @@ function hideInactiveAccessories(active){
   if(!active.bow){   bowImg.style.display="none";   bowImg.removeAttribute("src"); }
 }
 
-/* ===== EVENTS ===== */
-material.addEventListener("change", () => { updatePrice(); validateForm(); });
-size.addEventListener("change", () => { updatePrice(); validateForm(); });
-
-bodyColor.addEventListener("change", () => {
-  updatePreview();
-  validateForm();
-});
-
-accessory.addEventListener("change", () => {
-  updateAccessoryOptions();   // rebuild selects for combo
-  updatePrice();
-  validateForm();
-});
-
-/* ===== PREVIEW (body) ===== */
-function updatePreview(){
-  const selected = bodyColor.value;
-
-  if(!selected){
-    bearImage.style.display = "none";
-    bearImage.style.opacity = 0;
-    previewMessage.style.display = "block";
-    previewMessage.textContent = "Select options to see your teddy 🧸";
-    return;
-  }
-
-  const src = imageMap[selected] || "";
-  if(!src){
-    bearImage.style.display = "none";
-    bearImage.style.opacity = 0;
-    previewMessage.style.display = "block";
-    previewMessage.textContent = "Image missing for this colour 🤍";
-    return;
-  }
-
-  previewMessage.style.display = "none";
-
-  bearImage.style.opacity = 0;
-  bearImage.style.transform = "translateY(10px) scale(0.98)";
-  bearImage.style.display = "block";
-  bearImage.src = src;
-
-  bearImage.onload = () => {
-    requestAnimationFrame(() => {
-      bearImage.style.opacity = 1;
-      bearImage.style.transform = "translateY(0) scale(1)";
-    });
-  };
-
-  bearImage.onerror = () => {
-    bearImage.style.display = "none";
-    previewMessage.style.display = "block";
-    previewMessage.textContent = "Could not load image 🤍 (check file name/path)";
-  };
-}
-
-/* ===== IMPORTANT FIX: always read colors from UI, then render all active ===== */
 function syncColorsFromUI(){
   const heartSel = document.getElementById("heartSelect");
   const starSel  = document.getElementById("starSelect");
@@ -586,6 +853,20 @@ function syncColorsFromUI(){
   if(bowSel)   bowColor   = normalizeColorLabel(bowSel.value);
 }
 
+function animatePreviewElement(el, type = "default"){
+  el.classList.remove("preview-appear", "preview-appear-bow");
+  el.style.animation = "none";
+  void el.offsetWidth;
+
+  if(type === "bow"){
+    el.classList.add("preview-appear-bow");
+  }else if(type === "centered"){
+    el.style.animation = "previewAppearCenter 0.26s cubic-bezier(.22,.61,.36,1) forwards";
+  }else{
+    el.classList.add("preview-appear");
+  }
+}
+
 async function renderAccessory(type, colorLabel){
   const mapEl = { heart: heartImg, star: starImg, bow: bowImg };
   const imgEl = mapEl[type];
@@ -594,6 +875,7 @@ async function renderAccessory(type, colorLabel){
   if(!colorLabel){
     imgEl.style.display="none";
     imgEl.removeAttribute("src");
+    imgEl.style.opacity = "0";
     return;
   }
 
@@ -604,6 +886,15 @@ async function renderAccessory(type, colorLabel){
   if(type === "heart") showHint("heartHint", result.ok, example);
   if(type === "star")  showHint("starHint",  result.ok, example);
   if(type === "bow")   showHint("bowHint",   result.ok, example);
+
+  if(result.ok){
+    imgEl.style.opacity = "0";
+    if(type === "bow"){
+      animatePreviewElement(imgEl, "bow");
+    }else{
+      animatePreviewElement(imgEl, "centered");
+    }
+  }
 }
 
 async function renderAccessories(){
@@ -611,24 +902,19 @@ async function renderAccessories(){
   syncColorsFromUI();
   hideInactiveAccessories(active);
 
-  // Render each active accessory INDEPENDENT (so combo shows both)
   if(active.heart) await renderAccessory("heart", heartColor);
   if(active.star)  await renderAccessory("star",  starColor);
   if(active.bow)   await renderAccessory("bow",   bowColor);
 }
 
-/* ===== ACCESSORY UI ===== */
 function updateAccessoryOptions(){
   const active = getActiveFromSelectedText();
-
   accessoryColorsWrap.innerHTML = "";
 
-  // If not active anymore, clear stored values
   if(!active.heart) heartColor = "";
   if(!active.star)  starColor  = "";
   if(!active.bow)   bowColor   = "";
 
-  // If nothing selected -> hide all accessory images
   if(active.nothing){
     heartImg.style.display="none"; heartImg.removeAttribute("src");
     starImg.style.display="none";  starImg.removeAttribute("src");
@@ -660,7 +946,6 @@ function updateAccessoryOptions(){
     `;
   }
 
-  // Restore previous selections if exist (so switching keeps values)
   const heartSel = document.getElementById("heartSelect");
   const starSel  = document.getElementById("starSelect");
   const bowSel   = document.getElementById("bowSelect");
@@ -669,7 +954,6 @@ function updateAccessoryOptions(){
   if(starSel)  starSel.value  = starColor  || "";
   if(bowSel)   bowSel.value   = bowColor   || "";
 
-  // On any change -> re-render ALL active accessories
   if(heartSel){
     heartSel.addEventListener("change", async () => {
       syncColorsFromUI();
@@ -692,11 +976,52 @@ function updateAccessoryOptions(){
     });
   }
 
-  // Render whatever can be rendered now
   renderAccessories();
 }
 
-/* ===== PRICE ===== */
+function animateTeddyImage(){
+  teddyImage.classList.remove("preview-appear");
+  teddyImage.style.animation = "none";
+  void teddyImage.offsetWidth;
+  teddyImage.style.animation = "previewAppear 0.26s cubic-bezier(.22,.61,.36,1) forwards";
+}
+
+function updatePreview(){
+  const selected = bodyColor.value;
+
+  if(!selected){
+    teddyImage.style.display = "none";
+    teddyImage.style.opacity = 0;
+    previewMessage.style.display = "block";
+    previewMessage.textContent = "Select options to see your Teddy 🧸";
+    return;
+  }
+
+  const src = imageMap[selected] || "";
+  if(!src){
+    teddyImage.style.display = "none";
+    teddyImage.style.opacity = 0;
+    previewMessage.style.display = "block";
+    previewMessage.textContent = "Image missing for this colour 🤍";
+    return;
+  }
+
+  previewMessage.style.display = "none";
+  teddyImage.style.display = "block";
+  teddyImage.style.opacity = "0";
+  teddyImage.src = src;
+
+  teddyImage.onload = () => {
+    animateTeddyImage();
+  };
+
+  teddyImage.onerror = () => {
+    teddyImage.style.display = "none";
+    previewMessage.style.display = "block";
+    previewMessage.textContent = "Could not load image 🤍 (check file name/path)";
+  };
+}
+
 function getUnitPrice(){
   const sizeAdd = parseInt(size.value || "0", 10);
   const accessoryAdd = parseInt(accessory.value || "0", 10);
@@ -711,12 +1036,10 @@ function changeQty(delta){
   quantity += delta;
   if(quantity < 1) quantity = 1;
   if(quantity > 20) quantity = 20;
-
   qtyEl.textContent = String(quantity);
   updatePrice();
 }
 
-/* ===== VALIDATION ===== */
 function validateForm(){
   const active = getActiveFromSelectedText();
   syncColorsFromUI();
@@ -727,19 +1050,15 @@ function validateForm(){
     bodyColor.value &&
     accessory.value !== "";
 
-  // Require colors only for active accessories
   const heartOk = !active.heart || !!heartColor;
   const starOk  = !active.star  || !!starColor;
   const bowOk   = !active.bow   || !!bowColor;
 
   if(!heartOk || !starOk || !bowOk) valid = false;
-
   addBtn.disabled = !valid;
 }
 
-/* ===== CART SAVE (localStorage) ===== */
 function addToCart(){
-  // Make sure latest UI is stored
   syncColorsFromUI();
 
   const item = {
@@ -748,14 +1067,11 @@ function addToCart(){
     size: size.options[size.selectedIndex].text,
     bodyColor: bodyColor.value,
     accessory: accessory.options[accessory.selectedIndex].text,
-
     heartColor: heartColor,
     starColor: starColor,
     bowColor: bowColor,
-
-    image: bearImage && bearImage.src ? bearImage.src : "",
-
-    price: getUnitPrice(),   // unit price
+    image: teddyImage && teddyImage.src ? teddyImage.src : "",
+    price: getUnitPrice(),
     quantity: quantity
   };
 
@@ -770,11 +1086,44 @@ function addToCart(){
   setTimeout(() => toast.classList.remove("show"), 4000);
 }
 
-function goToCheckout(){
-  window.location.href = "checkout.html";
+function goToCart(){
+  window.location.href = "cart.html";
 }
 
-/* ===== INITIAL ===== */
+material.addEventListener("change", () => { updatePrice(); validateForm(); });
+size.addEventListener("change", () => { updatePrice(); validateForm(); });
+bodyColor.addEventListener("change", () => { updatePreview(); validateForm(); });
+accessory.addEventListener("change", () => {
+  updateAccessoryOptions();
+  updatePrice();
+  validateForm();
+});
+
+function handleHeaderShadow(){
+  if(window.scrollY > 14){
+    siteHeader.classList.add("scrolled");
+  } else {
+    siteHeader.classList.remove("scrolled");
+  }
+}
+
+document.addEventListener("mousemove", (e) => {
+  if(!cursorGlow) return;
+  cursorGlow.style.left = `${e.clientX}px`;
+  cursorGlow.style.top = `${e.clientY}px`;
+});
+
+document.addEventListener("mouseleave", () => {
+  if(cursorGlow) cursorGlow.style.opacity = "0";
+});
+
+document.addEventListener("mouseenter", () => {
+  if(cursorGlow) cursorGlow.style.opacity = "0.9";
+});
+
+window.addEventListener("scroll", handleHeaderShadow);
+window.addEventListener("load", handleHeaderShadow);
+
 updatePrice();
 updatePreview();
 updateAccessoryOptions();
