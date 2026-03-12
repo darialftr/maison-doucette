@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maison Doucette – Cart</title>
+<link rel="icon" href="images/favicon.ico" type="image/x-icon">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --bg:#f7f1eb;
+    --cream:#fffaf6;
+    --ocre:#d2b08d;
+    --ocre-deep:#b88e67;
+    --brown:#6a5145;
+    --brown-soft:#8b6f61;
+    --line:rgba(184,142,103,0.20);
+    --shadow:0 20px 50px rgba(106,81,69,0.12);
+    --radius-xl:36px;
+    --radius-lg:24px;
+    --ease:cubic-bezier(.22,.61,.36,1);
+}
+
+*{ box-sizing:border-box; }
+
+body{
+    margin:0;
+    font-family:'Inter',sans-serif;
+    color:var(--brown);
+    background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.75), transparent 22%),
+        radial-gradient(circle at bottom right, rgba(210,176,141,0.10), transparent 25%),
+        linear-gradient(180deg, #f9f4ef 0%, #f4ece4 100%);
+}
+
+a{ text-decoration:none; color:inherit; }
+img{ display:block; max-width:100%; }
+
+.site-header{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:1000;
+    background:rgba(255,250,246,0.78);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+}
+
+.nav{
+    max-width:1220px;
+    margin:auto;
+    min-height:88px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    padding:0 20px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo img{
+    width:58px;
+    height:58px;
+    object-fit:cover;
+    border-radius:50%;
+    background:rgba(255,255,255,0.95);
+    padding:4px;
+    box-shadow:0 8px 18px rgba(106,81,69,0.10);
+}
+
+.logo span{
+    font-family:'Playfair Display',serif;
+    font-size:1.08rem;
+    letter-spacing:0.04em;
+}
+
+.menu{
+    display:flex;
+    gap:28px;
+    list-style:none;
+    margin:0;
+    padding:0;
+    font-size:0.96rem;
+}
+
+.page{
+    max-width:1220px;
+    margin:auto;
+    padding:138px 20px 70px;
+}
+
+.page-head{
+    text-align:center;
+    margin-bottom:28px;
+}
+
+.eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 16px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.72);
+    border:1px solid var(--line);
+    font-size:0.78rem;
+    text-transform:uppercase;
+    letter-spacing:0.16em;
+    color:var(--brown-soft);
+    box-shadow:0 8px 20px rgba(106,81,69,0.05);
+    margin-bottom:14px;
+}
+
+.page-head h1{
+    font-family:'Playfair Display',serif;
+    font-size:clamp(2rem,4vw,3rem);
+    font-weight:500;
+    margin:0;
+}
+
+.cart-layout{
+    display:grid;
+    grid-template-columns:1.2fr 0.8fr;
+    gap:28px;
+    align-items:start;
+}
+
+.card{
+    background:rgba(255,250,246,0.82);
+    border:1px solid var(--line);
+    border-radius:var(--radius-xl);
+    box-shadow:var(--shadow);
+}
+
+.cart-list{
+    padding:22px;
+}
+
+.cart-item{
+    display:grid;
+    grid-template-columns:120px 1fr auto;
+    gap:18px;
+    align-items:center;
+    padding:18px 0;
+    border-bottom:1px solid rgba(184,142,103,0.14);
+}
+
+.cart-item:last-child{
+    border-bottom:none;
+}
+
+.cart-image{
+    width:120px;
+    height:120px;
+    border-radius:20px;
+    overflow:hidden;
+    background:#f6eee8;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.cart-image > img:not(.cart-layer){
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
+.cart-layer{
+    position:absolute;
+    pointer-events:none;
+    object-fit:contain;
+}
+
+.cart-body{
+    z-index:1;
+}
+
+.cart-heart,
+.cart-star,
+.cart-bow,
+.cart-chocolate{
+    z-index:2;
+}
+
+.item-title{
+    font-family:'Playfair Display',serif;
+    font-size:1.35rem;
+    margin:0 0 8px;
+}
+
+.item-meta{
+    font-size:0.94rem;
+    color:var(--brown-soft);
+    line-height:1.7;
+}
+
+.item-side{
+    text-align:right;
+    min-width:120px;
+}
+
+.item-price{
+    font-family:'Playfair Display',serif;
+    font-size:1.2rem;
+    margin-bottom:10px;
+}
+
+.qty-row{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:8px;
+    margin-bottom:10px;
+}
+
+.qty-btn{
+    width:34px;
+    height:34px;
+    border:none;
+    border-radius:10px;
+    background:white;
+    border:1px solid #ddd3c8;
+    cursor:pointer;
+    color:var(--brown);
+}
+
+.remove-btn{
+    border:none;
+    background:transparent;
+    color:#9a5e5e;
+    cursor:pointer;
+    font-size:0.9rem;
+}
+
+.summary{
+    padding:26px;
+    position:sticky;
+    top:110px;
+}
+
+.summary h2{
+    margin:0 0 18px;
+    font-family:'Playfair Display',serif;
+    font-size:1.7rem;
+    font-weight:500;
+}
+
+.summary-line{
+    display:flex;
+    justify-content:space-between;
+    gap:14px;
+    margin:12px 0;
+    color:var(--brown-soft);
+}
+
+.summary-total{
+    display:flex;
+    justify-content:space-between;
+    gap:14px;
+    margin:18px 0 24px;
+    padding-top:18px;
+    border-top:1px solid rgba(184,142,103,0.18);
+    font-family:'Playfair Display',serif;
+    font-size:1.4rem;
+    color:var(--brown);
+}
+
+.action-btn{
+    width:100%;
+    padding:15px 18px;
+    margin-top:12px;
+    border:none;
+    font-family:'Inter',sans-serif;
+    font-size:13px;
+    letter-spacing:1px;
+    cursor:pointer;
+    border-radius:14px;
+    transition:all 0.25s ease;
+}
+
+.primary-btn{
+    background:linear-gradient(135deg, var(--ocre-deep), var(--ocre));
+    color:white;
+    box-shadow:0 16px 30px rgba(184,142,103,0.22);
+}
+
+.primary-btn:hover{
+    transform:translateY(-2px);
+}
+
+.secondary-btn{
+    background:rgba(255,255,255,0.72);
+    border:1px solid var(--line);
+    color:var(--brown);
+}
+
+.empty{
+    padding:40px 24px;
+    text-align:center;
+    color:var(--brown-soft);
+    line-height:1.8;
+}
+
+.footer{
+    margin-top:60px;
+    padding:48px 20px 32px;
+    text-align:center;
+    color:var(--brown-soft);
+    background:linear-gradient(180deg, rgba(240,223,214,0.55), rgba(233,214,199,0.84));
+    border-top-left-radius:36px;
+    border-top-right-radius:36px;
+}
+
+.footer-title{
+    font-family:'Playfair Display',serif;
+    font-size:1.9rem;
+    color:var(--brown);
+    margin:0 0 10px;
+}
+
+@media (max-width: 900px){
+    .cart-layout{
+        grid-template-columns:1fr;
+    }
+
+    .summary{
+        position:static;
+    }
+
+    .cart-item{
+        grid-template-columns:1fr;
+        text-align:left;
+    }
+
+    .item-side{
+        text-align:left;
+        min-width:unset;
+    }
+
+    .qty-row{
+        justify-content:flex-start;
+    }
+}
+
+@media (max-width: 768px){
+    .nav{
+        flex-direction:column;
+        justify-content:center;
+        padding:12px 20px;
+    }
+
+    .menu{
+        flex-wrap:wrap;
+        justify-content:center;
+        gap:16px;
+        font-size:0.92rem;
+    }
+
+    .page{
+        padding-top:170px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="site-header">
+    <div class="nav">
+        <a href="index.html" class="logo">
+            <img src="images/logo.jpg" alt="Maison Doucette logo">
+            <span>Maison Doucette</span>
+        </a>
+
+        <ul class="menu">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#shop">Our collection</a></li>
+            <li><a href="index.html#about">About us</a></li>
+            <li><a href="index.html#contact">Contact us</a></li>
+        </ul>
+    </div>
+</header>
+
+<main class="page">
+    <div class="page-head">
+        <div class="eyebrow">Maison Doucette Cart</div>
+        <h1>Your Cart</h1>
+    </div>
+
+    <div class="cart-layout">
+        <section class="card cart-list" id="cartList"></section>
+
+        <aside class="card summary">
+            <h2>Order Summary</h2>
+            <div class="summary-line">
+                <span>Items</span>
+                <span id="summaryItems">0</span>
+            </div>
+            <div class="summary-line">
+                <span>Subtotal</span>
+                <span id="summarySubtotal">0 RON</span>
+            </div>
+            <div class="summary-total">
+                <span>Total</span>
+                <span id="summaryTotal">0 RON</span>
+            </div>
+
+            <button class="action-btn primary-btn" onclick="goToCheckout()">Proceed to checkout</button>
+            <button class="action-btn secondary-btn" onclick="window.location.href='index.html#shop'">Continue shopping</button>
+            <button class="action-btn secondary-btn" onclick="clearCart()">Clear cart</button>
+        </aside>
+    </div>
+</main>
+
+<footer class="footer">
+    <h3 class="footer-title">Maison Doucette</h3>
+    <p>Handmade with love, softness and little details.</p>
+    <p>© Maison Doucette — handmade with love</p>
+</footer>
+
+<script>
+function getCart(){
+  return JSON.parse(localStorage.getItem("cart")) || [];
+}
+
+function setCart(cart){
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function formatRon(value){
+  return `${value} RON`;
+}
+
+function escapeHtml(value){
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function getItemMeta(item){
+  const parts = [];
+
+  if(item.material) parts.push(`Material: ${item.material}`);
+  if(item.size) parts.push(`Size: ${item.size}`);
+  if(item.bodyColor) parts.push(`Body colour: ${item.bodyColor}`);
+  if(item.strawberryColor) parts.push(`Strawberry colour: ${item.strawberryColor}`);
+  if(item.chocolateColor) parts.push(`Chocolate colour: ${item.chocolateColor}`);
+  if(item.chocolate) parts.push(`Chocolate: ${item.chocolate}`);
+  if(item.accessory) parts.push(`Accessory: ${item.accessory}`);
+  if(item.keychain) parts.push(`Keychain: ${item.keychain}`);
+  if(item.drizzle) parts.push(`Drizzle: ${item.drizzle}`);
+  if(item.ribbon) parts.push(`Ribbon: ${item.ribbon}`);
+  if(item.heartColor) parts.push(`Heart: ${item.heartColor}`);
+  if(item.starColor) parts.push(`Star: ${item.starColor}`);
+  if(item.bowColor) parts.push(`Bow: ${item.bowColor}`);
+
+  return parts.join("<br>");
+}
+
+function pxOr(value, fallback){
+  if(value === undefined || value === null || value === "") return fallback;
+  return String(value);
+}
+
+function buildSimpleLayerStyle(styleObj, fallback){
+  const top = pxOr(styleObj?.top, fallback.top);
+  const left = pxOr(styleObj?.left, fallback.left);
+  const width = pxOr(styleObj?.width, fallback.width);
+  const height = pxOr(styleObj?.height, fallback.height);
+  const transform = pxOr(styleObj?.transform, fallback.transform);
+
+  return [
+    "position:absolute",
+    `top:${top}`,
+    `left:${left}`,
+    `width:${width}`,
+    `height:${height}`,
+    `transform:${transform}`,
+    "object-fit:contain",
+    "pointer-events:none"
+  ].join(";");
+}
+
+function renderImageTag(src, className, alt, styleString){
+  if(!src) return "";
+  return `<img class="${className}" src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" style="${escapeHtml(styleString)}">`;
+}
+
+function renderCartPreview(item){
+  const hasCompositeStrawberry = item.baseImage || item.chocolateImage;
+  const hasCompositePlush = item.bodyImage || item.heartImage || item.starImage || item.bowImage;
+
+  if(hasCompositeStrawberry){
+    const baseStyle = buildSimpleLayerStyle(item.baseStyle, {
+      top: "50%",
+      left: "50%",
+      width: "110%",
+      height: "auto",
+      transform: "translate(-50%, -50%)"
+    });
+
+    const chocolateStyle = buildSimpleLayerStyle(item.chocolateStyle, {
+      top: "96px",
+      left: "-11px",
+      width: "100%",
+      height: "auto",
+      transform: "none"
+    });
+
+    return `
+      <div class="cart-image">
+        ${renderImageTag(item.baseImage, "cart-layer cart-body", item.name || "Product", baseStyle)}
+        ${renderImageTag(item.chocolateImage, "cart-layer cart-chocolate", item.name || "Product", chocolateStyle)}
+      </div>
+    `;
+  }
+
+  if(hasCompositePlush){
+    const isBunny = item.name === "Bunny";
+    const isTeddy = item.name === "Teddy Bear";
+
+    const bodyStyle = buildSimpleLayerStyle(item.bodyStyle, {
+      top: isBunny || isTeddy ? "50%" : "0px",
+      left: isBunny || isTeddy ? "50%" : "0px",
+      width: isBunny || isTeddy ? "185%" : "100%",
+      height: isBunny || isTeddy ? "185%" : "100%",
+      transform: isBunny || isTeddy ? "translate(-50%, -50%)" : "none"
+    });
+
+    const heartStyle = buildSimpleLayerStyle(item.heartStyle, {
+      top: "64%",
+      left: "50%",
+      width: "350px",
+      height: "auto",
+      transform: "translate(-50%,-50%)"
+    });
+
+    const starStyle = buildSimpleLayerStyle(item.starStyle, {
+      top: "64%",
+      left: "50%",
+      width: "350px",
+      height: "auto",
+      transform: "translate(-50%,-50%)"
+    });
+
+    const bowStyle = buildSimpleLayerStyle(item.bowStyle, {
+      top: "34%",
+      left: "64%",
+      width: "250px",
+      height: "auto",
+      transform: "translate(-50%,-50%) rotate(29deg)"
+    });
+
+    return `
+      <div class="cart-image">
+        ${renderImageTag(item.bodyImage, "cart-layer cart-body", item.name || "Product", bodyStyle)}
+        ${renderImageTag(item.heartImage, "cart-layer cart-heart", `${item.name || "Product"} heart`, heartStyle)}
+        ${renderImageTag(item.starImage, "cart-layer cart-star", `${item.name || "Product"} star`, starStyle)}
+        ${renderImageTag(item.bowImage, "cart-layer cart-bow", `${item.name || "Product"} bow`, bowStyle)}
+      </div>
+    `;
+  }
+
+  return `
+    <div class="cart-image">
+      ${item.image ? `<img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name || "Product")}">` : ``}
+    </div>
+  `;
+}
+
+function changeQty(index, delta){
+  const cart = getCart();
+  if(!cart[index]) return;
+
+  cart[index].quantity += delta;
+  if(cart[index].quantity < 1) cart[index].quantity = 1;
+
+  setCart(cart);
+  renderCart();
+}
+
+function removeItem(index){
+  const cart = getCart();
+  cart.splice(index, 1);
+  setCart(cart);
+  renderCart();
+}
+
+function clearCart(){
+  localStorage.removeItem("cart");
+  renderCart();
+}
+
+function goToCheckout(){
+  window.location.href = "checkout.html";
+}
+
+function renderCart(){
+  const cart = getCart();
+  const cartList = document.getElementById("cartList");
+  const summaryItems = document.getElementById("summaryItems");
+  const summarySubtotal = document.getElementById("summarySubtotal");
+  const summaryTotal = document.getElementById("summaryTotal");
+
+  if(cart.length === 0){
+    cartList.innerHTML = `
+      <div class="empty">
+        Your cart is empty for now.<br>
+        Add a few handmade treasures and they will appear here.
+      </div>
+    `;
+    summaryItems.textContent = "0";
+    summarySubtotal.textContent = "0 RON";
+    summaryTotal.textContent = "0 RON";
+    return;
+  }
+
+  let totalItems = 0;
+  let totalPrice = 0;
+
+  cartList.innerHTML = cart.map((item, index) => {
+    const qty = Number(item.quantity || 1);
+    const price = Number(item.price || 0);
+    const lineTotal = qty * price;
+
+    totalItems += qty;
+    totalPrice += lineTotal;
+
+    return `
+      <div class="cart-item">
+        ${renderCartPreview(item)}
+
+        <div>
+          <h3 class="item-title">${escapeHtml(item.name || "Product")}</h3>
+          <div class="item-meta">${getItemMeta(item)}</div>
+        </div>
+
+        <div class="item-side">
+          <div class="item-price">${formatRon(lineTotal)}</div>
+
+          <div class="qty-row">
+            <button class="qty-btn" onclick="changeQty(${index}, -1)">−</button>
+            <span>${qty}</span>
+            <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
+          </div>
+
+          <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  summaryItems.textContent = String(totalItems);
+  summarySubtotal.textContent = formatRon(totalPrice);
+  summaryTotal.textContent = formatRon(totalPrice);
+}
+
+renderCart();
+</script>
+
+</body>
+</html>
