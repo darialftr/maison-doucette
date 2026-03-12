@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Maison Doucette – Teddy Bear</title>
-
+<link rel="icon" href="images/favicon.ico" type="image/x-icon">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
 <style>
@@ -122,11 +122,16 @@ img{ display:block; max-width:100%; }
 
 .menu{
     display:flex;
+    align-items:center;
     gap:28px;
     list-style:none;
     margin:0;
     padding:0;
     font-size:0.96rem;
+}
+
+.menu li{
+    position:relative;
 }
 
 .menu a{
@@ -136,6 +141,57 @@ img{ display:block; max-width:100%; }
 .menu a:hover{
     opacity:0.68;
     transform:translateY(-1px);
+}
+
+.cart-icon{
+    position:relative;
+    margin-left:6px;
+    flex-shrink:0;
+}
+
+.cart-icon a{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    background:rgba(255, 247, 240, 0.88);
+    border:1px solid rgba(184,142,103,0.25);
+    box-shadow:0 10px 18px rgba(106,81,69,0.08);
+    transition:transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    padding:0;
+}
+
+.cart-icon a:hover{
+    transform:translateY(-2px);
+    background:rgba(255,250,246,0.98);
+    box-shadow:0 14px 24px rgba(106,81,69,0.12);
+}
+
+.cart-icon svg{
+    width:23px;
+    height:23px;
+    stroke:var(--brown);
+}
+
+#cart-count{
+    position:absolute;
+    top:-4px;
+    right:-4px;
+    min-width:19px;
+    height:19px;
+    padding:0 5px;
+    border-radius:999px;
+    background:linear-gradient(135deg, var(--ocre-deep), var(--ocre));
+    color:white;
+    font-size:11px;
+    font-weight:700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    line-height:1;
+    box-shadow:0 6px 14px rgba(184,142,103,0.28);
 }
 
 .page-wrap{
@@ -435,15 +491,18 @@ select:focus{
     width:340px;
     transform:translate(-50%,-50%);
 }
+
 #starImg{
     top:63%;
     left:50%;
     width:340px;
     transform:translate(-50%,-50%);
 }
+
 #bowImg{
     top:32%;
     left:64%;
+    width:250px;
     transform:translate(-50%,-50%) rotate(22deg);
 }
 
@@ -563,6 +622,10 @@ select:focus{
         font-size:0.92rem;
     }
 
+    .cart-icon{
+        margin-left:0;
+    }
+
     .page-wrap{ padding-top:170px; }
     .page-head h1{ font-size:2rem; }
     .preview{ padding:34px; }
@@ -589,16 +652,27 @@ select:focus{
 
 <header class="site-header" id="siteHeader">
     <div class="nav">
-        <a href="Maison-doucette-homepage.html" class="logo">
+        <a href="index.html" class="logo">
             <img src="images/logo.jpg" alt="Maison Doucette logo">
             <span>Maison Doucette</span>
         </a>
 
         <ul class="menu">
-            <li><a href="Maison-doucette-homepage.html">Home</a></li>
-            <li><a href="Maison-doucette-homepage.html#shop">Our Collection</a></li>
-            <li><a href="Maison-doucette-homepage.html#about">About Us</a></li>
-            <li><a href="Maison-doucette-homepage.html#contact">Contact Us</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#shop">Our collection</a></li>
+            <li><a href="index.html#about">About us</a></li>
+            <li><a href="index.html#contact">Contact us</a></li>
+
+            <li class="cart-icon">
+                <a href="cart.html" aria-label="View cart">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="9" cy="20" r="1"></circle>
+                        <circle cx="18" cy="20" r="1"></circle>
+                        <path d="M2 3h3l2.2 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.5L21 6H7.1"></path>
+                    </svg>
+                    <span id="cart-count">0</span>
+                </a>
+            </li>
         </ul>
     </div>
 </header>
@@ -689,7 +763,7 @@ select:focus{
 
                 <button class="action-btn add-btn" id="addBtn" disabled type="button">Add to cart</button>
                 <button class="action-btn checkout-btn" id="checkoutBtn" type="button">Go to cart →</button>
-                <button class="action-btn continue-btn" type="button" onclick="window.location.href='Maison-doucette-homepage.html#shop'">
+                <button class="action-btn continue-btn" type="button" onclick="window.location.href='index.html#shop'">
                     Continue shopping
                 </button>
             </div>
@@ -734,6 +808,7 @@ const bowImg   = document.getElementById("bowImg");
 
 const siteHeader = document.getElementById("siteHeader");
 const cursorGlow = document.getElementById("cursorGlow");
+const cartCount = document.getElementById("cart-count");
 
 document.getElementById("minusBtn").addEventListener("click", () => changeQty(-1));
 document.getElementById("plusBtn").addEventListener("click", () => changeQty(1));
@@ -741,13 +816,13 @@ document.getElementById("checkoutBtn").addEventListener("click", goToCart);
 addBtn.addEventListener("click", addToCart);
 
 const imageMap = {
-  "Cream": "Teddy_Colors/teddy-cream.png",
-  "Brown": "Teddy_Colors/teddy-brown.png",
-  "Light brown": "Teddy_Colors/teddy-light-brown.png",
-  "Light pink": "Teddy_Colors/teddy-light-pink.png",
-  "Light yellow": "Teddy_Colors/teddy-light-yellow.png",
-  "Light blue": "Teddy_Colors/teddy-light-blue.png",
-  "Dark blue": "Teddy_Colors/teddy-dark-blue.png"
+  "Cream": "Teddy_Bear_Colors/teddy-bear-cream.png",
+  "Brown": "Teddy_Bear_Colors/teddy-bear-brown.png",
+  "Light brown": "Teddy_Bear_Colors/teddy-bear-light-brown.png",
+  "Light pink": "Teddy_Bear_Colors/teddy-bear-light-pink.png",
+  "Light yellow": "Teddy_Bear_Colors/teddy-bear-light-yellow.png",
+  "Light blue": "Teddy_Bear_Colors/teddy-bear-light-blue.png",
+  "Dark blue": "Teddy_Bear_Colors/teddy-bear-dark-blue.png"
 };
 
 const colorOptionsHtml = `
@@ -796,21 +871,25 @@ function trySetImage(imgEl, candidates){
     imgEl.style.display = "none";
     imgEl.removeAttribute("src");
 
-    const probe = new Image();
     const attempt = () => {
       if(i >= candidates.length){
         resolve({ ok:false, used:"" });
         return;
       }
+
       const src = candidates[i++];
+      const probe = new Image();
+
       probe.onload = () => {
         imgEl.src = src;
         imgEl.style.display = "block";
         resolve({ ok:true, used:src });
       };
-      probe.onerror = attempt;
+
+      probe.onerror = () => attempt();
       probe.src = src;
     };
+
     attempt();
   });
 }
@@ -818,6 +897,7 @@ function trySetImage(imgEl, candidates){
 function showHint(id, ok, example){
   const el = document.getElementById(id);
   if(!el) return;
+
   if(ok){
     el.textContent = "";
     el.classList.remove("error");
@@ -838,9 +918,21 @@ function getActiveFromSelectedText(){
 }
 
 function hideInactiveAccessories(active){
-  if(!active.heart){ heartImg.style.display="none"; heartImg.removeAttribute("src"); }
-  if(!active.star){  starImg.style.display="none";  starImg.removeAttribute("src"); }
-  if(!active.bow){   bowImg.style.display="none";   bowImg.removeAttribute("src"); }
+  if(!active.heart){
+    heartImg.style.display="none";
+    heartImg.removeAttribute("src");
+    heartImg.style.opacity = "0";
+  }
+  if(!active.star){
+    starImg.style.display="none";
+    starImg.removeAttribute("src");
+    starImg.style.opacity = "0";
+  }
+  if(!active.bow){
+    bowImg.style.display="none";
+    bowImg.removeAttribute("src");
+    bowImg.style.opacity = "0";
+  }
 }
 
 function syncColorsFromUI(){
@@ -856,6 +948,7 @@ function syncColorsFromUI(){
 function animatePreviewElement(el, type = "default"){
   el.classList.remove("preview-appear", "preview-appear-bow");
   el.style.animation = "none";
+
   void el.offsetWidth;
 
   if(type === "bow"){
@@ -889,11 +982,28 @@ async function renderAccessory(type, colorLabel){
 
   if(result.ok){
     imgEl.style.opacity = "0";
+
     if(type === "bow"){
+      imgEl.style.top = "32%";
+      imgEl.style.left = "64%";
+      imgEl.style.width = "250px";
+      imgEl.style.height = "auto";
+      imgEl.style.maxWidth = "50%";
+      imgEl.style.transform = "translate(-50%,-50%) rotate(22deg)";
       animatePreviewElement(imgEl, "bow");
     }else{
+      imgEl.style.top = "63%";
+      imgEl.style.left = "50%";
+      imgEl.style.width = "340px";
+      imgEl.style.height = "auto";
+      imgEl.style.maxWidth = "50%";
+      imgEl.style.transform = "translate(-50%,-50%)";
       animatePreviewElement(imgEl, "centered");
     }
+  } else {
+    imgEl.style.display = "none";
+    imgEl.removeAttribute("src");
+    imgEl.style.opacity = "0";
   }
 }
 
@@ -909,6 +1019,7 @@ async function renderAccessories(){
 
 function updateAccessoryOptions(){
   const active = getActiveFromSelectedText();
+
   accessoryColorsWrap.innerHTML = "";
 
   if(!active.heart) heartColor = "";
@@ -916,9 +1027,10 @@ function updateAccessoryOptions(){
   if(!active.bow)   bowColor   = "";
 
   if(active.nothing){
-    heartImg.style.display="none"; heartImg.removeAttribute("src");
-    starImg.style.display="none";  starImg.removeAttribute("src");
-    bowImg.style.display="none";   bowImg.removeAttribute("src");
+    heartImg.style.display="none"; heartImg.removeAttribute("src"); heartImg.style.opacity = "0";
+    starImg.style.display="none";  starImg.removeAttribute("src");  starImg.style.opacity = "0";
+    bowImg.style.display="none";   bowImg.removeAttribute("src");   bowImg.style.opacity = "0";
+    validateForm();
     return;
   }
 
@@ -956,21 +1068,23 @@ function updateAccessoryOptions(){
 
   if(heartSel){
     heartSel.addEventListener("change", async () => {
-      syncColorsFromUI();
+      heartColor = normalizeColorLabel(heartSel.value);
       await renderAccessories();
       validateForm();
     });
   }
+
   if(starSel){
     starSel.addEventListener("change", async () => {
-      syncColorsFromUI();
+      starColor = normalizeColorLabel(starSel.value);
       await renderAccessories();
       validateForm();
     });
   }
+
   if(bowSel){
     bowSel.addEventListener("change", async () => {
-      syncColorsFromUI();
+      bowColor = normalizeColorLabel(bowSel.value);
       await renderAccessories();
       validateForm();
     });
@@ -1058,6 +1172,37 @@ function validateForm(){
   addBtn.disabled = !valid;
 }
 
+function updateCartCount(){
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  let total = 0;
+
+  cart.forEach(item => {
+    total += Number(item.quantity || 1);
+  });
+
+  if(!cartCount) return;
+
+  cartCount.textContent = total;
+
+  if(total === 0){
+    cartCount.style.display = "none";
+  } else {
+    cartCount.style.display = "flex";
+  }
+}
+
+function getSavedStyle(el){
+  if(!el || !el.getAttribute("src")) return null;
+
+  return {
+    top: el.style.top || "",
+    left: el.style.left || "",
+    width: el.style.width || "",
+    height: el.style.height || "",
+    transform: el.style.transform || ""
+  };
+}
+
 function addToCart(){
   syncColorsFromUI();
 
@@ -1067,10 +1212,29 @@ function addToCart(){
     size: size.options[size.selectedIndex].text,
     bodyColor: bodyColor.value,
     accessory: accessory.options[accessory.selectedIndex].text,
+
     heartColor: heartColor,
     starColor: starColor,
     bowColor: bowColor,
-    image: teddyImage && teddyImage.src ? teddyImage.src : "",
+
+    bodyImage: teddyImage.getAttribute("src") || "",
+    heartImage: heartImg.getAttribute("src") || "",
+    starImage: starImg.getAttribute("src") || "",
+    bowImage: bowImg.getAttribute("src") || "",
+
+    bodyStyle: {
+      top: "0px",
+      left: "0px",
+      width: "100%",
+      height: "100%",
+      transform: "none"
+    },
+
+    heartStyle: getSavedStyle(heartImg),
+    starStyle: getSavedStyle(starImg),
+    bowStyle: getSavedStyle(bowImg),
+
+    image: teddyImage.getAttribute("src") || "",
     price: getUnitPrice(),
     quantity: quantity
   };
@@ -1080,6 +1244,7 @@ function addToCart(){
   localStorage.setItem("cart", JSON.stringify(cart));
 
   document.getElementById("checkoutBtn").style.display = "block";
+  updateCartCount();
 
   const toast = document.getElementById("toast");
   toast.classList.add("show");
@@ -1122,7 +1287,10 @@ document.addEventListener("mouseenter", () => {
 });
 
 window.addEventListener("scroll", handleHeaderShadow);
-window.addEventListener("load", handleHeaderShadow);
+window.addEventListener("load", () => {
+  handleHeaderShadow();
+  updateCartCount();
+});
 
 updatePrice();
 updatePreview();
