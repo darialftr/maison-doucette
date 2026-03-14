@@ -794,32 +794,32 @@ function showChocolateLayer(){
 
   chocolateLayer.style.width = "100%";
   chocolateLayer.style.maxWidth = "510px";
-  chocolateLayer.style.top = "0px";
-  chocolateLayer.style.left = "0px";
+  chocolateLayer.style.top = "0%";
+  chocolateLayer.style.left = "0%";
   chocolateLayer.style.transform = "none";
 
   if(chocolate.value === "Milk chocolate"){
     chocolateLayer.style.width = "103%";
-    chocolateLayer.style.top = "102px";
-    chocolateLayer.style.left = "-9px";
+    chocolateLayer.style.top = "20%";
+    chocolateLayer.style.left = "-1.8%";
   }
 
   if(chocolate.value === "Dark chocolate"){
     chocolateLayer.style.width = "93%";
-    chocolateLayer.style.top = "94px";
-    chocolateLayer.style.left = "-4px";
+    chocolateLayer.style.top = "18.4%";
+    chocolateLayer.style.left = "-0.8%";
   }
 
   if(chocolate.value === "Pink chocolate"){
     chocolateLayer.style.width = "102%";
-    chocolateLayer.style.top = "99px";
-    chocolateLayer.style.left = "-9px";
+    chocolateLayer.style.top = "19.4%";
+    chocolateLayer.style.left = "-1.8%";
   }
 
   if(chocolate.value === "White chocolate"){
     chocolateLayer.style.width = "78%";
-    chocolateLayer.style.top = "150px";
-    chocolateLayer.style.left = "35px";
+    chocolateLayer.style.top = "29.4%";
+    chocolateLayer.style.left = "6.9%";
   }
 
   chocolateLayer.src = chocolateSrc;
@@ -904,21 +904,6 @@ function updateCartCount(){
   }
 }
 
-function getSavedStyle(el){
-  const computed = window.getComputedStyle(el);
-
-  return {
-    width: el.style.width || computed.width || "",
-    height: el.style.height || computed.height || "",
-    maxWidth: el.style.maxWidth || computed.maxWidth || "",
-    maxHeight: el.style.maxHeight || computed.maxHeight || "",
-    top: el.style.top || computed.top || "",
-    left: el.style.left || computed.left || "",
-    right: el.style.right || computed.right || "",
-    bottom: el.style.bottom || computed.bottom || "",
-    transform: el.style.transform || computed.transform || "none"
-  };
-}
 function getSavedStyle(el){
   const computed = window.getComputedStyle(el);
 
