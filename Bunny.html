@@ -10,11 +10,8 @@
   <style>
     :root{
       --bg:#f7f1eb;
-      --bg-soft:#fbf7f3;
       --panel:#fffaf6;
-      --panel-2:#fffdfb;
       --line:rgba(184,142,103,0.20);
-      --line-strong:rgba(184,142,103,0.34);
       --brown:#6a5145;
       --brown-soft:#8b6f61;
       --muted:#a19389;
@@ -22,11 +19,9 @@
       --gold-deep:#b88e67;
       --shadow:0 20px 50px rgba(106,81,69,0.10);
       --shadow-soft:0 12px 26px rgba(106,81,69,0.08);
-      --shadow-strong:0 24px 50px rgba(106,81,69,0.16);
       --radius-xl:30px;
       --radius-lg:22px;
       --radius-md:16px;
-      --radius-sm:12px;
       --ease:cubic-bezier(.22,.61,.36,1);
       --topbar-h:68px;
     }
@@ -47,7 +42,7 @@
 
     a{ color:inherit; text-decoration:none; }
     img{ display:block; max-width:100%; }
-    button{ font:inherit; }
+    button, select{ font:inherit; }
 
     .cursor-glow{
       position:fixed;
@@ -307,7 +302,7 @@
       z-index:1;
     }
 
-    .preview-message{
+    #previewMessage{
       position:absolute;
       left:50%;
       top:50%;
@@ -318,6 +313,7 @@
       line-height:1.7;
       z-index:3;
       width:min(78%, 280px);
+      display:none;
     }
 
     #bunnyImage{
@@ -473,7 +469,7 @@
       width:44px;
       height:44px;
       border-radius:50%;
-      margin:0 auto 8px;
+      margin:0 auto;
       border:2px solid rgba(184,142,103,0.38);
       box-shadow:
         0 0 0 3px rgba(255,250,246,0.95),
@@ -491,10 +487,7 @@
     }
 
     .swatch-name{
-      font-size:0.76rem;
-      line-height:1.35;
-      color:var(--brown-soft);
-      font-weight:500;
+      display:none;
     }
 
     .option-grid{
@@ -859,14 +852,6 @@
       .customizer-layout{
         grid-template-columns:1fr;
       }
-
-      .right-column{
-        order:2;
-      }
-
-      .left-column{
-        order:1;
-      }
     }
 
     @media (max-width: 760px){
@@ -895,6 +880,8 @@
       }
 
       .customizer-layout{
+        display:flex;
+        flex-direction:column;
         gap:14px;
         padding-top:12px;
       }
@@ -908,9 +895,12 @@
         border-radius:24px;
       }
 
-      .preview-card{
-        padding:12px;
-      }
+      .preview-card{ order:1; padding:12px; }
+      .body-card{ order:2; }
+      .accessories-card{ order:3; }
+      .details-card{ order:4; }
+      .order-card{ order:5; }
+      .rec-card{ order:6; }
 
       .preview-head{
         margin-bottom:10px;
@@ -1001,10 +991,6 @@
         height:38px;
       }
 
-      .swatch-name{
-        font-size:0.7rem;
-      }
-
       .option-grid{
         grid-template-columns:repeat(2, minmax(0, 1fr));
         gap:10px;
@@ -1085,22 +1071,6 @@
         max-width:none;
         text-align:center;
       }
-
-      /* exact order on phone */
-      .left-column{
-        display:contents;
-      }
-
-      .right-column{
-        display:contents;
-      }
-
-      .preview-card{ order:1; }
-      .body-card{ order:2; }
-      .accessories-card{ order:3; }
-      .details-card{ order:4; }
-      .order-card{ order:5; }
-      .rec-card{ order:6; }
     }
 
     @media (max-width: 420px){
@@ -1123,16 +1093,6 @@
 
       .summary-chip .v{
         font-size:0.78rem;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      *,
-      *::before,
-      *::after{
-        animation:none !important;
-        transition:none !important;
-        scroll-behavior:auto !important;
       }
     }
   </style>
@@ -1189,7 +1149,7 @@
             <div class="stage-block b6"></div>
             <div class="stage-floor"></div>
 
-            <div id="previewMessage" class="preview-message" style="display:none;">Choose your bunny details to see it come to life 🐰</div>
+            <div id="previewMessage">Choose your bunny details to see it come to life 🐰</div>
 
             <img id="bunnyImage" alt="Bunny preview">
             <img id="heartImg" class="accessory-img" alt="Heart accessory">
@@ -1439,10 +1399,9 @@
       {
         value: "0",
         label: "Nothing - 0RON",
-        title: "Nothing",
+        title: "None",
         price: 0,
         combo: { heart:false, star:false, bow:false },
-        thumb: "images/bunny1.jpg",
         kind: "none"
       },
       {
@@ -1455,10 +1414,10 @@
         thumbColor: "Red"
       },
       {
-        value: "8",
-        label: "Star - 8RON",
+        value: "7-star",
+        label: "Star - 7RON",
         title: "Star",
-        price: 8,
+        price: 7,
         combo: { heart:false, star:true, bow:false },
         thumbType: "star",
         thumbColor: "Yellow"
@@ -1473,16 +1432,16 @@
         thumbColor: "Bright pink"
       },
       {
-        value: "9",
-        label: "Heart + Bow - 9RON",
+        value: "10-heart-bow",
+        label: "Heart + Bow - 10RON",
         title: "Heart + Bow",
-        price: 9,
+        price: 10,
         combo: { heart:true, star:false, bow:true },
         thumbType: "heart-bow",
         thumbColor: "Red"
       },
       {
-        value: "10",
+        value: "10-star-bow",
         label: "Star + Bow - 10RON",
         title: "Star + Bow",
         price: 10,
@@ -1584,6 +1543,7 @@
         btn.type = "button";
         btn.className = "swatch-btn";
         btn.dataset.value = option.name;
+        btn.setAttribute("aria-label", option.name);
 
         btn.innerHTML = `
           <span class="swatch-circle" style="background:${option.color};"></span>
@@ -1613,6 +1573,7 @@
         btn.type = "button";
         btn.className = "swatch-btn" + (currentValue === option.name ? " active" : "");
         btn.dataset.value = option.name;
+        btn.setAttribute("aria-label", option.name);
 
         btn.innerHTML = `
           <span class="swatch-circle" style="background:${option.color};"></span>
@@ -1659,8 +1620,27 @@
 
         if(option.kind === "none"){
           thumbHTML = `
-            <div class="option-thumb" style="background:#f6f1eb;">
-              <span style="font-size:0.82rem;color:#9b9087;font-weight:600;">No accessory</span>
+            <div class="option-thumb" style="background:#f8f3ee; position:relative;">
+              <div style="
+                width:54px;
+                height:54px;
+                border-radius:50%;
+                border:2px solid rgba(184,142,103,0.34);
+                position:relative;
+                background:rgba(255,255,255,0.78);
+                box-shadow:0 8px 16px rgba(106,81,69,0.06);
+              ">
+                <span style="
+                  position:absolute;
+                  left:50%;
+                  top:50%;
+                  width:2px;
+                  height:40px;
+                  background:#b88e67;
+                  transform:translate(-50%,-50%) rotate(45deg);
+                  border-radius:999px;
+                "></span>
+              </div>
             </div>
           `;
         } else if(option.thumbType === "heart-bow"){
@@ -1693,7 +1673,7 @@
         card.innerHTML = `
           ${thumbHTML}
           <h3>${option.title}</h3>
-          <p>+${option.price} RON</p>
+          <p>${option.price === 0 ? "0 RON" : "+" + option.price + " RON"}</p>
         `;
 
         card.addEventListener("click", () => {
@@ -1702,7 +1682,6 @@
           card.classList.add("active");
 
           const combo = option.combo;
-
           if(!combo.heart) heartColor = "";
           if(!combo.star) starColor = "";
           if(!combo.bow) bowColor = "";
@@ -1725,15 +1704,7 @@
     function updateAccessoryColorUI(){
       const selected = getSelectedAccessory();
 
-      if(!selected || selected.value === ""){
-        accessoryColorArea.style.display = "none";
-        heartColorWrap.style.display = "none";
-        starColorWrap.style.display = "none";
-        bowColorWrap.style.display = "none";
-        return;
-      }
-
-      if(selected.value === "0"){
+      if(!selected || selected.value === "" || selected.value === "0"){
         accessoryColorArea.style.display = "none";
         heartColorWrap.style.display = "none";
         starColorWrap.style.display = "none";
@@ -1747,7 +1718,7 @@
         heartColorWrap.style.display = "block";
         buildColorSwatches(heartSwatches, heartColor, (val) => {
           heartColor = val;
-          buildColorSwatches(heartSwatches, heartColor, arguments.callee);
+          updateAccessoryColorUI();
           renderAccessories();
           validateForm();
           updateSummary();
@@ -1760,7 +1731,7 @@
         starColorWrap.style.display = "block";
         buildColorSwatches(starSwatches, starColor, (val) => {
           starColor = val;
-          buildColorSwatches(starSwatches, starColor, arguments.callee);
+          updateAccessoryColorUI();
           renderAccessories();
           validateForm();
           updateSummary();
@@ -1773,7 +1744,7 @@
         bowColorWrap.style.display = "block";
         buildColorSwatches(bowSwatches, bowColor, (val) => {
           bowColor = val;
-          buildColorSwatches(bowSwatches, bowColor, arguments.callee);
+          updateAccessoryColorUI();
           renderAccessories();
           validateForm();
           updateSummary();
