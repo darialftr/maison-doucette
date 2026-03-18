@@ -254,7 +254,7 @@
       position:relative;
       width:100%;
       aspect-ratio:0.92/1;
-      min-height:430px;
+      min-height:450px;
       border-radius:26px;
       overflow:hidden;
       background:linear-gradient(180deg, #f5f3f1 0%, #ebe8e3 100%);
@@ -281,7 +281,7 @@
       position:absolute;
       left:8%;
       right:8%;
-      bottom:20px;
+      bottom:18px;
       height:58px;
       border-radius:50%;
       background:radial-gradient(ellipse at center, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.08) 38%, transparent 72%);
@@ -291,10 +291,10 @@
 
     .stage-glow{
       position:absolute;
-      width:240px;
-      height:240px;
+      width:250px;
+      height:250px;
       left:50%;
-      top:22px;
+      top:16px;
       transform:translateX(-50%);
       border-radius:50%;
       background:radial-gradient(circle, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.55) 36%, rgba(255,255,255,0) 72%);
@@ -318,9 +318,9 @@
     #bunnyImage{
       position:absolute;
       left:50%;
-      bottom:18px;
+      bottom:0;
       transform:translateX(-50%);
-      width:min(18%, 560px);
+      width:min(112%, 590px);
       max-width:none;
       display:block;
       opacity:1;
@@ -342,14 +342,14 @@
     #starImg{
       left:50%;
       top:69%;
-      width:min(56%, 260px);
+      width:min(58%, 280px);
       transform:translate(-50%,-50%);
     }
 
     #bowImg{
       left:63%;
-      top:36%;
-      width:min(37%, 170px);
+      top:35%;
+      width:min(38%, 180px);
       transform:translate(-50%,-50%) rotate(29deg);
     }
 
@@ -973,24 +973,24 @@
       }
 
       .preview-stage{
-        min-height:350px;
+        min-height:370px;
         border-radius:22px;
       }
 
       #bunnyImage{
-        width:min(106%, 370px);
-        bottom:-4px;
+        width:min(122%, 430px);
+        bottom:-6px;
       }
 
       #heartImg,
       #starImg{
-        width:min(58%, 196px);
+        width:min(60%, 212px);
         top:70%;
       }
 
       #bowImg{
-        width:min(35%, 122px);
-        top:36%;
+        width:min(37%, 132px);
+        top:35%;
         left:63%;
       }
 
@@ -1045,20 +1045,20 @@
 
     @media (max-width: 420px){
       .preview-stage{
-        min-height:332px;
+        min-height:346px;
       }
 
       #bunnyImage{
-        width:min(110%, 342px);
+        width:min(126%, 388px);
       }
 
       #heartImg,
       #starImg{
-        width:min(60%, 178px);
+        width:min(62%, 188px);
       }
 
       #bowImg{
-        width:min(34%, 112px);
+        width:min(36%, 118px);
       }
     }
   </style>
@@ -1447,7 +1447,14 @@
       }
     ];
 
-    const demoImage = "Bunny_Colors/bunny-demo.png";
+    const demoCandidates = [
+      "Bunny_Colors/bunny-demo.png",
+      "Bunny_Colors/bunny-demo.PNG",
+      "Bunny_Colors/Bunny-demo.png",
+      "Bunny_Colors/Bunny-demo.PNG",
+      "Bunny_Colors/demo.png",
+      "Bunny_Colors/demo.PNG"
+    ];
 
     function goToStep(step){
       currentStep = step;
@@ -1517,6 +1524,27 @@
             imgEl.style.display = "block";
             resolve({ ok:true, used:src });
           };
+          probe.onerror = attempt;
+          probe.src = src;
+        };
+
+        attempt();
+      });
+    }
+
+    async function getFirstWorkingImage(candidates){
+      return new Promise((resolve) => {
+        let i = 0;
+        const probe = new Image();
+
+        const attempt = () => {
+          if(i >= candidates.length){
+            resolve("");
+            return;
+          }
+
+          const src = candidates[i++];
+          probe.onload = () => resolve(src);
           probe.onerror = attempt;
           probe.src = src;
         };
@@ -1596,22 +1624,7 @@
 
     async function getAccessoryThumbSrc(type, colorLabel){
       const candidates = accessoryCandidates(type, colorLabel);
-      return new Promise((resolve) => {
-        let i = 0;
-        const probe = new Image();
-
-        const attempt = () => {
-          if(i >= candidates.length){
-            resolve("");
-            return;
-          }
-          const src = candidates[i++];
-          probe.onload = () => resolve(src);
-          probe.onerror = attempt;
-          probe.src = src;
-        };
-        attempt();
-      });
+      return getFirstWorkingImage(candidates);
     }
 
     async function buildAccessoryCards(){
@@ -1768,29 +1781,29 @@
     function getAccessoryScale(){
       if(window.innerWidth <= 420){
         return {
-          centerWidth: "178px",
+          centerWidth: "188px",
           centerTop: "70%",
-          bowWidth: "112px",
-          bowTop: "36%",
+          bowWidth: "118px",
+          bowTop: "35%",
           bowLeft: "63%"
         };
       }
 
       if(window.innerWidth <= 760){
         return {
-          centerWidth: "196px",
+          centerWidth: "212px",
           centerTop: "70%",
-          bowWidth: "122px",
-          bowTop: "36%",
+          bowWidth: "132px",
+          bowTop: "35%",
           bowLeft: "63%"
         };
       }
 
       return {
-        centerWidth: "260px",
+        centerWidth: "280px",
         centerTop: "69%",
-        bowWidth: "170px",
-        bowTop: "36%",
+        bowWidth: "180px",
+        bowTop: "35%",
         bowLeft: "63%"
       };
     }
@@ -1870,10 +1883,24 @@
       if(selected.combo.bow) await renderAccessory("bow", bowColor);
     }
 
-    function updatePreview(){
+    async function updatePreview(){
       const chosen = bodyOptions.find(item => item.name === bodyColor);
-      const src = chosen ? chosen.src : "Bunny_Colors/bunny-demo.png";
 
+      let src = "";
+      if(chosen){
+        src = chosen.src;
+      } else {
+        src = await getFirstWorkingImage(demoCandidates);
+      }
+
+      if(!src){
+        bunnyImage.style.display = "none";
+        previewMessage.style.display = "block";
+        previewMessage.textContent = "Could not load bunny image 🤍";
+        return;
+      }
+
+      previewMessage.style.display = "none";
       bunnyImage.style.display = "block";
       bunnyImage.style.opacity = "1";
       bunnyImage.src = src;
@@ -1948,7 +1975,7 @@
     }
 
     function validateForm(){
-      let valid = canGoFromBody() && canGoFromAccessories();
+      const valid = canGoFromBody() && canGoFromAccessories();
       addBtn.disabled = !valid;
     }
 
@@ -2070,7 +2097,7 @@
       buildBodySwatches();
       await buildAccessoryCards();
       updateAccessoryColorUI();
-      updatePreview();
+      await updatePreview();
       updatePrice();
       updateSummary();
       updateCartCount();
