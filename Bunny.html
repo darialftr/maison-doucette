@@ -11,6 +11,7 @@
     :root{
       --bg:#f7f1eb;
       --panel:#fffaf6;
+      --panel-soft:#fffdfb;
       --line:rgba(184,142,103,0.20);
       --brown:#6a5145;
       --brown-soft:#8b6f61;
@@ -169,7 +170,7 @@
 
     .customizer-layout{
       display:grid;
-      grid-template-columns:minmax(320px, 1.08fr) minmax(320px, 0.92fr);
+      grid-template-columns:minmax(320px, 1.02fr) minmax(320px, 0.98fr);
       gap:22px;
       align-items:start;
       padding-top:16px;
@@ -182,7 +183,7 @@
     }
 
     .card{
-      background:rgba(255,250,246,0.86);
+      background:rgba(255,250,246,0.88);
       border:1px solid var(--line);
       border-radius:var(--radius-xl);
       box-shadow:var(--shadow);
@@ -191,9 +192,8 @@
     }
 
     .preview-card,
-    .body-card,
-    .accessories-card,
-    .details-card,
+    .stepper-card,
+    .step-card,
     .order-card,
     .rec-card{
       opacity:0;
@@ -202,11 +202,10 @@
     }
 
     .preview-card{ animation-delay:0.05s; }
-    .body-card{ animation-delay:0.12s; }
-    .accessories-card{ animation-delay:0.18s; }
-    .details-card{ animation-delay:0.24s; }
-    .order-card{ animation-delay:0.30s; }
-    .rec-card{ animation-delay:0.36s; }
+    .stepper-card{ animation-delay:0.10s; }
+    .step-card{ animation-delay:0.15s; }
+    .order-card{ animation-delay:0.22s; }
+    .rec-card{ animation-delay:0.30s; }
 
     .preview-card{
       padding:18px;
@@ -384,8 +383,79 @@
       color:var(--brown);
     }
 
-    .section-inner{
+    .stepper-card{
+      padding:14px;
+    }
+
+    .stepper-title{
+      margin:0 0 12px;
+      font-family:'Playfair Display',serif;
+      font-size:1.22rem;
+      font-weight:500;
+    }
+
+    .stepper{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:8px;
+      align-items:start;
+    }
+
+    .step-badge{
+      display:grid;
+      justify-items:center;
+      gap:8px;
+      text-align:center;
+      opacity:0.66;
+      transition:opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .step-badge.active{
+      opacity:1;
+      transform:translateY(-1px);
+    }
+
+    .step-badge.done{
+      opacity:0.92;
+    }
+
+    .step-badge .dot{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      border:1px solid var(--line);
+      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:0.86rem;
+      font-weight:700;
+      color:var(--brown-soft);
+      box-shadow:var(--shadow-soft);
+      transition:all 0.2s ease;
+    }
+
+    .step-badge.active .dot,
+    .step-badge.done .dot{
+      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
+      color:#fff;
+      border-color:transparent;
+    }
+
+    .step-badge .txt{
+      font-size:0.73rem;
+      line-height:1.3;
+      color:var(--brown-soft);
+      font-weight:600;
+    }
+
+    .step-card{
       padding:16px;
+      display:none;
+    }
+
+    .step-card.active{
+      display:block;
     }
 
     .section-title{
@@ -458,7 +528,9 @@
       padding:0;
       cursor:pointer;
       transition:transform 0.18s ease;
-      text-align:center;
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
 
     .swatch-btn:hover{
@@ -466,15 +538,17 @@
     }
 
     .swatch-circle{
+      display:block;
       width:44px;
       height:44px;
+      aspect-ratio:1 / 1;
       border-radius:50%;
-      margin:0 auto;
-      border:2px solid rgba(184,142,103,0.38);
+      border:2px solid rgba(184,142,103,0.42);
       box-shadow:
         0 0 0 3px rgba(255,250,246,0.95),
         0 10px 18px rgba(106,81,69,0.08);
       transition:all 0.2s ease;
+      flex-shrink:0;
     }
 
     .swatch-btn.active .swatch-circle{
@@ -484,10 +558,6 @@
         0 0 0 6px rgba(210,176,141,0.34),
         0 12px 22px rgba(106,81,69,0.12);
       transform:scale(1.04);
-    }
-
-    .swatch-name{
-      display:none;
     }
 
     .option-grid{
@@ -528,6 +598,7 @@
       border:1px solid rgba(184,142,103,0.16);
       overflow:hidden;
       margin-bottom:10px;
+      position:relative;
     }
 
     .option-thumb img{
@@ -574,36 +645,51 @@
       font-weight:600;
     }
 
-    .next-wrap{
+    .step-actions{
       margin-top:18px;
-      display:none;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
     }
 
-    .next-wrap.show{
-      display:block;
-    }
-
-    .next-btn{
-      width:100%;
+    .step-btn{
       border:none;
       border-radius:16px;
-      padding:15px 16px;
+      padding:14px 16px;
       cursor:pointer;
+      font-weight:600;
+      letter-spacing:0.04em;
+      text-transform:uppercase;
+      transition:transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+      font-size:0.8rem;
+    }
+
+    .step-btn:hover{
+      transform:translateY(-1px);
+    }
+
+    .step-btn.primary{
       background:linear-gradient(135deg, var(--gold-deep), var(--gold));
       color:#fff;
-      font-weight:600;
-      letter-spacing:0.05em;
-      text-transform:uppercase;
       box-shadow:0 16px 28px rgba(184,142,103,0.24);
-      transition:transform 0.22s ease, box-shadow 0.22s ease;
     }
 
-    .next-btn:hover{
-      transform:translateY(-1px);
-      box-shadow:0 22px 34px rgba(184,142,103,0.30);
+    .step-btn.soft{
+      background:rgba(255,255,255,0.78);
+      color:var(--brown);
+      border:1px solid var(--line);
     }
 
-    .order-inner{
+    .step-btn[disabled]{
+      background:#d7cfc6;
+      color:#fff;
+      box-shadow:none;
+      cursor:not-allowed;
+      transform:none;
+      border:none;
+    }
+
+    .order-card{
       padding:16px;
     }
 
@@ -731,7 +817,7 @@
       border:1px solid var(--line);
     }
 
-    .rec-inner{
+    .rec-card{
       padding:16px;
     }
 
@@ -886,49 +972,10 @@
         padding-top:12px;
       }
 
-      .preview-card,
-      .body-card,
-      .accessories-card,
-      .details-card,
-      .order-card,
-      .rec-card{
-        border-radius:24px;
-      }
-
-      .preview-card{ order:1; padding:12px; }
-      .body-card{ order:2; }
-      .accessories-card{ order:3; }
-      .details-card{ order:4; }
-      .order-card{ order:5; }
-      .rec-card{ order:6; }
-
-      .preview-head{
-        margin-bottom:10px;
-      }
-
-      .preview-head h1{
-        font-size:1.34rem;
-      }
-
-      .preview-head p{
-        font-size:0.82rem;
-      }
-
-      .preview-badge{
-        display:none;
-      }
-
       .preview-stage{
         min-height:350px;
         border-radius:22px;
       }
-
-      .b1{ width:74px; height:100px; left:-20px; top:18px; }
-      .b2{ width:86px; height:70px; right:6px; top:24px; }
-      .b3{ width:100px; height:116px; left:4px; bottom:86px; }
-      .b4{ width:112px; height:78px; right:-14px; bottom:102px; }
-      .b5{ width:56px; height:56px; top:26px; }
-      .b6{ width:132px; height:52px; bottom:48px; }
 
       #bunnyImage{
         width:min(106%, 370px);
@@ -947,38 +994,21 @@
         left:63%;
       }
 
-      .summary-row{
-        grid-template-columns:repeat(3, minmax(0,1fr));
-        gap:8px;
+      .stepper{
+        grid-template-columns:repeat(4, minmax(0,1fr));
+        gap:6px;
       }
 
-      .summary-chip{
-        padding:10px 9px;
-        min-height:62px;
-        border-radius:14px;
+      .step-badge .txt{
+        font-size:0.66rem;
       }
 
-      .summary-chip .k{
-        font-size:0.62rem;
-      }
-
-      .summary-chip .v{
-        font-size:0.82rem;
-      }
-
-      .section-inner,
-      .order-inner,
-      .rec-inner{
+      .step-card,
+      .order-card,
+      .rec-card,
+      .stepper-card,
+      .preview-card{
         padding:12px;
-      }
-
-      .section-title{
-        font-size:1.18rem;
-      }
-
-      .section-text{
-        font-size:0.86rem;
-        margin-bottom:14px;
       }
 
       .swatch-grid{
@@ -996,72 +1026,12 @@
         gap:10px;
       }
 
-      .option-card{
-        border-radius:16px;
-        padding:9px;
-      }
-
-      .option-card h3{
-        font-size:0.82rem;
-      }
-
-      .option-card p{
-        font-size:0.72rem;
-      }
-
-      select{
-        padding:13px 14px;
-        padding-right:40px;
-        font-size:0.92rem;
-      }
-
-      .helper-box{
-        font-size:0.84rem;
-        padding:12px;
-      }
-
-      .order-top{
-        align-items:flex-end;
-      }
-
-      .order-top h2{
-        font-size:1.18rem;
-        max-width:52%;
-        line-height:1.12;
-      }
-
-      .price-box .value{
-        font-size:1.46rem;
-      }
-
       .order-grid{
         grid-template-columns:1fr;
-        gap:12px;
-      }
-
-      .rec-head h2{
-        font-size:1.14rem;
       }
 
       .rec-grid{
         gap:8px;
-      }
-
-      .rec-item{
-        border-radius:16px;
-        padding:8px;
-      }
-
-      .rec-thumb{
-        border-radius:12px;
-      }
-
-      .rec-name{
-        font-size:0.76rem;
-      }
-
-      .rec-price{
-        font-size:0.7rem;
       }
 
       .toast{
@@ -1090,15 +1060,10 @@
       #bowImg{
         width:min(34%, 112px);
       }
-
-      .summary-chip .v{
-        font-size:0.78rem;
-      }
     }
   </style>
 </head>
 <body>
-
   <div class="cursor-glow" id="cursorGlow"></div>
 
   <div class="app-shell">
@@ -1174,147 +1139,170 @@
             </div>
           </div>
         </section>
+
+        <section class="card stepper-card">
+          <h2 class="stepper-title">Create your bunny</h2>
+          <div class="stepper">
+            <div class="step-badge active" data-step-badge="1">
+              <div class="dot">1</div>
+              <div class="txt">Body</div>
+            </div>
+            <div class="step-badge" data-step-badge="2">
+              <div class="dot">2</div>
+              <div class="txt">Accessories</div>
+            </div>
+            <div class="step-badge" data-step-badge="3">
+              <div class="dot">3</div>
+              <div class="txt">Details</div>
+            </div>
+            <div class="step-badge" data-step-badge="4">
+              <div class="dot">4</div>
+              <div class="txt">Order</div>
+            </div>
+          </div>
+        </section>
       </div>
 
       <div class="right-column">
-        <section class="card body-card">
-          <div class="section-inner">
-            <h2 class="section-title">Choose body details</h2>
-            <p class="section-text">Pick the bunny size and then choose the body colour.</p>
+        <section class="card step-card active" id="step-1">
+          <h2 class="section-title">Choose body details</h2>
+          <p class="section-text">Pick the bunny size and then choose the body colour.</p>
 
-            <div class="control-block">
-              <label class="control-label" for="size">Size</label>
-              <select id="size">
-                <option value="">Select...</option>
-                <option value="0">Small (+0RON)</option>
-                <option value="15">Medium (+15RON)</option>
-                <option value="25">Large (+25RON)</option>
-              </select>
-            </div>
+          <div class="control-block">
+            <label class="control-label" for="size">Size</label>
+            <select id="size">
+              <option value="">Select...</option>
+              <option value="0">Small (+0RON)</option>
+              <option value="15">Medium (+15RON)</option>
+              <option value="25">Large (+25RON)</option>
+            </select>
+          </div>
 
-            <div class="control-block">
-              <label class="control-label">Body Colour</label>
-              <div class="swatch-grid" id="bodySwatches"></div>
-            </div>
+          <div class="control-block">
+            <label class="control-label">Body Colour</label>
+            <div class="swatch-grid" id="bodySwatches"></div>
+          </div>
 
-            <div class="next-wrap" id="bodyNextWrap">
-              <button class="next-btn" type="button" id="bodyNextBtn">Next — accessories</button>
-            </div>
+          <div class="step-actions">
+            <button class="step-btn primary" id="nextFromBody" type="button" disabled>Next — accessories</button>
           </div>
         </section>
 
-        <section class="card accessories-card">
-          <div class="section-inner">
-            <h2 class="section-title">Choose accessories</h2>
-            <p class="section-text">Pick a single accessory or a two-piece combination with the bow.</p>
+        <section class="card step-card" id="step-2">
+          <h2 class="section-title">Choose accessories</h2>
+          <p class="section-text">Pick a single accessory or a two-piece combination with the bow.</p>
 
-            <div class="option-grid" id="accessoryOptionsGrid"></div>
+          <div class="option-grid" id="accessoryOptionsGrid"></div>
 
-            <div id="accessoryColorArea" style="display:none; margin-top:18px;">
-              <div id="heartColorWrap" class="control-block" style="display:none;">
-                <label class="control-label">Heart Colour</label>
-                <div class="swatch-grid" id="heartSwatches"></div>
-                <div class="hint" id="heartHint"></div>
-              </div>
-
-              <div id="starColorWrap" class="control-block" style="display:none;">
-                <label class="control-label">Star Colour</label>
-                <div class="swatch-grid" id="starSwatches"></div>
-                <div class="hint" id="starHint"></div>
-              </div>
-
-              <div id="bowColorWrap" class="control-block" style="display:none;">
-                <label class="control-label">Bow Colour</label>
-                <div class="swatch-grid" id="bowSwatches"></div>
-                <div class="hint" id="bowHint"></div>
-              </div>
+          <div id="accessoryColorArea" style="display:none; margin-top:18px;">
+            <div id="heartColorWrap" class="control-block" style="display:none;">
+              <label class="control-label">Heart Colour</label>
+              <div class="swatch-grid" id="heartSwatches"></div>
+              <div class="hint" id="heartHint"></div>
             </div>
+
+            <div id="starColorWrap" class="control-block" style="display:none;">
+              <label class="control-label">Star Colour</label>
+              <div class="swatch-grid" id="starSwatches"></div>
+              <div class="hint" id="starHint"></div>
+            </div>
+
+            <div id="bowColorWrap" class="control-block" style="display:none;">
+              <label class="control-label">Bow Colour</label>
+              <div class="swatch-grid" id="bowSwatches"></div>
+              <div class="hint" id="bowHint"></div>
+            </div>
+          </div>
+
+          <div class="step-actions">
+            <button class="step-btn soft" type="button" data-prev-step="1">Back</button>
+            <button class="step-btn primary" id="nextFromAccessories" type="button" disabled>Next — details</button>
           </div>
         </section>
 
-        <section class="card details-card">
-          <div class="section-inner">
-            <h2 class="section-title">Details</h2>
-            <p class="section-text">Review the bunny you created before bringing it to life.</p>
+        <section class="card step-card" id="step-3">
+          <h2 class="section-title">Details</h2>
+          <p class="section-text">Review the bunny you created before bringing it to life.</p>
 
-            <div class="helper-box" style="margin-bottom:14px;">
-              <strong>Chosen size:</strong> <span id="detailsSize">Not selected</span><br>
-              <strong>Chosen body colour:</strong> <span id="detailsBody">Not selected</span><br>
-              <strong>Chosen accessory:</strong> <span id="detailsAccessory">Not selected</span>
+          <div class="helper-box" style="margin-bottom:14px;">
+            <strong>Chosen size:</strong> <span id="detailsSize">Not selected</span><br>
+            <strong>Chosen body colour:</strong> <span id="detailsBody">Not selected</span><br>
+            <strong>Chosen accessory:</strong> <span id="detailsAccessory">Not selected</span>
+          </div>
+
+          <div class="helper-box">
+            Every bunny is handmade, so your final piece will feel special and one of a kind.
+          </div>
+
+          <div class="step-actions">
+            <button class="step-btn soft" type="button" data-prev-step="2">Back</button>
+            <button class="step-btn primary" type="button" id="nextFromDetails">Next — order</button>
+          </div>
+        </section>
+
+        <section class="card step-card" id="step-4">
+          <div class="order-top">
+            <h2>Order & bring it to life</h2>
+
+            <div class="price-box">
+              <span class="label">Total</span>
+              <span class="value"><span id="price">45</span> RON</span>
+            </div>
+          </div>
+
+          <div class="order-grid">
+            <div>
+              <label class="control-label">Quantity</label>
+              <div class="qty-box">
+                <button class="qty-btn" type="button" id="minusBtn">−</button>
+                <span class="qty-value" id="quantity">1</span>
+                <button class="qty-btn" type="button" id="plusBtn">+</button>
+              </div>
             </div>
 
             <div class="helper-box">
-              Every bunny is handmade, so your final piece will feel special and one of a kind.
+              Handmade just for you.
             </div>
           </div>
-        </section>
 
-        <section class="card order-card">
-          <div class="order-inner">
-            <div class="order-top">
-              <h2>Order & bring it to life</h2>
-
-              <div class="price-box">
-                <span class="label">Total</span>
-                <span class="value"><span id="price">45</span> RON</span>
-              </div>
-            </div>
-
-            <div class="order-grid">
-              <div>
-                <label class="control-label">Quantity</label>
-                <div class="qty-box">
-                  <button class="qty-btn" type="button" id="minusBtn">−</button>
-                  <span class="qty-value" id="quantity">1</span>
-                  <button class="qty-btn" type="button" id="plusBtn">+</button>
-                </div>
-              </div>
-
-              <div class="helper-box">
-                Handmade just for you.
-              </div>
-            </div>
-
-            <div class="actions">
-              <button class="action-btn primary-btn" id="addBtn" type="button" disabled>Add to cart</button>
-              <button class="action-btn dark-btn" id="checkoutBtn" type="button">Go to cart</button>
-              <button class="action-btn soft-btn" type="button" onclick="window.location.href='index.html#shop'">Continue shopping</button>
-            </div>
+          <div class="actions">
+            <button class="action-btn primary-btn" id="addBtn" type="button" disabled>Add to cart</button>
+            <button class="action-btn dark-btn" id="checkoutBtn" type="button">Go to cart</button>
+            <button class="action-btn soft-btn" type="button" onclick="window.location.href='index.html#shop'">Continue shopping</button>
+            <button class="action-btn soft-btn" type="button" data-prev-step="3">Back to details</button>
           </div>
         </section>
 
         <section class="card rec-card">
-          <div class="rec-inner">
-            <div class="rec-head">
-              <h2>You may also like</h2>
-              <span>More lovely pieces</span>
-            </div>
+          <div class="rec-head">
+            <h2>You may also like</h2>
+            <span>More lovely pieces</span>
+          </div>
 
-            <div class="rec-grid">
-              <a class="rec-item" href="teddy-details.html">
-                <div class="rec-thumb">
-                  <img src="images/teddy1.jpg" alt="Teddy Bear">
-                </div>
-                <div class="rec-name">Teddy Bear</div>
-                <div class="rec-price">From 45 RON</div>
-              </a>
+          <div class="rec-grid">
+            <a class="rec-item" href="teddy-details.html">
+              <div class="rec-thumb">
+                <img src="images/teddy1.jpg" alt="Teddy Bear">
+              </div>
+              <div class="rec-name">Teddy Bear</div>
+              <div class="rec-price">From 45 RON</div>
+            </a>
 
-              <a class="rec-item" href="strawberry-details.html">
-                <div class="rec-thumb">
-                  <img src="images/strawberry1.jpg" alt="Chocolate Covered Strawberry">
-                </div>
-                <div class="rec-name">Strawberry</div>
-                <div class="rec-price">20 RON</div>
-              </a>
+            <a class="rec-item" href="strawberry-details.html">
+              <div class="rec-thumb">
+                <img src="images/strawberry1.jpg" alt="Chocolate Covered Strawberry">
+              </div>
+              <div class="rec-name">Strawberry</div>
+              <div class="rec-price">20 RON</div>
+            </a>
 
-              <a class="rec-item" href="index.html#shop">
-                <div class="rec-thumb">
-                  <img src="images/bunny1.jpg" alt="See all products">
-                </div>
-                <div class="rec-name">More creations</div>
-                <div class="rec-price">View collection</div>
-              </a>
-            </div>
+            <a class="rec-item" href="index.html#shop">
+              <div class="rec-thumb">
+                <img src="images/bunny1.jpg" alt="See all products">
+              </div>
+              <div class="rec-name">More creations</div>
+              <div class="rec-price">View collection</div>
+            </a>
           </div>
         </section>
       </div>
@@ -1332,12 +1320,17 @@
     let heartColor = "";
     let starColor = "";
     let bowColor = "";
+    let currentStep = 1;
 
     const size = document.getElementById("size");
     const priceEl = document.getElementById("price");
     const qtyEl = document.getElementById("quantity");
     const addBtn = document.getElementById("addBtn");
     const checkoutBtn = document.getElementById("checkoutBtn");
+
+    const nextFromBody = document.getElementById("nextFromBody");
+    const nextFromAccessories = document.getElementById("nextFromAccessories");
+    const nextFromDetails = document.getElementById("nextFromDetails");
 
     const bunnyImage = document.getElementById("bunnyImage");
     const previewMessage = document.getElementById("previewMessage");
@@ -1367,13 +1360,18 @@
     const starSwatches = document.getElementById("starSwatches");
     const bowSwatches = document.getElementById("bowSwatches");
 
-    const bodyNextWrap = document.getElementById("bodyNextWrap");
-    const bodyNextBtn = document.getElementById("bodyNextBtn");
-
     document.getElementById("minusBtn").addEventListener("click", () => changeQty(-1));
     document.getElementById("plusBtn").addEventListener("click", () => changeQty(1));
     checkoutBtn.addEventListener("click", goToCart);
     addBtn.addEventListener("click", addToCart);
+
+    nextFromBody.addEventListener("click", () => goToStep(2));
+    nextFromAccessories.addEventListener("click", () => goToStep(3));
+    nextFromDetails.addEventListener("click", () => goToStep(4));
+
+    document.querySelectorAll("[data-prev-step]").forEach(btn => {
+      btn.addEventListener("click", () => goToStep(Number(btn.dataset.prevStep)));
+    });
 
     const bodyOptions = [
       { name: "Cream", color: "#f4efe7", src: "Bunny_Colors/bunny-cream.png" },
@@ -1437,8 +1435,7 @@
         title: "Heart + Bow",
         price: 10,
         combo: { heart:true, star:false, bow:true },
-        thumbType: "heart-bow",
-        thumbColor: "Red"
+        thumbType: "heart-bow"
       },
       {
         value: "10-star-bow",
@@ -1446,12 +1443,30 @@
         title: "Star + Bow",
         price: 10,
         combo: { heart:false, star:true, bow:true },
-        thumbType: "star-bow",
-        thumbColor: "Yellow"
+        thumbType: "star-bow"
       }
     ];
 
     const demoImage = "Bunny_Colors/bunny-demo.png";
+
+    function goToStep(step){
+      currentStep = step;
+
+      document.querySelectorAll(".step-card").forEach(card => {
+        card.classList.toggle("active", card.id === `step-${step}`);
+      });
+
+      document.querySelectorAll("[data-step-badge]").forEach(el => {
+        const n = Number(el.dataset.stepBadge);
+        el.classList.toggle("active", n === step);
+        el.classList.toggle("done", n < step);
+      });
+
+      const activeCard = document.getElementById(`step-${step}`);
+      if (activeCard && window.innerWidth <= 980) {
+        activeCard.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
 
     function normalizeColorLabel(v){
       return String(v || "").trim();
@@ -1545,10 +1560,7 @@
         btn.dataset.value = option.name;
         btn.setAttribute("aria-label", option.name);
 
-        btn.innerHTML = `
-          <span class="swatch-circle" style="background:${option.color};"></span>
-          <span class="swatch-name">${option.name}</span>
-        `;
+        btn.innerHTML = `<span class="swatch-circle" style="background:${option.color};"></span>`;
 
         btn.addEventListener("click", () => {
           bodyColor = option.name;
@@ -1558,7 +1570,7 @@
           updatePrice();
           validateForm();
           updateSummary();
-          toggleBodyNext();
+          updateStepButtons();
         });
 
         bodySwatches.appendChild(btn);
@@ -1575,10 +1587,7 @@
         btn.dataset.value = option.name;
         btn.setAttribute("aria-label", option.name);
 
-        btn.innerHTML = `
-          <span class="swatch-circle" style="background:${option.color};"></span>
-          <span class="swatch-name">${option.name}</span>
-        `;
+        btn.innerHTML = `<span class="swatch-circle" style="background:${option.color};"></span>`;
 
         btn.addEventListener("click", () => onSelect(option.name));
         targetEl.appendChild(btn);
@@ -1586,8 +1595,6 @@
     }
 
     async function getAccessoryThumbSrc(type, colorLabel){
-      if(type === "heart-bow") return "";
-      if(type === "star-bow") return "";
       const candidates = accessoryCandidates(type, colorLabel);
       return new Promise((resolve) => {
         let i = 0;
@@ -1620,7 +1627,7 @@
 
         if(option.kind === "none"){
           thumbHTML = `
-            <div class="option-thumb" style="background:#f8f3ee; position:relative;">
+            <div class="option-thumb" style="background:#f8f3ee;">
               <div style="
                 width:54px;
                 height:54px;
@@ -1647,7 +1654,7 @@
           const heartSrc = await getAccessoryThumbSrc("heart", "Red");
           const bowSrc = await getAccessoryThumbSrc("bow", "Bright pink");
           thumbHTML = `
-            <div class="option-thumb" style="position:relative;">
+            <div class="option-thumb">
               ${heartSrc ? `<img src="${heartSrc}" alt="" style="position:absolute;width:54%;left:48%;top:57%;transform:translate(-50%,-50%);">` : ""}
               ${bowSrc ? `<img src="${bowSrc}" alt="" style="position:absolute;width:34%;left:66%;top:32%;transform:translate(-50%,-50%) rotate(29deg);">` : ""}
             </div>
@@ -1656,7 +1663,7 @@
           const starSrc = await getAccessoryThumbSrc("star", "Yellow");
           const bowSrc = await getAccessoryThumbSrc("bow", "Bright pink");
           thumbHTML = `
-            <div class="option-thumb" style="position:relative;">
+            <div class="option-thumb">
               ${starSrc ? `<img src="${starSrc}" alt="" style="position:absolute;width:54%;left:48%;top:57%;transform:translate(-50%,-50%);">` : ""}
               ${bowSrc ? `<img src="${bowSrc}" alt="" style="position:absolute;width:34%;left:66%;top:32%;transform:translate(-50%,-50%) rotate(29deg);">` : ""}
             </div>
@@ -1691,6 +1698,7 @@
           updatePrice();
           validateForm();
           updateSummary();
+          updateStepButtons();
         });
 
         accessoryOptionsGrid.appendChild(card);
@@ -1722,6 +1730,7 @@
           renderAccessories();
           validateForm();
           updateSummary();
+          updateStepButtons();
         });
       } else {
         heartColorWrap.style.display = "none";
@@ -1735,6 +1744,7 @@
           renderAccessories();
           validateForm();
           updateSummary();
+          updateStepButtons();
         });
       } else {
         starColorWrap.style.display = "none";
@@ -1748,6 +1758,7 @@
           renderAccessories();
           validateForm();
           updateSummary();
+          updateStepButtons();
         });
       } else {
         bowColorWrap.style.display = "none";
@@ -1861,7 +1872,7 @@
 
     function updatePreview(){
       const chosen = bodyOptions.find(item => item.name === bodyColor);
-      const src = chosen ? chosen.src : demoImage;
+      const src = chosen ? chosen.src : "Bunny_Colors/bunny-demo.png";
 
       bunnyImage.style.display = "block";
       bunnyImage.style.opacity = "1";
@@ -1918,27 +1929,26 @@
       detailsAccessory.textContent = getAccessoryText();
     }
 
-    function toggleBodyNext(){
-      const show = size.value !== "" && bodyColor !== "";
-      bodyNextWrap.classList.toggle("show", show);
+    function canGoFromBody(){
+      return size.value !== "" && bodyColor !== "";
+    }
+
+    function canGoFromAccessories(){
+      const selected = getSelectedAccessory();
+      if(!selected) return false;
+      if(selected.combo.heart && !heartColor) return false;
+      if(selected.combo.star && !starColor) return false;
+      if(selected.combo.bow && !bowColor) return false;
+      return true;
+    }
+
+    function updateStepButtons(){
+      nextFromBody.disabled = !canGoFromBody();
+      nextFromAccessories.disabled = !canGoFromAccessories();
     }
 
     function validateForm(){
-      const selected = getSelectedAccessory();
-
-      let valid =
-        size.value !== "" &&
-        bodyColor &&
-        accessoryValue !== "";
-
-      if(selected){
-        if(selected.combo.heart && !heartColor) valid = false;
-        if(selected.combo.star && !starColor) valid = false;
-        if(selected.combo.bow && !bowColor) valid = false;
-      } else {
-        valid = false;
-      }
-
+      let valid = canGoFromBody() && canGoFromAccessories();
       addBtn.disabled = !valid;
     }
 
@@ -1967,16 +1977,13 @@
         size: size.options[size.selectedIndex].text,
         bodyColor: bodyColor,
         accessory: getAccessoryText(),
-
         heartColor: heartColor,
         starColor: starColor,
         bowColor: bowColor,
-
         bodyImage: bunnyImage.getAttribute("src") || "",
         heartImage: heartImg.getAttribute("src") || "",
         starImage: starImg.getAttribute("src") || "",
         bowImage: bowImg.getAttribute("src") || "",
-
         bodyStyle: {
           top: "0px",
           left: "0px",
@@ -1986,7 +1993,6 @@
           maxWidth: "none",
           maxHeight: "none"
         },
-
         heartStyle: heartImg.getAttribute("src") ? {
           top: "64%",
           left: "50%",
@@ -1996,7 +2002,6 @@
           maxWidth: "none",
           maxHeight: "none"
         } : null,
-
         starStyle: starImg.getAttribute("src") ? {
           top: "64%",
           left: "50%",
@@ -2006,7 +2011,6 @@
           maxWidth: "none",
           maxHeight: "none"
         } : null,
-
         bowStyle: bowImg.getAttribute("src") ? {
           top: "34%",
           left: "64%",
@@ -2016,7 +2020,6 @@
           maxWidth: "none",
           maxHeight: "none"
         } : null,
-
         image: bunnyImage.getAttribute("src") || "",
         price: getUnitPrice(),
         quantity: quantity
@@ -2040,16 +2043,9 @@
 
     size.addEventListener("change", () => {
       updatePrice();
-      validateForm();
       updateSummary();
-      toggleBodyNext();
-    });
-
-    bodyNextBtn.addEventListener("click", () => {
-      const target = document.querySelector(".accessories-card");
-      if(target){
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
+      updateStepButtons();
+      validateForm();
     });
 
     document.addEventListener("mousemove", (e) => {
@@ -2078,8 +2074,9 @@
       updatePrice();
       updateSummary();
       updateCartCount();
+      updateStepButtons();
       validateForm();
-      toggleBodyNext();
+      goToStep(1);
     });
   </script>
 </body>
