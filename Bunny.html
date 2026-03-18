@@ -11,7 +11,6 @@
     :root{
       --bg:#f7f1eb;
       --panel:#fffaf6;
-      --panel-soft:#fffdfb;
       --line:rgba(184,142,103,0.20);
       --brown:#6a5145;
       --brown-soft:#8b6f61;
@@ -318,7 +317,7 @@
     #bunnyImage{
       position:absolute;
       left:50%;
-      bottom:0;
+      bottom:-40px;
       transform:translateX(-50%);
       width:min(180%, 980px);
       max-width:none;
@@ -341,15 +340,15 @@
     #heartImg,
     #starImg{
       left:50%;
-      top:69%;
+      top:61%;
       width:min(58%, 280px);
       transform:translate(-50%,-50%);
     }
 
     #bowImg{
       left:63%;
-      top:35%;
-      width:min(38%, 180px);
+      top:29%;
+      width:min(42%, 205px);
       transform:translate(-50%,-50%) rotate(29deg);
     }
 
@@ -985,12 +984,12 @@
       #heartImg,
       #starImg{
         width:min(60%, 212px);
-        top:70%;
+        top:62%;
       }
 
       #bowImg{
-        width:min(37%, 132px);
-        top:35%;
+        width:min(40%, 148px);
+        top:28%;
         left:63%;
       }
 
@@ -1050,15 +1049,18 @@
 
       #bunnyImage{
         width:min(200%, 680px);
+        bottom:-86px;
       }
 
       #heartImg,
       #starImg{
         width:min(62%, 188px);
+        top:62%;
       }
 
       #bowImg{
-        width:min(36%, 118px);
+        width:min(40%, 132px);
+        top:28%;
       }
     }
   </style>
@@ -1130,7 +1132,7 @@
 
             <div class="summary-chip">
               <div class="k">Body</div>
-              <div class="v" id="summaryBody">Not selected</div>
+              <div class="v" id="summaryBody">Cream</div>
             </div>
 
             <div class="summary-chip">
@@ -1226,7 +1228,7 @@
 
           <div class="helper-box" style="margin-bottom:14px;">
             <strong>Chosen size:</strong> <span id="detailsSize">Not selected</span><br>
-            <strong>Chosen body colour:</strong> <span id="detailsBody">Not selected</span><br>
+            <strong>Chosen body colour:</strong> <span id="detailsBody">Cream</span><br>
             <strong>Chosen accessory:</strong> <span id="detailsAccessory">Not selected</span>
           </div>
 
@@ -1315,7 +1317,7 @@
     let basePrice = 45;
     let quantity = 1;
 
-    let bodyColor = "";
+    let bodyColor = "Cream";
     let accessoryValue = "";
     let heartColor = "";
     let starColor = "";
@@ -1409,7 +1411,8 @@
         price: 7,
         combo: { heart:true, star:false, bow:false },
         thumbType: "heart",
-        thumbColor: "Red"
+        thumbColor: "Red",
+        defaultColors: { heart: "Red" }
       },
       {
         value: "7-star",
@@ -1418,7 +1421,8 @@
         price: 7,
         combo: { heart:false, star:true, bow:false },
         thumbType: "star",
-        thumbColor: "Yellow"
+        thumbColor: "Yellow",
+        defaultColors: { star: "Yellow" }
       },
       {
         value: "3",
@@ -1427,7 +1431,8 @@
         price: 3,
         combo: { heart:false, star:false, bow:true },
         thumbType: "bow",
-        thumbColor: "Bright pink"
+        thumbColor: "Bright pink",
+        defaultColors: { bow: "Bright pink" }
       },
       {
         value: "10-heart-bow",
@@ -1435,7 +1440,8 @@
         title: "Heart + Bow",
         price: 10,
         combo: { heart:true, star:false, bow:true },
-        thumbType: "heart-bow"
+        thumbType: "heart-bow",
+        defaultColors: { heart: "Red", bow: "Bright pink" }
       },
       {
         value: "10-star-bow",
@@ -1443,17 +1449,9 @@
         title: "Star + Bow",
         price: 10,
         combo: { heart:false, star:true, bow:true },
-        thumbType: "star-bow"
+        thumbType: "star-bow",
+        defaultColors: { star: "Yellow", bow: "Bright pink" }
       }
-    ];
-
-    const demoCandidates = [
-      "Bunny_Colors/bunny-demo.png",
-      "Bunny_Colors/bunny-demo.PNG",
-      "Bunny_Colors/Bunny-demo.png",
-      "Bunny_Colors/Bunny-demo.PNG",
-      "Bunny_Colors/demo.png",
-      "Bunny_Colors/demo.PNG"
     ];
 
     function goToStep(step){
@@ -1532,27 +1530,6 @@
       });
     }
 
-    async function getFirstWorkingImage(candidates){
-      return new Promise((resolve) => {
-        let i = 0;
-        const probe = new Image();
-
-        const attempt = () => {
-          if(i >= candidates.length){
-            resolve("");
-            return;
-          }
-
-          const src = candidates[i++];
-          probe.onload = () => resolve(src);
-          probe.onerror = attempt;
-          probe.src = src;
-        };
-
-        attempt();
-      });
-    }
-
     function showHint(id, ok, example){
       const el = document.getElementById(id);
       if(!el) return;
@@ -1584,7 +1561,7 @@
       bodyOptions.forEach(option => {
         const btn = document.createElement("button");
         btn.type = "button";
-        btn.className = "swatch-btn";
+        btn.className = "swatch-btn" + (option.name === bodyColor ? " active" : "");
         btn.dataset.value = option.name;
         btn.setAttribute("aria-label", option.name);
 
@@ -1624,7 +1601,16 @@
 
     async function getAccessoryThumbSrc(type, colorLabel){
       const candidates = accessoryCandidates(type, colorLabel);
-      return getFirstWorkingImage(candidates);
+      for (const src of candidates) {
+        const ok = await new Promise(resolve => {
+          const img = new Image();
+          img.onload = () => resolve(true);
+          img.onerror = () => resolve(false);
+          img.src = src;
+        });
+        if (ok) return src;
+      }
+      return "";
     }
 
     async function buildAccessoryCards(){
@@ -1668,8 +1654,8 @@
           const bowSrc = await getAccessoryThumbSrc("bow", "Bright pink");
           thumbHTML = `
             <div class="option-thumb">
-              ${heartSrc ? `<img src="${heartSrc}" alt="" style="position:absolute;width:54%;left:48%;top:57%;transform:translate(-50%,-50%);">` : ""}
-              ${bowSrc ? `<img src="${bowSrc}" alt="" style="position:absolute;width:34%;left:66%;top:32%;transform:translate(-50%,-50%) rotate(29deg);">` : ""}
+              ${heartSrc ? `<img src="${heartSrc}" alt="" style="position:absolute;width:54%;left:48%;top:54%;transform:translate(-50%,-50%);">` : ""}
+              ${bowSrc ? `<img src="${bowSrc}" alt="" style="position:absolute;width:37%;left:66%;top:28%;transform:translate(-50%,-50%) rotate(29deg);">` : ""}
             </div>
           `;
         } else if(option.thumbType === "star-bow"){
@@ -1677,8 +1663,8 @@
           const bowSrc = await getAccessoryThumbSrc("bow", "Bright pink");
           thumbHTML = `
             <div class="option-thumb">
-              ${starSrc ? `<img src="${starSrc}" alt="" style="position:absolute;width:54%;left:48%;top:57%;transform:translate(-50%,-50%);">` : ""}
-              ${bowSrc ? `<img src="${bowSrc}" alt="" style="position:absolute;width:34%;left:66%;top:32%;transform:translate(-50%,-50%) rotate(29deg);">` : ""}
+              ${starSrc ? `<img src="${starSrc}" alt="" style="position:absolute;width:54%;left:48%;top:54%;transform:translate(-50%,-50%);">` : ""}
+              ${bowSrc ? `<img src="${bowSrc}" alt="" style="position:absolute;width:37%;left:66%;top:28%;transform:translate(-50%,-50%) rotate(29deg);">` : ""}
             </div>
           `;
         } else {
@@ -1702,6 +1688,12 @@
           card.classList.add("active");
 
           const combo = option.combo;
+          const defaults = option.defaultColors || {};
+
+          heartColor = combo.heart ? (heartColor || defaults.heart || "Red") : "";
+          starColor = combo.star ? (starColor || defaults.star || "Yellow") : "";
+          bowColor = combo.bow ? (bowColor || defaults.bow || "Bright pink") : "";
+
           if(!combo.heart) heartColor = "";
           if(!combo.star) starColor = "";
           if(!combo.bow) bowColor = "";
@@ -1782,9 +1774,9 @@
       if(window.innerWidth <= 420){
         return {
           centerWidth: "188px",
-          centerTop: "70%",
-          bowWidth: "118px",
-          bowTop: "35%",
+          centerTop: "62%",
+          bowWidth: "132px",
+          bowTop: "28%",
           bowLeft: "63%"
         };
       }
@@ -1792,18 +1784,18 @@
       if(window.innerWidth <= 760){
         return {
           centerWidth: "212px",
-          centerTop: "70%",
-          bowWidth: "132px",
-          bowTop: "35%",
+          centerTop: "62%",
+          bowWidth: "148px",
+          bowTop: "28%",
           bowLeft: "63%"
         };
       }
 
       return {
         centerWidth: "280px",
-        centerTop: "69%",
-        bowWidth: "180px",
-        bowTop: "35%",
+        centerTop: "61%",
+        bowWidth: "205px",
+        bowTop: "29%",
         bowLeft: "63%"
       };
     }
@@ -1883,22 +1875,9 @@
       if(selected.combo.bow) await renderAccessory("bow", bowColor);
     }
 
-    async function updatePreview(){
-      const chosen = bodyOptions.find(item => item.name === bodyColor);
-
-      let src = "";
-      if(chosen){
-        src = chosen.src;
-      } else {
-        src = await getFirstWorkingImage(demoCandidates);
-      }
-
-      if(!src){
-        bunnyImage.style.display = "none";
-        previewMessage.style.display = "block";
-        previewMessage.textContent = "Could not load bunny image 🤍";
-        return;
-      }
+    function updatePreview(){
+      const chosen = bodyOptions.find(item => item.name === bodyColor) || bodyOptions[0];
+      const src = chosen.src;
 
       previewMessage.style.display = "none";
       bunnyImage.style.display = "block";
@@ -2021,7 +2000,7 @@
           maxHeight: "none"
         },
         heartStyle: heartImg.getAttribute("src") ? {
-          top: "64%",
+          top: "61%",
           left: "50%",
           width: "58%",
           height: "auto",
@@ -2030,7 +2009,7 @@
           maxHeight: "none"
         } : null,
         starStyle: starImg.getAttribute("src") ? {
-          top: "64%",
+          top: "61%",
           left: "50%",
           width: "58%",
           height: "auto",
@@ -2039,8 +2018,8 @@
           maxHeight: "none"
         } : null,
         bowStyle: bowImg.getAttribute("src") ? {
-          top: "34%",
-          left: "64%",
+          top: "29%",
+          left: "63%",
           width: "42%",
           height: "auto",
           transform: "translate(-50%,-50%) rotate(29deg)",
@@ -2096,8 +2075,7 @@
     window.addEventListener("load", async () => {
       buildBodySwatches();
       await buildAccessoryCards();
-      updateAccessoryColorUI();
-      await updatePreview();
+      updatePreview();
       updatePrice();
       updateSummary();
       updateCartCount();
