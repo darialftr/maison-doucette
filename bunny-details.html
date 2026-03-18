@@ -403,11 +403,11 @@
     .product-info h1{ animation-delay: 0.50s; }
     .product-info .subtitle{ animation-delay: 0.58s; }
     .product-info .price{ animation-delay: 0.66s; }
-    .product-info .story:nth-of-type(2){ animation-delay: 0.74s; }
-    .product-info .story:nth-of-type(3){ animation-delay: 0.82s; }
-    .product-info .mini-quote{ animation-delay: 0.90s; }
-    .product-info .detail-pills{ animation-delay: 0.98s; }
-    .product-info .button-row{ animation-delay: 1.06s; }
+    .product-info .story-first{ animation-delay: 0.74s; }
+    .product-info .button-row{ animation-delay: 0.82s; }
+    .product-info .story-second{ animation-delay: 0.90s; }
+    .product-info .mini-quote{ animation-delay: 0.98s; }
+    .product-info .detail-pills{ animation-delay: 1.06s; }
 
     .eyebrow{
       display: inline-block;
@@ -487,7 +487,7 @@
       display: flex;
       gap: 14px;
       flex-wrap: wrap;
-      margin-top: 8px;
+      margin: 18px 0 18px;
     }
 
     .button{
@@ -790,6 +790,12 @@
         margin-bottom: 14px;
       }
 
+      .button-row{
+        flex-direction: column;
+        gap: 10px;
+        margin: 16px 0 16px;
+      }
+
       .mini-quote{
         margin: 16px 0 20px;
         padding-left: 12px;
@@ -805,11 +811,6 @@
       .pill{
         font-size: 0.84rem;
         padding: 9px 12px;
-      }
-
-      .button-row{
-        flex-direction: column;
-        gap: 10px;
       }
 
       .button,
@@ -973,11 +974,16 @@
 
         <div class="price">From 45 RON</div>
 
-        <p class="story">
+        <p class="story story-first">
           This handmade crochet bunny is created stitch by stitch with warmth, softness and delicate attention to every little detail.
         </p>
 
-        <p class="story">
+        <div class="button-row">
+          <a class="button" href="Bunny.html">Step Into Bunny’s Atelier</a>
+          <a class="soft-link" href="index.html#shop">Back to Collection</a>
+        </div>
+
+        <p class="story story-second">
           Each bunny can be customized with different colors, eyes and accessories, making every piece feel personal, giftable and lovingly made just for one person.
         </p>
 
@@ -989,11 +995,6 @@
           <span class="pill">Custom colors</span>
           <span class="pill">Handmade to order</span>
           <span class="pill">Sweet little details</span>
-        </div>
-
-        <div class="button-row">
-          <a class="button" href="Bunny.html">Step Into Bunny’s Atelier</a>
-          <a class="soft-link" href="index.html#shop">Back to Collection</a>
         </div>
       </div>
     </section>
