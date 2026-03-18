@@ -1,1792 +1,1951 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Maison Doucette – Bunny</title>
-<link rel="icon" href="images/favicon.ico" type="image/x-icon">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-<style>
-:root{
-    --bg:#f7f1eb;
-    --bg-soft:#fbf7f3;
-    --cream:#fffaf6;
-    --ocre:#d2b08d;
-    --ocre-deep:#b88e67;
-    --brown:#6a5145;
-    --brown-soft:#8b6f61;
-    --line:rgba(184,142,103,0.20);
-    --shadow:0 20px 50px rgba(106,81,69,0.12);
-    --shadow-soft:0 14px 28px rgba(106,81,69,0.08);
-    --shadow-strong:0 24px 54px rgba(106,81,69,0.18);
-    --radius-xl:36px;
-    --radius-lg:26px;
-    --radius-md:18px;
-    --ease:cubic-bezier(.22,.61,.36,1);
-}
-
-*{
-    box-sizing:border-box;
-}
-
-html{
-    scroll-behavior:smooth;
-}
-
-body{
-    margin:0;
-    font-family:'Inter',sans-serif;
-    color:var(--brown);
-    background:
-        radial-gradient(circle at top left, rgba(255,255,255,0.75), transparent 22%),
-        radial-gradient(circle at bottom right, rgba(210,176,141,0.10), transparent 25%),
-        linear-gradient(180deg, #f9f4ef 0%, #f4ece4 100%);
-    overflow-x:hidden;
-}
-
-a{
-    text-decoration:none;
-    color:inherit;
-}
-
-img{
-    display:block;
-    max-width:100%;
-}
-
-button,
-select{
-    font:inherit;
-}
-
-.cursor-glow{
-    position:fixed;
-    width:340px;
-    height:340px;
-    left:0;
-    top:0;
-    pointer-events:none;
-    z-index:0;
-    border-radius:50%;
-    background:radial-gradient(circle, rgba(210,176,141,0.16) 0%, rgba(210,176,141,0.08) 36%, rgba(210,176,141,0.02) 62%, transparent 74%);
-    transform:translate(-50%, -50%);
-    transition:opacity 0.25s ease;
-    mix-blend-mode:multiply;
-    opacity:0.9;
-}
-
-/* ===== HEADER ===== */
-.site-header{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    z-index:1000;
-    background:rgba(255,250,246,0.82);
-    backdrop-filter:blur(12px);
-    border-bottom:1px solid var(--line);
-    transition:box-shadow 0.3s ease, background 0.3s ease;
-}
-
-.site-header.scrolled{
-    background:rgba(255,250,246,0.92);
-    box-shadow:0 8px 22px rgba(106,81,69,0.08);
-}
-
-.nav{
-    max-width:1220px;
-    margin:auto;
-    min-height:88px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:20px;
-    padding:0 20px;
-    position:relative;
-    z-index:2;
-}
-
-.logo{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    transition:transform 0.35s var(--ease);
-    min-width:0;
-}
-
-.logo:hover{
-    transform:translateY(-1px);
-}
-
-.logo img{
-    width:58px;
-    height:58px;
-    object-fit:cover;
-    border-radius:50%;
-    background:rgba(255,255,255,0.95);
-    padding:4px;
-    box-shadow:0 8px 18px rgba(106,81,69,0.10);
-    transition:transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
-    flex-shrink:0;
-}
-
-.logo:hover img{
-    transform:scale(1.04);
-    box-shadow:0 12px 24px rgba(106,81,69,0.14);
-}
-
-.logo span{
-    font-family:'Playfair Display',serif;
-    font-size:1.08rem;
-    letter-spacing:0.04em;
-    white-space:nowrap;
-}
-
-.menu{
-    display:flex;
-    align-items:center;
-    gap:28px;
-    list-style:none;
-    margin:0;
-    padding:0;
-    font-size:0.96rem;
-}
-
-.menu li{
-    position:relative;
-}
-
-.menu a{
-    transition:opacity 0.25s ease, transform 0.25s ease;
-}
-
-.menu a:hover{
-    opacity:0.68;
-    transform:translateY(-1px);
-}
-
-.cart-icon{
-    position:relative;
-    margin-left:6px;
-    flex-shrink:0;
-}
-
-.cart-icon a{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    width:44px;
-    height:44px;
-    border-radius:50%;
-    background:rgba(255,247,240,0.88);
-    border:1px solid rgba(184,142,103,0.25);
-    box-shadow:0 10px 18px rgba(106,81,69,0.08);
-    transition:transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-    padding:0;
-}
-
-.cart-icon a:hover{
-    transform:translateY(-2px);
-    background:rgba(255,250,246,0.98);
-    box-shadow:0 14px 24px rgba(106,81,69,0.12);
-}
-
-.cart-icon svg{
-    width:23px;
-    height:23px;
-    stroke:var(--brown);
-}
-
-#cart-count{
-    position:absolute;
-    top:-4px;
-    right:-4px;
-    min-width:19px;
-    height:19px;
-    padding:0 5px;
-    border-radius:999px;
-    background:linear-gradient(135deg, var(--ocre-deep), var(--ocre));
-    color:white;
-    font-size:11px;
-    font-weight:700;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    line-height:1;
-    box-shadow:0 6px 14px rgba(184,142,103,0.28);
-}
-
-/* ===== PAGE WRAP ===== */
-.page-wrap{
-    max-width:1320px;
-    margin:auto;
-    padding:126px 20px 64px;
-    position:relative;
-    z-index:2;
-}
-
-.page-head{
-    text-align:center;
-    margin-bottom:26px;
-    opacity:0;
-    transform:translateY(22px);
-    animation:fadeUp 0.8s var(--ease) forwards 0.12s;
-}
-
-.page-head .eyebrow{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-    padding:10px 16px;
-    border-radius:999px;
-    background:rgba(255,255,255,0.72);
-    border:1px solid var(--line);
-    font-size:0.78rem;
-    text-transform:uppercase;
-    letter-spacing:0.16em;
-    color:var(--brown-soft);
-    box-shadow:0 8px 20px rgba(106,81,69,0.05);
-    margin-bottom:14px;
-}
-
-.page-head h1{
-    font-family:'Playfair Display',serif;
-    font-size:clamp(2rem,4vw,3rem);
-    font-weight:500;
-    margin:0;
-}
-
-/* ===== MAIN LAYOUT ===== */
-.container{
-    display:grid;
-    grid-template-columns:minmax(320px, 390px) minmax(380px, 640px);
-    grid-template-rows:auto auto;
-    gap:32px 42px;
-    align-items:start;
-    justify-content:center;
-}
-
-.controls-card{
-    grid-column:1;
-    grid-row:1;
-}
-
-.checkout-card{
-    grid-column:1;
-    grid-row:2;
-}
-
-.preview-card{
-    grid-column:2;
-    grid-row:1 / span 2;
-}
-
-.card{
-    background:rgba(255,250,246,0.84);
-    border:1px solid var(--line);
-    border-radius:var(--radius-xl);
-    box-shadow:var(--shadow);
-    overflow:hidden;
-    backdrop-filter:blur(5px);
-}
-
-.controls-card,
-.checkout-card,
-.preview-card{
-    opacity:0;
-    transform:translateY(26px);
-    animation:fadeUp 0.9s var(--ease) forwards;
-}
-
-.controls-card{ animation-delay:0.18s; }
-.preview-card{ animation-delay:0.28s; }
-.checkout-card{ animation-delay:0.38s; }
-
-/* ===== CONTROLS ===== */
-.controls-inner{
-    padding:28px;
-}
-
-.section-mini-title{
-    font-family:'Playfair Display',serif;
-    font-size:1.5rem;
-    margin:0 0 22px;
-    font-weight:500;
-    line-height:1.2;
-}
-
-label{
-    font-size:12px;
-    letter-spacing:1.5px;
-    text-transform:uppercase;
-    margin-bottom:8px;
-    display:block;
-    color:var(--brown-soft);
-    font-weight:500;
-}
-
-select{
-    width:100%;
-    padding:15px 15px;
-    margin-bottom:22px;
-    border:1px solid #ddd3c8;
-    background:rgba(255,255,255,0.92);
-    font-size:14px;
-    border-radius:14px;
-    color:var(--brown);
-    outline:none;
-    transition:border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease, background 0.25s ease;
-    appearance:none;
-    -webkit-appearance:none;
-    background-image:
-        linear-gradient(45deg, transparent 50%, var(--brown-soft) 50%),
-        linear-gradient(135deg, var(--brown-soft) 50%, transparent 50%);
-    background-position:
-        calc(100% - 18px) calc(50% - 3px),
-        calc(100% - 12px) calc(50% - 3px);
-    background-size:6px 6px, 6px 6px;
-    background-repeat:no-repeat;
-    padding-right:40px;
-}
-
-select:hover{
-    background-color:#fffdfb;
-}
-
-select:focus{
-    border-color:var(--ocre);
-    box-shadow:0 0 0 4px rgba(210,176,141,0.12);
-}
-
-.hint{
-    margin-top:-14px;
-    margin-bottom:18px;
-    font-size:12px;
-    color:#a39d95;
-    line-height:1.35;
-}
-
-.hint.error{
-    color:#b34a4a;
-}
-
-/* ===== CHECKOUT ===== */
-.checkout-inner{
-    padding:28px;
-}
-
-.price-box{
-    font-family:'Playfair Display',serif;
-    font-size:28px;
-    margin:0;
-    text-align:center;
-    color:var(--brown);
-    line-height:1.2;
-}
-
-.quantity-wrap{
-    margin-top:22px;
-}
-
-.quantity-box{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:14px;
-    margin-top:10px;
-}
-
-.quantity-box button{
-    width:46px;
-    height:46px;
-    border:1px solid #d8d2ca;
-    background:white;
-    font-size:20px;
-    cursor:pointer;
-    border-radius:14px;
-    color:var(--brown);
-    transition:transform 0.2s ease, box-shadow 0.25s ease, background 0.25s ease;
-}
-
-.quantity-box button:hover{
-    transform:translateY(-1px);
-    box-shadow:0 10px 18px rgba(106,81,69,0.08);
-    background:#fffdfa;
-}
-
-.quantity-box span{
-    min-width:34px;
-    text-align:center;
-    font-size:16px;
-    font-weight:600;
-}
-
-.action-btn{
-    width:100%;
-    padding:15px 18px;
-    margin-top:14px;
-    border:none;
-    font-size:13px;
-    letter-spacing:1px;
-    cursor:pointer;
-    border-radius:16px;
-    transition:all 0.25s ease;
-    font-weight:500;
-}
-
-.add-btn{
-    background:linear-gradient(135deg, var(--ocre-deep), var(--ocre));
-    color:white;
-    box-shadow:0 16px 30px rgba(184,142,103,0.22);
-}
-
-.add-btn:hover{
-    transform:translateY(-2px);
-    box-shadow:0 22px 38px rgba(184,142,103,0.30);
-}
-
-.add-btn:disabled{
-    background:#d7cfc6;
-    cursor:not-allowed;
-    box-shadow:none;
-    transform:none;
-}
-
-.checkout-btn{
-    display:none;
-    background:#3e3a36;
-    color:white;
-}
-
-.checkout-btn:hover{
-    filter:brightness(0.95);
-    transform:translateY(-1px);
-}
-
-.continue-btn{
-    background:rgba(255,255,255,0.76);
-    border:1px solid var(--line);
-    color:var(--brown);
-}
-
-.continue-btn:hover{
-    background:#f3ebe4;
-}
-
-/* ===== PREVIEW ===== */
-.preview-shell{
-    padding:26px;
-}
-
-.preview-title{
-    text-align:center;
-    font-family:'Playfair Display',serif;
-    font-size:1.5rem;
-    margin:0 0 18px;
-    font-weight:500;
-    line-height:1.2;
-}
-
-.preview{
-    position:relative;
-    width:100%;
-    aspect-ratio:1/1;
-    min-height:380px;
-    padding:42px;
-    border-radius:30px;
-    background:
-      radial-gradient(circle at 50% 35%, rgba(255,255,255,0.94) 0%, rgba(252,247,240,0.94) 40%, rgba(241,232,221,1) 100%);
-    box-shadow:0 25px 50px rgba(0,0,0,0.08);
-    border:1px solid #efeae4;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-    isolation:isolate;
-}
-
-.preview::before{
-    content:"";
-    position:absolute;
-    width:240px;
-    height:240px;
-    border-radius:50%;
-    background:rgba(210,176,141,0.10);
-    top:-80px;
-    right:-60px;
-    pointer-events:none;
-}
-
-.preview::after{
-    content:"";
-    position:absolute;
-    bottom:52px;
-    width:58%;
-    height:36px;
-    background:radial-gradient(ellipse at center, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.08) 40%, transparent 80%);
-    filter:blur(8px);
-    z-index:1;
-}
-
-#previewMessage{
-    text-align:center;
-    color:#b8b2ab;
-    font-size:15px;
-    padding:0 10px;
-    z-index:2;
-    line-height:1.7;
-    max-width:280px;
-}
-
-#bunnyImage{
-    width:100%;
-    max-width:540px;
-    position:absolute;
-    display:none;
-    opacity:0;
-    transform:translateY(6px) scale(0.985);
-    transition:none;
-    filter:drop-shadow(0 18px 28px rgba(0,0,0,0.12));
-    z-index:2;
-}
-
-.accessory-img{
-    position:absolute;
-    display:none;
-    z-index:3;
-    width:250px;
-    max-width:50%;
-    filter:drop-shadow(0 10px 18px rgba(0,0,0,0.10));
-    pointer-events:none;
-    opacity:0;
-    transform-origin:center;
-    transition:none;
-}
-
-#heartImg{
-    top:64%;
-    left:50%;
-    width:350px;
-    transform:translate(-50%,-50%);
-}
-
-#starImg{
-    top:64%;
-    left:50%;
-    width:350px;
-    transform:translate(-50%,-50%);
-}
-
-#bowImg{
-    top:34%;
-    left:64%;
-    width:250px;
-    transform:translate(-50%,-50%) rotate(29deg);
-}
-
-.preview-appear{
-    animation:previewAppear 0.26s var(--ease) forwards;
-}
-
-.preview-appear-bow{
-    animation:previewAppearBow 0.26s var(--ease) forwards;
-}
-
-/* ===== TOAST ===== */
-.toast{
-    position:fixed;
-    top:25px;
-    right:25px;
-    background:#3e3a36;
-    color:white;
-    padding:14px 20px;
-    font-size:13px;
-    border-radius:12px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.15);
-    opacity:0;
-    visibility:hidden;
-    transform:translateY(-15px);
-    transition:all 0.35s ease;
-    z-index:9999;
-    max-width:min(92vw, 320px);
-}
-.toast.show{
-    opacity:1;
-    visibility:visible;
-    transform:translateY(0);
-}
-
-/* ===== FOOTER ===== */
-.footer{
-    margin-top:56px;
-    padding:48px 20px 32px;
-    text-align:center;
-    color:var(--brown-soft);
-    background:linear-gradient(180deg, rgba(240,223,214,0.55), rgba(233,214,199,0.84));
-    border-top-left-radius:36px;
-    border-top-right-radius:36px;
-    position:relative;
-    z-index:2;
-}
-
-.footer-inner{
-    max-width:1220px;
-    margin:auto;
-}
-
-.footer-title{
-    font-family:'Playfair Display',serif;
-    font-size:1.9rem;
-    color:var(--brown);
-    margin:0 0 10px;
-}
-
-.footer p{
-    margin:0 0 8px;
-    line-height:1.8;
-}
-
-/* ===== ANIMATIONS ===== */
-@keyframes fadeUp{
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-@keyframes previewAppear{
-    0%{
-        opacity:0;
-        transform:translateY(6px) scale(0.985);
-    }
-    100%{
-        opacity:1;
-        transform:translateY(0) scale(1);
-    }
-}
-
-@keyframes previewAppearCenter{
-    0%{
-        opacity:0;
-        transform:translate(-50%,-47%) scale(0.985);
-    }
-    100%{
-        opacity:1;
-        transform:translate(-50%,-50%) scale(1);
-    }
-}
-
-@keyframes previewAppearBow{
-    0%{
-        opacity:0;
-        transform:translate(-50%,-47%) rotate(29deg) scale(0.985);
-    }
-    100%{
-        opacity:1;
-        transform:translate(-50%,-50%) rotate(29deg) scale(1);
-    }
-}
-
-/* ===== LARGE TABLET / SMALL DESKTOP ===== */
-@media (max-width: 1100px){
-    .container{
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        gap:24px;
-        padding:0;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maison Doucette – Bunny Customizer</title>
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#f7f1eb;
+      --bg-soft:#fbf7f3;
+      --panel:#fffaf6;
+      --panel-2:#fffdfb;
+      --line:rgba(184,142,103,0.20);
+      --line-strong:rgba(184,142,103,0.34);
+      --brown:#6a5145;
+      --brown-soft:#8b6f61;
+      --muted:#a19389;
+      --gold:#d2b08d;
+      --gold-deep:#b88e67;
+      --shadow:0 20px 50px rgba(106,81,69,0.10);
+      --shadow-soft:0 12px 26px rgba(106,81,69,0.08);
+      --shadow-strong:0 24px 50px rgba(106,81,69,0.16);
+      --radius-xl:30px;
+      --radius-lg:22px;
+      --radius-md:16px;
+      --radius-sm:12px;
+      --ease:cubic-bezier(.22,.61,.36,1);
+      --topbar-h:68px;
+      --bottombar-h:86px;
+      --phone-max:460px;
     }
 
-    .preview-card{
-        order:1;
+    *{ box-sizing:border-box; }
+
+    html{ scroll-behavior:smooth; }
+
+    body{
+      margin:0;
+      font-family:'Inter',sans-serif;
+      color:var(--brown);
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.78), transparent 26%),
+        radial-gradient(circle at bottom right, rgba(210,176,141,0.10), transparent 28%),
+        linear-gradient(180deg, #faf5f0 0%, #f4ece4 100%);
+      overflow-x:hidden;
     }
 
-    .controls-card{
-        order:2;
+    a{
+      color:inherit;
+      text-decoration:none;
     }
 
-    .checkout-card{
-        order:3;
+    img{
+      display:block;
+      max-width:100%;
     }
 
-    .controls-card,
-    .checkout-card,
-    .preview-card{
-        width:100%;
-        max-width:720px;
+    button,
+    select{
+      font:inherit;
     }
 
-    .preview{
-        min-height:360px;
-        padding:34px;
-    }
-
-    #bunnyImage{
-        max-width:500px;
-    }
-
-    .accessory-img{
-        width:170px;
-        max-width:48%;
-    }
-
-    #heartImg,
-    #starImg{
-        width:300px;
-    }
-
-    #bowImg{
-        width:215px;
-    }
-}
-
-/* ===== PHONE ===== */
-@media (max-width: 768px){
     .cursor-glow{
-        display:none;
+      position:fixed;
+      width:340px;
+      height:340px;
+      left:0;
+      top:0;
+      pointer-events:none;
+      z-index:0;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(210,176,141,0.16) 0%, rgba(210,176,141,0.08) 36%, rgba(210,176,141,0.02) 62%, transparent 74%);
+      transform:translate(-50%, -50%);
+      transition:opacity 0.25s ease;
+      mix-blend-mode:multiply;
+      opacity:0.9;
     }
 
-    .site-header{
-        background:rgba(255,250,246,0.92);
+    .app-shell{
+      max-width:1160px;
+      margin:0 auto;
+      min-height:100vh;
+      position:relative;
+      z-index:2;
+      padding:0 18px 28px;
     }
 
-    .nav{
-        min-height:auto;
-        flex-direction:column;
-        justify-content:center;
-        align-items:center;
-        gap:12px;
-        padding:14px 16px 12px;
+    /* ===== TOP BAR ===== */
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:1000;
+      background:rgba(255,250,246,0.86);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid var(--line);
+      margin:0 -18px;
+      padding:0 18px;
     }
 
-    .logo{
-        gap:10px;
+    .topbar-inner{
+      max-width:1160px;
+      margin:0 auto;
+      min-height:var(--topbar-h);
+      display:grid;
+      grid-template-columns:44px 1fr auto;
+      align-items:center;
+      gap:12px;
     }
 
-    .logo img{
-        width:50px;
-        height:50px;
+    .icon-btn,
+    .top-cart{
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.82);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:var(--shadow-soft);
+      transition:transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+      cursor:pointer;
+      padding:0;
     }
 
-    .logo span{
-        font-size:1rem;
+    .icon-btn:hover,
+    .top-cart:hover{
+      transform:translateY(-1px);
+      box-shadow:0 14px 22px rgba(106,81,69,0.12);
+      background:#fff;
     }
 
-    .menu{
-        width:100%;
-        flex-wrap:wrap;
-        justify-content:center;
-        gap:12px 18px;
-        font-size:0.9rem;
-        text-align:center;
+    .icon-btn svg,
+    .top-cart svg{
+      width:20px;
+      height:20px;
+      stroke:var(--brown);
     }
 
-    .cart-icon{
-        margin-left:0;
+    .top-title{
+      text-align:center;
+      min-width:0;
     }
 
-    .cart-icon a{
-        width:42px;
-        height:42px;
+    .top-title .label{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-weight:600;
+      color:var(--brown);
+      font-size:1.02rem;
+      letter-spacing:0.01em;
     }
 
-    .page-wrap{
-        padding:186px 14px 42px;
+    .top-title .sub{
+      display:block;
+      margin-top:2px;
+      font-size:0.72rem;
+      color:var(--brown-soft);
+      letter-spacing:0.08em;
+      text-transform:uppercase;
     }
 
-    .page-head{
-        margin-bottom:20px;
+    .top-cart-wrap{
+      position:relative;
     }
 
-    .page-head .eyebrow{
-        font-size:0.68rem;
-        letter-spacing:0.12em;
-        padding:9px 13px;
-        margin-bottom:12px;
+    #cart-count{
+      position:absolute;
+      top:-4px;
+      right:-3px;
+      min-width:18px;
+      height:18px;
+      padding:0 5px;
+      border-radius:999px;
+      background:linear-gradient(135deg,var(--gold-deep),var(--gold));
+      color:#fff;
+      font-size:10px;
+      font-weight:700;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 7px 14px rgba(184,142,103,0.28);
+      line-height:1;
     }
 
-    .page-head h1{
-        font-size:1.9rem;
-        line-height:1.15;
-        padding:0 6px;
+    /* ===== LAYOUT ===== */
+    .customizer-layout{
+      display:grid;
+      grid-template-columns:minmax(320px, 1.08fr) minmax(320px, 0.92fr);
+      gap:22px;
+      align-items:start;
+      padding-top:16px;
+    }
+
+    .left-column,
+    .right-column{
+      display:grid;
+      gap:18px;
     }
 
     .card{
-        border-radius:26px;
+      background:rgba(255,250,246,0.86);
+      border:1px solid var(--line);
+      border-radius:var(--radius-xl);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      backdrop-filter:blur(6px);
     }
 
-    .controls-inner,
-    .checkout-inner,
-    .preview-shell{
-        padding:20px;
+    /* ===== PREVIEW ===== */
+    .preview-card{
+      padding:18px;
+      opacity:0;
+      transform:translateY(22px);
+      animation:fadeUp 0.82s var(--ease) forwards 0.06s;
     }
 
-    .section-mini-title,
-    .preview-title{
-        font-size:1.3rem;
-        margin-bottom:18px;
+    .preview-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:12px;
     }
 
-    label{
-        font-size:11px;
-        letter-spacing:1.25px;
+    .preview-head h1{
+      margin:0;
+      font-family:'Playfair Display',serif;
+      font-size:1.55rem;
+      font-weight:500;
+      line-height:1.1;
     }
 
-    select{
-        padding:14px 14px;
-        padding-right:38px;
-        font-size:14px;
-        margin-bottom:18px;
-        border-radius:13px;
+    .preview-head p{
+      margin:4px 0 0;
+      font-size:0.88rem;
+      color:var(--brown-soft);
+      line-height:1.5;
     }
 
-    .hint{
-        font-size:11.5px;
-        margin-top:-10px;
-        margin-bottom:16px;
+    .preview-badge{
+      flex-shrink:0;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:9px 12px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--brown-soft);
+      font-size:0.74rem;
+      text-transform:uppercase;
+      letter-spacing:0.12em;
+      box-shadow:var(--shadow-soft);
     }
 
-    .preview{
-        aspect-ratio:1/1.02;
-        min-height:300px;
-        padding:20px;
-        border-radius:24px;
+    .preview-stage{
+      position:relative;
+      width:100%;
+      aspect-ratio:0.92/1;
+      min-height:400px;
+      border-radius:26px;
+      overflow:hidden;
+      background:
+        linear-gradient(180deg, #f5f3f1 0%, #ebe8e3 100%);
+      border:1px solid rgba(185,177,170,0.52);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.75);
     }
 
-    .preview::before{
-        width:170px;
-        height:170px;
-        top:-56px;
-        right:-44px;
+    .stage-block{
+      position:absolute;
+      background:#d9d4ce;
+      border-radius:18px;
+      opacity:0.62;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.35);
     }
 
-    .preview::after{
-        bottom:34px;
-        width:64%;
-        height:24px;
+    .b1{ width:98px; height:122px; left:-26px; top:26px; }
+    .b2{ width:116px; height:88px; right:10px; top:34px; }
+    .b3{ width:128px; height:138px; left:10px; bottom:94px; }
+    .b4{ width:142px; height:96px; right:-24px; bottom:118px; }
+    .b5{ width:78px; height:78px; left:50%; transform:translateX(-50%); top:32px; }
+    .b6{ width:168px; height:62px; left:50%; transform:translateX(-50%); bottom:58px; border-radius:22px; }
+
+    .stage-floor{
+      position:absolute;
+      left:8%;
+      right:8%;
+      bottom:22px;
+      height:58px;
+      border-radius:50%;
+      background:radial-gradient(ellipse at center, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.08) 38%, transparent 72%);
+      filter:blur(8px);
+      z-index:1;
     }
 
-    #previewMessage{
-        font-size:14px;
-        line-height:1.55;
-        max-width:230px;
+    .stage-glow{
+      position:absolute;
+      width:220px;
+      height:220px;
+      left:50%;
+      top:24px;
+      transform:translateX(-50%);
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.55) 36%, rgba(255,255,255,0) 72%);
+      z-index:1;
+    }
+
+    .preview-message{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      text-align:center;
+      color:#aca29a;
+      font-size:0.96rem;
+      line-height:1.7;
+      z-index:3;
+      width:min(78%, 280px);
     }
 
     #bunnyImage{
-        width:100%;
-        max-width:350px;
+      position:absolute;
+      left:50%;
+      bottom:44px;
+      transform:translateX(-50%);
+      width:min(82%, 390px);
+      max-width:none;
+      display:none;
+      opacity:0;
+      z-index:4;
+      filter:drop-shadow(0 18px 26px rgba(0,0,0,0.12));
     }
 
     .accessory-img{
-        max-width:58%;
+      position:absolute;
+      display:none;
+      opacity:0;
+      z-index:5;
+      pointer-events:none;
+      filter:drop-shadow(0 10px 18px rgba(0,0,0,0.10));
+      max-width:none;
     }
 
     #heartImg,
     #starImg{
-        width:220px;
-        top:65%;
+      left:50%;
+      top:69%;
+      width:min(54%, 240px);
+      transform:translate(-50%,-50%);
     }
 
     #bowImg{
-        width:150px;
-        top:35%;
-        left:63%;
+      left:63%;
+      top:37%;
+      width:min(36%, 160px);
+      transform:translate(-50%,-50%) rotate(29deg);
+    }
+
+    .preview-appear{ animation:previewAppear 0.26s var(--ease) forwards; }
+    .preview-appear-bow{ animation:previewAppearBow 0.26s var(--ease) forwards; }
+
+    .summary-row{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:10px;
+    }
+
+    .summary-chip{
+      background:rgba(255,255,255,0.8);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:11px 12px;
+      min-height:68px;
+    }
+
+    .summary-chip .k{
+      font-size:0.68rem;
+      text-transform:uppercase;
+      letter-spacing:0.12em;
+      color:var(--brown-soft);
+      margin-bottom:6px;
+    }
+
+    .summary-chip .v{
+      font-size:0.92rem;
+      line-height:1.35;
+      font-weight:500;
+      color:var(--brown);
+    }
+
+    /* ===== TABS + PANELS ===== */
+    .controls-card{
+      overflow:visible;
+      opacity:0;
+      transform:translateY(22px);
+      animation:fadeUp 0.82s var(--ease) forwards 0.14s;
+    }
+
+    .tab-scroll{
+      overflow-x:auto;
+      padding:14px 14px 0;
+      scrollbar-width:none;
+    }
+
+    .tab-scroll::-webkit-scrollbar{ display:none; }
+
+    .tabs{
+      display:flex;
+      gap:10px;
+      min-width:max-content;
+      padding-bottom:14px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .tab-btn{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.82);
+      color:var(--brown-soft);
+      padding:11px 15px;
+      border-radius:999px;
+      font-size:0.84rem;
+      font-weight:600;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      cursor:pointer;
+      transition:all 0.22s ease;
+      white-space:nowrap;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .tab-btn:hover{
+      transform:translateY(-1px);
+      background:#fff;
+      color:var(--brown);
+    }
+
+    .tab-btn.active{
+      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
+      color:#fff;
+      border-color:transparent;
+      box-shadow:0 14px 26px rgba(184,142,103,0.22);
+    }
+
+    .tab-panels{
+      padding:16px;
+    }
+
+    .tab-panel{
+      display:none;
+      animation:panelFade 0.26s ease;
+    }
+
+    .tab-panel.active{
+      display:block;
+    }
+
+    .panel-title{
+      margin:0 0 6px;
+      font-family:'Playfair Display',serif;
+      font-size:1.28rem;
+      font-weight:500;
+    }
+
+    .panel-text{
+      margin:0 0 16px;
+      color:var(--brown-soft);
+      font-size:0.92rem;
+      line-height:1.6;
+    }
+
+    .control-block{
+      margin-bottom:16px;
+    }
+
+    .control-label{
+      display:block;
+      font-size:0.72rem;
+      text-transform:uppercase;
+      letter-spacing:0.14em;
+      color:var(--brown-soft);
+      font-weight:600;
+      margin-bottom:8px;
+    }
+
+    select{
+      width:100%;
+      padding:14px 15px;
+      padding-right:42px;
+      border-radius:14px;
+      border:1px solid #ddd3c8;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.90));
+      color:var(--brown);
+      outline:none;
+      transition:border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+      appearance:none;
+      -webkit-appearance:none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, var(--brown-soft) 50%),
+        linear-gradient(135deg, var(--brown-soft) 50%, transparent 50%);
+      background-position:
+        calc(100% - 18px) calc(50% - 2px),
+        calc(100% - 12px) calc(50% - 2px);
+      background-size:6px 6px, 6px 6px;
+      background-repeat:no-repeat;
+      box-shadow:0 8px 18px rgba(106,81,69,0.04);
+    }
+
+    select:hover{
+      background-color:#fffdfb;
+    }
+
+    select:focus{
+      border-color:var(--gold);
+      box-shadow:0 0 0 4px rgba(210,176,141,0.12);
+    }
+
+    .hint{
+      margin-top:6px;
+      font-size:0.77rem;
+      color:#a39d95;
+      line-height:1.45;
+    }
+
+    .hint.error{
+      color:#b34a4a;
+    }
+
+    .helper-box{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.72);
+      border-radius:18px;
+      padding:14px;
+      color:var(--brown-soft);
+      font-size:0.88rem;
+      line-height:1.6;
+    }
+
+    .helper-box strong{
+      color:var(--brown);
+      font-weight:600;
+    }
+
+    /* ===== ORDER CARD ===== */
+    .order-card{
+      opacity:0;
+      transform:translateY(22px);
+      animation:fadeUp 0.82s var(--ease) forwards 0.22s;
+    }
+
+    .order-inner{
+      padding:16px;
+    }
+
+    .order-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .order-top h2{
+      margin:0;
+      font-family:'Playfair Display',serif;
+      font-size:1.35rem;
+      font-weight:500;
     }
 
     .price-box{
-        font-size:1.65rem;
-        margin-top:0;
+      text-align:right;
     }
 
-    .quantity-wrap{
-        margin-top:18px;
+    .price-box .label{
+      display:block;
+      font-size:0.7rem;
+      text-transform:uppercase;
+      letter-spacing:0.14em;
+      color:var(--brown-soft);
+      margin-bottom:5px;
     }
 
-    .quantity-box{
-        gap:12px;
+    .price-box .value{
+      font-family:'Playfair Display',serif;
+      font-size:1.7rem;
+      line-height:1;
+      color:var(--brown);
     }
 
-    .quantity-box button{
-        width:46px;
-        height:46px;
-        font-size:20px;
+    .order-grid{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:14px;
+      align-items:end;
+    }
+
+    .qty-box{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-top:8px;
+    }
+
+    .qty-btn{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      border:1px solid #d8d2ca;
+      background:#fff;
+      color:var(--brown);
+      font-size:1.2rem;
+      cursor:pointer;
+      transition:transform 0.2s ease, box-shadow 0.22s ease, background 0.22s ease;
+    }
+
+    .qty-btn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 10px 18px rgba(106,81,69,0.08);
+      background:#fffdfa;
+    }
+
+    .qty-value{
+      min-width:30px;
+      text-align:center;
+      font-weight:700;
+      font-size:1rem;
+    }
+
+    .actions{
+      margin-top:16px;
+      display:grid;
+      gap:10px;
     }
 
     .action-btn{
-        padding:15px 16px;
-        font-size:13px;
-        border-radius:15px;
+      width:100%;
+      padding:15px 16px;
+      border:none;
+      border-radius:16px;
+      cursor:pointer;
+      transition:transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease, background 0.22s ease;
+      letter-spacing:0.06em;
+      font-size:0.84rem;
+      font-weight:600;
+      text-transform:uppercase;
     }
 
+    .action-btn:hover{
+      transform:translateY(-1px);
+    }
+
+    .primary-btn{
+      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
+      color:#fff;
+      box-shadow:0 16px 28px rgba(184,142,103,0.24);
+    }
+
+    .primary-btn:hover{
+      box-shadow:0 22px 34px rgba(184,142,103,0.30);
+    }
+
+    .primary-btn:disabled{
+      background:#d7cfc6;
+      box-shadow:none;
+      cursor:not-allowed;
+      transform:none;
+    }
+
+    .dark-btn{
+      background:#3e3a36;
+      color:#fff;
+      display:none;
+    }
+
+    .soft-btn{
+      background:rgba(255,255,255,0.78);
+      color:var(--brown);
+      border:1px solid var(--line);
+    }
+
+    /* ===== RECOMMENDATIONS ===== */
+    .rec-card{
+      opacity:0;
+      transform:translateY(22px);
+      animation:fadeUp 0.82s var(--ease) forwards 0.28s;
+    }
+
+    .rec-inner{
+      padding:16px;
+    }
+
+    .rec-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .rec-head h2{
+      margin:0;
+      font-family:'Playfair Display',serif;
+      font-size:1.28rem;
+      font-weight:500;
+    }
+
+    .rec-head span{
+      color:var(--brown-soft);
+      font-size:0.84rem;
+    }
+
+    .rec-grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:10px;
+    }
+
+    .rec-item{
+      background:rgba(255,255,255,0.76);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:10px;
+      transition:transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+    }
+
+    .rec-item:hover{
+      transform:translateY(-2px);
+      box-shadow:var(--shadow-soft);
+      background:#fff;
+    }
+
+    .rec-thumb{
+      width:100%;
+      aspect-ratio:1/1.04;
+      border-radius:14px;
+      overflow:hidden;
+      background:#f2ece6;
+      margin-bottom:9px;
+    }
+
+    .rec-thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .rec-name{
+      font-size:0.84rem;
+      font-weight:600;
+      line-height:1.35;
+      margin-bottom:4px;
+    }
+
+    .rec-price{
+      font-size:0.76rem;
+      color:var(--brown-soft);
+    }
+
+    /* ===== TOAST ===== */
     .toast{
-        right:12px;
-        left:12px;
-        top:auto;
-        bottom:16px;
-        max-width:none;
-        text-align:center;
-        transform:translateY(12px);
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      z-index:9999;
+      background:#3e3a36;
+      color:#fff;
+      padding:14px 18px;
+      border-radius:14px;
+      box-shadow:0 12px 28px rgba(0,0,0,0.18);
+      font-size:0.84rem;
+      opacity:0;
+      visibility:hidden;
+      transform:translateY(12px);
+      transition:all 0.3s ease;
+      max-width:min(90vw, 340px);
     }
 
     .toast.show{
+      opacity:1;
+      visibility:visible;
+      transform:translateY(0);
+    }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeUp{
+      to{
+        opacity:1;
         transform:translateY(0);
+      }
     }
 
-    .footer{
-        margin-top:42px;
-        padding:40px 18px 28px;
-        border-top-left-radius:26px;
-        border-top-right-radius:26px;
+    @keyframes panelFade{
+      from{ opacity:0; transform:translateY(8px); }
+      to{ opacity:1; transform:translateY(0); }
     }
 
-    .footer-title{
-        font-size:1.55rem;
+    @keyframes previewAppear{
+      0%{ opacity:0; transform:translateX(-50%) translateY(6px) scale(0.985); }
+      100%{ opacity:1; transform:translateX(-50%) translateY(0) scale(1); }
     }
 
-    .footer p{
-        font-size:0.95rem;
-        line-height:1.65;
-    }
-}
-
-/* ===== SMALL PHONE ===== */
-@media (max-width: 480px){
-    .page-wrap{
-        padding:192px 12px 38px;
+    @keyframes previewAppearCenter{
+      0%{ opacity:0; transform:translate(-50%,-47%) scale(0.985); }
+      100%{ opacity:1; transform:translate(-50%,-50%) scale(1); }
     }
 
-    .menu{
-        gap:10px 14px;
-        font-size:0.86rem;
+    @keyframes previewAppearBow{
+      0%{ opacity:0; transform:translate(-50%,-47%) rotate(29deg) scale(0.985); }
+      100%{ opacity:1; transform:translate(-50%,-50%) rotate(29deg) scale(1); }
     }
 
-    .page-head h1{
-        font-size:1.72rem;
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 980px){
+      .customizer-layout{
+        grid-template-columns:1fr;
+      }
+
+      .right-column{
+        order:2;
+      }
+
+      .left-column{
+        order:1;
+      }
     }
 
-    .controls-inner,
-    .checkout-inner,
-    .preview-shell{
-        padding:18px;
-    }
+    @media (max-width: 760px){
+      .cursor-glow{ display:none; }
 
-    .preview{
-        min-height:270px;
-        padding:16px;
-    }
+      .app-shell{
+        padding:0 10px calc(var(--bottombar-h) + 16px);
+      }
 
-    #bunnyImage{
-        max-width:315px;
-    }
+      .topbar{
+        margin:0 -10px;
+        padding:0 10px;
+      }
 
-    #heartImg,
-    #starImg{
-        width:195px;
-        max-width:60%;
-        top:65%;
-    }
+      .topbar-inner{
+        grid-template-columns:42px 1fr 42px;
+        min-height:64px;
+      }
 
-    #bowImg{
-        width:132px;
-        max-width:42%;
-        top:35%;
+      .top-title .label{
+        font-size:0.98rem;
+      }
+
+      .top-title .sub{
+        font-size:0.66rem;
+      }
+
+      .customizer-layout{
+        gap:14px;
+        padding-top:12px;
+      }
+
+      .preview-card,
+      .controls-card,
+      .order-card,
+      .rec-card{
+        border-radius:24px;
+      }
+
+      .preview-card{
+        padding:12px;
+      }
+
+      .preview-head{
+        margin-bottom:10px;
+      }
+
+      .preview-head h1{
+        font-size:1.34rem;
+      }
+
+      .preview-head p{
+        font-size:0.82rem;
+      }
+
+      .preview-badge{
+        display:none;
+      }
+
+      .preview-stage{
+        min-height:330px;
+        border-radius:22px;
+      }
+
+      .b1{ width:74px; height:100px; left:-20px; top:18px; }
+      .b2{ width:86px; height:70px; right:6px; top:24px; }
+      .b3{ width:100px; height:116px; left:4px; bottom:86px; }
+      .b4{ width:112px; height:78px; right:-14px; bottom:102px; }
+      .b5{ width:56px; height:56px; top:26px; }
+      .b6{ width:132px; height:52px; bottom:48px; }
+
+      #bunnyImage{
+        width:min(84%, 280px);
+        bottom:36px;
+      }
+
+      #heartImg,
+      #starImg{
+        width:min(56%, 186px);
+        top:69%;
+      }
+
+      #bowImg{
+        width:min(34%, 118px);
+        top:37%;
         left:63%;
-    }
+      }
 
-    .section-mini-title,
-    .preview-title{
-        font-size:1.22rem;
-    }
+      .summary-row{
+        grid-template-columns:repeat(3, minmax(0,1fr));
+        gap:8px;
+      }
 
-    .price-box{
-        font-size:1.52rem;
-    }
+      .summary-chip{
+        padding:10px 9px;
+        min-height:62px;
+        border-radius:14px;
+      }
 
-    .action-btn{
-        margin-top:12px;
-    }
-}
-
-@media (max-width: 380px){
-    .logo span{
-        font-size:0.95rem;
-    }
-
-    .page-wrap{
-        padding-top:198px;
-    }
-
-    .page-head .eyebrow{
+      .summary-chip .k{
         font-size:0.62rem;
-        padding:8px 11px;
+      }
+
+      .summary-chip .v{
+        font-size:0.82rem;
+      }
+
+      .tab-scroll{
+        padding:12px 12px 0;
+      }
+
+      .tab-panels{
+        padding:14px 12px;
+      }
+
+      .panel-title{
+        font-size:1.18rem;
+      }
+
+      .panel-text{
+        font-size:0.86rem;
+        margin-bottom:14px;
+      }
+
+      .tab-btn{
+        padding:10px 13px;
+        font-size:0.8rem;
+      }
+
+      select{
+        padding:13px 14px;
+        padding-right:40px;
+        font-size:0.92rem;
+      }
+
+      .helper-box{
+        font-size:0.84rem;
+        padding:12px;
+      }
+
+      .order-inner,
+      .rec-inner{
+        padding:12px;
+      }
+
+      .order-top{
+        align-items:flex-end;
+      }
+
+      .order-top h2{
+        font-size:1.22rem;
+      }
+
+      .price-box .value{
+        font-size:1.5rem;
+      }
+
+      .order-grid{
+        grid-template-columns:1fr;
+        gap:12px;
+      }
+
+      .actions{
+        gap:9px;
+      }
+
+      .action-btn{
+        padding:14px 14px;
+        font-size:0.8rem;
+      }
+
+      .rec-head h2{
+        font-size:1.14rem;
+      }
+
+      .rec-grid{
+        gap:8px;
+      }
+
+      .rec-item{
+        border-radius:16px;
+        padding:8px;
+      }
+
+      .rec-thumb{
+        border-radius:12px;
+      }
+
+      .rec-name{
+        font-size:0.76rem;
+      }
+
+      .rec-price{
+        font-size:0.7rem;
+      }
     }
 
-    .page-head h1{
-        font-size:1.58rem;
+    @media (max-width: 420px){
+      .preview-stage{
+        min-height:306px;
+      }
+
+      #bunnyImage{
+        width:min(86%, 250px);
+      }
+
+      #heartImg,
+      #starImg{
+        width:min(58%, 168px);
+      }
+
+      #bowImg{
+        width:min(33%, 104px);
+      }
+
+      .summary-chip .v{
+        font-size:0.78rem;
+      }
     }
 
-    .preview{
-        min-height:248px;
-        padding:14px;
+    @media (prefers-reduced-motion: reduce){
+      *,
+      *::before,
+      *::after{
+        animation:none !important;
+        transition:none !important;
+        scroll-behavior:auto !important;
+      }
     }
-
-    #bunnyImage{
-        max-width:290px;
-    }
-
-    #heartImg,
-    #starImg{
-        width:178px;
-    }
-
-    #bowImg{
-        width:120px;
-    }
-
-    .quantity-box button{
-        width:44px;
-        height:44px;
-    }
-}
-</style>
+  </style>
 </head>
-
 <body>
 
-<div class="cursor-glow" id="cursorGlow"></div>
+  <div class="cursor-glow" id="cursorGlow"></div>
 
-<header class="site-header" id="siteHeader">
-    <div class="nav">
-        <a href="index.html" class="logo">
-            <img src="images/logo.jpg" alt="Maison Doucette logo">
-            <span>Maison Doucette</span>
-        </a>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <button class="icon-btn" type="button" aria-label="Back" onclick="window.location.href='index.html#shop'">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M15 18l-6-6 6-6"></path>
+          </svg>
+        </button>
 
-        <ul class="menu">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="index.html#shop">Our collection</a></li>
-            <li><a href="index.html#about">About us</a></li>
-            <li><a href="index.html#contact">Contact us</a></li>
+        <div class="top-title">
+          <span class="label">Customize Bunny</span>
+          <span class="sub">Maison Doucette Atelier</span>
+        </div>
 
-            <li class="cart-icon">
-                <a href="cart.html" aria-label="View cart">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <circle cx="9" cy="20" r="1"></circle>
-                        <circle cx="18" cy="20" r="1"></circle>
-                        <path d="M2 3h3l2.2 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.5L21 6H7.1"></path>
-                    </svg>
-                    <span id="cart-count">0</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-</header>
+        <div class="top-cart-wrap">
+          <a class="top-cart" href="cart.html" aria-label="View cart">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="9" cy="20" r="1"></circle>
+              <circle cx="18" cy="20" r="1"></circle>
+              <path d="M2 3h3l2.2 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.5L21 6H7.1"></path>
+            </svg>
+          </a>
+          <span id="cart-count">0</span>
+        </div>
+      </div>
+    </header>
 
-<main class="page-wrap">
-    <div class="page-head">
-        <div class="eyebrow">Maison Doucette Atelier</div>
-        <h1>Customize your Bunny</h1>
-    </div>
+    <main class="customizer-layout">
+      <div class="left-column">
+        <section class="card preview-card">
+          <div class="preview-head">
+            <div>
+              <h1>Your Bunny</h1>
+              <p>Create your own little companion, one detail at a time.</p>
+            </div>
+            <div class="preview-badge">Live preview</div>
+          </div>
 
-    <div class="container">
+          <div class="preview-stage">
+            <div class="stage-glow"></div>
+            <div class="stage-block b1"></div>
+            <div class="stage-block b2"></div>
+            <div class="stage-block b3"></div>
+            <div class="stage-block b4"></div>
+            <div class="stage-block b5"></div>
+            <div class="stage-block b6"></div>
+            <div class="stage-floor"></div>
 
-        <section class="controls-card card">
-            <div class="controls-inner">
-                <h2 class="section-mini-title">Choose your details</h2>
+            <div id="previewMessage" class="preview-message">Choose your bunny details to see it come to life 🐰</div>
 
-                <label>Material</label>
+            <img id="bunnyImage" alt="Bunny preview">
+            <img id="heartImg" class="accessory-img" alt="Heart accessory">
+            <img id="starImg" class="accessory-img" alt="Star accessory">
+            <img id="bowImg" class="accessory-img" alt="Bow accessory">
+          </div>
+
+          <div class="summary-row">
+            <div class="summary-chip">
+              <div class="k">Material</div>
+              <div class="v" id="summaryMaterial">Not selected</div>
+            </div>
+
+            <div class="summary-chip">
+              <div class="k">Body</div>
+              <div class="v" id="summaryBody">Not selected</div>
+            </div>
+
+            <div class="summary-chip">
+              <div class="k">Accessory</div>
+              <div class="v" id="summaryAccessory">Not selected</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card rec-card">
+          <div class="rec-inner">
+            <div class="rec-head">
+              <h2>You may also like</h2>
+              <span>More lovely pieces</span>
+            </div>
+
+            <div class="rec-grid">
+              <a class="rec-item" href="teddy-details.html">
+                <div class="rec-thumb">
+                  <img src="images/teddy1.jpg" alt="Teddy Bear">
+                </div>
+                <div class="rec-name">Teddy Bear</div>
+                <div class="rec-price">From 45 RON</div>
+              </a>
+
+              <a class="rec-item" href="strawberry-details.html">
+                <div class="rec-thumb">
+                  <img src="images/strawberry1.jpg" alt="Chocolate Covered Strawberry">
+                </div>
+                <div class="rec-name">Strawberry</div>
+                <div class="rec-price">20 RON</div>
+              </a>
+
+              <a class="rec-item" href="index.html#shop">
+                <div class="rec-thumb">
+                  <img src="images/bunny1.jpg" alt="See all products">
+                </div>
+                <div class="rec-name">More creations</div>
+                <div class="rec-price">View collection</div>
+              </a>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="right-column">
+        <section class="card controls-card">
+          <div class="tab-scroll">
+            <div class="tabs">
+              <button class="tab-btn active" type="button" data-tab="bodyTab">Body</button>
+              <button class="tab-btn" type="button" data-tab="detailsTab">Details</button>
+              <button class="tab-btn" type="button" data-tab="accessoriesTab">Accessories</button>
+              <button class="tab-btn" type="button" data-tab="orderTab">Order</button>
+            </div>
+          </div>
+
+          <div class="tab-panels">
+            <div class="tab-panel active" id="bodyTab">
+              <h2 class="panel-title">Choose the bunny base</h2>
+              <p class="panel-text">Start with the essentials: yarn type, size and the main body colour.</p>
+
+              <div class="control-block">
+                <label class="control-label" for="material">Material</label>
                 <select id="material">
-                    <option value="">Select...</option>
-                    <option value="Acrylic yarn">Acrylic yarn</option>
-                    <option value="Fluffy yarn">Fluffy yarn</option>
+                  <option value="">Select...</option>
+                  <option value="Acrylic yarn">Acrylic yarn</option>
+                  <option value="Fluffy yarn">Fluffy yarn</option>
                 </select>
+              </div>
 
-                <label>Size</label>
+              <div class="control-block">
+                <label class="control-label" for="size">Size</label>
                 <select id="size">
-                    <option value="">Select...</option>
-                    <option value="0">Small (+0RON)</option>
-                    <option value="15">Medium (+15RON)</option>
-                    <option value="25">Large (+25RON)</option>
+                  <option value="">Select...</option>
+                  <option value="0">Small (+0RON)</option>
+                  <option value="15">Medium (+15RON)</option>
+                  <option value="25">Large (+25RON)</option>
                 </select>
+              </div>
 
-                <label>Body Colour</label>
+              <div class="control-block">
+                <label class="control-label" for="bodyColor">Body Colour</label>
                 <select id="bodyColor">
-                    <option value="">Select...</option>
-                    <option value="Cream">Cream</option>
-                    <option value="Brown">Brown</option>
-                    <option value="Light brown">Light brown</option>
-                    <option value="Light pink">Light pink</option>
-                    <option value="Light yellow">Light yellow</option>
-                    <option value="Light blue">Light blue</option>
-                    <option value="Dark blue">Dark blue</option>
+                  <option value="">Select...</option>
+                  <option value="Cream">Cream</option>
+                  <option value="Brown">Brown</option>
+                  <option value="Light brown">Light brown</option>
+                  <option value="Light pink">Light pink</option>
+                  <option value="Light yellow">Light yellow</option>
+                  <option value="Light blue">Light blue</option>
+                  <option value="Dark blue">Dark blue</option>
                 </select>
+              </div>
 
-                <label>Accessory</label>
+              <div class="helper-box">
+                <strong>Tip:</strong> choose the body first so the accessory colours are easier to imagine.
+              </div>
+            </div>
+
+            <div class="tab-panel" id="detailsTab">
+              <h2 class="panel-title">Refine the creation</h2>
+              <p class="panel-text">Here you can review the current choices before adding the final accessory details.</p>
+
+              <div class="helper-box" style="margin-bottom:14px;">
+                <strong>Current material:</strong> <span id="detailsMaterial">Not selected</span><br>
+                <strong>Current size:</strong> <span id="detailsSize">Not selected</span><br>
+                <strong>Current body colour:</strong> <span id="detailsBody">Not selected</span>
+              </div>
+
+              <div class="helper-box">
+                Every bunny is handmade, so your final piece will feel special and one of a kind.
+              </div>
+            </div>
+
+            <div class="tab-panel" id="accessoriesTab">
+              <h2 class="panel-title">Dress your bunny</h2>
+              <p class="panel-text">Pick an accessory and then choose its colour to make the bunny truly yours.</p>
+
+              <div class="control-block">
+                <label class="control-label" for="accessory">Accessory</label>
                 <select id="accessory">
-                    <option value="">Select...</option>
-                    <option value="0">Nothing - 0RON</option>
-                    <option value="7">Heart - 7RON</option>
-                    <option value="3">Bow - 3RON</option>
-                    <option value="9">Heart + Bow - 9RON</option>
-                    <option value="8">Star - 8RON</option>
-                    <option value="10">Star + Bow - 10RON</option>
+                  <option value="">Select...</option>
+                  <option value="0">Nothing - 0RON</option>
+                  <option value="7">Heart - 7RON</option>
+                  <option value="3">Bow - 3RON</option>
+                  <option value="9">Heart + Bow - 9RON</option>
+                  <option value="8">Star - 8RON</option>
+                  <option value="10">Star + Bow - 10RON</option>
                 </select>
+              </div>
 
-                <div id="accessoryColors"></div>
+              <div id="accessoryColors"></div>
             </div>
+
+            <div class="tab-panel" id="orderTab">
+              <h2 class="panel-title">Ready to order</h2>
+              <p class="panel-text">Once your bunny looks just right, choose the quantity and add it to cart.</p>
+
+              <div class="helper-box">
+                Your order saves the selected bunny image, accessory layers and chosen options to the cart preview.
+              </div>
+            </div>
+          </div>
         </section>
 
-        <section class="preview-card card">
-            <div class="preview-shell">
-                <h2 class="preview-title">Bunny Preview</h2>
+        <section class="card order-card">
+          <div class="order-inner">
+            <div class="order-top">
+              <h2>Order summary</h2>
 
-                <div class="preview">
-                    <div id="previewMessage">Select options to see your Bunny 🐰</div>
-
-                    <img id="bunnyImage" alt="Bunny preview">
-                    <img id="heartImg" class="accessory-img" alt="Heart accessory">
-                    <img id="starImg" class="accessory-img" alt="Star accessory">
-                    <img id="bowImg" class="accessory-img" alt="Bow accessory">
-                </div>
+              <div class="price-box">
+                <span class="label">Total</span>
+                <span class="value"><span id="price">45</span> RON</span>
+              </div>
             </div>
-        </section>
 
-        <section class="checkout-card card">
-            <div class="checkout-inner">
-                <div class="price-box">
-                    Total: <span id="price">45</span> RON
+            <div class="order-grid">
+              <div>
+                <label class="control-label">Quantity</label>
+                <div class="qty-box">
+                  <button class="qty-btn" type="button" id="minusBtn">−</button>
+                  <span class="qty-value" id="quantity">1</span>
+                  <button class="qty-btn" type="button" id="plusBtn">+</button>
                 </div>
+              </div>
 
-                <div class="quantity-wrap">
-                    <label>Quantity</label>
-                    <div class="quantity-box">
-                        <button type="button" id="minusBtn">−</button>
-                        <span id="quantity">1</span>
-                        <button type="button" id="plusBtn">+</button>
-                    </div>
-                </div>
-
-                <button class="action-btn add-btn" id="addBtn" disabled type="button">Add to cart</button>
-                <button class="action-btn checkout-btn" id="checkoutBtn" type="button">Go to cart →</button>
-                <button class="action-btn continue-btn" type="button" onclick="window.location.href='index.html#shop'">
-                    Continue shopping
-                </button>
+              <div class="helper-box">
+                Handmade just for you.
+              </div>
             </div>
+
+            <div class="actions">
+              <button class="action-btn primary-btn" id="addBtn" type="button" disabled>Add to cart</button>
+              <button class="action-btn dark-btn" id="checkoutBtn" type="button">Go to cart</button>
+              <button class="action-btn soft-btn" type="button" onclick="window.location.href='index.html#shop'">Continue shopping</button>
+            </div>
+          </div>
         </section>
+      </div>
+    </main>
+  </div>
 
-    </div>
-</main>
+  <div id="toast" class="toast">Product added to cart successfully.</div>
 
-<footer class="footer">
-    <div class="footer-inner">
-        <h3 class="footer-title">Maison Doucette</h3>
-        <p>Handmade with love, softness and little details.</p>
-        <p>© Maison Doucette — handmade with love</p>
-    </div>
-</footer>
+  <script>
+    let basePrice = 45;
+    let quantity = 1;
 
-<div id="toast" class="toast">Product added to cart successfully.</div>
+    let heartColor = "";
+    let starColor = "";
+    let bowColor = "";
 
-<script>
-let basePrice = 45;
-let quantity = 1;
+    const material = document.getElementById("material");
+    const size = document.getElementById("size");
+    const bodyColor = document.getElementById("bodyColor");
+    const accessory = document.getElementById("accessory");
 
-let heartColor = "";
-let starColor  = "";
-let bowColor   = "";
+    const priceEl = document.getElementById("price");
+    const qtyEl = document.getElementById("quantity");
+    const addBtn = document.getElementById("addBtn");
+    const checkoutBtn = document.getElementById("checkoutBtn");
 
-const material = document.getElementById("material");
-const size = document.getElementById("size");
-const bodyColor = document.getElementById("bodyColor");
-const accessory = document.getElementById("accessory");
-const priceEl = document.getElementById("price");
-const qtyEl = document.getElementById("quantity");
-const addBtn = document.getElementById("addBtn");
+    const accessoryColorsWrap = document.getElementById("accessoryColors");
+    const previewMessage = document.getElementById("previewMessage");
+    const bunnyImage = document.getElementById("bunnyImage");
+    const heartImg = document.getElementById("heartImg");
+    const starImg = document.getElementById("starImg");
+    const bowImg = document.getElementById("bowImg");
+    const cartCount = document.getElementById("cart-count");
+    const cursorGlow = document.getElementById("cursorGlow");
 
-const accessoryColorsWrap = document.getElementById("accessoryColors");
-const previewMessage = document.getElementById("previewMessage");
-const bunnyImage = document.getElementById("bunnyImage");
+    const summaryMaterial = document.getElementById("summaryMaterial");
+    const summaryBody = document.getElementById("summaryBody");
+    const summaryAccessory = document.getElementById("summaryAccessory");
 
-const heartImg = document.getElementById("heartImg");
-const starImg  = document.getElementById("starImg");
-const bowImg   = document.getElementById("bowImg");
+    const detailsMaterial = document.getElementById("detailsMaterial");
+    const detailsSize = document.getElementById("detailsSize");
+    const detailsBody = document.getElementById("detailsBody");
 
-const siteHeader = document.getElementById("siteHeader");
-const cursorGlow = document.getElementById("cursorGlow");
-const cartCount = document.getElementById("cart-count");
+    const imageMap = {
+      "Cream": "Bunny_Colors/bunny-cream.png",
+      "Brown": "Bunny_Colors/bunny-brown.png",
+      "Light brown": "Bunny_Colors/bunny-light-brown.png",
+      "Light pink": "Bunny_Colors/bunny-light-pink.png",
+      "Light yellow": "Bunny_Colors/bunny-light-yellow.png",
+      "Light blue": "Bunny_Colors/bunny-light-blue.png",
+      "Dark blue": "Bunny_Colors/bunny-dark-blue.png"
+    };
 
-document.getElementById("minusBtn").addEventListener("click", () => changeQty(-1));
-document.getElementById("plusBtn").addEventListener("click", () => changeQty(1));
-document.getElementById("checkoutBtn").addEventListener("click", goToCart);
-addBtn.addEventListener("click", addToCart);
+    const colorOptionsHtml = `
+      <option value="">Select colour...</option>
+      <option value="Bright pink">Bright pink</option>
+      <option value="Light pink">Light pink</option>
+      <option value="Yellow">Yellow</option>
+      <option value="Light blue">Light blue</option>
+      <option value="Dark blue">Dark blue</option>
+      <option value="Red">Red</option>
+      <option value="Burgundy">Burgundy</option>
+    `;
 
-const imageMap = {
-  "Cream": "Bunny_Colors/bunny-cream.png",
-  "Brown": "Bunny_Colors/bunny-brown.png",
-  "Light brown": "Bunny_Colors/bunny-light-brown.png",
-  "Light pink": "Bunny_Colors/bunny-light-pink.png",
-  "Light yellow": "Bunny_Colors/bunny-light-yellow.png",
-  "Light blue": "Bunny_Colors/bunny-light-blue.png",
-  "Dark blue": "Bunny_Colors/bunny-dark-blue.png"
-};
+    document.getElementById("minusBtn").addEventListener("click", () => changeQty(-1));
+    document.getElementById("plusBtn").addEventListener("click", () => changeQty(1));
+    checkoutBtn.addEventListener("click", goToCart);
+    addBtn.addEventListener("click", addToCart);
 
-const colorOptionsHtml = `
-  <option value="">Select colour...</option>
-  <option value="Bright pink">Bright pink</option>
-  <option value="Light pink">Light pink</option>
-  <option value="Yellow">Yellow</option>
-  <option value="Light blue">Light blue</option>
-  <option value="Dark blue">Dark blue</option>
-  <option value="Red">Red</option>
-  <option value="Burgundy">Burgundy</option>
-`;
+    function normalizeColorLabel(v){
+      return String(v || "").trim();
+    }
 
-function normalizeColorLabel(v){
-  return String(v || "").trim();
-}
+    function slugVariants(colorLabel){
+      const c = normalizeColorLabel(colorLabel);
+      const v1 = c.toLowerCase().replace(/\s+/g, "-");
+      const v2 = c.toLowerCase();
+      const v3 = c.toLowerCase().replace(/\s+/g, "_");
+      return Array.from(new Set([v1, v2, v3]));
+    }
 
-function slugVariants(colorLabel){
-  const c = normalizeColorLabel(colorLabel);
-  const v1 = c.toLowerCase().replace(/\s+/g, "-");
-  const v2 = c.toLowerCase();
-  const v3 = c.toLowerCase().replace(/\s+/g, "_");
-  return Array.from(new Set([v1, v2, v3]));
-}
+    function accessoryCandidates(type, colorLabel){
+      const variants = slugVariants(colorLabel);
+      const folders = ["Accessories", "accessories"];
+      const exts = ["png", "PNG"];
 
-function accessoryCandidates(type, colorLabel){
-  const variants = slugVariants(colorLabel);
-  const folders = ["Accessories", "accessories"];
-  const exts = ["png", "PNG"];
-
-  const candidates = [];
-  folders.forEach(folder => {
-    variants.forEach(v => {
-      exts.forEach(ext => {
-        candidates.push(`${folder}/${type}-${v}.${ext}`);
+      const candidates = [];
+      folders.forEach(folder => {
+        variants.forEach(v => {
+          exts.forEach(ext => {
+            candidates.push(`${folder}/${type}-${v}.${ext}`);
+          });
+        });
       });
-    });
-  });
 
-  return candidates;
-}
+      return candidates;
+    }
 
-function trySetImage(imgEl, candidates){
-  return new Promise((resolve) => {
-    let i = 0;
-    imgEl.style.display = "none";
-    imgEl.removeAttribute("src");
+    function trySetImage(imgEl, candidates){
+      return new Promise((resolve) => {
+        let i = 0;
+        imgEl.style.display = "none";
+        imgEl.removeAttribute("src");
 
-    const probe = new Image();
-    const attempt = () => {
-      if(i >= candidates.length){
-        resolve({ ok:false, used:"" });
+        const probe = new Image();
+
+        const attempt = () => {
+          if(i >= candidates.length){
+            resolve({ ok:false, used:"" });
+            return;
+          }
+
+          const src = candidates[i++];
+          probe.onload = () => {
+            imgEl.src = src;
+            imgEl.style.display = "block";
+            resolve({ ok:true, used:src });
+          };
+          probe.onerror = attempt;
+          probe.src = src;
+        };
+
+        attempt();
+      });
+    }
+
+    function showHint(id, ok, example){
+      const el = document.getElementById(id);
+      if(!el) return;
+
+      if(ok){
+        el.textContent = "";
+        el.classList.remove("error");
+      }else{
+        el.textContent = `Could not find image like: ${example}`;
+        el.classList.add("error");
+      }
+    }
+
+    function getActiveFromSelectedText(){
+      const selectedText = accessory.options[accessory.selectedIndex]?.text || "";
+      return {
+        heart: selectedText.includes("Heart"),
+        star: selectedText.includes("Star"),
+        bow: selectedText.includes("Bow"),
+        nothing: selectedText.includes("Nothing") || selectedText.includes("Select...")
+      };
+    }
+
+    function hideInactiveAccessories(active){
+      if(!active.heart){
+        heartImg.style.display = "none";
+        heartImg.removeAttribute("src");
+        heartImg.style.opacity = "0";
+      }
+      if(!active.star){
+        starImg.style.display = "none";
+        starImg.removeAttribute("src");
+        starImg.style.opacity = "0";
+      }
+      if(!active.bow){
+        bowImg.style.display = "none";
+        bowImg.removeAttribute("src");
+        bowImg.style.opacity = "0";
+      }
+    }
+
+    function syncColorsFromUI(){
+      const heartSel = document.getElementById("heartSelect");
+      const starSel = document.getElementById("starSelect");
+      const bowSel = document.getElementById("bowSelect");
+
+      if(heartSel) heartColor = normalizeColorLabel(heartSel.value);
+      if(starSel) starColor = normalizeColorLabel(starSel.value);
+      if(bowSel) bowColor = normalizeColorLabel(bowSel.value);
+    }
+
+    function animatePreviewElement(el, type = "default"){
+      el.classList.remove("preview-appear", "preview-appear-bow");
+      el.style.animation = "none";
+      void el.offsetWidth;
+
+      if(type === "bow"){
+        el.style.animation = "previewAppearBow 0.26s cubic-bezier(.22,.61,.36,1) forwards";
+      }else if(type === "centered"){
+        el.style.animation = "previewAppearCenter 0.26s cubic-bezier(.22,.61,.36,1) forwards";
+      }else{
+        el.style.animation = "previewAppear 0.26s cubic-bezier(.22,.61,.36,1) forwards";
+      }
+    }
+
+    function getAccessoryScale(){
+      if(window.innerWidth <= 420){
+        return {
+          centerWidth: "168px",
+          centerTop: "69%",
+          bowWidth: "104px",
+          bowTop: "37%",
+          bowLeft: "63%"
+        };
+      }
+
+      if(window.innerWidth <= 760){
+        return {
+          centerWidth: "186px",
+          centerTop: "69%",
+          bowWidth: "118px",
+          bowTop: "37%",
+          bowLeft: "63%"
+        };
+      }
+
+      return {
+        centerWidth: "240px",
+        centerTop: "69%",
+        bowWidth: "160px",
+        bowTop: "37%",
+        bowLeft: "63%"
+      };
+    }
+
+    async function renderAccessory(type, colorLabel){
+      const mapEl = { heart: heartImg, star: starImg, bow: bowImg };
+      const imgEl = mapEl[type];
+      if(!imgEl) return;
+
+      if(!colorLabel){
+        imgEl.style.display = "none";
+        imgEl.removeAttribute("src");
+        imgEl.style.opacity = "0";
         return;
       }
-      const src = candidates[i++];
-      probe.onload = () => {
-        imgEl.src = src;
-        imgEl.style.display = "block";
-        resolve({ ok:true, used:src });
-      };
-      probe.onerror = attempt;
-      probe.src = src;
-    };
-    attempt();
-  });
-}
 
-function showHint(id, ok, example){
-  const el = document.getElementById(id);
-  if(!el) return;
+      const candidates = accessoryCandidates(type, colorLabel);
+      const result = await trySetImage(imgEl, candidates);
 
-  if(ok){
-    el.textContent = "";
-    el.classList.remove("error");
-  }else{
-    el.textContent = `Could not find image like: ${example}`;
-    el.classList.add("error");
-  }
-}
+      const example = candidates[0] || "";
+      if(type === "heart") showHint("heartHint", result.ok, example);
+      if(type === "star") showHint("starHint", result.ok, example);
+      if(type === "bow") showHint("bowHint", result.ok, example);
 
-function getActiveFromSelectedText(){
-  const selectedText = accessory.options[accessory.selectedIndex]?.text || "";
-  return {
-    heart: selectedText.includes("Heart"),
-    star:  selectedText.includes("Star"),
-    bow:   selectedText.includes("Bow"),
-    nothing: selectedText.includes("Nothing") || selectedText.includes("Select...")
-  };
-}
+      if(result.ok){
+        const scale = getAccessoryScale();
+        imgEl.style.opacity = "0";
 
-function hideInactiveAccessories(active){
-  if(!active.heart){
-    heartImg.style.display="none";
-    heartImg.removeAttribute("src");
-    heartImg.style.opacity = "0";
-  }
-  if(!active.star){
-    starImg.style.display="none";
-    starImg.removeAttribute("src");
-    starImg.style.opacity = "0";
-  }
-  if(!active.bow){
-    bowImg.style.display="none";
-    bowImg.removeAttribute("src");
-    bowImg.style.opacity = "0";
-  }
-}
-
-function syncColorsFromUI(){
-  const heartSel = document.getElementById("heartSelect");
-  const starSel  = document.getElementById("starSelect");
-  const bowSel   = document.getElementById("bowSelect");
-
-  if(heartSel) heartColor = normalizeColorLabel(heartSel.value);
-  if(starSel)  starColor  = normalizeColorLabel(starSel.value);
-  if(bowSel)   bowColor   = normalizeColorLabel(bowSel.value);
-}
-
-function animatePreviewElement(el, type = "default"){
-  el.classList.remove("preview-appear", "preview-appear-bow");
-  el.style.animation = "none";
-  void el.offsetWidth;
-
-  if(type === "bow"){
-    el.style.animation = "previewAppearBow 0.26s cubic-bezier(.22,.61,.36,1) forwards";
-  }else if(type === "centered"){
-    el.style.animation = "previewAppearCenter 0.26s cubic-bezier(.22,.61,.36,1) forwards";
-  }else{
-    el.style.animation = "previewAppear 0.26s cubic-bezier(.22,.61,.36,1) forwards";
-  }
-}
-
-function getAccessoryScale(){
-  if(window.innerWidth <= 380){
-    return {
-      centerWidth: "178px",
-      centerMaxWidth: "60%",
-      centerTop: "65%",
-      bowWidth: "120px",
-      bowMaxWidth: "42%",
-      bowTop: "35%",
-      bowLeft: "63%"
-    };
-  }
-
-  if(window.innerWidth <= 480){
-    return {
-      centerWidth: "195px",
-      centerMaxWidth: "60%",
-      centerTop: "65%",
-      bowWidth: "132px",
-      bowMaxWidth: "42%",
-      bowTop: "35%",
-      bowLeft: "63%"
-    };
-  }
-
-  if(window.innerWidth <= 768){
-    return {
-      centerWidth: "220px",
-      centerMaxWidth: "58%",
-      centerTop: "65%",
-      bowWidth: "150px",
-      bowMaxWidth: "42%",
-      bowTop: "35%",
-      bowLeft: "63%"
-    };
-  }
-
-  if(window.innerWidth <= 1100){
-    return {
-      centerWidth: "300px",
-      centerMaxWidth: "48%",
-      centerTop: "64%",
-      bowWidth: "215px",
-      bowMaxWidth: "48%",
-      bowTop: "34%",
-      bowLeft: "64%"
-    };
-  }
-
-  return {
-    centerWidth: "350px",
-    centerMaxWidth: "50%",
-    centerTop: "64%",
-    bowWidth: "250px",
-    bowMaxWidth: "50%",
-    bowTop: "34%",
-    bowLeft: "64%"
-  };
-}
-
-async function renderAccessory(type, colorLabel){
-  const mapEl = { heart: heartImg, star: starImg, bow: bowImg };
-  const imgEl = mapEl[type];
-  if(!imgEl) return;
-
-  if(!colorLabel){
-    imgEl.style.display="none";
-    imgEl.removeAttribute("src");
-    imgEl.style.opacity = "0";
-    return;
-  }
-
-  const candidates = accessoryCandidates(type, colorLabel);
-  const result = await trySetImage(imgEl, candidates);
-
-  const example = candidates[0] || "";
-  if(type === "heart") showHint("heartHint", result.ok, example);
-  if(type === "star")  showHint("starHint",  result.ok, example);
-  if(type === "bow")   showHint("bowHint",   result.ok, example);
-
-  if(result.ok){
-    const scale = getAccessoryScale();
-    imgEl.style.opacity = "0";
-
-    if(type === "bow"){
-      imgEl.style.top = scale.bowTop;
-      imgEl.style.left = scale.bowLeft;
-      imgEl.style.width = scale.bowWidth;
-      imgEl.style.maxWidth = scale.bowMaxWidth;
-      imgEl.style.transform = "translate(-50%,-50%) rotate(29deg)";
-      animatePreviewElement(imgEl, "bow");
-    }else{
-      imgEl.style.top = scale.centerTop;
-      imgEl.style.left = "50%";
-      imgEl.style.width = scale.centerWidth;
-      imgEl.style.maxWidth = scale.centerMaxWidth;
-      imgEl.style.transform = "translate(-50%,-50%)";
-      animatePreviewElement(imgEl, "centered");
+        if(type === "bow"){
+          imgEl.style.top = scale.bowTop;
+          imgEl.style.left = scale.bowLeft;
+          imgEl.style.width = scale.bowWidth;
+          imgEl.style.transform = "translate(-50%,-50%) rotate(29deg)";
+          animatePreviewElement(imgEl, "bow");
+        }else{
+          imgEl.style.top = scale.centerTop;
+          imgEl.style.left = "50%";
+          imgEl.style.width = scale.centerWidth;
+          imgEl.style.transform = "translate(-50%,-50%)";
+          animatePreviewElement(imgEl, "centered");
+        }
+      }else{
+        imgEl.style.display = "none";
+        imgEl.removeAttribute("src");
+        imgEl.style.opacity = "0";
+      }
     }
-  } else {
-    imgEl.style.display = "none";
-    imgEl.removeAttribute("src");
-    imgEl.style.opacity = "0";
-  }
-}
 
-async function renderAccessories(){
-  const active = getActiveFromSelectedText();
-  syncColorsFromUI();
-  hideInactiveAccessories(active);
+    async function renderAccessories(){
+      const active = getActiveFromSelectedText();
+      syncColorsFromUI();
+      hideInactiveAccessories(active);
 
-  if(active.heart) await renderAccessory("heart", heartColor);
-  if(active.star)  await renderAccessory("star",  starColor);
-  if(active.bow)   await renderAccessory("bow",   bowColor);
-}
+      if(active.heart) await renderAccessory("heart", heartColor);
+      if(active.star) await renderAccessory("star", starColor);
+      if(active.bow) await renderAccessory("bow", bowColor);
+    }
 
-function updateAccessoryOptions(){
-  const active = getActiveFromSelectedText();
+    function updateAccessoryOptions(){
+      const active = getActiveFromSelectedText();
 
-  accessoryColorsWrap.innerHTML = "";
+      accessoryColorsWrap.innerHTML = "";
 
-  if(!active.heart) heartColor = "";
-  if(!active.star)  starColor  = "";
-  if(!active.bow)   bowColor   = "";
+      if(!active.heart) heartColor = "";
+      if(!active.star) starColor = "";
+      if(!active.bow) bowColor = "";
 
-  if(active.nothing){
-    heartImg.style.display="none"; heartImg.removeAttribute("src");
-    starImg.style.display="none";  starImg.removeAttribute("src");
-    bowImg.style.display="none";   bowImg.removeAttribute("src");
-    heartImg.style.opacity = "0";
-    starImg.style.opacity = "0";
-    bowImg.style.opacity = "0";
+      if(active.nothing){
+        heartImg.style.display = "none";
+        heartImg.removeAttribute("src");
+        starImg.style.display = "none";
+        starImg.removeAttribute("src");
+        bowImg.style.display = "none";
+        bowImg.removeAttribute("src");
+        heartImg.style.opacity = "0";
+        starImg.style.opacity = "0";
+        bowImg.style.opacity = "0";
+        validateForm();
+        updateSummary();
+        return;
+      }
+
+      if(active.heart){
+        accessoryColorsWrap.innerHTML += `
+          <div class="control-block">
+            <label class="control-label">Heart Colour</label>
+            <select id="heartSelect">${colorOptionsHtml}</select>
+            <div class="hint" id="heartHint"></div>
+          </div>
+        `;
+      }
+
+      if(active.star){
+        accessoryColorsWrap.innerHTML += `
+          <div class="control-block">
+            <label class="control-label">Star Colour</label>
+            <select id="starSelect">${colorOptionsHtml}</select>
+            <div class="hint" id="starHint"></div>
+          </div>
+        `;
+      }
+
+      if(active.bow){
+        accessoryColorsWrap.innerHTML += `
+          <div class="control-block">
+            <label class="control-label">Bow Colour</label>
+            <select id="bowSelect">${colorOptionsHtml}</select>
+            <div class="hint" id="bowHint"></div>
+          </div>
+        `;
+      }
+
+      const heartSel = document.getElementById("heartSelect");
+      const starSel = document.getElementById("starSelect");
+      const bowSel = document.getElementById("bowSelect");
+
+      if(heartSel) heartSel.value = heartColor || "";
+      if(starSel) starSel.value = starColor || "";
+      if(bowSel) bowSel.value = bowColor || "";
+
+      if(heartSel){
+        heartSel.addEventListener("change", async () => {
+          syncColorsFromUI();
+          await renderAccessories();
+          validateForm();
+          updateSummary();
+        });
+      }
+
+      if(starSel){
+        starSel.addEventListener("change", async () => {
+          syncColorsFromUI();
+          await renderAccessories();
+          validateForm();
+          updateSummary();
+        });
+      }
+
+      if(bowSel){
+        bowSel.addEventListener("change", async () => {
+          syncColorsFromUI();
+          await renderAccessories();
+          validateForm();
+          updateSummary();
+        });
+      }
+
+      renderAccessories();
+      updateSummary();
+    }
+
+    function animateBunnyImage(){
+      bunnyImage.classList.remove("preview-appear");
+      bunnyImage.style.animation = "none";
+      void bunnyImage.offsetWidth;
+      bunnyImage.style.animation = "previewAppear 0.26s cubic-bezier(.22,.61,.36,1) forwards";
+    }
+
+    function updatePreview(){
+      const selected = bodyColor.value;
+
+      if(!selected){
+        bunnyImage.style.display = "none";
+        bunnyImage.style.opacity = "0";
+        previewMessage.style.display = "block";
+        previewMessage.textContent = "Choose your bunny details to see it come to life 🐰";
+        updateSummary();
+        return;
+      }
+
+      const src = imageMap[selected] || "";
+      if(!src){
+        bunnyImage.style.display = "none";
+        bunnyImage.style.opacity = "0";
+        previewMessage.style.display = "block";
+        previewMessage.textContent = "Image missing for this colour 🤍";
+        updateSummary();
+        return;
+      }
+
+      previewMessage.style.display = "none";
+      bunnyImage.style.display = "block";
+      bunnyImage.style.opacity = "0";
+      bunnyImage.src = src;
+
+      bunnyImage.onload = () => {
+        animateBunnyImage();
+      };
+
+      bunnyImage.onerror = () => {
+        bunnyImage.style.display = "none";
+        previewMessage.style.display = "block";
+        previewMessage.textContent = "Could not load image 🤍 (check file name/path)";
+      };
+
+      updateSummary();
+    }
+
+    function getUnitPrice(){
+      const sizeAdd = parseInt(size.value || "0", 10);
+      const accessoryAdd = parseInt(accessory.value || "0", 10);
+      return basePrice + sizeAdd + accessoryAdd;
+    }
+
+    function updatePrice(){
+      priceEl.textContent = String(getUnitPrice() * quantity);
+    }
+
+    function changeQty(delta){
+      quantity += delta;
+      if(quantity < 1) quantity = 1;
+      if(quantity > 20) quantity = 20;
+      qtyEl.textContent = String(quantity);
+      updatePrice();
+    }
+
+    function getSizeText(){
+      return size.options[size.selectedIndex]?.text || "Not selected";
+    }
+
+    function getAccessoryText(){
+      return accessory.options[accessory.selectedIndex]?.text || "Not selected";
+    }
+
+    function updateSummary(){
+      summaryMaterial.textContent = material.value || "Not selected";
+      summaryBody.textContent = bodyColor.value || "Not selected";
+      summaryAccessory.textContent = getAccessoryText();
+
+      detailsMaterial.textContent = material.value || "Not selected";
+      detailsSize.textContent = getSizeText();
+      detailsBody.textContent = bodyColor.value || "Not selected";
+    }
+
+    function validateForm(){
+      const active = getActiveFromSelectedText();
+      syncColorsFromUI();
+
+      let valid =
+        material.value &&
+        size.value !== "" &&
+        bodyColor.value &&
+        accessory.value !== "";
+
+      const heartOk = !active.heart || !!heartColor;
+      const starOk = !active.star || !!starColor;
+      const bowOk = !active.bow || !!bowColor;
+
+      if(!heartOk || !starOk || !bowOk) valid = false;
+
+      addBtn.disabled = !valid;
+    }
+
+    function updateCartCount(){
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      let total = 0;
+
+      cart.forEach(item => {
+        total += Number(item.quantity || 1);
+      });
+
+      if(!cartCount) return;
+
+      cartCount.textContent = total;
+
+      if(total === 0){
+        cartCount.style.display = "none";
+      }else{
+        cartCount.style.display = "flex";
+      }
+    }
+
+    function addToCart(){
+      syncColorsFromUI();
+
+      const item = {
+        name: "Bunny",
+        material: material.value,
+        size: size.options[size.selectedIndex].text,
+        bodyColor: bodyColor.value,
+        accessory: accessory.options[accessory.selectedIndex].text,
+
+        heartColor: heartColor,
+        starColor: starColor,
+        bowColor: bowColor,
+
+        bodyImage: bunnyImage.getAttribute("src") || "",
+        heartImage: heartImg.getAttribute("src") || "",
+        starImage: starImg.getAttribute("src") || "",
+        bowImage: bowImg.getAttribute("src") || "",
+
+        bodyStyle: {
+          top: "0px",
+          left: "0px",
+          width: "100%",
+          height: "100%",
+          transform: "none",
+          maxWidth: "none",
+          maxHeight: "none"
+        },
+
+        heartStyle: heartImg.getAttribute("src") ? {
+          top: "64%",
+          left: "50%",
+          width: "58%",
+          height: "auto",
+          transform: "translate(-50%,-50%)",
+          maxWidth: "none",
+          maxHeight: "none"
+        } : null,
+
+        starStyle: starImg.getAttribute("src") ? {
+          top: "64%",
+          left: "50%",
+          width: "58%",
+          height: "auto",
+          transform: "translate(-50%,-50%)",
+          maxWidth: "none",
+          maxHeight: "none"
+        } : null,
+
+        bowStyle: bowImg.getAttribute("src") ? {
+          top: "34%",
+          left: "64%",
+          width: "42%",
+          height: "auto",
+          transform: "translate(-50%,-50%) rotate(29deg)",
+          maxWidth: "none",
+          maxHeight: "none"
+        } : null,
+
+        image: bunnyImage.getAttribute("src") || "",
+        price: getUnitPrice(),
+        quantity: quantity
+      };
+
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      cart.push(item);
+      localStorage.setItem("cart", JSON.stringify(cart));
+
+      checkoutBtn.style.display = "block";
+      updateCartCount();
+
+      const toast = document.getElementById("toast");
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 4000);
+    }
+
+    function goToCart(){
+      window.location.href = "cart.html";
+    }
+
+    function setupTabs(){
+      const tabButtons = document.querySelectorAll(".tab-btn");
+      const tabPanels = document.querySelectorAll(".tab-panel");
+
+      tabButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const targetId = btn.dataset.tab;
+
+          tabButtons.forEach(b => b.classList.remove("active"));
+          tabPanels.forEach(p => p.classList.remove("active"));
+
+          btn.classList.add("active");
+          document.getElementById(targetId).classList.add("active");
+        });
+      });
+    }
+
+    material.addEventListener("change", () => {
+      updatePrice();
+      validateForm();
+      updateSummary();
+    });
+
+    size.addEventListener("change", () => {
+      updatePrice();
+      validateForm();
+      updateSummary();
+    });
+
+    bodyColor.addEventListener("change", () => {
+      updatePreview();
+      validateForm();
+      updateSummary();
+    });
+
+    accessory.addEventListener("change", () => {
+      updateAccessoryOptions();
+      updatePrice();
+      validateForm();
+      updateSummary();
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if(!cursorGlow || window.innerWidth <= 760) return;
+      cursorGlow.style.left = `${e.clientX}px`;
+      cursorGlow.style.top = `${e.clientY}px`;
+    });
+
+    document.addEventListener("mouseleave", () => {
+      if(cursorGlow) cursorGlow.style.opacity = "0";
+    });
+
+    document.addEventListener("mouseenter", () => {
+      if(cursorGlow && window.innerWidth > 760) cursorGlow.style.opacity = "0.9";
+    });
+
+    window.addEventListener("resize", () => {
+      renderAccessories();
+    });
+
+    window.addEventListener("load", () => {
+      updateCartCount();
+      updateSummary();
+      renderAccessories();
+      setupTabs();
+    });
+
+    updatePrice();
+    updatePreview();
+    updateAccessoryOptions();
     validateForm();
-    return;
-  }
-
-  if(active.heart){
-    accessoryColorsWrap.innerHTML += `
-      <label>Heart Colour</label>
-      <select id="heartSelect">${colorOptionsHtml}</select>
-      <div class="hint" id="heartHint"></div>
-    `;
-  }
-
-  if(active.star){
-    accessoryColorsWrap.innerHTML += `
-      <label>Star Colour</label>
-      <select id="starSelect">${colorOptionsHtml}</select>
-      <div class="hint" id="starHint"></div>
-    `;
-  }
-
-  if(active.bow){
-    accessoryColorsWrap.innerHTML += `
-      <label>Bow Colour</label>
-      <select id="bowSelect">${colorOptionsHtml}</select>
-      <div class="hint" id="bowHint"></div>
-    `;
-  }
-
-  const heartSel = document.getElementById("heartSelect");
-  const starSel  = document.getElementById("starSelect");
-  const bowSel   = document.getElementById("bowSelect");
-
-  if(heartSel) heartSel.value = heartColor || "";
-  if(starSel)  starSel.value  = starColor  || "";
-  if(bowSel)   bowSel.value   = bowColor   || "";
-
-  if(heartSel){
-    heartSel.addEventListener("change", async () => {
-      syncColorsFromUI();
-      await renderAccessories();
-      validateForm();
-    });
-  }
-
-  if(starSel){
-    starSel.addEventListener("change", async () => {
-      syncColorsFromUI();
-      await renderAccessories();
-      validateForm();
-    });
-  }
-
-  if(bowSel){
-    bowSel.addEventListener("change", async () => {
-      syncColorsFromUI();
-      await renderAccessories();
-      validateForm();
-    });
-  }
-
-  renderAccessories();
-}
-
-function animateBunnyImage(){
-  bunnyImage.classList.remove("preview-appear");
-  bunnyImage.style.animation = "none";
-  void bunnyImage.offsetWidth;
-  bunnyImage.style.animation = "previewAppear 0.26s cubic-bezier(.22,.61,.36,1) forwards";
-}
-
-function updatePreview(){
-  const selected = bodyColor.value;
-
-  if(!selected){
-    bunnyImage.style.display = "none";
-    bunnyImage.style.opacity = 0;
-    previewMessage.style.display = "block";
-    previewMessage.textContent = "Select options to see your Bunny 🐰";
-    return;
-  }
-
-  const src = imageMap[selected] || "";
-  if(!src){
-    bunnyImage.style.display = "none";
-    bunnyImage.style.opacity = 0;
-    previewMessage.style.display = "block";
-    previewMessage.textContent = "Image missing for this colour 🤍";
-    return;
-  }
-
-  previewMessage.style.display = "none";
-
-  bunnyImage.style.display = "block";
-  bunnyImage.style.opacity = "0";
-  bunnyImage.src = src;
-
-  bunnyImage.onload = () => {
-    animateBunnyImage();
-  };
-
-  bunnyImage.onerror = () => {
-    bunnyImage.style.display = "none";
-    previewMessage.style.display = "block";
-    previewMessage.textContent = "Could not load image 🤍 (check file name/path)";
-  };
-}
-
-function getUnitPrice(){
-  const sizeAdd = parseInt(size.value || "0", 10);
-  const accessoryAdd = parseInt(accessory.value || "0", 10);
-  return basePrice + sizeAdd + accessoryAdd;
-}
-
-function updatePrice(){
-  priceEl.textContent = String(getUnitPrice() * quantity);
-}
-
-function changeQty(delta){
-  quantity += delta;
-  if(quantity < 1) quantity = 1;
-  if(quantity > 20) quantity = 20;
-
-  qtyEl.textContent = String(quantity);
-  updatePrice();
-}
-
-function validateForm(){
-  const active = getActiveFromSelectedText();
-  syncColorsFromUI();
-
-  let valid =
-    material.value &&
-    size.value !== "" &&
-    bodyColor.value &&
-    accessory.value !== "";
-
-  const heartOk = !active.heart || !!heartColor;
-  const starOk  = !active.star  || !!starColor;
-  const bowOk   = !active.bow   || !!bowColor;
-
-  if(!heartOk || !starOk || !bowOk) valid = false;
-
-  addBtn.disabled = !valid;
-}
-
-function updateCartCount(){
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  let total = 0;
-
-  cart.forEach(item => {
-    total += Number(item.quantity || 1);
-  });
-
-  if(!cartCount) return;
-
-  cartCount.textContent = total;
-
-  if(total === 0){
-    cartCount.style.display = "none";
-  } else {
-    cartCount.style.display = "flex";
-  }
-}
-
-function addToCart(){
-  syncColorsFromUI();
-
-  const item = {
-    name: "Bunny",
-    material: material.value,
-    size: size.options[size.selectedIndex].text,
-    bodyColor: bodyColor.value,
-    accessory: accessory.options[accessory.selectedIndex].text,
-
-    heartColor: heartColor,
-    starColor: starColor,
-    bowColor: bowColor,
-
-    bodyImage: bunnyImage.getAttribute("src") || "",
-    heartImage: heartImg.getAttribute("src") || "",
-    starImage: starImg.getAttribute("src") || "",
-    bowImage: bowImg.getAttribute("src") || "",
-
-    bodyStyle: {
-      top: "0px",
-      left: "0px",
-      width: "100%",
-      height: "100%",
-      transform: "none",
-      maxWidth: "none",
-      maxHeight: "none"
-    },
-
-    heartStyle: heartImg.getAttribute("src") ? {
-      top: "64%",
-      left: "50%",
-      width: "58%",
-      height: "auto",
-      transform: "translate(-50%,-50%)",
-      maxWidth: "none",
-      maxHeight: "none"
-    } : null,
-
-    starStyle: starImg.getAttribute("src") ? {
-      top: "64%",
-      left: "50%",
-      width: "58%",
-      height: "auto",
-      transform: "translate(-50%,-50%)",
-      maxWidth: "none",
-      maxHeight: "none"
-    } : null,
-
-    bowStyle: bowImg.getAttribute("src") ? {
-      top: "34%",
-      left: "64%",
-      width: "42%",
-      height: "auto",
-      transform: "translate(-50%,-50%) rotate(29deg)",
-      maxWidth: "none",
-      maxHeight: "none"
-    } : null,
-
-    image: bunnyImage.getAttribute("src") || "",
-    price: getUnitPrice(),
-    quantity: quantity
-  };
-
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  cart.push(item);
-  localStorage.setItem("cart", JSON.stringify(cart));
-
-  document.getElementById("checkoutBtn").style.display = "block";
-  updateCartCount();
-
-  const toast = document.getElementById("toast");
-  toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 4000);
-}
-
-function goToCart(){
-  window.location.href = "cart.html";
-}
-
-material.addEventListener("change", () => { updatePrice(); validateForm(); });
-size.addEventListener("change", () => { updatePrice(); validateForm(); });
-bodyColor.addEventListener("change", () => {
-  updatePreview();
-  validateForm();
-});
-accessory.addEventListener("change", () => {
-  updateAccessoryOptions();
-  updatePrice();
-  validateForm();
-});
-
-function handleHeaderShadow(){
-  if(window.scrollY > 14){
-    siteHeader.classList.add("scrolled");
-  } else {
-    siteHeader.classList.remove("scrolled");
-  }
-}
-
-document.addEventListener("mousemove", (e) => {
-  if(!cursorGlow || window.innerWidth <= 768) return;
-  cursorGlow.style.left = `${e.clientX}px`;
-  cursorGlow.style.top = `${e.clientY}px`;
-});
-
-document.addEventListener("mouseleave", () => {
-  if(cursorGlow) cursorGlow.style.opacity = "0";
-});
-
-document.addEventListener("mouseenter", () => {
-  if(cursorGlow && window.innerWidth > 768) cursorGlow.style.opacity = "0.9";
-});
-
-window.addEventListener("scroll", handleHeaderShadow);
-window.addEventListener("resize", () => {
-  renderAccessories();
-});
-window.addEventListener("load", () => {
-  handleHeaderShadow();
-  updateCartCount();
-  renderAccessories();
-});
-
-updatePrice();
-updatePreview();
-updateAccessoryOptions();
-validateForm();
-</script>
-
+    updateSummary();
+  </script>
 </body>
 </html>
