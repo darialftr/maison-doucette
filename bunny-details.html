@@ -303,6 +303,7 @@
       box-shadow:var(--shadow-soft);
       position:relative;
       transition:transform 0.35s ease, box-shadow 0.35s ease;
+      overflow:hidden;
     }
 
     .gallery-frame:hover{
@@ -338,7 +339,7 @@
       background:rgba(255,250,246,0.92);
       box-shadow:0 8px 18px rgba(106,81,69,0.14);
       transition:transform 0.2s ease, opacity 0.2s ease, box-shadow 0.25s ease;
-      z-index:2;
+      z-index:3;
     }
 
     .slide-btn:hover{
@@ -348,6 +349,10 @@
 
     .prev{ left:16px; }
     .next{ right:16px; }
+
+    .mobile-overlay-btn{
+      display:none;
+    }
 
     .thumbs{
       display:grid;
@@ -730,7 +735,7 @@
 
       .slide{
         border-radius:14px;
-        aspect-ratio:1 / 0.78;
+        aspect-ratio:1 / 0.92;
         object-fit:cover;
       }
 
@@ -738,10 +743,30 @@
         width:30px;
         height:30px;
         font-size:16px;
+        top:42%;
       }
 
       .prev{ left:8px; }
       .next{ right:8px; }
+
+      .mobile-overlay-btn{
+        display:flex;
+        position:absolute;
+        left:10px;
+        right:10px;
+        bottom:10px;
+        min-height:44px;
+        align-items:center;
+        justify-content:center;
+        padding:12px 14px;
+        border-radius:999px;
+        background:linear-gradient(135deg, var(--ocre-deep), var(--ocre));
+        color:#fffaf7;
+        box-shadow:0 14px 28px rgba(184,142,103,0.28);
+        font-size:0.9rem;
+        text-align:center;
+        z-index:4;
+      }
 
       .thumbs{
         gap:6px;
@@ -753,7 +778,7 @@
       }
 
       .thumb img{
-        aspect-ratio:1 / 0.68;
+        aspect-ratio:1 / 0.72;
         object-fit:cover;
       }
 
@@ -786,7 +811,10 @@
         margin:0 0 12px;
       }
 
-      .button,
+      .button-row .button{
+        display:none;
+      }
+
       .soft-link{
         width:100%;
         min-width:0;
@@ -861,17 +889,25 @@
       }
 
       .slide{
-        aspect-ratio:1 / 0.74;
+        aspect-ratio:1 / 0.88;
       }
 
       .thumb img{
-        aspect-ratio:1 / 0.64;
+        aspect-ratio:1 / 0.68;
       }
 
       .slide-btn{
         width:28px;
         height:28px;
         font-size:15px;
+      }
+
+      .mobile-overlay-btn{
+        left:8px;
+        right:8px;
+        bottom:8px;
+        padding:11px 12px;
+        font-size:0.86rem;
       }
 
       h1{
@@ -884,7 +920,6 @@
         font-size:0.88rem;
       }
 
-      .button,
       .soft-link{
         padding:12px 14px;
       }
@@ -935,6 +970,8 @@
 
           <button class="slide-btn prev" onclick="prevSlide()">‹</button>
           <button class="slide-btn next" onclick="nextSlide()">›</button>
+
+          <a class="mobile-overlay-btn" href="Bunny.html">Step Into Bunny’s Atelier</a>
         </div>
 
         <div class="thumbs">
