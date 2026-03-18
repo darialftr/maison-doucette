@@ -415,7 +415,7 @@
     .totals{
       display:grid;
       gap:10px;
-      margin:18px 0;
+      margin:18px 0 10px;
     }
 
     .total-row{
@@ -581,12 +581,6 @@
       .summary-card{
         order:-1;
       }
-
-      .place-order-btn{
-        position:sticky;
-        bottom:10px;
-        z-index:5;
-      }
     }
 
     @media (max-width: 420px){
@@ -747,6 +741,10 @@
               </div>
               <div class="error-text" id="formError"></div>
             </div>
+
+            <div class="section" style="padding-bottom:0; margin-bottom:0; border-bottom:none;">
+              <button id="placeOrderBtn" class="place-order-btn" type="button" disabled>Place Order ✨</button>
+            </div>
           </form>
         </div>
       </section>
@@ -782,7 +780,6 @@
             </div>
           </div>
 
-          <button id="placeOrderBtn" class="place-order-btn" type="button">Place Order ✨</button>
           <div class="secure-note">By placing your order, your details will be sent securely to Maison Doucette.</div>
         </div>
       </aside>
@@ -839,12 +836,6 @@
 
     function getCart(){
       return JSON.parse(localStorage.getItem("cart")) || [];
-    }
-
-    function formatAccessories(item){
-      const extras = [];
-      if(item.accessory) extras.push(item.accessory);
-      return extras.join(", ");
     }
 
     function buildItemMeta(item){
@@ -932,6 +923,7 @@
 
     isGiftCheckbox.addEventListener("change", () => {
       giftMessageWrap.style.display = isGiftCheckbox.checked ? "grid" : "none";
+      updatePlaceOrderState();
     });
 
     function getFormData(){
@@ -973,6 +965,24 @@
       }
 
       return true;
+    }
+
+    function updatePlaceOrderState(){
+      const requiredFields = [
+        document.getElementById("fullName"),
+        document.getElementById("email"),
+        document.getElementById("phone"),
+        document.getElementById("county"),
+        document.getElementById("city"),
+        document.getElementById("address"),
+        document.getElementById("postalCode")
+      ];
+
+      const allFilled = requiredFields.every(field => field.value.trim() !== "");
+      const confirmed = document.getElementById("confirmDetails").checked;
+      const hasCart = getCart().length > 0;
+
+      placeOrderBtn.disabled = !(allFilled && confirmed && hasCart);
     }
 
     async function sendEmails(){
@@ -1038,9 +1048,33 @@
       }
     });
 
+    [
+      "fullName",
+      "email",
+      "phone",
+      "county",
+      "city",
+      "address",
+      "postalCode",
+      "deliveryNotes",
+      "giftMessage",
+      "confirmDetails"
+    ].forEach(id => {
+      const el = document.getElementById(id);
+      if(!el) return;
+
+      const eventType = el.type === "checkbox" ? "change" : "input";
+      el.addEventListener(eventType, updatePlaceOrderState);
+    });
+
+    document.querySelectorAll('input[name="paymentMethod"]').forEach(el => {
+      el.addEventListener("change", updatePlaceOrderState);
+    });
+
     window.addEventListener("load", () => {
       handleHeaderShadow();
       renderOrderSummary();
+      updatePlaceOrderState();
     });
   </script>
 </body>
