@@ -314,12 +314,13 @@
       display:none;
     }
 
+    /* TEDDY MAI MIC */
     #teddyImage{
       position:absolute;
       left:50%;
-      bottom:-40px;
+      bottom:-24px;
       transform:translateX(-50%);
-      width:min(180%, 980px);
+      width:min(148%, 760px);
       max-width:none;
       display:block;
       opacity:1;
@@ -341,15 +342,16 @@
     #starImg{
       left:50%;
       top:66%;
-      width:min(58%, 280px);
+      width:min(54%, 248px);
       transform:translate(-50%,-50%);
     }
 
+    /* FUNDIȚĂ MAI PE URECHE */
     #bowImg{
-      left:63%;
-      top:32%;
-      width:min(42%, 205px);
-      transform:translate(-50%,-50%) rotate(22deg);
+      left:68%;
+      top:29%;
+      width:min(28%, 138px);
+      transform:translate(-50%,-50%) rotate(18deg);
     }
 
     .summary-row{
@@ -929,8 +931,8 @@
     }
 
     @keyframes previewAppearBow{
-      0%{ opacity:0; transform:translate(-50%,-47%) rotate(22deg) scale(0.985); }
-      100%{ opacity:1; transform:translate(-50%,-50%) rotate(22deg) scale(1); }
+      0%{ opacity:0; transform:translate(-50%,-47%) rotate(18deg) scale(0.985); }
+      100%{ opacity:1; transform:translate(-50%,-50%) rotate(18deg) scale(1); }
     }
 
     @media (max-width: 980px){
@@ -976,21 +978,22 @@
         border-radius:22px;
       }
 
+      /* PHONE FRIENDLY */
       #teddyImage{
-        width:min(190%, 760px);
-        bottom:-80px;
+        width:min(155%, 560px);
+        bottom:-52px;
       }
 
       #heartImg,
       #starImg{
-        width:min(60%, 212px);
-        top:73%;
+        width:min(49%, 172px);
+        top:70%;
       }
 
       #bowImg{
-        width:min(40%, 148px);
-        top:37%;
-        left:63%;
+        width:min(24%, 82px);
+        top:30%;
+        left:69%;
       }
 
       .stepper{
@@ -1048,19 +1051,20 @@
       }
 
       #teddyImage{
-        width:min(200%, 680px);
-        bottom:-86px;
+        width:min(160%, 500px);
+        bottom:-56px;
       }
 
       #heartImg,
       #starImg{
-        width:min(62%, 188px);
-        top:74%;
+        width:min(50%, 156px);
+        top:71%;
       }
 
       #bowImg{
-        width:min(40%, 132px);
-        top:38%;
+        width:min(22%, 68px);
+        top:31%;
+        left:69%;
       }
     }
   </style>
@@ -1655,7 +1659,7 @@
           thumbHTML = `
             <div class="option-thumb">
               ${heartSrc ? `<img src="${heartSrc}" alt="" style="position:absolute;width:54%;left:48%;top:54%;transform:translate(-50%,-50%);">` : ""}
-              ${bowSrc ? `<img src="${bowSrc}" alt="" style="position:absolute;width:37%;left:66%;top:28%;transform:translate(-50%,-50%) rotate(22deg);">` : ""}
+              ${bowSrc ? `<img src="${bowSrc}" alt="" style="position:absolute;width:31%;left:69%;top:27%;transform:translate(-50%,-50%) rotate(18deg);">` : ""}
             </div>
           `;
         } else if(option.thumbType === "star-bow"){
@@ -1664,7 +1668,7 @@
           thumbHTML = `
             <div class="option-thumb">
               ${starSrc ? `<img src="${starSrc}" alt="" style="position:absolute;width:54%;left:48%;top:54%;transform:translate(-50%,-50%);">` : ""}
-              ${bowSrc ? `<img src="${bowSrc}" alt="" style="position:absolute;width:37%;left:66%;top:28%;transform:translate(-50%,-50%) rotate(22deg);">` : ""}
+              ${bowSrc ? `<img src="${bowSrc}" alt="" style="position:absolute;width:31%;left:69%;top:27%;transform:translate(-50%,-50%) rotate(18deg);">` : ""}
             </div>
           `;
         } else {
@@ -1773,30 +1777,30 @@
     function getAccessoryScale(){
       if(window.innerWidth <= 420){
         return {
-          centerWidth: "188px",
-          centerTop: "74%",
-          bowWidth: "132px",
-          bowTop: "38%",
-          bowLeft: "63%"
+          centerWidth: "156px",
+          centerTop: "71%",
+          bowWidth: "68px",
+          bowTop: "31%",
+          bowLeft: "69%"
         };
       }
 
       if(window.innerWidth <= 760){
         return {
-          centerWidth: "212px",
-          centerTop: "73%",
-          bowWidth: "148px",
-          bowTop: "37%",
-          bowLeft: "63%"
+          centerWidth: "172px",
+          centerTop: "70%",
+          bowWidth: "82px",
+          bowTop: "30%",
+          bowLeft: "69%"
         };
       }
 
       return {
-        centerWidth: "280px",
+        centerWidth: "248px",
         centerTop: "66%",
-        bowWidth: "205px",
-        bowTop: "32%",
-        bowLeft: "63%"
+        bowWidth: "138px",
+        bowTop: "29%",
+        bowLeft: "68%"
       };
     }
 
@@ -1828,7 +1832,7 @@
           imgEl.style.top = scale.bowTop;
           imgEl.style.left = scale.bowLeft;
           imgEl.style.width = scale.bowWidth;
-          imgEl.style.transform = "translate(-50%,-50%) rotate(22deg)";
+          imgEl.style.transform = "translate(-50%,-50%) rotate(18deg)";
           animatePreviewElement(imgEl, "bow");
         } else {
           imgEl.style.top = scale.centerTop;
@@ -2002,7 +2006,7 @@
         heartStyle: heartImg.getAttribute("src") ? {
           top: "66%",
           left: "50%",
-          width: "58%",
+          width: "54%",
           height: "auto",
           transform: "translate(-50%,-50%)",
           maxWidth: "none",
@@ -2011,18 +2015,18 @@
         starStyle: starImg.getAttribute("src") ? {
           top: "66%",
           left: "50%",
-          width: "58%",
+          width: "54%",
           height: "auto",
           transform: "translate(-50%,-50%)",
           maxWidth: "none",
           maxHeight: "none"
         } : null,
         bowStyle: bowImg.getAttribute("src") ? {
-          top: "32%",
-          left: "63%",
-          width: "42%",
+          top: "29%",
+          left: "68%",
+          width: "28%",
           height: "auto",
-          transform: "translate(-50%,-50%) rotate(22deg)",
+          transform: "translate(-50%,-50%) rotate(18deg)",
           maxWidth: "none",
           maxHeight: "none"
         } : null,
