@@ -193,6 +193,7 @@
     .preview-card,
     .stepper-card,
     .step-card,
+    .order-card,
     .rec-card{
       opacity:0;
       transform:translateY(22px);
@@ -202,6 +203,7 @@
     .preview-card{ animation-delay:0.05s; }
     .stepper-card{ animation-delay:0.10s; }
     .step-card{ animation-delay:0.15s; }
+    .order-card{ animation-delay:0.22s; }
     .rec-card{ animation-delay:0.30s; }
 
     .preview-card{
@@ -686,6 +688,10 @@
       border:none;
     }
 
+    .order-card{
+      padding:16px;
+    }
+
     .order-top{
       display:flex;
       justify-content:space-between;
@@ -937,7 +943,7 @@
       .cursor-glow{ display:none; }
 
       .app-shell{
-        padding:0 10px 16px;
+        padding:0 10px 18px;
       }
 
       .topbar{
@@ -947,244 +953,84 @@
 
       .topbar-inner{
         grid-template-columns:42px 1fr 42px;
-        min-height:62px;
+        min-height:64px;
       }
 
       .top-title .label{
-        font-size:0.95rem;
+        font-size:0.98rem;
       }
 
       .top-title .sub{
-        font-size:0.64rem;
+        font-size:0.66rem;
       }
 
       .customizer-layout{
         display:flex;
         flex-direction:column;
-        gap:10px;
-        padding-top:8px;
-      }
-
-      .left-column,
-      .right-column{
-        gap:10px;
-      }
-
-      .preview-card,
-      .stepper-card,
-      .step-card,
-      .rec-card{
-        padding:10px;
-        border-radius:20px;
-      }
-
-      .preview-head{
-        margin-bottom:8px;
-        gap:8px;
-      }
-
-      .preview-head h1{
-        font-size:1.08rem;
-      }
-
-      .preview-head p{
-        font-size:0.73rem;
-        line-height:1.35;
-      }
-
-      .preview-badge{
-        font-size:0.58rem;
-        padding:6px 8px;
+        gap:14px;
+        padding-top:12px;
       }
 
       .preview-stage{
-        min-height:220px;
-        max-height:220px;
-        border-radius:18px;
+        min-height:300px;
+        border-radius:22px;
       }
 
       #bunnyImage{
-        width:min(126%, 470px);
-        bottom:-24px;
+        width:min(150%, 560px);
+        bottom:-38px;
       }
 
       #heartImg,
       #starImg{
-        width:min(34%, 118px);
-        top:69%;
+        width:min(48%, 172px);
+        top:68%;
       }
 
       #bowImg{
-        width:min(22%, 76px);
-        top:30%;
+        width:min(32%, 112px);
+        top:31%;
         left:63%;
       }
 
-      .stage-glow{
-        width:145px;
-        height:145px;
-        top:12px;
-      }
-
-      .b1{ width:48px; height:62px; left:-14px; top:18px; }
-      .b2{ width:64px; height:48px; right:2px; top:22px; }
-      .b3{ width:68px; height:78px; left:2px; bottom:52px; }
-      .b4{ width:74px; height:52px; right:-12px; bottom:70px; }
-      .b5{ width:42px; height:42px; top:18px; }
-      .b6{ width:96px; height:34px; bottom:32px; }
-
-      .stage-floor{
-        bottom:8px;
-        height:28px;
-      }
-
-      .summary-row{
-        margin-top:8px;
+      .stepper{
+        grid-template-columns:repeat(4, minmax(0,1fr));
         gap:6px;
       }
 
-      .summary-chip{
-        min-height:auto;
-        padding:8px 7px;
-      }
-
-      .summary-chip .k{
-        font-size:0.55rem;
-        margin-bottom:4px;
-      }
-
-      .summary-chip .v{
-        font-size:0.72rem;
-      }
-
-      .stepper-card{
-        padding:10px;
-      }
-
-      .stepper-title{
-        margin:0 0 8px;
-        font-size:0.98rem;
-      }
-
-      .stepper{
-        gap:5px;
-      }
-
-      .step-badge .dot{
-        width:26px;
-        height:26px;
-        font-size:0.72rem;
-      }
-
       .step-badge .txt{
-        font-size:0.58rem;
-      }
-
-      .section-title{
-        font-size:1.02rem;
-      }
-
-      .section-text{
-        font-size:0.82rem;
-        margin-bottom:12px;
-      }
-
-      .control-block{
-        margin-bottom:13px;
-      }
-
-      .control-label{
         font-size:0.66rem;
-        margin-bottom:8px;
       }
 
-      select{
-        padding:12px 13px;
-        padding-right:38px;
-        border-radius:12px;
-        font-size:0.92rem;
+      .step-card,
+      .order-card,
+      .rec-card,
+      .stepper-card,
+      .preview-card{
+        padding:12px;
       }
 
       .swatch-grid{
         grid-template-columns:repeat(4, minmax(0,1fr));
-        gap:8px;
+        gap:10px;
       }
 
       .swatch-circle{
-        width:32px;
-        height:32px;
+        width:38px;
+        height:38px;
       }
 
       .option-grid{
         grid-template-columns:repeat(2, minmax(0, 1fr));
-        gap:8px;
-      }
-
-      .option-card{
-        padding:8px;
-        border-radius:14px;
-      }
-
-      .option-thumb{
-        border-radius:12px;
-        margin-bottom:8px;
-      }
-
-      .option-card h3{
-        font-size:0.76rem;
-      }
-
-      .option-card p{
-        font-size:0.68rem;
-      }
-
-      .helper-box{
-        padding:12px;
-        border-radius:14px;
-        font-size:0.8rem;
-      }
-
-      .step-actions{
-        margin-top:12px;
-        gap:8px;
-      }
-
-      .step-btn{
-        width:100%;
-        padding:12px 14px;
-        font-size:0.73rem;
-        border-radius:13px;
+        gap:10px;
       }
 
       .order-grid{
         grid-template-columns:1fr;
       }
 
-      .qty-btn{
-        width:38px;
-        height:38px;
-      }
-
-      .qty-value{
-        font-size:0.94rem;
-      }
-
-      .action-btn{
-        padding:13px 14px;
-        font-size:0.74rem;
-        border-radius:13px;
-      }
-
       .rec-grid{
         gap:8px;
-      }
-
-      .rec-name{
-        font-size:0.72rem;
-      }
-
-      .rec-price{
-        font-size:0.66rem;
       }
 
       .toast{
@@ -1198,34 +1044,24 @@
 
     @media (max-width: 420px){
       .preview-stage{
-        min-height:205px;
-        max-height:205px;
+        min-height:280px;
       }
 
       #bunnyImage{
-        width:min(128%, 430px);
-        bottom:-20px;
+        width:min(145%, 470px);
+        bottom:-30px;
       }
 
       #heartImg,
       #starImg{
-        width:min(35%, 108px);
-        top:69%;
+        width:min(46%, 150px);
+        top:68%;
       }
 
       #bowImg{
-        width:min(22%, 70px);
-        top:30%;
+        width:min(30%, 96px);
+        top:31%;
         left:63%;
-      }
-
-      .summary-chip .v{
-        font-size:0.68rem;
-      }
-
-      .swatch-circle{
-        width:30px;
-        height:30px;
       }
     }
   </style>
@@ -1619,7 +1455,7 @@
       }
     ];
 
-    function goToStep(step){
+    function goToStep(step, shouldScroll = true){
       currentStep = step;
 
       document.querySelectorAll(".step-card").forEach(card => {
@@ -1632,9 +1468,11 @@
         el.classList.toggle("done", n < step);
       });
 
-      const activeCard = document.getElementById(`step-${step}`);
-      if (activeCard && window.innerWidth <= 980) {
-        activeCard.scrollIntoView({ behavior: "smooth", block: "start" });
+      if(shouldScroll){
+        const activeCard = document.getElementById(`step-${step}`);
+        if (activeCard && window.innerWidth <= 980) {
+          activeCard.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
       }
     }
 
@@ -1938,20 +1776,20 @@
     function getAccessoryScale(){
       if(window.innerWidth <= 420){
         return {
-          centerWidth: "108px",
-          centerTop: "69%",
-          bowWidth: "70px",
-          bowTop: "30%",
+          centerWidth: "150px",
+          centerTop: "68%",
+          bowWidth: "96px",
+          bowTop: "31%",
           bowLeft: "63%"
         };
       }
 
       if(window.innerWidth <= 760){
         return {
-          centerWidth: "118px",
-          centerTop: "69%",
-          bowWidth: "76px",
-          bowTop: "30%",
+          centerWidth: "172px",
+          centerTop: "68%",
+          bowWidth: "112px",
+          bowTop: "31%",
           bowLeft: "63%"
         };
       }
@@ -2165,27 +2003,27 @@
           maxHeight: "none"
         },
         heartStyle: heartImg.getAttribute("src") ? {
-          top: window.innerWidth <= 760 ? "69%" : "66%",
+          top: "66%",
           left: "50%",
-          width: window.innerWidth <= 760 ? "34%" : "58%",
+          width: "58%",
           height: "auto",
           transform: "translate(-50%,-50%)",
           maxWidth: "none",
           maxHeight: "none"
         } : null,
         starStyle: starImg.getAttribute("src") ? {
-          top: window.innerWidth <= 760 ? "69%" : "66%",
+          top: "66%",
           left: "50%",
-          width: window.innerWidth <= 760 ? "34%" : "58%",
+          width: "58%",
           height: "auto",
           transform: "translate(-50%,-50%)",
           maxWidth: "none",
           maxHeight: "none"
         } : null,
         bowStyle: bowImg.getAttribute("src") ? {
-          top: window.innerWidth <= 760 ? "30%" : "32%",
+          top: "32%",
           left: "63%",
-          width: window.innerWidth <= 760 ? "22%" : "42%",
+          width: "42%",
           height: "auto",
           transform: "translate(-50%,-50%) rotate(29deg)",
           maxWidth: "none",
@@ -2246,7 +2084,7 @@
       updateCartCount();
       updateStepButtons();
       validateForm();
-      goToStep(1);
+      goToStep(1, false);
     });
   </script>
 </body>
