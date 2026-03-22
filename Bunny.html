@@ -193,7 +193,6 @@
     .preview-card,
     .stepper-card,
     .step-card,
-    .order-card,
     .rec-card{
       opacity:0;
       transform:translateY(22px);
@@ -203,7 +202,6 @@
     .preview-card{ animation-delay:0.05s; }
     .stepper-card{ animation-delay:0.10s; }
     .step-card{ animation-delay:0.15s; }
-    .order-card{ animation-delay:0.22s; }
     .rec-card{ animation-delay:0.30s; }
 
     .preview-card{
@@ -688,84 +686,6 @@
       border:none;
     }
 
-    .order-card{
-      padding:16px;
-    }
-
-    .order-top{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      margin-bottom:14px;
-    }
-
-    .order-top h2{
-      margin:0;
-      font-family:'Playfair Display',serif;
-      font-size:1.35rem;
-      font-weight:500;
-    }
-
-    .price-box{
-      text-align:right;
-    }
-
-    .price-box .label{
-      display:block;
-      font-size:0.7rem;
-      text-transform:uppercase;
-      letter-spacing:0.14em;
-      color:var(--brown-soft);
-      margin-bottom:5px;
-    }
-
-    .price-box .value{
-      font-family:'Playfair Display',serif;
-      font-size:1.7rem;
-      line-height:1;
-      color:var(--brown);
-    }
-
-    .order-grid{
-      display:grid;
-      grid-template-columns:1fr auto;
-      gap:14px;
-      align-items:end;
-    }
-
-    .qty-box{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      margin-top:8px;
-    }
-
-    .qty-btn{
-      width:42px;
-      height:42px;
-      border-radius:14px;
-      border:1px solid #d8d2ca;
-      background:#fff;
-      color:var(--brown);
-      font-size:1.2rem;
-      cursor:pointer;
-      transition:transform 0.2s ease, box-shadow 0.22s ease, background 0.22s ease;
-    }
-
-    .qty-btn:hover{
-      transform:translateY(-1px);
-      box-shadow:0 10px 18px rgba(106,81,69,0.08);
-      background:#fffdfa;
-    }
-
-    .qty-value{
-      min-width:30px;
-      text-align:center;
-      font-weight:700;
-      font-size:1rem;
-    }
-
     .actions{
       margin-top:16px;
       display:grid;
@@ -967,47 +887,140 @@
       .customizer-layout{
         display:flex;
         flex-direction:column;
-        gap:14px;
-        padding-top:12px;
+        gap:12px;
+        padding-top:10px;
       }
 
-      .preview-stage{
-        min-height:370px;
+      .left-column,
+      .right-column{
+        gap:12px;
+      }
+
+      .preview-card,
+      .stepper-card,
+      .step-card,
+      .rec-card{
         border-radius:22px;
       }
 
+      .preview-card{
+        padding:10px;
+      }
+
+      .preview-head{
+        margin-bottom:8px;
+        gap:8px;
+      }
+
+      .preview-head h1{
+        font-size:1.18rem;
+      }
+
+      .preview-head p{
+        font-size:0.76rem;
+        line-height:1.4;
+      }
+
+      .preview-badge{
+        font-size:0.62rem;
+        padding:7px 9px;
+      }
+
+      .preview-stage{
+        min-height:255px;
+        max-height:255px;
+        border-radius:20px;
+      }
+
+      .summary-row{
+        margin-top:8px;
+        gap:8px;
+      }
+
+      .summary-chip{
+        min-height:auto;
+        padding:9px 8px;
+      }
+
+      .summary-chip .k{
+        font-size:0.58rem;
+        margin-bottom:4px;
+      }
+
+      .summary-chip .v{
+        font-size:0.76rem;
+      }
+
       #bunnyImage{
-        width:min(190%, 760px);
-        bottom:-80px;
+        width:min(134%, 520px);
+        bottom:-34px;
       }
 
       #heartImg,
       #starImg{
-        width:min(60%, 212px);
-        top:73%;
+        width:min(37%, 132px);
+        top:70%;
       }
 
       #bowImg{
-        width:min(40%, 148px);
-        top:37%;
+        width:min(24%, 86px);
+        top:31%;
         left:63%;
       }
 
+      .stage-glow{
+        width:160px;
+        height:160px;
+        top:14px;
+      }
+
+      .b1{ width:54px; height:72px; left:-16px; top:22px; }
+      .b2{ width:70px; height:54px; right:2px; top:26px; }
+      .b3{ width:76px; height:88px; left:2px; bottom:60px; }
+      .b4{ width:86px; height:58px; right:-16px; bottom:82px; }
+      .b5{ width:50px; height:50px; top:22px; }
+      .b6{ width:112px; height:40px; bottom:38px; }
+
+      .stage-floor{
+        bottom:10px;
+        height:34px;
+      }
+
+      .stepper-card{
+        padding:10px;
+      }
+
+      .stepper-title{
+        margin-bottom:10px;
+        font-size:1rem;
+      }
+
       .stepper{
-        grid-template-columns:repeat(4, minmax(0,1fr));
         gap:6px;
       }
 
+      .step-badge .dot{
+        width:28px;
+        height:28px;
+        font-size:0.75rem;
+      }
+
       .step-badge .txt{
-        font-size:0.66rem;
+        font-size:0.62rem;
       }
 
       .step-card,
-      .order-card,
-      .rec-card,
-      .stepper-card,
-      .preview-card{
+      .rec-card{
         padding:12px;
+      }
+
+      .section-title{
+        font-size:1.08rem;
+      }
+
+      .section-text{
+        font-size:0.84rem;
+        margin-bottom:12px;
       }
 
       .swatch-grid{
@@ -1016,21 +1029,49 @@
       }
 
       .swatch-circle{
-        width:38px;
-        height:38px;
+        width:34px;
+        height:34px;
       }
 
       .option-grid{
-        grid-template-columns:repeat(2, minmax(0, 1fr));
+        grid-template-columns:repeat(2, minmax(0,1fr));
         gap:10px;
       }
 
-      .order-grid{
-        grid-template-columns:1fr;
+      .option-card{
+        padding:8px;
+      }
+
+      .option-card h3{
+        font-size:0.8rem;
+      }
+
+      .option-card p{
+        font-size:0.72rem;
+      }
+
+      .step-actions{
+        margin-top:14px;
+      }
+
+      .step-btn{
+        width:100%;
+        justify-content:center;
+        text-align:center;
+        padding:13px 14px;
+        font-size:0.76rem;
       }
 
       .rec-grid{
         gap:8px;
+      }
+
+      .rec-name{
+        font-size:0.76rem;
+      }
+
+      .rec-price{
+        font-size:0.68rem;
       }
 
       .toast{
@@ -1044,23 +1085,34 @@
 
     @media (max-width: 420px){
       .preview-stage{
-        min-height:346px;
+        min-height:232px;
+        max-height:232px;
       }
 
       #bunnyImage{
-        width:min(200%, 680px);
-        bottom:-86px;
+        width:min(138%, 470px);
+        bottom:-30px;
       }
 
       #heartImg,
       #starImg{
-        width:min(62%, 188px);
-        top:74%;
+        width:min(38%, 122px);
+        top:70%;
       }
 
       #bowImg{
-        width:min(40%, 132px);
-        top:38%;
+        width:min(24%, 78px);
+        top:31%;
+        left:63%;
+      }
+
+      .summary-chip .v{
+        font-size:0.72rem;
+      }
+
+      .swatch-circle{
+        width:32px;
+        height:32px;
       }
     }
   </style>
@@ -1773,20 +1825,20 @@
     function getAccessoryScale(){
       if(window.innerWidth <= 420){
         return {
-          centerWidth: "188px",
-          centerTop: "74%",
-          bowWidth: "132px",
-          bowTop: "38%",
+          centerWidth: "122px",
+          centerTop: "70%",
+          bowWidth: "78px",
+          bowTop: "31%",
           bowLeft: "63%"
         };
       }
 
       if(window.innerWidth <= 760){
         return {
-          centerWidth: "212px",
-          centerTop: "73%",
-          bowWidth: "148px",
-          bowTop: "37%",
+          centerWidth: "132px",
+          centerTop: "70%",
+          bowWidth: "86px",
+          bowTop: "31%",
           bowLeft: "63%"
         };
       }
@@ -2000,27 +2052,27 @@
           maxHeight: "none"
         },
         heartStyle: heartImg.getAttribute("src") ? {
-          top: "66%",
+          top: window.innerWidth <= 760 ? "70%" : "66%",
           left: "50%",
-          width: "58%",
+          width: window.innerWidth <= 760 ? "37%" : "58%",
           height: "auto",
           transform: "translate(-50%,-50%)",
           maxWidth: "none",
           maxHeight: "none"
         } : null,
         starStyle: starImg.getAttribute("src") ? {
-          top: "66%",
+          top: window.innerWidth <= 760 ? "70%" : "66%",
           left: "50%",
-          width: "58%",
+          width: window.innerWidth <= 760 ? "37%" : "58%",
           height: "auto",
           transform: "translate(-50%,-50%)",
           maxWidth: "none",
           maxHeight: "none"
         } : null,
         bowStyle: bowImg.getAttribute("src") ? {
-          top: "32%",
+          top: window.innerWidth <= 760 ? "31%" : "32%",
           left: "63%",
-          width: "42%",
+          width: window.innerWidth <= 760 ? "24%" : "42%",
           height: "auto",
           transform: "translate(-50%,-50%) rotate(29deg)",
           maxWidth: "none",
