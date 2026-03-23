@@ -11,6 +11,7 @@
     :root{
       --bg:#f7f1eb;
       --panel:#fffaf6;
+      --panel-2:#fffdfb;
       --line:rgba(184,142,103,0.20);
       --brown:#6a5145;
       --brown-soft:#8b6f61;
@@ -19,11 +20,13 @@
       --gold-deep:#b88e67;
       --shadow:0 20px 50px rgba(106,81,69,0.10);
       --shadow-soft:0 12px 26px rgba(106,81,69,0.08);
-      --radius-xl:30px;
+      --shadow-card:0 26px 60px rgba(106,81,69,0.12);
+      --radius-xl:32px;
       --radius-lg:22px;
       --radius-md:16px;
       --ease:cubic-bezier(.22,.61,.36,1);
       --topbar-h:68px;
+      --content-max:1240px;
     }
 
     *{ box-sizing:border-box; }
@@ -61,12 +64,12 @@
     }
 
     .app-shell{
-      max-width:1160px;
+      max-width:var(--content-max);
       margin:0 auto;
       min-height:100vh;
       position:relative;
       z-index:2;
-      padding:0 18px 28px;
+      padding:0 18px 32px;
     }
 
     .topbar{
@@ -81,7 +84,7 @@
     }
 
     .topbar-inner{
-      max-width:1160px;
+      max-width:var(--content-max);
       margin:0 auto;
       min-height:var(--topbar-h);
       display:grid;
@@ -96,7 +99,7 @@
       height:42px;
       border-radius:50%;
       border:1px solid var(--line);
-      background:rgba(255,255,255,0.82);
+      background:rgba(255,255,255,0.84);
       display:flex;
       align-items:center;
       justify-content:center;
@@ -104,6 +107,7 @@
       transition:transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
       cursor:pointer;
       padding:0;
+      flex-shrink:0;
     }
 
     .icon-btn:hover,
@@ -167,24 +171,60 @@
       line-height:1;
     }
 
-    .customizer-layout{
+    .hero-head{
+      padding:22px 0 18px;
+      text-align:center;
+      animation:fadeUp .8s var(--ease) forwards;
+    }
+
+    .hero-eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.66);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow-soft);
+      font-size:.73rem;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      color:var(--brown-soft);
+      margin-bottom:14px;
+    }
+
+    .hero-head h1{
+      margin:0;
+      font-family:'Playfair Display',serif;
+      font-size:clamp(2rem, 5vw, 3.2rem);
+      font-weight:500;
+      line-height:1.04;
+    }
+
+    .hero-head p{
+      margin:12px auto 0;
+      max-width:760px;
+      color:var(--brown-soft);
+      line-height:1.7;
+      font-size:.98rem;
+    }
+
+    .apple-layout{
       display:grid;
-      grid-template-columns:minmax(320px, 1.02fr) minmax(320px, 0.98fr);
-      gap:22px;
+      grid-template-columns:minmax(350px, 0.95fr) minmax(360px, 0.92fr);
+      gap:26px;
       align-items:start;
-      padding-top:16px;
     }
 
-    .left-column,
-    .right-column{
-      display:grid;
-      gap:18px;
+    .preview-column{
+      position:relative;
     }
 
-    .left-column{
+    .sticky-wrap{
       position:sticky;
-      top:calc(var(--topbar-h) + 16px);
-      align-self:start;
+      top:calc(var(--topbar-h) + 20px);
+      display:grid;
+      gap:16px;
     }
 
     .card{
@@ -193,25 +233,28 @@
       border-radius:var(--radius-xl);
       box-shadow:var(--shadow);
       overflow:hidden;
-      backdrop-filter:blur(6px);
+      backdrop-filter:blur(7px);
     }
 
     .preview-card,
-    .stepper-card,
-    .step-card,
+    .summary-card,
+    .config-card,
+    .order-card,
     .rec-card{
       opacity:0;
       transform:translateY(22px);
-      animation:fadeUp 0.82s var(--ease) forwards;
+      animation:fadeUp .82s var(--ease) forwards;
     }
 
-    .preview-card{ animation-delay:0.05s; }
-    .stepper-card{ animation-delay:0.10s; }
-    .step-card{ animation-delay:0.15s; }
-    .rec-card{ animation-delay:0.30s; }
+    .preview-card{ animation-delay:.04s; }
+    .summary-card{ animation-delay:.10s; }
+    .config-card{ animation-delay:.16s; }
+    .order-card{ animation-delay:.22s; }
+    .rec-card{ animation-delay:.28s; }
 
     .preview-card{
       padding:18px;
+      box-shadow:var(--shadow-card);
     }
 
     .preview-head{
@@ -222,45 +265,46 @@
       margin-bottom:12px;
     }
 
-    .preview-head h1{
+    .preview-head h2{
       margin:0;
       font-family:'Playfair Display',serif;
       font-size:1.55rem;
       font-weight:500;
-      line-height:1.1;
+      line-height:1.08;
     }
 
     .preview-head p{
       margin:4px 0 0;
-      font-size:0.88rem;
       color:var(--brown-soft);
-      line-height:1.5;
+      font-size:.89rem;
+      line-height:1.55;
     }
 
     .preview-badge{
       flex-shrink:0;
       display:inline-flex;
       align-items:center;
-      gap:8px;
+      justify-content:center;
       padding:9px 12px;
       border-radius:999px;
       background:#fff;
       border:1px solid var(--line);
       color:var(--brown-soft);
-      font-size:0.74rem;
+      font-size:.72rem;
       text-transform:uppercase;
-      letter-spacing:0.12em;
+      letter-spacing:.12em;
       box-shadow:var(--shadow-soft);
     }
 
     .preview-stage{
       position:relative;
       width:100%;
-      aspect-ratio:0.92/1;
-      min-height:450px;
-      border-radius:26px;
+      aspect-ratio:0.94/1;
+      min-height:520px;
+      border-radius:28px;
       overflow:hidden;
-      background:linear-gradient(180deg, #f5f3f1 0%, #ebe8e3 100%);
+      background:
+        linear-gradient(180deg, #f7f4f1 0%, #ece8e1 100%);
       border:1px solid rgba(185,177,170,0.52);
       box-shadow:inset 0 1px 0 rgba(255,255,255,0.75);
     }
@@ -282,10 +326,10 @@
 
     .stage-floor{
       position:absolute;
-      left:8%;
-      right:8%;
-      bottom:18px;
-      height:58px;
+      left:9%;
+      right:9%;
+      bottom:22px;
+      height:62px;
       border-radius:50%;
       background:radial-gradient(ellipse at center, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.08) 38%, transparent 72%);
       filter:blur(8px);
@@ -294,13 +338,13 @@
 
     .stage-glow{
       position:absolute;
-      width:250px;
-      height:250px;
+      width:280px;
+      height:280px;
       left:50%;
-      top:16px;
+      top:20px;
       transform:translateX(-50%);
       border-radius:50%;
-      background:radial-gradient(circle, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.55) 36%, rgba(255,255,255,0) 72%);
+      background:radial-gradient(circle, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.58) 36%, rgba(255,255,255,0) 72%);
       z-index:1;
     }
 
@@ -321,9 +365,9 @@
     #bunnyImage{
       position:absolute;
       left:50%;
-      bottom:-40px;
+      bottom:-28px;
       transform:translateX(-50%);
-      width:min(180%, 980px);
+      width:min(168%, 880px);
       max-width:none;
       display:block;
       opacity:1;
@@ -344,146 +388,146 @@
     #heartImg,
     #starImg{
       left:50%;
-      top:66%;
-      width:min(58%, 280px);
+      top:64%;
+      width:min(54%, 255px);
       transform:translate(-50%,-50%);
     }
 
     #bowImg{
-      left:63%;
-      top:32%;
-      width:min(42%, 205px);
+      left:64%;
+      top:31%;
+      width:min(38%, 190px);
       transform:translate(-50%,-50%) rotate(29deg);
     }
 
+    .summary-card{
+      padding:14px;
+    }
+
     .summary-row{
-      margin-top:12px;
       display:grid;
       grid-template-columns:repeat(3, minmax(0, 1fr));
       gap:10px;
     }
 
     .summary-chip{
-      background:rgba(255,255,255,0.8);
+      background:rgba(255,255,255,0.82);
       border:1px solid var(--line);
-      border-radius:16px;
-      padding:11px 12px;
-      min-height:68px;
+      border-radius:18px;
+      padding:12px 13px;
+      min-height:72px;
     }
 
     .summary-chip .k{
-      font-size:0.68rem;
+      font-size:.67rem;
       text-transform:uppercase;
-      letter-spacing:0.12em;
+      letter-spacing:.12em;
       color:var(--brown-soft);
       margin-bottom:6px;
     }
 
     .summary-chip .v{
-      font-size:0.92rem;
+      font-size:.92rem;
       line-height:1.35;
       font-weight:500;
       color:var(--brown);
     }
 
-    .stepper-card{
-      padding:14px;
+    .config-column{
+      display:grid;
+      gap:18px;
     }
 
-    .stepper-title{
-      margin:0 0 12px;
+    .config-card{
+      padding:18px;
+    }
+
+    .config-label{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,0.74);
+      border:1px solid var(--line);
+      color:var(--brown-soft);
+      font-size:.72rem;
+      text-transform:uppercase;
+      letter-spacing:.13em;
+      margin-bottom:12px;
+    }
+
+    .config-title{
+      margin:0 0 8px;
       font-family:'Playfair Display',serif;
-      font-size:1.22rem;
+      font-size:1.55rem;
       font-weight:500;
+      line-height:1.08;
     }
 
-    .stepper{
-      display:grid;
-      grid-template-columns:repeat(4, minmax(0,1fr));
-      gap:8px;
-      align-items:start;
+    .config-text{
+      margin:0 0 18px;
+      color:var(--brown-soft);
+      line-height:1.65;
+      font-size:.94rem;
     }
 
-    .step-badge{
-      display:grid;
-      justify-items:center;
-      gap:8px;
-      text-align:center;
-      opacity:0.66;
-      transition:opacity 0.2s ease, transform 0.2s ease;
+    .flow-block{
+      padding:16px 0 18px;
+      border-top:1px solid rgba(184,142,103,0.16);
     }
 
-    .step-badge.active{
-      opacity:1;
-      transform:translateY(-1px);
+    .flow-block:first-of-type{
+      border-top:none;
+      padding-top:0;
     }
 
-    .step-badge.done{
-      opacity:0.92;
+    .flow-head{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:12px;
     }
 
-    .step-badge .dot{
+    .flow-step{
       width:34px;
       height:34px;
+      flex-shrink:0;
       border-radius:50%;
-      border:1px solid var(--line);
-      background:#fff;
+      background:linear-gradient(135deg,var(--gold-deep),var(--gold));
+      color:#fff;
       display:flex;
       align-items:center;
       justify-content:center;
-      font-size:0.86rem;
       font-weight:700;
-      color:var(--brown-soft);
-      box-shadow:var(--shadow-soft);
-      transition:all 0.2s ease;
+      font-size:.84rem;
+      box-shadow:0 12px 20px rgba(184,142,103,0.18);
     }
 
-    .step-badge.active .dot,
-    .step-badge.done .dot{
-      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
-      color:#fff;
-      border-color:transparent;
-    }
-
-    .step-badge .txt{
-      font-size:0.73rem;
-      line-height:1.3;
-      color:var(--brown-soft);
+    .flow-head h3{
+      margin:2px 0 4px;
+      font-size:1.06rem;
+      line-height:1.2;
       font-weight:600;
+      color:var(--brown);
     }
 
-    .step-card{
-      padding:16px;
-      display:none;
-    }
-
-    .step-card.active{
-      display:block;
-    }
-
-    .section-title{
-      margin:0 0 6px;
-      font-family:'Playfair Display',serif;
-      font-size:1.28rem;
-      font-weight:500;
-    }
-
-    .section-text{
-      margin:0 0 16px;
+    .flow-head p{
+      margin:0;
       color:var(--brown-soft);
-      font-size:0.92rem;
-      line-height:1.6;
+      font-size:.88rem;
+      line-height:1.55;
     }
 
     .control-block{
-      margin-bottom:16px;
+      margin-top:12px;
     }
 
     .control-label{
       display:block;
-      font-size:0.72rem;
+      font-size:.72rem;
       text-transform:uppercase;
-      letter-spacing:0.14em;
+      letter-spacing:.14em;
       color:var(--brown-soft);
       font-weight:600;
       margin-bottom:10px;
@@ -493,10 +537,10 @@
       width:100%;
       padding:14px 15px;
       padding-right:42px;
-      border-radius:14px;
+      border-radius:15px;
       border:1px solid #ddd3c8;
       background:
-        linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.90));
+        linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.92));
       color:var(--brown);
       outline:none;
       transition:border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
@@ -542,15 +586,15 @@
 
     .swatch-circle{
       display:block;
-      width:44px;
-      height:44px;
-      aspect-ratio:1 / 1;
+      width:46px;
+      height:46px;
+      aspect-ratio:1/1;
       border-radius:50%;
       border:2px solid rgba(184,142,103,0.42);
       box-shadow:
         0 0 0 3px rgba(255,250,246,0.95),
         0 10px 18px rgba(106,81,69,0.08);
-      transition:all 0.2s ease;
+      transition:all .2s ease;
       flex-shrink:0;
     }
 
@@ -571,11 +615,11 @@
 
     .option-card{
       border:1px solid var(--line);
-      background:rgba(255,255,255,0.8);
-      border-radius:18px;
+      background:rgba(255,255,255,0.82);
+      border-radius:20px;
       padding:10px;
       cursor:pointer;
-      transition:all 0.22s ease;
+      transition:all .22s ease;
       box-shadow:var(--shadow-soft);
     }
 
@@ -593,7 +637,7 @@
     .option-thumb{
       width:100%;
       aspect-ratio:1/1;
-      border-radius:14px;
+      border-radius:16px;
       display:flex;
       align-items:center;
       justify-content:center;
@@ -610,86 +654,139 @@
       object-fit:contain;
     }
 
-    .option-card h3{
+    .option-card h4{
       margin:0 0 4px;
-      font-size:0.88rem;
+      font-size:.88rem;
       line-height:1.2;
       font-weight:600;
     }
 
     .option-card p{
       margin:0;
-      font-size:0.76rem;
+      font-size:.76rem;
       color:var(--brown-soft);
       line-height:1.4;
     }
 
     .hint{
       margin-top:8px;
-      font-size:0.77rem;
+      font-size:.77rem;
       color:#a39d95;
       line-height:1.45;
     }
 
     .hint.error{ color:#b34a4a; }
 
-    .helper-box{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,0.72);
-      border-radius:18px;
-      padding:14px;
+    .order-card{
+      padding:18px;
+    }
+
+    .order-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .order-top h2{
+      margin:0;
+      font-family:'Playfair Display',serif;
+      font-size:1.45rem;
+      font-weight:500;
+    }
+
+    .order-top p{
+      margin:6px 0 0;
+      font-size:.9rem;
       color:var(--brown-soft);
-      font-size:0.88rem;
       line-height:1.6;
     }
 
-    .helper-box strong{
-      color:var(--brown);
-      font-weight:600;
+    .price-box{
+      text-align:right;
+      flex-shrink:0;
     }
 
-    .step-actions{
-      margin-top:18px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .step-btn{
-      border:none;
-      border-radius:16px;
-      padding:14px 16px;
-      cursor:pointer;
-      font-weight:600;
-      letter-spacing:0.04em;
+    .price-box .label{
+      display:block;
+      font-size:.7rem;
       text-transform:uppercase;
-      transition:transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
-      font-size:0.8rem;
+      letter-spacing:.14em;
+      color:var(--brown-soft);
+      margin-bottom:5px;
     }
 
-    .step-btn:hover{
-      transform:translateY(-1px);
-    }
-
-    .step-btn.primary{
-      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
-      color:#fff;
-      box-shadow:0 16px 28px rgba(184,142,103,0.24);
-    }
-
-    .step-btn.soft{
-      background:rgba(255,255,255,0.78);
+    .price-box .value{
+      font-family:'Playfair Display',serif;
+      font-size:1.9rem;
+      line-height:1;
       color:var(--brown);
-      border:1px solid var(--line);
     }
 
-    .step-btn[disabled]{
-      background:#d7cfc6;
-      color:#fff;
-      box-shadow:none;
-      cursor:not-allowed;
-      transform:none;
-      border:none;
+    .details-review{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.74);
+      border-radius:18px;
+      padding:14px;
+      margin-bottom:14px;
+      color:var(--brown-soft);
+      line-height:1.7;
+      font-size:.9rem;
+    }
+
+    .details-review strong{
+      color:var(--brown);
+      font-weight:600;
+    }
+
+    .order-grid{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:14px;
+      align-items:end;
+    }
+
+    .qty-box{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-top:8px;
+    }
+
+    .qty-btn{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      border:1px solid #d8d2ca;
+      background:#fff;
+      color:var(--brown);
+      font-size:1.2rem;
+      cursor:pointer;
+      transition:transform .2s ease, box-shadow .22s ease, background .22s ease;
+    }
+
+    .qty-btn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 10px 18px rgba(106,81,69,0.08);
+      background:#fffdfa;
+    }
+
+    .qty-value{
+      min-width:30px;
+      text-align:center;
+      font-weight:700;
+      font-size:1rem;
+    }
+
+    .mini-note{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.74);
+      border-radius:18px;
+      padding:14px;
+      color:var(--brown-soft);
+      line-height:1.6;
+      font-size:.88rem;
     }
 
     .actions{
@@ -704,9 +801,9 @@
       border:none;
       border-radius:16px;
       cursor:pointer;
-      transition:transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease, background 0.22s ease;
-      letter-spacing:0.06em;
-      font-size:0.84rem;
+      transition:transform .22s ease, box-shadow .22s ease, filter .22s ease, background .22s ease;
+      letter-spacing:.06em;
+      font-size:.84rem;
       font-weight:600;
       text-transform:uppercase;
     }
@@ -757,18 +854,18 @@
     .rec-head h2{
       margin:0;
       font-family:'Playfair Display',serif;
-      font-size:1.28rem;
+      font-size:1.24rem;
       font-weight:500;
     }
 
     .rec-head span{
       color:var(--brown-soft);
-      font-size:0.84rem;
+      font-size:.84rem;
     }
 
     .rec-grid{
       display:grid;
-      grid-template-columns:repeat(3, minmax(0, 1fr));
+      grid-template-columns:repeat(3, minmax(0,1fr));
       gap:10px;
     }
 
@@ -777,7 +874,7 @@
       border:1px solid var(--line);
       border-radius:18px;
       padding:10px;
-      transition:transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+      transition:transform .22s ease, box-shadow .22s ease, background .22s ease;
     }
 
     .rec-item:hover{
@@ -802,14 +899,14 @@
     }
 
     .rec-name{
-      font-size:0.84rem;
+      font-size:.84rem;
       font-weight:600;
       line-height:1.35;
       margin-bottom:4px;
     }
 
     .rec-price{
-      font-size:0.76rem;
+      font-size:.76rem;
       color:var(--brown-soft);
     }
 
@@ -823,11 +920,11 @@
       padding:14px 18px;
       border-radius:14px;
       box-shadow:0 12px 28px rgba(0,0,0,0.18);
-      font-size:0.84rem;
+      font-size:.84rem;
       opacity:0;
       visibility:hidden;
       transform:translateY(12px);
-      transition:all 0.3s ease;
+      transition:all .3s ease;
       max-width:min(90vw, 340px);
     }
 
@@ -845,33 +942,41 @@
     }
 
     @keyframes previewAppear{
-      0%{ opacity:0; transform:translateX(-50%) translateY(6px) scale(0.985); }
+      0%{ opacity:0; transform:translateX(-50%) translateY(6px) scale(.985); }
       100%{ opacity:1; transform:translateX(-50%) translateY(0) scale(1); }
     }
 
     @keyframes previewAppearCenter{
-      0%{ opacity:0; transform:translate(-50%,-47%) scale(0.985); }
+      0%{ opacity:0; transform:translate(-50%,-47%) scale(.985); }
       100%{ opacity:1; transform:translate(-50%,-50%) scale(1); }
     }
 
     @keyframes previewAppearBow{
-      0%{ opacity:0; transform:translate(-50%,-47%) rotate(29deg) scale(0.985); }
+      0%{ opacity:0; transform:translate(-50%,-47%) rotate(29deg) scale(.985); }
       100%{ opacity:1; transform:translate(-50%,-50%) rotate(29deg) scale(1); }
     }
 
-    @media (max-width: 980px){
-      .customizer-layout{
+    @media (max-width: 1080px){
+      .apple-layout{
         grid-template-columns:1fr;
       }
 
-      .left-column{
-        position:static;
+      .sticky-wrap{
+        position:relative;
         top:auto;
       }
     }
 
     @media (max-width: 760px){
       .cursor-glow{ display:none; }
+
+      html, body{
+        scroll-padding-top:0 !important;
+      }
+
+      body{
+        overflow-anchor:none;
+      }
 
       .app-shell{
         padding:0 10px 18px;
@@ -888,190 +993,166 @@
       }
 
       .top-title .label{
-        font-size:0.98rem;
+        font-size:.98rem;
       }
 
       .top-title .sub{
-        font-size:0.66rem;
+        font-size:.66rem;
       }
 
-      .customizer-layout{
-        display:flex;
-        flex-direction:column;
+      .hero-head{
+        padding:14px 0 14px;
+      }
+
+      .hero-eyebrow{
+        font-size:.65rem;
+        letter-spacing:.12em;
+        margin-bottom:10px;
+      }
+
+      .hero-head h1{
+        font-size:1.8rem;
+      }
+
+      .hero-head p{
+        font-size:.9rem;
+        line-height:1.6;
+      }
+
+      .apple-layout{
+        gap:14px;
+      }
+
+      .sticky-wrap{
         gap:12px;
-        padding-top:10px;
       }
 
-      .left-column,
-      .right-column{
-        gap:12px;
-      }
-
-      .preview-card{
+      .preview-card,
+      .summary-card,
+      .config-card,
+      .order-card,
+      .rec-card{
         padding:12px;
       }
 
-      .preview-head{
-        margin-bottom:8px;
+      .preview-card{
+        box-shadow:var(--shadow);
       }
 
-      .preview-head h1{
-        font-size:1.05rem;
+      .preview-head{
+        margin-bottom:10px;
+      }
+
+      .preview-head h2{
+        font-size:1.24rem;
       }
 
       .preview-head p{
-        font-size:0.70rem;
-        line-height:1.35;
+        font-size:.82rem;
       }
 
       .preview-badge{
-        font-size:0.62rem;
-        padding:7px 9px;
+        font-size:.65rem;
+        padding:7px 10px;
       }
 
       .preview-stage{
-        min-height:200px;
-        aspect-ratio:1.16/1;
-        border-radius:18px;
+        min-height:285px;
+        aspect-ratio:1.05/1;
+        border-radius:22px;
       }
 
       #bunnyImage{
-        width:min(110%, 340px);
-        bottom:-5px;
+        width:min(116%, 430px);
+        bottom:-22px;
       }
 
       #heartImg,
       #starImg{
-        width:min(30%, 95px);
-        top:68%;
+        width:min(34%, 118px);
+        top:64%;
       }
 
       #bowImg{
-        width:min(20%, 60px);
-        top:30%;
+        width:min(23%, 78px);
+        top:31%;
         left:64%;
       }
 
       .summary-row{
         gap:8px;
-        margin-top:8px;
       }
 
       .summary-chip{
-        padding:6px 6px;
-        min-height:50px;
+        min-height:62px;
+        padding:10px 10px;
       }
 
       .summary-chip .k{
-        font-size:0.56rem;
-        margin-bottom:4px;
+        font-size:.60rem;
       }
 
       .summary-chip .v{
-        font-size:0.70rem;
-        line-height:1.2;
+        font-size:.82rem;
       }
 
-      .stepper-card,
-      .step-card,
-      .rec-card{
-        padding:12px;
+      .config-title{
+        font-size:1.25rem;
       }
 
-      .stepper{
-        gap:6px;
+      .config-text{
+        font-size:.88rem;
+        margin-bottom:14px;
       }
 
-      .step-badge .dot{
-        width:28px;
-        height:28px;
-        font-size:0.78rem;
+      .flow-block{
+        padding:14px 0 16px;
       }
 
-      .step-badge .txt{
-        font-size:0.60rem;
+      .flow-step{
+        width:30px;
+        height:30px;
+        font-size:.76rem;
       }
 
-      .section-title{
-        font-size:1.08rem;
+      .flow-head h3{
+        font-size:.98rem;
       }
 
-      .section-text{
-        font-size:0.82rem;
-        margin-bottom:12px;
-      }
-
-      .control-block{
-        margin-bottom:12px;
-      }
-
-      .control-label{
-        font-size:0.64rem;
-        margin-bottom:8px;
-      }
-
-      select{
-        padding:12px 14px;
-        padding-right:40px;
-        font-size:0.92rem;
+      .flow-head p{
+        font-size:.84rem;
       }
 
       .swatch-grid{
         grid-template-columns:repeat(4, minmax(0,1fr));
-        gap:8px;
-      }
-
-      .swatch-circle{
-        width:34px;
-        height:34px;
-      }
-
-      .option-grid{
-        grid-template-columns:repeat(2, minmax(0, 1fr));
         gap:10px;
       }
 
-      .option-card{
-        padding:8px;
+      .swatch-circle{
+        width:38px;
+        height:38px;
       }
 
-      .option-card h3{
-        font-size:0.78rem;
+      .option-grid{
+        grid-template-columns:repeat(2, minmax(0,1fr));
+        gap:10px;
       }
 
-      .option-card p{
-        font-size:0.68rem;
+      .order-top{
+        flex-direction:column;
+        align-items:flex-start;
       }
 
-      .step-btn,
-      .action-btn{
-        padding:13px 14px;
-        font-size:0.74rem;
+      .price-box{
+        text-align:left;
       }
 
-      .helper-box{
-        font-size:0.80rem;
-        padding:12px;
-      }
-
-      .rec-head h2{
-        font-size:1.05rem;
-      }
-
-      .rec-head span{
-        font-size:0.72rem;
+      .order-grid{
+        grid-template-columns:1fr;
       }
 
       .rec-grid{
         gap:8px;
-      }
-
-      .rec-name{
-        font-size:0.74rem;
-      }
-
-      .rec-price{
-        font-size:0.66rem;
       }
 
       .toast{
@@ -1085,28 +1166,28 @@
 
     @media (max-width: 420px){
       .preview-stage{
-        min-height:190px;
+        min-height:265px;
       }
 
       #bunnyImage{
-        width:min(108%, 315px);
-        bottom:-3px;
+        width:min(112%, 390px);
+        bottom:-18px;
       }
 
       #heartImg,
       #starImg{
-        width:min(30%, 88px);
-        top:68%;
+        width:min(36%, 108px);
+        top:65%;
       }
 
       #bowImg{
-        width:min(19%, 56px);
+        width:min(24%, 72px);
         top:31%;
         left:64%;
       }
 
       .summary-chip .v{
-        font-size:0.66rem;
+        font-size:.78rem;
       }
     }
   </style>
@@ -1141,185 +1222,166 @@
       </div>
     </header>
 
-    <main class="customizer-layout">
-      <div class="left-column">
-        <section class="card preview-card">
-          <div class="preview-head">
+    <section class="hero-head">
+      <div class="hero-eyebrow">Maison Doucette favourite</div>
+      <h1>Create your Bunny</h1>
+      <p>A softer, cleaner atelier-style customizer with a live preview that stays close while you choose every little detail.</p>
+    </section>
+
+    <main class="apple-layout">
+      <aside class="preview-column">
+        <div class="sticky-wrap">
+          <section class="card preview-card">
+            <div class="preview-head">
+              <div>
+                <h2>Your Bunny</h2>
+                <p>Create your own little companion, one detail at a time.</p>
+              </div>
+              <div class="preview-badge">Live preview</div>
+            </div>
+
+            <div class="preview-stage">
+              <div class="stage-glow"></div>
+              <div class="stage-block b1"></div>
+              <div class="stage-block b2"></div>
+              <div class="stage-block b3"></div>
+              <div class="stage-block b4"></div>
+              <div class="stage-block b5"></div>
+              <div class="stage-block b6"></div>
+              <div class="stage-floor"></div>
+
+              <div id="previewMessage">Choose your bunny details to see it come to life 🐰</div>
+
+              <img id="bunnyImage" alt="Bunny preview">
+              <img id="heartImg" class="accessory-img" alt="Heart accessory">
+              <img id="starImg" class="accessory-img" alt="Star accessory">
+              <img id="bowImg" class="accessory-img" alt="Bow accessory">
+            </div>
+          </section>
+
+          <section class="card summary-card">
+            <div class="summary-row">
+              <div class="summary-chip">
+                <div class="k">Size</div>
+                <div class="v" id="summarySize">Not selected</div>
+              </div>
+
+              <div class="summary-chip">
+                <div class="k">Body</div>
+                <div class="v" id="summaryBody">Cream</div>
+              </div>
+
+              <div class="summary-chip">
+                <div class="k">Accessory</div>
+                <div class="v" id="summaryAccessory">Not selected</div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </aside>
+
+      <section class="config-column">
+        <section class="card config-card">
+          <div class="config-label">Apple-style atelier flow</div>
+          <h2 class="config-title">Build your Bunny beautifully</h2>
+          <p class="config-text">Everything stays clean and elegant while you customize. The preview remains close, and each choice updates live.</p>
+
+          <div class="flow-block">
+            <div class="flow-head">
+              <div class="flow-step">1</div>
+              <div>
+                <h3>Choose the body</h3>
+                <p>Start with the size, then pick the body colour.</p>
+              </div>
+            </div>
+
+            <div class="control-block">
+              <label class="control-label" for="size">Size</label>
+              <select id="size">
+                <option value="">Select...</option>
+                <option value="0">Small (+0RON)</option>
+                <option value="15">Medium (+15RON)</option>
+                <option value="25">Large (+25RON)</option>
+              </select>
+            </div>
+
+            <div class="control-block">
+              <label class="control-label">Body Colour</label>
+              <div class="swatch-grid" id="bodySwatches"></div>
+            </div>
+          </div>
+
+          <div class="flow-block">
+            <div class="flow-head">
+              <div class="flow-step">2</div>
+              <div>
+                <h3>Choose accessories</h3>
+                <p>Pick one accessory, or combine it with the bow.</p>
+              </div>
+            </div>
+
+            <div class="option-grid" id="accessoryOptionsGrid"></div>
+
+            <div id="accessoryColorArea" style="display:none; margin-top:18px;">
+              <div id="heartColorWrap" class="control-block" style="display:none;">
+                <label class="control-label">Heart Colour</label>
+                <div class="swatch-grid" id="heartSwatches"></div>
+                <div class="hint" id="heartHint"></div>
+              </div>
+
+              <div id="starColorWrap" class="control-block" style="display:none;">
+                <label class="control-label">Star Colour</label>
+                <div class="swatch-grid" id="starSwatches"></div>
+                <div class="hint" id="starHint"></div>
+              </div>
+
+              <div id="bowColorWrap" class="control-block" style="display:none;">
+                <label class="control-label">Bow Colour</label>
+                <div class="swatch-grid" id="bowSwatches"></div>
+                <div class="hint" id="bowHint"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card order-card">
+          <div class="order-top">
             <div>
-              <h1>Your Bunny</h1>
-              <p>Create your own little companion, one detail at a time.</p>
-            </div>
-            <div class="preview-badge">Live preview</div>
-          </div>
-
-          <div class="preview-stage">
-            <div class="stage-glow"></div>
-            <div class="stage-block b1"></div>
-            <div class="stage-block b2"></div>
-            <div class="stage-block b3"></div>
-            <div class="stage-block b4"></div>
-            <div class="stage-block b5"></div>
-            <div class="stage-block b6"></div>
-            <div class="stage-floor"></div>
-
-            <div id="previewMessage">Choose your bunny details to see it come to life 🐰</div>
-
-            <img id="bunnyImage" alt="Bunny preview">
-            <img id="heartImg" class="accessory-img" alt="Heart accessory">
-            <img id="starImg" class="accessory-img" alt="Star accessory">
-            <img id="bowImg" class="accessory-img" alt="Bow accessory">
-          </div>
-
-          <div class="summary-row">
-            <div class="summary-chip">
-              <div class="k">Size</div>
-              <div class="v" id="summarySize">Not selected</div>
+              <h2>Order & bring it to life</h2>
+              <p>Your bunny is reviewed live below and is ready to be added to the cart once all required choices are made.</p>
             </div>
 
-            <div class="summary-chip">
-              <div class="k">Body</div>
-              <div class="v" id="summaryBody">Cream</div>
-            </div>
-
-            <div class="summary-chip">
-              <div class="k">Accessory</div>
-              <div class="v" id="summaryAccessory">Not selected</div>
-            </div>
-          </div>
-        </section>
-
-        <section class="card stepper-card">
-          <h2 class="stepper-title">Create your bunny</h2>
-          <div class="stepper">
-            <div class="step-badge active" data-step-badge="1">
-              <div class="dot">1</div>
-              <div class="txt">Body</div>
-            </div>
-            <div class="step-badge" data-step-badge="2">
-              <div class="dot">2</div>
-              <div class="txt">Accessories</div>
-            </div>
-            <div class="step-badge" data-step-badge="3">
-              <div class="dot">3</div>
-              <div class="txt">Details</div>
-            </div>
-            <div class="step-badge" data-step-badge="4">
-              <div class="dot">4</div>
-              <div class="txt">Order</div>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <div class="right-column">
-        <section class="card step-card active" id="step-1">
-          <h2 class="section-title">Choose body details</h2>
-          <p class="section-text">Pick the bunny size and then choose the body colour.</p>
-
-          <div class="control-block">
-            <label class="control-label" for="size">Size</label>
-            <select id="size">
-              <option value="">Select...</option>
-              <option value="0">Small (+0RON)</option>
-              <option value="15">Medium (+15RON)</option>
-              <option value="25">Large (+25RON)</option>
-            </select>
-          </div>
-
-          <div class="control-block">
-            <label class="control-label">Body Colour</label>
-            <div class="swatch-grid" id="bodySwatches"></div>
-          </div>
-
-          <div class="step-actions">
-            <button class="step-btn primary" id="nextFromBody" type="button" disabled>Next — accessories</button>
-          </div>
-        </section>
-
-        <section class="card step-card" id="step-2">
-          <h2 class="section-title">Choose accessories</h2>
-          <p class="section-text">Pick a single accessory or a two-piece combination with the bow.</p>
-
-          <div class="option-grid" id="accessoryOptionsGrid"></div>
-
-          <div id="accessoryColorArea" style="display:none; margin-top:18px;">
-            <div id="heartColorWrap" class="control-block" style="display:none;">
-              <label class="control-label">Heart Colour</label>
-              <div class="swatch-grid" id="heartSwatches"></div>
-              <div class="hint" id="heartHint"></div>
-            </div>
-
-            <div id="starColorWrap" class="control-block" style="display:none;">
-              <label class="control-label">Star Colour</label>
-              <div class="swatch-grid" id="starSwatches"></div>
-              <div class="hint" id="starHint"></div>
-            </div>
-
-            <div id="bowColorWrap" class="control-block" style="display:none;">
-              <label class="control-label">Bow Colour</label>
-              <div class="swatch-grid" id="bowSwatches"></div>
-              <div class="hint" id="bowHint"></div>
+            <div class="price-box">
+              <span class="label">Total</span>
+              <span class="value"><span id="price">45</span> RON</span>
             </div>
           </div>
 
-          <div class="step-actions">
-            <button class="step-btn soft" type="button" data-prev-step="1">Back</button>
-            <button class="step-btn primary" id="nextFromAccessories" type="button" disabled>Next — details</button>
-          </div>
-        </section>
-
-        <section class="card step-card" id="step-3">
-          <h2 class="section-title">Details</h2>
-          <p class="section-text">Review the bunny you created before bringing it to life.</p>
-
-          <div class="helper-box" style="margin-bottom:14px;">
+          <div class="details-review">
             <strong>Chosen size:</strong> <span id="detailsSize">Not selected</span><br>
             <strong>Chosen body colour:</strong> <span id="detailsBody">Cream</span><br>
             <strong>Chosen accessory:</strong> <span id="detailsAccessory">Not selected</span>
           </div>
 
-          <div class="helper-box">
-            Every bunny is handmade, so your final piece will feel special and one of a kind.
+          <div class="order-grid">
+            <div>
+              <label class="control-label">Quantity</label>
+              <div class="qty-box">
+                <button class="qty-btn" type="button" id="minusBtn">−</button>
+                <span class="qty-value" id="quantity">1</span>
+                <button class="qty-btn" type="button" id="plusBtn">+</button>
+              </div>
+            </div>
+
+            <div class="mini-note">
+              Handmade just for you.
+            </div>
           </div>
 
-          <div class="step-actions">
-            <button class="step-btn soft" type="button" data-prev-step="2">Back</button>
-            <button class="step-btn primary" type="button" id="nextFromDetails">Next — order</button>
-          </div>
-        </section>
-
-        <section class="card step-card" id="step-4">
-          <div style="padding:16px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;">
-              <h2 style="margin:0;font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:500;">Order & bring it to life</h2>
-
-              <div class="price-box">
-                <span class="label">Total</span>
-                <span class="value"><span id="price">45</span> RON</span>
-              </div>
-            </div>
-
-            <div style="display:grid;grid-template-columns:1fr auto;gap:14px;align-items:end;" class="order-grid-mobile">
-              <div>
-                <label class="control-label">Quantity</label>
-                <div class="qty-box">
-                  <button class="qty-btn" type="button" id="minusBtn">−</button>
-                  <span class="qty-value" id="quantity">1</span>
-                  <button class="qty-btn" type="button" id="plusBtn">+</button>
-                </div>
-              </div>
-
-              <div class="helper-box">
-                Handmade just for you.
-              </div>
-            </div>
-
-            <div class="actions">
-              <button class="action-btn primary-btn" id="addBtn" type="button" disabled>Add to cart</button>
-              <button class="action-btn dark-btn" id="checkoutBtn" type="button">Go to cart</button>
-              <button class="action-btn soft-btn" type="button" onclick="window.location.href='index.html#shop'">Continue shopping</button>
-              <button class="action-btn soft-btn" type="button" data-prev-step="3">Back to details</button>
-            </div>
+          <div class="actions">
+            <button class="action-btn primary-btn" id="addBtn" type="button" disabled>Add to cart</button>
+            <button class="action-btn dark-btn" id="checkoutBtn" type="button">Go to cart</button>
+            <button class="action-btn soft-btn" type="button" onclick="window.location.href='index.html#shop'">Continue shopping</button>
           </div>
         </section>
 
@@ -1355,7 +1417,7 @@
             </a>
           </div>
         </section>
-      </div>
+      </section>
     </main>
   </div>
 
@@ -1370,17 +1432,12 @@
     let heartColor = "";
     let starColor = "";
     let bowColor = "";
-    let currentStep = 1;
 
     const size = document.getElementById("size");
     const priceEl = document.getElementById("price");
     const qtyEl = document.getElementById("quantity");
     const addBtn = document.getElementById("addBtn");
     const checkoutBtn = document.getElementById("checkoutBtn");
-
-    const nextFromBody = document.getElementById("nextFromBody");
-    const nextFromAccessories = document.getElementById("nextFromAccessories");
-    const nextFromDetails = document.getElementById("nextFromDetails");
 
     const bunnyImage = document.getElementById("bunnyImage");
     const previewMessage = document.getElementById("previewMessage");
@@ -1414,14 +1471,6 @@
     document.getElementById("plusBtn").addEventListener("click", () => changeQty(1));
     checkoutBtn.addEventListener("click", goToCart);
     addBtn.addEventListener("click", addToCart);
-
-    nextFromBody.addEventListener("click", () => goToStep(2, true));
-    nextFromAccessories.addEventListener("click", () => goToStep(3, true));
-    nextFromDetails.addEventListener("click", () => goToStep(4, true));
-
-    document.querySelectorAll("[data-prev-step]").forEach(btn => {
-      btn.addEventListener("click", () => goToStep(Number(btn.dataset.prevStep), true));
-    });
 
     const bodyOptions = [
       { name: "Cream", color: "#f4efe7", src: "Bunny_Colors/bunny-cream.png" },
@@ -1501,25 +1550,6 @@
         defaultColors: { star: "Yellow", bow: "Bright pink" }
       }
     ];
-
-    function goToStep(step, allowScroll = true){
-      currentStep = step;
-
-      document.querySelectorAll(".step-card").forEach(card => {
-        card.classList.toggle("active", card.id === `step-${step}`);
-      });
-
-      document.querySelectorAll("[data-step-badge]").forEach(el => {
-        const n = Number(el.dataset.stepBadge);
-        el.classList.toggle("active", n === step);
-        el.classList.toggle("done", n < step);
-      });
-
-      const activeCard = document.getElementById(`step-${step}`);
-      if (allowScroll && activeCard && window.innerWidth <= 980) {
-        activeCard.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    }
 
     function normalizeColorLabel(v){
       return String(v || "").trim();
@@ -1612,6 +1642,7 @@
         btn.className = "swatch-btn" + (option.name === bodyColor ? " active" : "");
         btn.dataset.value = option.name;
         btn.setAttribute("aria-label", option.name);
+        btn.title = option.name;
 
         btn.innerHTML = `<span class="swatch-circle" style="background:${option.color};"></span>`;
 
@@ -1623,7 +1654,6 @@
           updatePrice();
           validateForm();
           updateSummary();
-          updateStepButtons();
         });
 
         bodySwatches.appendChild(btn);
@@ -1639,6 +1669,7 @@
         btn.className = "swatch-btn" + (currentValue === option.name ? " active" : "");
         btn.dataset.value = option.name;
         btn.setAttribute("aria-label", option.name);
+        btn.title = option.name;
 
         btn.innerHTML = `<span class="swatch-circle" style="background:${option.color};"></span>`;
 
@@ -1667,7 +1698,7 @@
       for (const option of accessoryOptions) {
         const card = document.createElement("button");
         card.type = "button";
-        card.className = "option-card";
+        card.className = "option-card" + (option.value === accessoryValue ? " active" : "");
         card.dataset.value = option.value;
 
         let thumbHTML = "";
@@ -1726,7 +1757,7 @@
 
         card.innerHTML = `
           ${thumbHTML}
-          <h3>${option.title}</h3>
+          <h4>${option.title}</h4>
           <p>${option.price === 0 ? "0 RON" : "+" + option.price + " RON"}</p>
         `;
 
@@ -1751,7 +1782,6 @@
           updatePrice();
           validateForm();
           updateSummary();
-          updateStepButtons();
         });
 
         accessoryOptionsGrid.appendChild(card);
@@ -1783,7 +1813,6 @@
           renderAccessories();
           validateForm();
           updateSummary();
-          updateStepButtons();
         });
       } else {
         heartColorWrap.style.display = "none";
@@ -1797,7 +1826,6 @@
           renderAccessories();
           validateForm();
           updateSummary();
-          updateStepButtons();
         });
       } else {
         starColorWrap.style.display = "none";
@@ -1811,7 +1839,6 @@
           renderAccessories();
           validateForm();
           updateSummary();
-          updateStepButtons();
         });
       } else {
         bowColorWrap.style.display = "none";
@@ -1821,9 +1848,9 @@
     function getAccessoryScale(){
       if(window.innerWidth <= 420){
         return {
-          centerWidth: "88px",
-          centerTop: "68%",
-          bowWidth: "56px",
+          centerWidth: "108px",
+          centerTop: "65%",
+          bowWidth: "72px",
           bowTop: "31%",
           bowLeft: "64%"
         };
@@ -1831,20 +1858,20 @@
 
       if(window.innerWidth <= 760){
         return {
-          centerWidth: "95px",
-          centerTop: "68%",
-          bowWidth: "60px",
-          bowTop: "30%",
+          centerWidth: "118px",
+          centerTop: "64%",
+          bowWidth: "78px",
+          bowTop: "31%",
           bowLeft: "64%"
         };
       }
 
       return {
-        centerWidth: "280px",
-        centerTop: "66%",
-        bowWidth: "205px",
-        bowTop: "32%",
-        bowLeft: "63%"
+        centerWidth: "255px",
+        centerTop: "64%",
+        bowWidth: "190px",
+        bowTop: "31%",
+        bowLeft: "64%"
       };
     }
 
@@ -1983,11 +2010,11 @@
       detailsAccessory.textContent = getAccessoryText();
     }
 
-    function canGoFromBody(){
+    function isBodyValid(){
       return size.value !== "" && bodyColor !== "";
     }
 
-    function canGoFromAccessories(){
+    function isAccessoryValid(){
       const selected = getSelectedAccessory();
       if(!selected) return false;
       if(selected.combo.heart && !heartColor) return false;
@@ -1996,13 +2023,8 @@
       return true;
     }
 
-    function updateStepButtons(){
-      nextFromBody.disabled = !canGoFromBody();
-      nextFromAccessories.disabled = !canGoFromAccessories();
-    }
-
     function validateForm(){
-      const valid = canGoFromBody() && canGoFromAccessories();
+      const valid = isBodyValid() && isAccessoryValid();
       addBtn.disabled = !valid;
     }
 
@@ -2048,27 +2070,27 @@
           maxHeight: "none"
         },
         heartStyle: heartImg.getAttribute("src") ? {
-          top: window.innerWidth <= 760 ? "68%" : "66%",
+          top: "64%",
           left: "50%",
-          width: window.innerWidth <= 760 ? "95px" : "58%",
+          width: "54%",
           height: "auto",
           transform: "translate(-50%,-50%)",
           maxWidth: "none",
           maxHeight: "none"
         } : null,
         starStyle: starImg.getAttribute("src") ? {
-          top: window.innerWidth <= 760 ? "68%" : "66%",
+          top: "64%",
           left: "50%",
-          width: window.innerWidth <= 760 ? "95px" : "58%",
+          width: "54%",
           height: "auto",
           transform: "translate(-50%,-50%)",
           maxWidth: "none",
           maxHeight: "none"
         } : null,
         bowStyle: bowImg.getAttribute("src") ? {
-          top: window.innerWidth <= 760 ? "30%" : "32%",
-          left: window.innerWidth <= 760 ? "64%" : "63%",
-          width: window.innerWidth <= 760 ? "60px" : "42%",
+          top: "31%",
+          left: "64%",
+          width: "38%",
           height: "auto",
           transform: "translate(-50%,-50%) rotate(29deg)",
           maxWidth: "none",
@@ -2098,7 +2120,6 @@
     size.addEventListener("change", () => {
       updatePrice();
       updateSummary();
-      updateStepButtons();
       validateForm();
     });
 
@@ -2121,15 +2142,18 @@
     });
 
     window.addEventListener("load", async () => {
+      if ("scrollRestoration" in history) {
+        history.scrollRestoration = "manual";
+      }
+      window.scrollTo(0, 0);
+
       buildBodySwatches();
       await buildAccessoryCards();
       updatePreview();
       updatePrice();
       updateSummary();
       updateCartCount();
-      updateStepButtons();
       validateForm();
-      goToStep(1, false);
     });
   </script>
 </body>
