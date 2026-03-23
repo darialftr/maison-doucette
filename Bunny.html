@@ -710,13 +710,25 @@
       font-size:0.84rem;
     }
 
-    .rec-grid{
-      display:grid;
-      grid-template-columns:repeat(3, minmax(0, 1fr));
+    .rec-carousel{
+      position:relative;
+    }
+
+    .rec-track{
+      display:flex;
       gap:10px;
+      overflow-x:auto;
+      scroll-behavior:smooth;
+      scrollbar-width:none;
+      padding-bottom:2px;
+    }
+
+    .rec-track::-webkit-scrollbar{
+      display:none;
     }
 
     .rec-item{
+      flex:0 0 150px;
       background:rgba(255,255,255,0.76);
       border:1px solid var(--line);
       border-radius:18px;
@@ -755,6 +767,48 @@
     .rec-price{
       font-size:0.76rem;
       color:var(--brown-soft);
+    }
+
+    .rec-future{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      min-height:100%;
+      color:var(--brown-soft);
+      font-size:0.78rem;
+      line-height:1.4;
+      padding:12px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.86), rgba(248,242,236,0.86));
+      border:1px dashed rgba(184,142,103,0.34);
+    }
+
+    .rec-controls{
+      display:flex;
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .rec-arrow{
+      width:38px;
+      height:38px;
+      border-radius:50%;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--brown);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      box-shadow:var(--shadow-soft);
+      transition:transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .rec-arrow:hover{
+      transform:translateY(-1px);
+      box-shadow:0 12px 18px rgba(106,81,69,0.10);
+      background:#fffdfa;
     }
 
     .toast{
@@ -823,190 +877,245 @@
 
       .topbar-inner{
         grid-template-columns:42px 1fr 42px;
-        min-height:64px;
+        min-height:62px;
       }
 
       .top-title .label{
-        font-size:0.98rem;
+        font-size:0.95rem;
       }
 
       .top-title .sub{
-        font-size:0.66rem;
+        font-size:0.62rem;
       }
 
       .customizer-layout{
         display:flex;
         flex-direction:column;
-        gap:12px;
-        padding-top:10px;
+        gap:10px;
+        padding-top:8px;
       }
 
       .left-column{
         display:grid;
-        gap:12px;
+        gap:10px;
       }
 
       .preview-card{
         position:sticky;
-        top:74px;
+        top:70px;
         z-index:30;
-        padding:10px;
-        border-radius:22px;
-        box-shadow:0 14px 30px rgba(106,81,69,0.10);
+        padding:9px;
+        border-radius:20px;
+        box-shadow:0 12px 24px rgba(106,81,69,0.09);
       }
 
       .preview-head{
-        margin-bottom:8px;
-        gap:8px;
+        margin-bottom:7px;
+        gap:7px;
       }
 
       .preview-head h1{
-        font-size:1.18rem;
+        font-size:1.08rem;
       }
 
       .preview-head p{
-        font-size:0.76rem;
-        line-height:1.4;
-        margin-top:3px;
+        font-size:0.72rem;
+        line-height:1.35;
+        margin-top:2px;
       }
 
       .preview-badge{
-        padding:7px 9px;
-        font-size:0.62rem;
-        letter-spacing:0.10em;
+        padding:6px 8px;
+        font-size:0.58rem;
+        letter-spacing:0.08em;
       }
 
       .preview-stage{
-        min-height:250px;
-        max-height:250px;
-        border-radius:20px;
+        min-height:218px;
+        max-height:218px;
+        border-radius:18px;
       }
 
       #bunnyImage{
-        width:min(132%, 470px);
-        bottom:-28px;
+        width:min(122%, 400px);
+        bottom:-20px;
       }
 
       #heartImg,
       #starImg{
-        width:min(37%, 126px);
-        top:68%;
+        width:min(33%, 100px);
+        top:64%;
       }
 
       #bowImg{
-        width:min(24%, 78px);
-        top:30%;
-        left:66%;
+        width:min(21%, 58px);
+        top:28%;
+        left:63%;
       }
 
       .summary-row{
-        margin-top:8px;
-        gap:8px;
+        margin-top:7px;
+        gap:6px;
       }
 
       .summary-chip{
         min-height:auto;
-        padding:8px 9px;
-        border-radius:14px;
+        padding:7px 8px;
+        border-radius:13px;
       }
 
       .summary-chip .k{
-        font-size:0.56rem;
-        margin-bottom:4px;
+        font-size:0.52rem;
+        margin-bottom:3px;
       }
 
       .summary-chip .v{
-        font-size:0.74rem;
-        line-height:1.25;
+        font-size:0.68rem;
+        line-height:1.2;
       }
 
       .stepper-card{
-        padding:10px;
+        padding:9px;
       }
 
       .stepper-title{
-        font-size:1rem;
-        margin-bottom:10px;
+        font-size:0.96rem;
+        margin-bottom:8px;
       }
 
       .stepper{
-        grid-template-columns:repeat(4, minmax(0,1fr));
-        gap:6px;
+        gap:5px;
       }
 
       .step-badge .dot{
-        width:30px;
-        height:30px;
-        font-size:0.75rem;
+        width:28px;
+        height:28px;
+        font-size:0.72rem;
       }
 
       .step-badge .txt{
-        font-size:0.62rem;
+        font-size:0.58rem;
       }
 
       .step-card,
       .rec-card{
-        padding:12px;
-        border-radius:22px;
+        padding:10px;
+        border-radius:20px;
       }
 
       .section-title{
-        font-size:1.12rem;
+        font-size:1.02rem;
       }
 
       .section-text{
-        font-size:0.82rem;
-        line-height:1.5;
-        margin-bottom:14px;
+        font-size:0.78rem;
+        line-height:1.45;
+        margin-bottom:12px;
+      }
+
+      .control-block{
+        margin-bottom:13px;
       }
 
       .control-label{
-        font-size:0.64rem;
-        margin-bottom:8px;
+        font-size:0.60rem;
+        margin-bottom:7px;
+      }
+
+      select{
+        padding:12px 14px;
+        padding-right:40px;
+        border-radius:13px;
+        font-size:0.88rem;
       }
 
       .swatch-grid{
         grid-template-columns:repeat(4, minmax(0,1fr));
-        gap:10px;
+        gap:8px;
       }
 
       .swatch-circle{
-        width:36px;
-        height:36px;
+        width:32px;
+        height:32px;
       }
 
       .option-grid{
         grid-template-columns:repeat(2, minmax(0, 1fr));
-        gap:10px;
+        gap:8px;
       }
 
       .option-card{
-        padding:9px;
-        border-radius:16px;
+        padding:8px;
+        border-radius:15px;
+      }
+
+      .option-thumb{
+        border-radius:12px;
+        margin-bottom:8px;
       }
 
       .option-card h3{
-        font-size:0.8rem;
+        font-size:0.75rem;
       }
 
       .option-card p{
-        font-size:0.72rem;
+        font-size:0.68rem;
+      }
+
+      .helper-box{
+        padding:11px;
+        font-size:0.78rem;
+        border-radius:15px;
       }
 
       .step-actions{
-        gap:8px;
-        margin-top:14px;
+        gap:7px;
+        margin-top:12px;
       }
 
       .step-btn{
         width:100%;
-        padding:13px 14px;
-        font-size:0.74rem;
+        padding:12px 13px;
+        font-size:0.70rem;
+        border-radius:14px;
       }
 
-      .rec-grid{
-        grid-template-columns:1fr 1fr;
-        gap:8px;
+      .rec-head h2{
+        font-size:1.04rem;
+      }
+
+      .rec-head span{
+        font-size:0.72rem;
+      }
+
+      .rec-item{
+        flex:0 0 118px;
+        padding:8px;
+        border-radius:15px;
+      }
+
+      .rec-thumb{
+        border-radius:11px;
+        margin-bottom:7px;
+      }
+
+      .rec-name{
+        font-size:0.70rem;
+        margin-bottom:3px;
+      }
+
+      .rec-price{
+        font-size:0.63rem;
+      }
+
+      .rec-future{
+        font-size:0.66rem;
+        padding:10px;
+      }
+
+      .rec-arrow{
+        width:34px;
+        height:34px;
       }
 
       .toast{
@@ -1020,38 +1129,38 @@
 
     @media (max-width: 420px){
       .preview-card{
-        top:70px;
-        padding:9px;
+        top:68px;
+        padding:8px;
       }
 
       .preview-stage{
-        min-height:228px;
-        max-height:228px;
+        min-height:204px;
+        max-height:204px;
       }
 
       #bunnyImage{
-        width:min(128%, 420px);
-        bottom:-24px;
+        width:min(118%, 360px);
+        bottom:-18px;
       }
 
       #heartImg,
       #starImg{
-        width:min(39%, 118px);
-        top:69%;
+        width:min(34%, 92px);
+        top:63%;
       }
 
       #bowImg{
-        width:min(24%, 72px);
-        top:31%;
-        left:66%;
+        width:min(21%, 54px);
+        top:27%;
+        left:62%;
       }
 
       .summary-chip .v{
-        font-size:0.7rem;
+        font-size:0.64rem;
       }
 
-      .rec-grid{
-        grid-template-columns:1fr;
+      .rec-item{
+        flex:0 0 110px;
       }
     }
   </style>
@@ -1269,30 +1378,57 @@
             <span>More lovely pieces</span>
           </div>
 
-          <div class="rec-grid">
-            <a class="rec-item" href="teddy-details.html">
-              <div class="rec-thumb">
-                <img src="images/teddy1.jpg" alt="Teddy Bear">
-              </div>
-              <div class="rec-name">Teddy Bear</div>
-              <div class="rec-price">From 45 RON</div>
-            </a>
+          <div class="rec-carousel">
+            <div class="rec-track" id="recTrack">
+              <a class="rec-item" href="teddy-details.html">
+                <div class="rec-thumb">
+                  <img src="images/teddy1.jpg" alt="Teddy Bear">
+                </div>
+                <div class="rec-name">Teddy Bear</div>
+                <div class="rec-price">From 45 RON</div>
+              </a>
 
-            <a class="rec-item" href="strawberry-details.html">
-              <div class="rec-thumb">
-                <img src="images/strawberry1.jpg" alt="Chocolate Covered Strawberry">
-              </div>
-              <div class="rec-name">Strawberry</div>
-              <div class="rec-price">20 RON</div>
-            </a>
+              <a class="rec-item" href="strawberry-details.html">
+                <div class="rec-thumb">
+                  <img src="images/strawberry1.jpg" alt="Chocolate Covered Strawberry">
+                </div>
+                <div class="rec-name">Strawberry</div>
+                <div class="rec-price">20 RON</div>
+              </a>
 
-            <a class="rec-item" href="index.html#shop">
-              <div class="rec-thumb">
-                <img src="images/bunny1.jpg" alt="See all products">
+              <a class="rec-item" href="index.html#shop">
+                <div class="rec-thumb">
+                  <img src="images/bunny1.jpg" alt="More creations">
+                </div>
+                <div class="rec-name">More creations</div>
+                <div class="rec-price">View collection</div>
+              </a>
+
+              <div class="rec-item rec-future">
+                Future product
               </div>
-              <div class="rec-name">More creations</div>
-              <div class="rec-price">View collection</div>
-            </a>
+
+              <div class="rec-item rec-future">
+                Future product
+              </div>
+
+              <div class="rec-item rec-future">
+                Future product
+              </div>
+            </div>
+
+            <div class="rec-controls">
+              <button class="rec-arrow" type="button" id="recPrev" aria-label="Previous">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M15 18l-6-6 6-6"></path>
+                </svg>
+              </button>
+              <button class="rec-arrow" type="button" id="recNext" aria-label="Next">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 18l6-6-6-6"></path>
+                </svg>
+              </button>
+            </div>
           </div>
         </section>
       </div>
@@ -1350,6 +1486,10 @@
     const starSwatches = document.getElementById("starSwatches");
     const bowSwatches = document.getElementById("bowSwatches");
 
+    const recTrack = document.getElementById("recTrack");
+    const recPrev = document.getElementById("recPrev");
+    const recNext = document.getElementById("recNext");
+
     document.getElementById("minusBtn").addEventListener("click", () => changeQty(-1));
     document.getElementById("plusBtn").addEventListener("click", () => changeQty(1));
     checkoutBtn.addEventListener("click", goToCart);
@@ -1362,6 +1502,18 @@
     document.querySelectorAll("[data-prev-step]").forEach(btn => {
       btn.addEventListener("click", () => goToStep(Number(btn.dataset.prevStep)));
     });
+
+    if (recPrev && recTrack) {
+      recPrev.addEventListener("click", () => {
+        recTrack.scrollBy({ left: -170, behavior: "smooth" });
+      });
+    }
+
+    if (recNext && recTrack) {
+      recNext.addEventListener("click", () => {
+        recTrack.scrollBy({ left: 170, behavior: "smooth" });
+      });
+    }
 
     const bodyOptions = [
       { name: "Cream", color: "#f4efe7", src: "Bunny_Colors/bunny-cream.png" },
@@ -1762,21 +1914,21 @@
     function getAccessoryScale(){
       if(window.innerWidth <= 420){
         return {
-          centerWidth: "118px",
-          centerTop: "69%",
-          bowWidth: "72px",
-          bowTop: "31%",
-          bowLeft: "66%"
+          centerWidth: "92px",
+          centerTop: "63%",
+          bowWidth: "54px",
+          bowTop: "27%",
+          bowLeft: "62%"
         };
       }
 
       if(window.innerWidth <= 760){
         return {
-          centerWidth: "126px",
-          centerTop: "68%",
-          bowWidth: "78px",
-          bowTop: "30%",
-          bowLeft: "66%"
+          centerWidth: "100px",
+          centerTop: "64%",
+          bowWidth: "58px",
+          bowTop: "28%",
+          bowLeft: "63%"
         };
       }
 
@@ -1933,7 +2085,8 @@
       if(!selected) return false;
       if(selected.combo.heart && !heartColor) return false;
       if(selected.combo.star && !starColor) return false;
-      if(selected.combo.bow && !bowColor) return false;
+      ifselected = selected.combo.bow && !bowColor;
+      if(ifselected) return false;
       return true;
     }
 
