@@ -193,7 +193,6 @@
     .preview-card,
     .stepper-card,
     .step-card,
-    .order-card,
     .rec-card{
       opacity:0;
       transform:translateY(22px);
@@ -203,7 +202,6 @@
     .preview-card{ animation-delay:0.05s; }
     .stepper-card{ animation-delay:0.10s; }
     .step-card{ animation-delay:0.15s; }
-    .order-card{ animation-delay:0.22s; }
     .rec-card{ animation-delay:0.30s; }
 
     .preview-card{
@@ -688,134 +686,6 @@
       border:none;
     }
 
-    .order-card{
-      padding:16px;
-    }
-
-    .order-top{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      margin-bottom:14px;
-    }
-
-    .order-top h2{
-      margin:0;
-      font-family:'Playfair Display',serif;
-      font-size:1.35rem;
-      font-weight:500;
-    }
-
-    .price-box{
-      text-align:right;
-    }
-
-    .price-box .label{
-      display:block;
-      font-size:0.7rem;
-      text-transform:uppercase;
-      letter-spacing:0.14em;
-      color:var(--brown-soft);
-      margin-bottom:5px;
-    }
-
-    .price-box .value{
-      font-family:'Playfair Display',serif;
-      font-size:1.7rem;
-      line-height:1;
-      color:var(--brown);
-    }
-
-    .order-grid{
-      display:grid;
-      grid-template-columns:1fr auto;
-      gap:14px;
-      align-items:end;
-    }
-
-    .qty-box{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      margin-top:8px;
-    }
-
-    .qty-btn{
-      width:42px;
-      height:42px;
-      border-radius:14px;
-      border:1px solid #d8d2ca;
-      background:#fff;
-      color:var(--brown);
-      font-size:1.2rem;
-      cursor:pointer;
-      transition:transform 0.2s ease, box-shadow 0.22s ease, background 0.22s ease;
-    }
-
-    .qty-btn:hover{
-      transform:translateY(-1px);
-      box-shadow:0 10px 18px rgba(106,81,69,0.08);
-      background:#fffdfa;
-    }
-
-    .qty-value{
-      min-width:30px;
-      text-align:center;
-      font-weight:700;
-      font-size:1rem;
-    }
-
-    .actions{
-      margin-top:16px;
-      display:grid;
-      gap:10px;
-    }
-
-    .action-btn{
-      width:100%;
-      padding:15px 16px;
-      border:none;
-      border-radius:16px;
-      cursor:pointer;
-      transition:transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease, background 0.22s ease;
-      letter-spacing:0.06em;
-      font-size:0.84rem;
-      font-weight:600;
-      text-transform:uppercase;
-    }
-
-    .action-btn:hover{ transform:translateY(-1px); }
-
-    .primary-btn{
-      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
-      color:#fff;
-      box-shadow:0 16px 28px rgba(184,142,103,0.24);
-    }
-
-    .primary-btn:hover{
-      box-shadow:0 22px 34px rgba(184,142,103,0.30);
-    }
-
-    .primary-btn:disabled{
-      background:#d7cfc6;
-      box-shadow:none;
-      cursor:not-allowed;
-      transform:none;
-    }
-
-    .dark-btn{
-      background:#3e3a36;
-      color:#fff;
-      display:none;
-    }
-
-    .soft-btn{
-      background:rgba(255,255,255,0.78);
-      color:var(--brown);
-      border:1px solid var(--line);
-    }
-
     .rec-card{
       padding:16px;
     }
@@ -842,16 +712,15 @@
 
     .rec-grid{
       display:grid;
-      grid-template-columns:repeat(3, minmax(0, 150px));
-      justify-content:start;
-      gap:8px;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:10px;
     }
 
     .rec-item{
       background:rgba(255,255,255,0.76);
       border:1px solid var(--line);
-      border-radius:16px;
-      padding:8px;
+      border-radius:18px;
+      padding:10px;
       transition:transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
     }
 
@@ -863,11 +732,11 @@
 
     .rec-thumb{
       width:100%;
-      aspect-ratio:1/1;
-      border-radius:12px;
+      aspect-ratio:1/1.04;
+      border-radius:14px;
       overflow:hidden;
       background:#f2ece6;
-      margin-bottom:7px;
+      margin-bottom:9px;
     }
 
     .rec-thumb img{
@@ -877,14 +746,14 @@
     }
 
     .rec-name{
-      font-size:0.76rem;
+      font-size:0.84rem;
       font-weight:600;
-      line-height:1.25;
-      margin-bottom:3px;
+      line-height:1.35;
+      margin-bottom:4px;
     }
 
     .rec-price{
-      font-size:0.68rem;
+      font-size:0.76rem;
       color:var(--brown-soft);
     }
 
@@ -968,30 +837,96 @@
       .customizer-layout{
         display:flex;
         flex-direction:column;
-        gap:14px;
-        padding-top:12px;
+        gap:12px;
+        padding-top:10px;
+      }
+
+      .left-column{
+        display:grid;
+        gap:12px;
+      }
+
+      .preview-card{
+        position:sticky;
+        top:74px;
+        z-index:30;
+        padding:10px;
+        border-radius:22px;
+        box-shadow:0 14px 30px rgba(106,81,69,0.10);
+      }
+
+      .preview-head{
+        margin-bottom:8px;
+        gap:8px;
+      }
+
+      .preview-head h1{
+        font-size:1.18rem;
+      }
+
+      .preview-head p{
+        font-size:0.76rem;
+        line-height:1.4;
+        margin-top:3px;
+      }
+
+      .preview-badge{
+        padding:7px 9px;
+        font-size:0.62rem;
+        letter-spacing:0.10em;
       }
 
       .preview-stage{
-        min-height:370px;
-        border-radius:22px;
+        min-height:250px;
+        max-height:250px;
+        border-radius:20px;
       }
 
       #bunnyImage{
-        width:min(190%, 760px);
-        bottom:-80px;
+        width:min(132%, 470px);
+        bottom:-28px;
       }
 
       #heartImg,
       #starImg{
-        width:min(60%, 212px);
-        top:73%;
+        width:min(37%, 126px);
+        top:68%;
       }
 
       #bowImg{
-        width:min(40%, 148px);
-        top:37%;
-        left:63%;
+        width:min(24%, 78px);
+        top:30%;
+        left:66%;
+      }
+
+      .summary-row{
+        margin-top:8px;
+        gap:8px;
+      }
+
+      .summary-chip{
+        min-height:auto;
+        padding:8px 9px;
+        border-radius:14px;
+      }
+
+      .summary-chip .k{
+        font-size:0.56rem;
+        margin-bottom:4px;
+      }
+
+      .summary-chip .v{
+        font-size:0.74rem;
+        line-height:1.25;
+      }
+
+      .stepper-card{
+        padding:10px;
+      }
+
+      .stepper-title{
+        font-size:1rem;
+        margin-bottom:10px;
       }
 
       .stepper{
@@ -999,16 +934,35 @@
         gap:6px;
       }
 
+      .step-badge .dot{
+        width:30px;
+        height:30px;
+        font-size:0.75rem;
+      }
+
       .step-badge .txt{
-        font-size:0.66rem;
+        font-size:0.62rem;
       }
 
       .step-card,
-      .order-card,
-      .rec-card,
-      .stepper-card,
-      .preview-card{
+      .rec-card{
         padding:12px;
+        border-radius:22px;
+      }
+
+      .section-title{
+        font-size:1.12rem;
+      }
+
+      .section-text{
+        font-size:0.82rem;
+        line-height:1.5;
+        margin-bottom:14px;
+      }
+
+      .control-label{
+        font-size:0.64rem;
+        margin-bottom:8px;
       }
 
       .swatch-grid{
@@ -1017,8 +971,8 @@
       }
 
       .swatch-circle{
-        width:38px;
-        height:38px;
+        width:36px;
+        height:36px;
       }
 
       .option-grid{
@@ -1026,13 +980,32 @@
         gap:10px;
       }
 
-      .order-grid{
-        grid-template-columns:1fr;
+      .option-card{
+        padding:9px;
+        border-radius:16px;
+      }
+
+      .option-card h3{
+        font-size:0.8rem;
+      }
+
+      .option-card p{
+        font-size:0.72rem;
+      }
+
+      .step-actions{
+        gap:8px;
+        margin-top:14px;
+      }
+
+      .step-btn{
+        width:100%;
+        padding:13px 14px;
+        font-size:0.74rem;
       }
 
       .rec-grid{
-        grid-template-columns:repeat(2, minmax(0, 120px));
-        justify-content:start;
+        grid-template-columns:1fr 1fr;
         gap:8px;
       }
 
@@ -1046,30 +1019,39 @@
     }
 
     @media (max-width: 420px){
+      .preview-card{
+        top:70px;
+        padding:9px;
+      }
+
       .preview-stage{
-        min-height:346px;
+        min-height:228px;
+        max-height:228px;
       }
 
       #bunnyImage{
-        width:min(200%, 680px);
-        bottom:-86px;
+        width:min(128%, 420px);
+        bottom:-24px;
       }
 
       #heartImg,
       #starImg{
-        width:min(62%, 188px);
-        top:74%;
+        width:min(39%, 118px);
+        top:69%;
       }
 
       #bowImg{
-        width:min(40%, 132px);
-        top:38%;
+        width:min(24%, 72px);
+        top:31%;
+        left:66%;
+      }
+
+      .summary-chip .v{
+        font-size:0.7rem;
       }
 
       .rec-grid{
-        grid-template-columns:repeat(2, minmax(0, 108px));
-        justify-content:start;
-        gap:7px;
+        grid-template-columns:1fr;
       }
     }
   </style>
@@ -1252,35 +1234,32 @@
         </section>
 
         <section class="card step-card" id="step-4">
-          <div class="order-top">
-            <h2>Order & bring it to life</h2>
+          <div class="section-title" style="margin-bottom:12px;">Order & bring it to life</div>
 
-            <div class="price-box">
-              <span class="label">Total</span>
-              <span class="value"><span id="price">45</span> RON</span>
-            </div>
+          <div class="helper-box" style="margin-bottom:14px;">
+            <strong>Total:</strong> <span id="price">45</span> RON
           </div>
 
-          <div class="order-grid">
-            <div>
-              <label class="control-label">Quantity</label>
-              <div class="qty-box">
-                <button class="qty-btn" type="button" id="minusBtn">−</button>
-                <span class="qty-value" id="quantity">1</span>
-                <button class="qty-btn" type="button" id="plusBtn">+</button>
+          <div class="control-block">
+            <label class="control-label">Quantity</label>
+            <div class="qty-box">
+              <button class="step-btn soft" type="button" id="minusBtn" style="padding:10px 14px; min-width:52px;">−</button>
+              <div class="helper-box" style="padding:10px 16px; min-width:68px; text-align:center;">
+                <strong id="quantity">1</strong>
               </div>
-            </div>
-
-            <div class="helper-box">
-              Handmade just for you.
+              <button class="step-btn soft" type="button" id="plusBtn" style="padding:10px 14px; min-width:52px;">+</button>
             </div>
           </div>
 
-          <div class="actions">
-            <button class="action-btn primary-btn" id="addBtn" type="button" disabled>Add to cart</button>
-            <button class="action-btn dark-btn" id="checkoutBtn" type="button">Go to cart</button>
-            <button class="action-btn soft-btn" type="button" onclick="window.location.href='index.html#shop'">Continue shopping</button>
-            <button class="action-btn soft-btn" type="button" data-prev-step="3">Back to details</button>
+          <div class="helper-box" style="margin-bottom:14px;">
+            Handmade just for you.
+          </div>
+
+          <div class="step-actions">
+            <button class="step-btn primary" id="addBtn" type="button" disabled>Add to cart</button>
+            <button class="step-btn soft" id="checkoutBtn" type="button" style="display:none;">Go to cart</button>
+            <button class="step-btn soft" type="button" onclick="window.location.href='index.html#shop'">Continue shopping</button>
+            <button class="step-btn soft" type="button" data-prev-step="3">Back to details</button>
           </div>
         </section>
 
@@ -1477,7 +1456,8 @@
       });
 
       const activeCard = document.getElementById(`step-${step}`);
-      if (activeCard && window.innerWidth <= 980) {
+
+      if (activeCard && window.innerWidth > 760) {
         activeCard.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }
@@ -1782,21 +1762,21 @@
     function getAccessoryScale(){
       if(window.innerWidth <= 420){
         return {
-          centerWidth: "188px",
-          centerTop: "74%",
-          bowWidth: "132px",
-          bowTop: "38%",
-          bowLeft: "63%"
+          centerWidth: "118px",
+          centerTop: "69%",
+          bowWidth: "72px",
+          bowTop: "31%",
+          bowLeft: "66%"
         };
       }
 
       if(window.innerWidth <= 760){
         return {
-          centerWidth: "212px",
-          centerTop: "73%",
-          bowWidth: "148px",
-          bowTop: "37%",
-          bowLeft: "63%"
+          centerWidth: "126px",
+          centerTop: "68%",
+          bowWidth: "78px",
+          bowTop: "30%",
+          bowLeft: "66%"
         };
       }
 
