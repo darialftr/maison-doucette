@@ -560,14 +560,14 @@
     .option-grid{
       display:grid;
       grid-template-columns:repeat(3, minmax(0, 1fr));
-      gap:12px;
+      gap:10px;
     }
 
     .option-card{
       border:1px solid var(--line);
       background:rgba(255,255,255,0.8);
-      border-radius:18px;
-      padding:10px;
+      border-radius:16px;
+      padding:8px;
       cursor:pointer;
       transition:all 0.22s ease;
       box-shadow:var(--shadow-soft);
@@ -587,35 +587,35 @@
     .option-thumb{
       width:100%;
       aspect-ratio:1/1;
-      border-radius:14px;
+      border-radius:12px;
       display:flex;
       align-items:center;
       justify-content:center;
       background:#f7f2ec;
       border:1px solid rgba(184,142,103,0.16);
       overflow:hidden;
-      margin-bottom:10px;
+      margin-bottom:8px;
       position:relative;
     }
 
     .option-thumb img{
-      width:76%;
-      height:76%;
+      width:72%;
+      height:72%;
       object-fit:contain;
     }
 
     .option-card h3{
-      margin:0 0 4px;
-      font-size:0.88rem;
+      margin:0 0 3px;
+      font-size:0.78rem;
       line-height:1.2;
       font-weight:600;
     }
 
     .option-card p{
       margin:0;
-      font-size:0.76rem;
+      font-size:0.68rem;
       color:var(--brown-soft);
-      line-height:1.4;
+      line-height:1.35;
     }
 
     .hint{
@@ -710,17 +710,31 @@
       font-size:0.84rem;
     }
 
-    .rec-grid{
-      display:grid;
-      grid-template-columns:repeat(3, minmax(0, 1fr));
+    .rec-scroll-wrap{
+      position:relative;
+    }
+
+    .rec-track{
+      display:flex;
       gap:10px;
+      overflow-x:auto;
+      scroll-behavior:smooth;
+      padding-bottom:4px;
+      scrollbar-width:none;
+    }
+
+    .rec-track::-webkit-scrollbar{
+      display:none;
     }
 
     .rec-item{
+      min-width:145px;
+      max-width:145px;
+      flex:0 0 145px;
       background:rgba(255,255,255,0.76);
       border:1px solid var(--line);
-      border-radius:18px;
-      padding:10px;
+      border-radius:16px;
+      padding:8px;
       transition:transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
     }
 
@@ -732,11 +746,11 @@
 
     .rec-thumb{
       width:100%;
-      aspect-ratio:1/1.04;
-      border-radius:14px;
+      aspect-ratio:1/1.02;
+      border-radius:12px;
       overflow:hidden;
       background:#f2ece6;
-      margin-bottom:9px;
+      margin-bottom:7px;
     }
 
     .rec-thumb img{
@@ -746,15 +760,42 @@
     }
 
     .rec-name{
-      font-size:0.84rem;
+      font-size:0.76rem;
       font-weight:600;
-      line-height:1.35;
-      margin-bottom:4px;
+      line-height:1.3;
+      margin-bottom:3px;
     }
 
     .rec-price{
-      font-size:0.76rem;
+      font-size:0.66rem;
       color:var(--brown-soft);
+    }
+
+    .rec-arrow{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      width:34px;
+      height:34px;
+      border:none;
+      border-radius:50%;
+      background:rgba(255,255,255,0.92);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow-soft);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      z-index:3;
+    }
+
+    .rec-arrow.left{ left:-6px; }
+    .rec-arrow.right{ right:-6px; }
+
+    .rec-arrow svg{
+      width:16px;
+      height:16px;
+      stroke:var(--brown);
     }
 
     .toast{
@@ -893,13 +934,13 @@
       #heartImg,
       #starImg{
         width:min(37%, 126px);
-        top:68%;
+        top:66%;
       }
 
       #bowImg{
         width:min(24%, 78px);
-        top:30%;
-        left:66%;
+        top:29%;
+        left:64%;
       }
 
       .summary-row{
@@ -979,21 +1020,33 @@
       }
 
       .option-grid{
-        grid-template-columns:repeat(2, minmax(0, 1fr));
-        gap:10px;
+        grid-template-columns:repeat(3, minmax(0, 1fr));
+        gap:8px;
       }
 
       .option-card{
-        padding:9px;
-        border-radius:16px;
+        padding:6px;
+        border-radius:14px;
+      }
+
+      .option-thumb{
+        border-radius:10px;
+        margin-bottom:6px;
+      }
+
+      .option-thumb img{
+        width:68%;
+        height:68%;
       }
 
       .option-card h3{
-        font-size:0.8rem;
+        font-size:0.66rem;
+        line-height:1.15;
       }
 
       .option-card p{
-        font-size:0.72rem;
+        font-size:0.58rem;
+        line-height:1.2;
       }
 
       .step-actions{
@@ -1007,9 +1060,15 @@
         font-size:0.74rem;
       }
 
-      .rec-grid{
-        grid-template-columns:1fr 1fr;
-        gap:8px;
+      .rec-item{
+        min-width:128px;
+        max-width:128px;
+        flex:0 0 128px;
+      }
+
+      .rec-arrow{
+        width:30px;
+        height:30px;
       }
 
       .toast{
@@ -1040,21 +1099,39 @@
       #heartImg,
       #starImg{
         width:min(34%, 92px);
-        top:63%;
+        top:61%;
       }
 
       #bowImg{
         width:min(21%, 54px);
-        top:27%;
-        left:62%;
+        top:26%;
+        left:60%;
       }
 
       .summary-chip .v{
         font-size:0.64rem;
       }
 
-      .rec-grid{
-        grid-template-columns:1fr;
+      .option-grid{
+        gap:7px;
+      }
+
+      .option-card{
+        padding:5px;
+      }
+
+      .option-card h3{
+        font-size:0.62rem;
+      }
+
+      .option-card p{
+        font-size:0.55rem;
+      }
+
+      .rec-item{
+        min-width:118px;
+        max-width:118px;
+        flex:0 0 118px;
       }
     }
   </style>
@@ -1245,7 +1322,7 @@
 
           <div class="control-block">
             <label class="control-label">Quantity</label>
-            <div class="qty-box">
+            <div class="qty-box" style="display:flex; gap:10px; align-items:center;">
               <button class="step-btn soft" type="button" id="minusBtn" style="padding:10px 14px; min-width:52px;">−</button>
               <div class="helper-box" style="padding:10px 16px; min-width:68px; text-align:center;">
                 <strong id="quantity">1</strong>
@@ -1272,30 +1349,62 @@
             <span>More lovely pieces</span>
           </div>
 
-          <div class="rec-grid">
-            <a class="rec-item" href="teddy-details.html">
-              <div class="rec-thumb">
-                <img src="images/teddy1.jpg" alt="Teddy Bear">
-              </div>
-              <div class="rec-name">Teddy Bear</div>
-              <div class="rec-price">From 45 RON</div>
-            </a>
+          <div class="rec-scroll-wrap">
+            <button class="rec-arrow left" type="button" id="recPrev" aria-label="Previous">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 18l-6-6 6-6"></path>
+              </svg>
+            </button>
 
-            <a class="rec-item" href="strawberry-details.html">
-              <div class="rec-thumb">
-                <img src="images/strawberry1.jpg" alt="Chocolate Covered Strawberry">
-              </div>
-              <div class="rec-name">Strawberry</div>
-              <div class="rec-price">20 RON</div>
-            </a>
+            <div class="rec-track" id="recTrack">
+              <a class="rec-item" href="teddy-details.html">
+                <div class="rec-thumb">
+                  <img src="images/teddy1.jpg" alt="Teddy Bear">
+                </div>
+                <div class="rec-name">Teddy Bear</div>
+                <div class="rec-price">From 45 RON</div>
+              </a>
 
-            <a class="rec-item" href="index.html#shop">
-              <div class="rec-thumb">
-                <img src="images/bunny1.jpg" alt="See all products">
-              </div>
-              <div class="rec-name">More creations</div>
-              <div class="rec-price">View collection</div>
-            </a>
+              <a class="rec-item" href="strawberry-details.html">
+                <div class="rec-thumb">
+                  <img src="images/strawberry1.jpg" alt="Chocolate Covered Strawberry">
+                </div>
+                <div class="rec-name">Strawberry</div>
+                <div class="rec-price">20 RON</div>
+              </a>
+
+              <a class="rec-item" href="index.html#shop">
+                <div class="rec-thumb">
+                  <img src="images/bunny1.jpg" alt="See all products">
+                </div>
+                <div class="rec-name">More creations</div>
+                <div class="rec-price">View collection</div>
+              </a>
+
+              <a class="rec-item" href="#">
+                <div class="rec-thumb"></div>
+                <div class="rec-name">Future product</div>
+                <div class="rec-price">Coming soon</div>
+              </a>
+
+              <a class="rec-item" href="#">
+                <div class="rec-thumb"></div>
+                <div class="rec-name">Future product</div>
+                <div class="rec-price">Coming soon</div>
+              </a>
+
+              <a class="rec-item" href="#">
+                <div class="rec-thumb"></div>
+                <div class="rec-name">Future product</div>
+                <div class="rec-price">Coming soon</div>
+              </a>
+            </div>
+
+            <button class="rec-arrow right" type="button" id="recNext" aria-label="Next">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 18l6-6-6-6"></path>
+              </svg>
+            </button>
           </div>
         </section>
       </div>
@@ -1353,6 +1462,10 @@
     const starSwatches = document.getElementById("starSwatches");
     const bowSwatches = document.getElementById("bowSwatches");
 
+    const recTrack = document.getElementById("recTrack");
+    const recPrev = document.getElementById("recPrev");
+    const recNext = document.getElementById("recNext");
+
     document.getElementById("minusBtn").addEventListener("click", () => changeQty(-1));
     document.getElementById("plusBtn").addEventListener("click", () => changeQty(1));
     checkoutBtn.addEventListener("click", goToCart);
@@ -1366,6 +1479,16 @@
       btn.addEventListener("click", () => goToStep(Number(btn.dataset.prevStep)));
     });
 
+    if (recPrev && recNext && recTrack) {
+      recPrev.addEventListener("click", () => {
+        recTrack.scrollBy({ left: -170, behavior: "smooth" });
+      });
+
+      recNext.addEventListener("click", () => {
+        recTrack.scrollBy({ left: 170, behavior: "smooth" });
+      });
+    }
+
     const bodyOptions = [
       { name: "Cream", color: "#f4efe7", src: "Bunny_Colors/bunny-cream.png" },
       { name: "Brown", color: "#8b5e48", src: "Bunny_Colors/bunny-brown.png" },
@@ -1378,7 +1501,6 @@
 
     const colorOptions = [
       { name: "Bright pink", color: "#ff4fa3" },
-      { name: "Light pink", color: "#f3bfd1" },
       { name: "Yellow", color: "#f4d55b" },
       { name: "Light blue", color: "#9fd3f6" },
       { name: "Dark blue", color: "#355f9d" },
@@ -1620,8 +1742,8 @@
           thumbHTML = `
             <div class="option-thumb" style="background:#f8f3ee;">
               <div style="
-                width:54px;
-                height:54px;
+                width:42px;
+                height:42px;
                 border-radius:50%;
                 border:2px solid rgba(184,142,103,0.34);
                 position:relative;
@@ -1633,7 +1755,7 @@
                   left:50%;
                   top:50%;
                   width:2px;
-                  height:40px;
+                  height:28px;
                   background:#b88e67;
                   transform:translate(-50%,-50%) rotate(45deg);
                   border-radius:999px;
@@ -1646,8 +1768,8 @@
           const bowSrc = await getAccessoryThumbSrc("bow", "Bright pink");
           thumbHTML = `
             <div class="option-thumb">
-              ${heartSrc ? `<img src="${heartSrc}" alt="" style="position:absolute;width:54%;left:48%;top:54%;transform:translate(-50%,-50%);">` : ""}
-              ${bowSrc ? `<img src="${bowSrc}" alt="" style="position:absolute;width:37%;left:66%;top:28%;transform:translate(-50%,-50%) rotate(29deg);">` : ""}
+              ${heartSrc ? `<img src="${heartSrc}" alt="" style="position:absolute;width:48%;left:48%;top:56%;transform:translate(-50%,-50%);">` : ""}
+              ${bowSrc ? `<img src="${bowSrc}" alt="" style="position:absolute;width:30%;left:65%;top:28%;transform:translate(-50%,-50%) rotate(29deg);">` : ""}
             </div>
           `;
         } else if(option.thumbType === "star-bow"){
@@ -1655,15 +1777,15 @@
           const bowSrc = await getAccessoryThumbSrc("bow", "Bright pink");
           thumbHTML = `
             <div class="option-thumb">
-              ${starSrc ? `<img src="${starSrc}" alt="" style="position:absolute;width:54%;left:48%;top:54%;transform:translate(-50%,-50%);">` : ""}
-              ${bowSrc ? `<img src="${bowSrc}" alt="" style="position:absolute;width:37%;left:66%;top:28%;transform:translate(-50%,-50%) rotate(29deg);">` : ""}
+              ${starSrc ? `<img src="${starSrc}" alt="" style="position:absolute;width:48%;left:48%;top:56%;transform:translate(-50%,-50%);">` : ""}
+              ${bowSrc ? `<img src="${bowSrc}" alt="" style="position:absolute;width:30%;left:65%;top:28%;transform:translate(-50%,-50%) rotate(29deg);">` : ""}
             </div>
           `;
         } else {
           const src = await getAccessoryThumbSrc(option.thumbType, option.thumbColor);
           thumbHTML = `
             <div class="option-thumb">
-              ${src ? `<img src="${src}" alt="">` : `<span style="font-size:0.8rem;color:#9b9087;">Accessory</span>`}
+              ${src ? `<img src="${src}" alt="">` : `<span style="font-size:0.7rem;color:#9b9087;">Accessory</span>`}
             </div>
           `;
         }
@@ -1768,18 +1890,18 @@
           centerWidth: "118px",
           centerTop: "63%",
           bowWidth: "54px",
-          bowTop: "27%",
-          bowLeft: "62%"
+          bowTop: "26%",
+          bowLeft: "60%"
         };
       }
 
       if(window.innerWidth <= 760){
         return {
           centerWidth: "126px",
-          centerTop: "68%",
+          centerTop: "66%",
           bowWidth: "78px",
-          bowTop: "30%",
-          bowLeft: "66%"
+          bowTop: "29%",
+          bowLeft: "64%"
         };
       }
 
