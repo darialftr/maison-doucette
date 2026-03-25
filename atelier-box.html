@@ -448,8 +448,15 @@
 
     .options-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 20px;
+    }
+
+    .worlds-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .boxes-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
     .choice-card {
@@ -515,6 +522,29 @@
       line-height: 1.5;
     }
 
+    .world-card .choice-media {
+      aspect-ratio: 1 / 0.88;
+    }
+
+    .box-card .choice-media {
+      aspect-ratio: 1 / 0.92;
+    }
+
+    .swatch-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 1px solid rgba(91, 71, 63, 0.12);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.34);
+    }
+
     .selected-note,
     .world-selected-note {
       margin-top: 18px;
@@ -534,35 +564,6 @@
     .world-selected-note.is-visible {
       opacity: 1;
       transform: translateY(0);
-    }
-
-    .worlds-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 20px;
-    }
-
-    .world-card {
-      min-height: 100%;
-    }
-
-    .world-card .choice-media {
-      aspect-ratio: 1 / 0.92;
-    }
-
-    .swatch-row {
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-      flex-wrap: wrap;
-    }
-
-    .swatch {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      border: 1px solid rgba(91, 71, 63, 0.12);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.34);
     }
 
     .form-shell {
@@ -851,9 +852,12 @@
         grid-template-columns: 1fr;
       }
 
-      .options-grid,
       .inside-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .boxes-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
     }
 
@@ -1003,32 +1007,70 @@
         line-height: 1.7;
       }
 
-      .options-grid,
-      .worlds-grid,
-      .radio-row,
-      .inside-grid {
-        grid-template-columns: 1fr;
+      .worlds-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .boxes-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
       }
 
       .choice-card {
-        padding: 14px;
-        border-radius: 20px;
+        padding: 10px;
+        border-radius: 18px;
       }
 
       .choice-media {
-        border-radius: 18px;
-        margin-bottom: 14px;
+        border-radius: 14px;
+        margin-bottom: 10px;
+      }
+
+      .world-card .choice-media {
+        aspect-ratio: 1 / 0.94;
+      }
+
+      .box-card .choice-media {
+        aspect-ratio: 1 / 0.96;
       }
 
       .choice-card h3 {
-        font-size: 1.02rem;
+        font-size: 0.88rem;
+        margin-bottom: 4px;
+        line-height: 1.15;
       }
 
-      .choice-card p,
-      .choice-meta,
+      .choice-card p {
+        font-size: 0.76rem;
+        line-height: 1.45;
+        margin-bottom: 8px;
+      }
+
+      .choice-meta {
+        font-size: 0.76rem;
+        line-height: 1.4;
+      }
+
+      .swatch-row {
+        gap: 6px;
+        margin-top: 8px;
+      }
+
+      .swatch {
+        width: 12px;
+        height: 12px;
+      }
+
       .selected-note,
       .world-selected-note {
-        font-size: 0.91rem;
+        font-size: 0.88rem;
+        min-height: 20px;
+      }
+
+      .radio-row,
+      .inside-grid {
+        grid-template-columns: 1fr;
       }
 
       .glimpse-copy {
@@ -1066,7 +1108,7 @@
       }
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 520px) {
       :root {
         --nav-h: 206px;
       }
@@ -1096,6 +1138,43 @@
       .hero-card,
       .footer-card {
         padding: 16px;
+      }
+
+      .worlds-grid {
+        gap: 8px;
+      }
+
+      .boxes-grid {
+        gap: 6px;
+      }
+
+      .choice-card {
+        padding: 8px;
+        border-radius: 16px;
+      }
+
+      .choice-media {
+        border-radius: 12px;
+        margin-bottom: 8px;
+      }
+
+      .choice-card h3 {
+        font-size: 0.8rem;
+      }
+
+      .choice-card p {
+        font-size: 0.69rem;
+        line-height: 1.35;
+        margin-bottom: 6px;
+      }
+
+      .choice-meta {
+        font-size: 0.7rem;
+      }
+
+      .swatch {
+        width: 10px;
+        height: 10px;
       }
 
       .summary-line {
@@ -1145,7 +1224,7 @@
           <span class="eyebrow">A curated mystery experience</span>
           <h1><i>The<br />Atelier Box</i></h1>
           <p>
-            Choose a box. Choose a world. We will create something unique for you, within this world. Each set is imagined as a small handmade moment — soft, personal and full of carefully chosen detail.
+            First, choose the world you want to step into. Then choose the box size that fits the level of surprise you want. Each set is built around feeling, colour, styling and mystery.
           </p>
           <div class="button-row">
             <a class="btn btn-primary" href="#step-1">Begin the experience</a>
@@ -1166,60 +1245,17 @@
         <div class="section-shell">
           <div class="section-head reveal reveal-delay-1">
             <div class="step-tag">01</div>
-            <h2><i>Choose your box</i></h2>
-            <p>Each box carries a different level of detail, surprise and atmosphere. Start by choosing the size of the world you want to receive.</p>
-          </div>
-
-          <div class="options-grid reveal reveal-delay-2" id="boxOptions">
-            <button class="choice-card box-card is-selected" type="button" data-box="petite" data-price="75">
-              <div class="choice-media">
-                <img src="images/atelier-box/box-petite.jpg" alt="Petite Box" />
-              </div>
-              <h3>Petite Box</h3>
-              <p>A smaller mystery moment with a handmade plush, one accessory, a short story and a QR song.</p>
-              <div class="choice-meta">75 RON</div>
-            </button>
-
-            <button class="choice-card box-card" type="button" data-box="signature" data-price="105">
-              <div class="choice-media">
-                <img src="images/atelier-box/box-signature.jpg" alt="Signature Box" />
-              </div>
-              <h3>Signature Box</h3>
-              <p>Our signature experience with a plush, accessories, an outfit, a story and a carefully matched musical mood.</p>
-              <div class="choice-meta">105 RON</div>
-            </button>
-
-            <button class="choice-card box-card" type="button" data-box="grand" data-price="135">
-              <div class="choice-media">
-                <img src="images/atelier-box/box-grand.jpg" alt="Grand Box" />
-              </div>
-              <h3>Grand Box</h3>
-              <p>A fuller world with more detail, more styling and an even richer unboxing experience.</p>
-              <div class="choice-meta">135 RON</div>
-            </button>
-          </div>
-
-          <div class="selected-note" id="boxSelectedNote">Selected: Petite Box</div>
-        </div>
-      </div>
-    </section>
-
-    <section id="step-2" class="reveal">
-      <div class="container">
-        <div class="section-shell">
-          <div class="section-head reveal reveal-delay-1">
-            <div class="step-tag">02</div>
             <h2><i>Choose your world</i></h2>
-            <p>Select the aesthetic universe that should guide the colours, styling and feeling of your Atelier Box.</p>
+            <p>Select the aesthetic universe that should guide the colours, styling and overall mood of your Atelier Box.</p>
           </div>
 
-          <div class="worlds-grid reveal reveal-delay-2" id="worldOptions">
+          <div class="options-grid worlds-grid reveal reveal-delay-2" id="worldOptions">
             <button class="choice-card world-card is-selected" type="button" data-world="soft-romance" data-world-name="Soft Romance">
               <div class="choice-media">
                 <img src="images/worlds/soft-romance/soft-romance-cover.jpg" alt="Soft Romance" />
               </div>
               <h3>Soft Romance</h3>
-              <p>Delicate, warm and tender — a world of soft blush tones, cream details and gentle sweetness.</p>
+              <p>Delicate, warm and tender — soft blush tones, cream details and gentle sweetness.</p>
               <div class="swatch-row">
                 <span class="swatch" style="background:#f1d6db;"></span>
                 <span class="swatch" style="background:#f8eee8;"></span>
@@ -1233,7 +1269,7 @@
                 <img src="images/worlds/blue-dream/blue-dream-cover.jpg" alt="Blue Dream" />
               </div>
               <h3>Blue Dream</h3>
-              <p>Calm, airy and luminous — a peaceful palette of light blue, cloud-soft neutrals and quiet charm.</p>
+              <p>Calm, airy and luminous — light blue, cloud-soft neutrals and quiet charm.</p>
               <div class="swatch-row">
                 <span class="swatch" style="background:#dce8f5;"></span>
                 <span class="swatch" style="background:#f3f8fd;"></span>
@@ -1247,7 +1283,7 @@
                 <img src="images/worlds/dark-cherry/dark-cherry-cover.jpg" alt="Dark Cherry" />
               </div>
               <h3>Dark Cherry</h3>
-              <p>Deep, rich and romantic — a mood of burgundy, muted rose, dark cocoa and soft luxury.</p>
+              <p>Deep, rich and romantic — burgundy, muted rose, dark cocoa and soft luxury.</p>
               <div class="swatch-row">
                 <span class="swatch" style="background:#7f4b53;"></span>
                 <span class="swatch" style="background:#c5989f;"></span>
@@ -1261,7 +1297,7 @@
                 <img src="images/worlds/golden-hour/golden-hour-cover.jpg" alt="Golden Hour" />
               </div>
               <h3>Golden Hour</h3>
-              <p>Warm, nostalgic and sunlit — a soft golden palette filled with comfort, light and handmade glow.</p>
+              <p>Warm, nostalgic and sunlit — soft golden shades full of comfort and glow.</p>
               <div class="swatch-row">
                 <span class="swatch" style="background:#e7c98b;"></span>
                 <span class="swatch" style="background:#f3e5c7;"></span>
@@ -1278,13 +1314,56 @@
       </div>
     </section>
 
+    <section id="step-2" class="reveal">
+      <div class="container">
+        <div class="section-shell">
+          <div class="section-head reveal reveal-delay-1">
+            <div class="step-tag">02</div>
+            <h2><i>Choose your box</i></h2>
+            <p>Now choose how much detail and surprise you want inside the world you selected.</p>
+          </div>
+
+          <div class="options-grid boxes-grid reveal reveal-delay-2" id="boxOptions">
+            <button class="choice-card box-card is-selected" type="button" data-box="petite" data-price="75">
+              <div class="choice-media">
+                <img src="images/atelier-box/box-petite.jpg" alt="Petite Box" />
+              </div>
+              <h3>Petite</h3>
+              <p>Plush, one accessory, short story and QR song.</p>
+              <div class="choice-meta">75 RON</div>
+            </button>
+
+            <button class="choice-card box-card" type="button" data-box="signature" data-price="105">
+              <div class="choice-media">
+                <img src="images/atelier-box/box-signature.jpg" alt="Signature Box" />
+              </div>
+              <h3>Signature</h3>
+              <p>Plush, accessories, outfit, story and matched mood.</p>
+              <div class="choice-meta">105 RON</div>
+            </button>
+
+            <button class="choice-card box-card" type="button" data-box="grand" data-price="135">
+              <div class="choice-media">
+                <img src="images/atelier-box/box-grand.jpg" alt="Grand Box" />
+              </div>
+              <h3>Grand</h3>
+              <p>Richer styling, more detail and an even fuller reveal.</p>
+              <div class="choice-meta">135 RON</div>
+            </button>
+          </div>
+
+          <div class="selected-note" id="boxSelectedNote">Selected: Petite Box</div>
+        </div>
+      </div>
+    </section>
+
     <section id="step-3" class="reveal">
       <div class="container">
         <div class="section-shell">
           <div class="section-head reveal reveal-delay-1">
             <div class="step-tag">03</div>
             <h2><i>A few final touches</i></h2>
-            <p>Keep this part simple and soft. These small details help us shape the feeling of the box without taking away the mystery.</p>
+            <p>Just enough detail to guide the experience, without taking away the mystery.</p>
           </div>
 
           <div class="form-shell reveal reveal-delay-2">
@@ -1330,7 +1409,7 @@
           <div class="section-head reveal reveal-delay-1">
             <div class="step-tag">04</div>
             <h2><i>A glimpse into this world</i></h2>
-            <p>Not the full reveal — just the feeling, the textures and the atmosphere that will guide your box.</p>
+            <p>Not the full reveal — only the atmosphere, colours and textures that guide your box.</p>
           </div>
 
           <div class="glimpse-shell reveal reveal-delay-2">
@@ -1357,7 +1436,7 @@
           <div class="section-head reveal reveal-delay-1">
             <div class="step-tag">05</div>
             <h2><i>Inside your box</i></h2>
-            <p>The contents adapt to the box you choose, while always keeping the mystery and the emotional feel at the centre.</p>
+            <p>The contents adapt to the size you choose, while the chosen world shapes the entire feeling.</p>
           </div>
 
           <div class="inside-grid reveal reveal-delay-2" id="insideGrid">
@@ -1397,7 +1476,7 @@
             <div class="step-tag">06</div>
             <div class="section-head">
               <h2><i>Create your box</i></h2>
-              <p>Your Atelier Box will be created by hand, guided by the size, world and mood you have chosen.</p>
+              <p>Your Atelier Box will be created by hand, guided first by the world you chose and then by the size of the experience.</p>
             </div>
 
             <div class="summary-card">
@@ -1405,13 +1484,13 @@
 
               <div class="summary-lines">
                 <div class="summary-line">
-                  <span>Chosen box</span>
-                  <span id="summaryBox">Petite Box</span>
+                  <span>Chosen world</span>
+                  <span id="summaryWorld">Soft Romance</span>
                 </div>
 
                 <div class="summary-line">
-                  <span>Chosen world</span>
-                  <span id="summaryWorld">Soft Romance</span>
+                  <span>Chosen box</span>
+                  <span id="summaryBox">Petite Box</span>
                 </div>
 
                 <div class="summary-line">
@@ -1594,8 +1673,8 @@
     }
 
     function updateSummary() {
-      summaryBox.textContent = selectedBox.name;
       summaryWorld.textContent = selectedWorld.name;
+      summaryBox.textContent = selectedBox.name;
       summaryPrice.textContent = `${selectedBox.price} RON`;
 
       const checkedRecipient = document.querySelector('input[name="recipient-type"]:checked');
@@ -1658,7 +1737,7 @@
 
         selectedBox = {
           key: card.dataset.box,
-          name: card.querySelector('h3').textContent.trim(),
+          name: `${card.querySelector('h3').textContent.trim()} Box`,
           price: Number(card.dataset.price)
         };
 
