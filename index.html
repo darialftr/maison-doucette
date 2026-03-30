@@ -14,7 +14,7 @@
     :root{
       --bg:#f8f3ef;
       --bg-2:#f3e9e2;
-      --card:rgba(255,250,246,0.92);
+      --card:rgba(255,250,246,0.94);
       --card-strong:rgba(255,250,246,0.98);
       --white:#fffaf7;
       --text:#5b473f;
@@ -27,21 +27,16 @@
       --pink-deep:#c9889d;
       --pink-soft:#f8e8ee;
       --pink-text:#8c6270;
+      --pink-line:rgba(201,136,157,0.22);
 
       --blue:#a9c7e6;
       --blue-deep:#7ea8d3;
-      --blue-soft:#eef5fb;
-      --blue-text:#627b92;
 
       --cherry:#b5798a;
       --cherry-deep:#8f4f64;
-      --cherry-soft:#f5e8ec;
-      --cherry-text:#7d4757;
 
       --gold:#e2c37b;
       --gold-deep:#cfa553;
-      --gold-soft:#fbf5e7;
-      --gold-text:#8f7441;
 
       --line:rgba(188,145,130,0.18);
       --shadow:0 18px 45px rgba(100,74,63,0.10);
@@ -55,8 +50,14 @@
       --ease:cubic-bezier(.22,.61,.36,1);
     }
 
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
+    *{
+      box-sizing:border-box;
+    }
+
+    html{
+      scroll-behavior:smooth;
+    }
+
     body{
       margin:0;
       color:var(--text);
@@ -67,10 +68,19 @@
       overflow-x:hidden;
     }
 
-    img{display:block;max-width:100%}
-    a{text-decoration:none;color:inherit}
-    button{font:inherit}
-    ul{margin:0;padding:0;list-style:none}
+    img{
+      display:block;
+      max-width:100%;
+    }
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    button{
+      font:inherit;
+    }
 
     .sparkle-layer{
       position:fixed;
@@ -116,7 +126,7 @@
       position:fixed;
       inset:0 0 auto 0;
       z-index:1000;
-      background:rgba(255,250,246,0.78);
+      background:rgba(255,250,246,0.80);
       backdrop-filter:blur(14px);
       border-bottom:1px solid var(--line);
       transition:box-shadow .3s ease, background .3s ease;
@@ -140,11 +150,13 @@
       align-items:center;
       gap:12px;
       min-width:0;
-      transition:transform .35s var(--ease);
       flex-shrink:0;
+      transition:transform .35s var(--ease);
     }
 
-    .logo-wrap:hover{transform:translateY(-1px)}
+    .logo-wrap:hover{
+      transform:translateY(-1px);
+    }
 
     .logo-wrap img{
       width:56px;
@@ -174,10 +186,15 @@
       display:flex;
       align-items:center;
       gap:22px;
+      list-style:none;
+      margin:0;
+      padding:0;
       font-size:.96rem;
     }
 
-    .nav-links > li{position:relative}
+    .nav-links > li{
+      position:relative;
+    }
 
     .nav-links a{
       display:inline-flex;
@@ -361,8 +378,8 @@
 
     .hero h1{
       margin:0 0 18px;
-      font-size:clamp(3rem,6vw,5.8rem);
-      line-height:.94;
+      font-size:clamp(3rem,6vw,5.4rem);
+      line-height:.95;
       font-weight:500;
     }
 
@@ -395,7 +412,9 @@
       overflow:hidden;
     }
 
-    .btn:hover{transform:translateY(-2px)}
+    .btn:hover{
+      transform:translateY(-2px);
+    }
 
     .btn-primary{
       color:var(--white);
@@ -566,7 +585,9 @@
       box-shadow:0 16px 26px rgba(201,136,157,0.14);
     }
 
-    .atelier-box-visual{min-width:0}
+    .atelier-box-visual{
+      min-width:0;
+    }
 
     .atelier-slideshow-shell{
       position:relative;
@@ -596,7 +617,9 @@
       transition:opacity .8s ease;
     }
 
-    .atelier-slide.active{opacity:1}
+    .atelier-slide.active{
+      opacity:1;
+    }
 
     .atelier-badge{
       position:absolute;
@@ -751,7 +774,9 @@
       transition:transform .45s ease;
     }
 
-    .product-card:hover img{transform:scale(1.04)}
+    .product-card:hover img{
+      transform:scale(1.04);
+    }
 
     .product-card.featured-card{
       background:linear-gradient(180deg, rgba(255,244,248,0.98), rgba(248,233,239,0.98));
@@ -815,6 +840,12 @@
     .ba-card h3{
       margin:0 0 12px;
       font-size:1.28rem;
+    }
+
+    .ba-card ul{
+      list-style:none;
+      margin:0;
+      padding:0;
     }
 
     .ba-card li{
@@ -981,6 +1012,34 @@
     .reveal-delay-3{transition-delay:.24s}
     .reveal-delay-4{transition-delay:.32s}
 
+    @keyframes shimmerBlur{
+      0%,100%{opacity:.45;transform:scale(1)}
+      50%{opacity:.85;transform:scale(1.03)}
+    }
+
+    @keyframes heroReveal{
+      to{opacity:1;transform:translateY(0)}
+    }
+
+    @keyframes heroImageReveal{
+      to{opacity:1;transform:translateY(0) scale(1)}
+    }
+
+    @keyframes gentleFloat{
+      0%,100%{transform:scale(1) translateY(0)}
+      50%{transform:scale(1.015) translateY(-6px)}
+    }
+
+    @keyframes driftOne{
+      0%,100%{transform:translate(0,0)}
+      50%{transform:translate(16px,-12px)}
+    }
+
+    @keyframes driftTwo{
+      0%,100%{transform:translate(0,0)}
+      50%{transform:translate(-14px,12px)}
+    }
+
     @media (prefers-reduced-motion: reduce){
       *, *::before, *::after{
         animation:none !important;
@@ -989,13 +1048,13 @@
       }
     }
 
-    @media (max-width: 1180px){
+    @media (max-width:1180px){
       .shop-grid{
         grid-template-columns:repeat(2, minmax(0, 1fr));
       }
     }
 
-    @media (max-width: 1024px){
+    @media (max-width:1024px){
       .hero-grid,
       .atelier-box-wrap,
       .about-wrap,
@@ -1004,7 +1063,6 @@
         grid-template-columns:1fr;
       }
 
-      .value-grid,
       .size-grid,
       .reviews-grid,
       .vibe-grid{
@@ -1012,8 +1070,10 @@
       }
     }
 
-    @media (max-width: 760px){
-      :root{--nav-h:188px}
+    @media (max-width:760px){
+      :root{
+        --nav-h:188px;
+      }
 
       .sparkle-layer{opacity:.45}
       .cursor-glow{display:none}
@@ -1239,7 +1299,6 @@
 
       .product-info h3,
       .size-card h3,
-      .review-card h3,
       .vibe-card h3{
         font-size:.96rem;
         margin-bottom:5px;
@@ -1251,9 +1310,10 @@
         margin-bottom:10px;
       }
 
-      .card-link{font-size:.82rem}
+      .card-link{
+        font-size:.82rem;
+      }
 
-      .value-card,
       .about-wrap,
       .footer-card,
       .ba-card,
@@ -1271,7 +1331,6 @@
       }
 
       .about-wrap p,
-      .value-card p,
       .footer-card p,
       .contact-list,
       .size-card p,
@@ -1291,8 +1350,10 @@
       }
     }
 
-    @media (max-width: 480px){
-      :root{--nav-h:204px}
+    @media (max-width:480px){
+      :root{
+        --nav-h:204px;
+      }
 
       .container{
         width:min(var(--container), calc(100% - 18px));
@@ -1307,7 +1368,9 @@
         font-size:clamp(2.1rem,11vw,3rem);
       }
 
-      .hero p{font-size:.92rem}
+      .hero p{
+        font-size:.92rem;
+      }
 
       .btn,
       .atelier-btn-primary,
@@ -1705,6 +1768,7 @@
         </div>
       </div>
     </div>
+
     <div class="container tiny-note">© Maison Doucette — handmade cu drag.</div>
   </footer>
 
