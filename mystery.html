@@ -35,6 +35,11 @@
       --active-vibe:#ae7f43;
       --active-vibe-soft:rgba(174,127,67,0.12);
 
+      --page-bg:transparent;
+      --page-card:var(--cream);
+      --page-accent:var(--active-vibe);
+      --page-accent-soft:var(--active-vibe-soft);
+
       --radius-xl:40px;
       --radius-lg:28px;
       --radius-md:20px;
@@ -55,28 +60,11 @@
       overflow-x:hidden;
     }
 
-    body.vibe-soft-romance{
-      --active-vibe:#d79ab6;
-      --active-vibe-soft:rgba(242,200,216,0.18);
-    }
-    body.vibe-blue-dream{
-      --active-vibe:#7da7d7;
-      --active-vibe-soft:rgba(191,215,241,0.18);
-    }
-    body.vibe-dark-cherry{
-      --active-vibe:#8b1538;
-      --active-vibe-soft:rgba(139,21,56,0.14);
-    }
-    body.vibe-golden-hour{
-      --active-vibe:#c99a43;
-      --active-vibe-soft:rgba(217,186,122,0.18);
-    }
-
     img{display:block;max-width:100%}
     a{text-decoration:none;color:inherit}
     button,input,textarea,select{font:inherit}
 
-    .display,h1,h2,h3,.brand-text,.page-subtitle,.summary-title{
+    .display,h1,h2,h3,.brand-text,.page-subtitle,.summary-title,.step-title{
       font-family:'Cormorant Garamond', serif;
       letter-spacing:-0.02em;
     }
@@ -282,6 +270,7 @@
       display:none;
       align-items:center;
     }
+
     .mobile-left{justify-content:flex-start}
     .mobile-right{justify-content:flex-end}
 
@@ -300,6 +289,7 @@
       margin:0 auto;
       text-align:center;
       animation:heroFadeUp 1s var(--ease) both;
+      will-change:transform;
     }
 
     .page-tag{
@@ -431,10 +421,41 @@
     .vibe-page{
       display:none;
       animation:fadePage .45s ease;
+      background:var(--page-bg);
+      border-radius:36px;
+      padding:28px 0;
     }
 
     .vibe-page.active{
       display:block;
+    }
+
+    .vibe-page.theme-soft-romance{
+      --page-bg: linear-gradient(180deg, #fff7fb 0%, #f8e7ef 100%);
+      --page-card: #fffafc;
+      --page-accent: #cf86a6;
+      --page-accent-soft: rgba(242,200,216,0.18);
+    }
+
+    .vibe-page.theme-blue-dream{
+      --page-bg: linear-gradient(180deg, #f7fbff 0%, #e8f1fb 100%);
+      --page-card: #fbfdff;
+      --page-accent: #7ea9d8;
+      --page-accent-soft: rgba(191,215,241,0.18);
+    }
+
+    .vibe-page.theme-dark-cherry{
+      --page-bg: linear-gradient(180deg, #fff7fa 0%, #f5e4ea 100%);
+      --page-card: #fffafb;
+      --page-accent: #8b1538;
+      --page-accent-soft: rgba(139,21,56,0.12);
+    }
+
+    .vibe-page.theme-golden-hour{
+      --page-bg: linear-gradient(180deg, #fffdf7 0%, #f7efdb 100%);
+      --page-card: #fffdf8;
+      --page-accent: #c99a43;
+      --page-accent-soft: rgba(217,186,122,0.18);
     }
 
     .back-row{
@@ -454,6 +475,11 @@
       color:var(--brown);
       cursor:pointer;
       box-shadow:var(--shadow);
+      transition:transform .22s ease;
+    }
+
+    .back-btn:hover{
+      transform:translateY(-1px);
     }
 
     .vibe-layout{
@@ -465,7 +491,7 @@
 
     .vibe-left,
     .vibe-right{
-      background:var(--cream);
+      background:var(--page-card);
       border:1px solid var(--line);
       border-radius:32px;
       padding:24px;
@@ -480,7 +506,7 @@
       margin:0 0 8px;
       font-size:clamp(2.4rem, 6vw, 3.8rem);
       line-height:.9;
-      color:var(--active-vibe);
+      color:var(--page-accent);
     }
 
     .vibe-page-head p{
@@ -507,6 +533,21 @@
       font-size:1.9rem;
       line-height:.95;
       color:var(--brown);
+      transition:color .35s ease;
+    }
+
+    .step-helper{
+      margin:0 0 14px;
+      color:var(--brown-soft);
+      line-height:1.8;
+      font-size:.94rem;
+    }
+
+    .optional-mark{
+      font-size:.72em;
+      color:var(--brown-soft);
+      font-family:'Manrope', sans-serif;
+      font-weight:500;
     }
 
     .option-grid{
@@ -538,8 +579,8 @@
     }
 
     .option-card.selected{
-      border-color:var(--active-vibe);
-      box-shadow:0 0 0 4px var(--active-vibe-soft), var(--shadow);
+      border-color:var(--page-accent);
+      box-shadow:0 0 0 4px var(--page-accent-soft), var(--shadow);
       background:linear-gradient(180deg, #fffdf9 0%, rgba(255,255,255,.82) 100%);
     }
 
@@ -554,7 +595,91 @@
       display:block;
       color:var(--brown-soft);
       font-size:.86rem;
+      line-height:1.7;
+    }
+
+    .size-contents-box{
+      margin-top:14px;
+    }
+
+    .size-contents-panel{
+      display:none;
+      padding:16px 18px;
+      border-radius:20px;
+      background:linear-gradient(180deg, #fffdf9, #f9f2ea);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      animation:fadeSuccess .35s ease;
+    }
+
+    .size-contents-panel.active{
+      display:block;
+    }
+
+    .size-contents-panel h4{
+      margin:0 0 10px;
+      font-size:1.15rem;
+      color:var(--page-accent);
+      transition:color .35s ease;
+    }
+
+    .size-contents-panel ul{
+      margin:0;
+      padding-left:18px;
+      color:var(--brown-soft);
+      line-height:1.75;
+      font-size:.92rem;
+    }
+
+    .song-toggle{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:14px 16px;
+      border-radius:18px;
+      background:#fffdf9;
+      border:1px solid var(--line);
+      color:var(--brown);
       line-height:1.6;
+      cursor:pointer;
+    }
+
+    .song-toggle input{
+      margin-top:2px;
+      accent-color:var(--page-accent);
+    }
+
+    .custom-song-fields{
+      display:none;
+      margin-top:12px;
+      gap:12px;
+    }
+
+    .custom-song-fields.show{
+      display:grid;
+    }
+
+    .custom-song-fields label{
+      display:grid;
+      gap:8px;
+      font-size:.9rem;
+      color:var(--brown);
+    }
+
+    .custom-song-fields input{
+      width:100%;
+      border:1.5px solid var(--line);
+      background:#fffdf9;
+      color:var(--brown);
+      border-radius:16px;
+      padding:13px 14px;
+      outline:none;
+      transition:border-color .22s ease, box-shadow .22s ease;
+    }
+
+    .custom-song-fields input:focus{
+      border-color:var(--page-accent);
+      box-shadow:0 0 0 4px var(--page-accent-soft);
     }
 
     .slideshow-shell{
@@ -587,8 +712,12 @@
       z-index:2;
       padding:9px 14px;
       border-radius:999px;
-      background:rgba(255,255,255,.9);
-      color:var(--active-vibe);
+      background:linear-gradient(
+        135deg,
+        var(--page-accent),
+        color-mix(in srgb, var(--page-accent) 65%, white)
+      );
+      color:white;
       font-size:.78rem;
       letter-spacing:.08em;
       text-transform:uppercase;
@@ -599,7 +728,8 @@
       margin:0 0 14px;
       font-size:2.2rem;
       line-height:.9;
-      color:var(--active-vibe);
+      color:var(--page-accent);
+      transition:color .35s ease;
     }
 
     .summary-box{
@@ -616,6 +746,7 @@
       border-radius:18px;
       background:#fffdf9;
       border:1px solid var(--line);
+      transition:background .35s ease, border-color .35s ease;
     }
 
     .summary-line span{
@@ -651,8 +782,9 @@
     }
 
     .total-row strong{
-      color:var(--active-vibe);
+      color:var(--page-accent);
       font-size:1.4rem;
+      transition:color .35s ease;
     }
 
     .add-btn{
@@ -661,7 +793,11 @@
       min-height:52px;
       border:none;
       border-radius:999px;
-      background:linear-gradient(135deg, var(--active-vibe), color-mix(in srgb, var(--active-vibe) 65%, white));
+      background:linear-gradient(
+        135deg,
+        var(--page-accent),
+        color-mix(in srgb, var(--page-accent) 65%, white)
+      );
       color:#fff;
       font-weight:700;
       cursor:pointer;
@@ -678,8 +814,8 @@
       margin-top:14px;
       padding:14px 16px;
       border-radius:18px;
-      background:var(--active-vibe-soft);
-      border:1px solid color-mix(in srgb, var(--active-vibe) 40%, white);
+      background:var(--page-accent-soft);
+      border:1px solid color-mix(in srgb, var(--page-accent) 40%, white);
       color:var(--brown);
       font-size:.92rem;
       animation:fadeSuccess .35s ease;
@@ -713,7 +849,11 @@
     }
 
     .secondary-btn{
-      background:linear-gradient(135deg, var(--active-vibe), color-mix(in srgb, var(--active-vibe) 65%, white));
+      background:linear-gradient(
+        135deg,
+        var(--page-accent),
+        color-mix(in srgb, var(--page-accent) 65%, white)
+      );
       color:#fff;
     }
 
@@ -1083,10 +1223,6 @@
       .footer-grid{
         grid-template-columns:1fr;
       }
-
-      .option-grid.three{
-        grid-template-columns:repeat(3, minmax(0,1fr));
-      }
     }
 
     @media (max-width: 760px){
@@ -1189,6 +1325,11 @@
         line-height:1.45;
       }
 
+      .vibe-page{
+        border-radius:24px;
+        padding:18px 0;
+      }
+
       .vibe-left,
       .vibe-right{
         border-radius:24px;
@@ -1207,6 +1348,10 @@
         font-size:1.65rem;
       }
 
+      .step-helper{
+        font-size:.88rem;
+      }
+
       .option-grid.three,
       .option-grid.two{
         grid-template-columns:1fr;
@@ -1223,6 +1368,30 @@
 
       .option-card span{
         font-size:.82rem;
+      }
+
+      .size-contents-panel{
+        border-radius:16px;
+        padding:14px;
+      }
+
+      .size-contents-panel h4{
+        font-size:1rem;
+      }
+
+      .size-contents-panel ul{
+        font-size:.84rem;
+        line-height:1.65;
+      }
+
+      .song-toggle{
+        border-radius:16px;
+        padding:12px 14px;
+        font-size:.86rem;
+      }
+
+      .custom-song-fields label{
+        font-size:.84rem;
       }
 
       .slideshow-shell{
@@ -1402,33 +1571,68 @@
         </div>
 
         <div class="vibe-layout">
-          <div class="vibe-left">
-            <div class="vibe-page-head">
+          <div class="vibe-left reveal-up">
+            <div class="vibe-page-head reveal-up">
               <h2>Soft Romance</h2>
               <p>
                 O lume delicată, baby pink, romantică și blândă, cu o energie tandră și dreamy.
               </p>
             </div>
 
-            <div class="step-block">
+            <div class="step-block reveal-up">
               <h3 class="step-title">Alege mărimea cutiei</h3>
+              <p class="step-helper">
+                Fiecare cutie păstrează misterul, dar schimbă cât de bogată devine experiența.
+              </p>
+
               <div class="option-grid three size-options" data-group="size">
-                <button class="option-card selected" data-size="Petite Box" data-price="75" data-slide="petite">
-                  <strong>Petite Box</strong>
-                  <span>75 RON · un reveal mic și delicat</span>
+                <button class="option-card selected" data-size="Petite Box" data-price="75" data-slide="petite" data-size-key="petite">
+                  <strong>Petite Box — 75 RON</strong>
+                  <span>Un prim reveal delicat, dar complet.</span>
                 </button>
-                <button class="option-card" data-size="Signature Box" data-price="105" data-slide="signature">
-                  <strong>Signature Box</strong>
-                  <span>105 RON · cea mai echilibrată experiență</span>
+
+                <button class="option-card" data-size="Signature Box" data-price="105" data-slide="signature" data-size-key="signature">
+                  <strong>Signature Box — 105 RON</strong>
+                  <span>Mai mult styling, mai multă personalitate.</span>
                 </button>
-                <button class="option-card" data-size="Grand Box" data-price="135" data-slide="grand">
-                  <strong>Grand Box</strong>
-                  <span>135 RON · varianta wow, mai bogată</span>
+
+                <button class="option-card" data-size="Grand Box" data-price="135" data-slide="grand" data-size-key="grand">
+                  <strong>Grand Box — 135 RON</strong>
+                  <span>Varianta cea mai bogată a experienței.</span>
                 </button>
+              </div>
+
+              <div class="size-contents-box">
+                <div class="size-contents-panel active" data-size-panel="petite">
+                  <h4>Ce conține Petite Box</h4>
+                  <ul>
+                    <li>plușul mystery</li>
+                    <li>un accesoriu</li>
+                    <li>un accesoriu inspirat de pasiunea aleasă</li>
+                    <li>un QR code cu muzica</li>
+                    <li>o mică povestioară despre plus, care te transpune în universul ales</li>
+                  </ul>
+                </div>
+
+                <div class="size-contents-panel" data-size-panel="signature">
+                  <h4>Ce conține Signature Box</h4>
+                  <ul>
+                    <li>tot ce conține Petite Box</li>
+                    <li>o hăinuță pentru pluș</li>
+                  </ul>
+                </div>
+
+                <div class="size-contents-panel" data-size-panel="grand">
+                  <h4>Ce conține Grand Box</h4>
+                  <ul>
+                    <li>tot ce conține Signature Box</li>
+                    <li>încă o hăinuță pentru pluș</li>
+                  </ul>
+                </div>
               </div>
             </div>
 
-            <div class="step-block">
+            <div class="step-block reveal-up">
               <h3 class="step-title">Alege pasiunea</h3>
               <div class="option-grid two passion-options" data-group="passion">
                 <button class="option-card selected" data-passion="Lectură">
@@ -1450,30 +1654,54 @@
               </div>
             </div>
 
-            <div class="step-block">
+            <div class="step-block reveal-up">
               <h3 class="step-title">Alege music mood</h3>
               <div class="option-grid two mood-options" data-group="mood">
-                <button class="option-card selected" data-mood="Dream Pop">
-                  <strong>Dream Pop</strong>
-                  <span>airy și diafan</span>
+                <button class="option-card selected" data-mood="Pop">
+                  <strong>Pop</strong>
+                  <span>ușor de iubit, catchy, cald</span>
                 </button>
-                <button class="option-card" data-mood="Indie Acoustic">
-                  <strong>Indie Acoustic</strong>
-                  <span>cald și blând</span>
+
+                <button class="option-card" data-mood="Rock">
+                  <strong>Rock</strong>
+                  <span>mai intens, mai puternic, mai bold</span>
                 </button>
-                <button class="option-card" data-mood="Soft Classical">
-                  <strong>Soft Classical</strong>
-                  <span>romantic și elegant</span>
+
+                <button class="option-card" data-mood="Romantic">
+                  <strong>Romantic</strong>
+                  <span>emoțional, tandru, cu atmosferă</span>
                 </button>
-                <button class="option-card" data-mood="Lo-fi">
-                  <strong>Lo-fi</strong>
-                  <span>intim și cozy</span>
+
+                <button class="option-card" data-mood="Acoustic">
+                  <strong>Acoustic</strong>
+                  <span>blând, intim și cozy</span>
                 </button>
+              </div>
+            </div>
+
+            <div class="step-block reveal-up">
+              <h3 class="step-title">Melodie aleasă de tine? <span class="optional-mark">(opțional)</span></h3>
+
+              <label class="song-toggle">
+                <input type="checkbox" class="custom-song-toggle">
+                <span>Vreau să aleg chiar eu melodia pentru cineva drag</span>
+              </label>
+
+              <div class="custom-song-fields">
+                <label>
+                  Melodia
+                  <input type="text" class="custom-song-title" placeholder="Ex: Perfect">
+                </label>
+
+                <label>
+                  Artistul / formația
+                  <input type="text" class="custom-song-artist" placeholder="Ex: Ed Sheeran">
+                </label>
               </div>
             </div>
           </div>
 
-          <div class="vibe-right">
+          <div class="vibe-right reveal-soft">
             <div class="slideshow-shell">
               <img src="images/worlds/soft-romance/soft-romance-petite.jpg" class="size-slide active" data-size-slide="petite" alt="Soft Romance Petite">
               <img src="images/worlds/soft-romance/soft-romance-signature.jpg" class="size-slide" data-size-slide="signature" alt="Soft Romance Signature">
@@ -1498,7 +1726,11 @@
               </div>
               <div class="summary-line">
                 <span>Music mood</span>
-                <strong class="summary-mood">Dream Pop</strong>
+                <strong class="summary-mood">Pop</strong>
+              </div>
+              <div class="summary-line summary-custom-song-row" style="display:none;">
+                <span>Melodie aleasă de tine</span>
+                <strong class="summary-custom-song">—</strong>
               </div>
             </div>
 
@@ -1530,33 +1762,68 @@
         </div>
 
         <div class="vibe-layout">
-          <div class="vibe-left">
-            <div class="vibe-page-head">
+          <div class="vibe-left reveal-up">
+            <div class="vibe-page-head reveal-up">
               <h2>Blue Dream</h2>
               <p>
                 O lume airy, calmă și ușor rece, cu lumină albastră, oceanic soft și energie dreamy.
               </p>
             </div>
 
-            <div class="step-block">
+            <div class="step-block reveal-up">
               <h3 class="step-title">Alege mărimea cutiei</h3>
+              <p class="step-helper">
+                Fiecare cutie păstrează misterul, dar schimbă cât de bogată devine experiența.
+              </p>
+
               <div class="option-grid three size-options" data-group="size">
-                <button class="option-card selected" data-size="Petite Box" data-price="75" data-slide="petite">
-                  <strong>Petite Box</strong>
-                  <span>75 RON · reveal delicat</span>
+                <button class="option-card selected" data-size="Petite Box" data-price="75" data-slide="petite" data-size-key="petite">
+                  <strong>Petite Box — 75 RON</strong>
+                  <span>Un prim reveal delicat, dar complet.</span>
                 </button>
-                <button class="option-card" data-size="Signature Box" data-price="105" data-slide="signature">
-                  <strong>Signature Box</strong>
-                  <span>105 RON · experiență echilibrată</span>
+
+                <button class="option-card" data-size="Signature Box" data-price="105" data-slide="signature" data-size-key="signature">
+                  <strong>Signature Box — 105 RON</strong>
+                  <span>Mai mult styling, mai multă personalitate.</span>
                 </button>
-                <button class="option-card" data-size="Grand Box" data-price="135" data-slide="grand">
-                  <strong>Grand Box</strong>
-                  <span>135 RON · reveal bogat</span>
+
+                <button class="option-card" data-size="Grand Box" data-price="135" data-slide="grand" data-size-key="grand">
+                  <strong>Grand Box — 135 RON</strong>
+                  <span>Varianta cea mai bogată a experienței.</span>
                 </button>
+              </div>
+
+              <div class="size-contents-box">
+                <div class="size-contents-panel active" data-size-panel="petite">
+                  <h4>Ce conține Petite Box</h4>
+                  <ul>
+                    <li>plușul mystery</li>
+                    <li>un accesoriu</li>
+                    <li>un accesoriu inspirat de pasiunea aleasă</li>
+                    <li>un QR code cu muzica</li>
+                    <li>o mică povestioară despre plus, care te transpune în universul ales</li>
+                  </ul>
+                </div>
+
+                <div class="size-contents-panel" data-size-panel="signature">
+                  <h4>Ce conține Signature Box</h4>
+                  <ul>
+                    <li>tot ce conține Petite Box</li>
+                    <li>o hăinuță pentru pluș</li>
+                  </ul>
+                </div>
+
+                <div class="size-contents-panel" data-size-panel="grand">
+                  <h4>Ce conține Grand Box</h4>
+                  <ul>
+                    <li>tot ce conține Signature Box</li>
+                    <li>încă o hăinuță pentru pluș</li>
+                  </ul>
+                </div>
               </div>
             </div>
 
-            <div class="step-block">
+            <div class="step-block reveal-up">
               <h3 class="step-title">Alege pasiunea</h3>
               <div class="option-grid two passion-options" data-group="passion">
                 <button class="option-card selected" data-passion="Lectură">
@@ -1578,30 +1845,54 @@
               </div>
             </div>
 
-            <div class="step-block">
+            <div class="step-block reveal-up">
               <h3 class="step-title">Alege music mood</h3>
               <div class="option-grid two mood-options" data-group="mood">
-                <button class="option-card selected" data-mood="Ambient">
-                  <strong>Ambient</strong>
-                  <span>aerisit și cinematic</span>
+                <button class="option-card selected" data-mood="Pop">
+                  <strong>Pop</strong>
+                  <span>ușor de iubit, catchy, cald</span>
                 </button>
-                <button class="option-card" data-mood="Dream Pop">
-                  <strong>Dream Pop</strong>
-                  <span>fluid și soft</span>
+
+                <button class="option-card" data-mood="Rock">
+                  <strong>Rock</strong>
+                  <span>mai intens, mai puternic, mai bold</span>
                 </button>
-                <button class="option-card" data-mood="Indie Electronic">
-                  <strong>Indie Electronic</strong>
-                  <span>cool și curat</span>
+
+                <button class="option-card" data-mood="Romantic">
+                  <strong>Romantic</strong>
+                  <span>emoțional, tandru, cu atmosferă</span>
                 </button>
-                <button class="option-card" data-mood="Lo-fi">
-                  <strong>Lo-fi</strong>
-                  <span>calm și cozy</span>
+
+                <button class="option-card" data-mood="Acoustic">
+                  <strong>Acoustic</strong>
+                  <span>blând, intim și cozy</span>
                 </button>
+              </div>
+            </div>
+
+            <div class="step-block reveal-up">
+              <h3 class="step-title">Melodie aleasă de tine? <span class="optional-mark">(opțional)</span></h3>
+
+              <label class="song-toggle">
+                <input type="checkbox" class="custom-song-toggle">
+                <span>Vreau să aleg chiar eu melodia pentru cineva drag</span>
+              </label>
+
+              <div class="custom-song-fields">
+                <label>
+                  Melodia
+                  <input type="text" class="custom-song-title" placeholder="Ex: Perfect">
+                </label>
+
+                <label>
+                  Artistul / formația
+                  <input type="text" class="custom-song-artist" placeholder="Ex: Ed Sheeran">
+                </label>
               </div>
             </div>
           </div>
 
-          <div class="vibe-right">
+          <div class="vibe-right reveal-soft">
             <div class="slideshow-shell">
               <img src="images/worlds/blue-dream/blue-dream-petite.jpg" class="size-slide active" data-size-slide="petite" alt="Blue Dream Petite">
               <img src="images/worlds/blue-dream/blue-dream-signature.jpg" class="size-slide" data-size-slide="signature" alt="Blue Dream Signature">
@@ -1626,7 +1917,11 @@
               </div>
               <div class="summary-line">
                 <span>Music mood</span>
-                <strong class="summary-mood">Ambient</strong>
+                <strong class="summary-mood">Pop</strong>
+              </div>
+              <div class="summary-line summary-custom-song-row" style="display:none;">
+                <span>Melodie aleasă de tine</span>
+                <strong class="summary-custom-song">—</strong>
               </div>
             </div>
 
@@ -1658,33 +1953,68 @@
         </div>
 
         <div class="vibe-layout">
-          <div class="vibe-left">
-            <div class="vibe-page-head">
+          <div class="vibe-left reveal-up">
+            <div class="vibe-page-head reveal-up">
               <h2>Dark Cherry</h2>
               <p>
                 O lume intensă, romantică și misterioasă, cu energie burgundy, velvet și puțin dramatică.
               </p>
             </div>
 
-            <div class="step-block">
+            <div class="step-block reveal-up">
               <h3 class="step-title">Alege mărimea cutiei</h3>
+              <p class="step-helper">
+                Fiecare cutie păstrează misterul, dar schimbă cât de bogată devine experiența.
+              </p>
+
               <div class="option-grid three size-options" data-group="size">
-                <button class="option-card selected" data-size="Petite Box" data-price="75" data-slide="petite">
-                  <strong>Petite Box</strong>
-                  <span>75 RON · reveal mic și intens</span>
+                <button class="option-card selected" data-size="Petite Box" data-price="75" data-slide="petite" data-size-key="petite">
+                  <strong>Petite Box — 75 RON</strong>
+                  <span>Un prim reveal delicat, dar complet.</span>
                 </button>
-                <button class="option-card" data-size="Signature Box" data-price="105" data-slide="signature">
-                  <strong>Signature Box</strong>
-                  <span>105 RON · experiență echilibrată</span>
+
+                <button class="option-card" data-size="Signature Box" data-price="105" data-slide="signature" data-size-key="signature">
+                  <strong>Signature Box — 105 RON</strong>
+                  <span>Mai mult styling, mai multă personalitate.</span>
                 </button>
-                <button class="option-card" data-size="Grand Box" data-price="135" data-slide="grand">
-                  <strong>Grand Box</strong>
-                  <span>135 RON · varianta wow</span>
+
+                <button class="option-card" data-size="Grand Box" data-price="135" data-slide="grand" data-size-key="grand">
+                  <strong>Grand Box — 135 RON</strong>
+                  <span>Varianta cea mai bogată a experienței.</span>
                 </button>
+              </div>
+
+              <div class="size-contents-box">
+                <div class="size-contents-panel active" data-size-panel="petite">
+                  <h4>Ce conține Petite Box</h4>
+                  <ul>
+                    <li>plușul mystery</li>
+                    <li>un accesoriu</li>
+                    <li>un accesoriu inspirat de pasiunea aleasă</li>
+                    <li>un QR code cu muzica</li>
+                    <li>o mică povestioară despre plus, care te transpune în universul ales</li>
+                  </ul>
+                </div>
+
+                <div class="size-contents-panel" data-size-panel="signature">
+                  <h4>Ce conține Signature Box</h4>
+                  <ul>
+                    <li>tot ce conține Petite Box</li>
+                    <li>o hăinuță pentru pluș</li>
+                  </ul>
+                </div>
+
+                <div class="size-contents-panel" data-size-panel="grand">
+                  <h4>Ce conține Grand Box</h4>
+                  <ul>
+                    <li>tot ce conține Signature Box</li>
+                    <li>încă o hăinuță pentru pluș</li>
+                  </ul>
+                </div>
               </div>
             </div>
 
-            <div class="step-block">
+            <div class="step-block reveal-up">
               <h3 class="step-title">Alege pasiunea</h3>
               <div class="option-grid two passion-options" data-group="passion">
                 <button class="option-card selected" data-passion="Lectură">
@@ -1706,30 +2036,54 @@
               </div>
             </div>
 
-            <div class="step-block">
+            <div class="step-block reveal-up">
               <h3 class="step-title">Alege music mood</h3>
               <div class="option-grid two mood-options" data-group="mood">
-                <button class="option-card selected" data-mood="Alternative Pop">
-                  <strong>Alternative Pop</strong>
-                  <span>moody și magnetic</span>
+                <button class="option-card selected" data-mood="Pop">
+                  <strong>Pop</strong>
+                  <span>ușor de iubit, catchy, cald</span>
                 </button>
-                <button class="option-card" data-mood="Dark Indie">
-                  <strong>Dark Indie</strong>
-                  <span>misterios și stylish</span>
+
+                <button class="option-card" data-mood="Rock">
+                  <strong>Rock</strong>
+                  <span>mai intens, mai puternic, mai bold</span>
                 </button>
-                <button class="option-card" data-mood="Cinematic">
-                  <strong>Cinematic</strong>
-                  <span>dramatic și amplu</span>
+
+                <button class="option-card" data-mood="Romantic">
+                  <strong>Romantic</strong>
+                  <span>emoțional, tandru, cu atmosferă</span>
                 </button>
-                <button class="option-card" data-mood="R&B Soft">
-                  <strong>R&B Soft</strong>
-                  <span>catifelat și profund</span>
+
+                <button class="option-card" data-mood="Acoustic">
+                  <strong>Acoustic</strong>
+                  <span>blând, intim și cozy</span>
                 </button>
+              </div>
+            </div>
+
+            <div class="step-block reveal-up">
+              <h3 class="step-title">Melodie aleasă de tine? <span class="optional-mark">(opțional)</span></h3>
+
+              <label class="song-toggle">
+                <input type="checkbox" class="custom-song-toggle">
+                <span>Vreau să aleg chiar eu melodia pentru cineva drag</span>
+              </label>
+
+              <div class="custom-song-fields">
+                <label>
+                  Melodia
+                  <input type="text" class="custom-song-title" placeholder="Ex: Perfect">
+                </label>
+
+                <label>
+                  Artistul / formația
+                  <input type="text" class="custom-song-artist" placeholder="Ex: Ed Sheeran">
+                </label>
               </div>
             </div>
           </div>
 
-          <div class="vibe-right">
+          <div class="vibe-right reveal-soft">
             <div class="slideshow-shell">
               <img src="images/worlds/dark-cherry/dark-cherry-petite.jpg" class="size-slide active" data-size-slide="petite" alt="Dark Cherry Petite">
               <img src="images/worlds/dark-cherry/dark-cherry-signature.jpg" class="size-slide" data-size-slide="signature" alt="Dark Cherry Signature">
@@ -1754,7 +2108,11 @@
               </div>
               <div class="summary-line">
                 <span>Music mood</span>
-                <strong class="summary-mood">Alternative Pop</strong>
+                <strong class="summary-mood">Pop</strong>
+              </div>
+              <div class="summary-line summary-custom-song-row" style="display:none;">
+                <span>Melodie aleasă de tine</span>
+                <strong class="summary-custom-song">—</strong>
               </div>
             </div>
 
@@ -1786,33 +2144,68 @@
         </div>
 
         <div class="vibe-layout">
-          <div class="vibe-left">
-            <div class="vibe-page-head">
+          <div class="vibe-left reveal-up">
+            <div class="vibe-page-head reveal-up">
               <h2>Golden Hour</h2>
               <p>
                 O lume luminoasă, stylish și caldă, cu energie de apus, aur și eleganță subtilă.
               </p>
             </div>
 
-            <div class="step-block">
+            <div class="step-block reveal-up">
               <h3 class="step-title">Alege mărimea cutiei</h3>
+              <p class="step-helper">
+                Fiecare cutie păstrează misterul, dar schimbă cât de bogată devine experiența.
+              </p>
+
               <div class="option-grid three size-options" data-group="size">
-                <button class="option-card selected" data-size="Petite Box" data-price="75" data-slide="petite">
-                  <strong>Petite Box</strong>
-                  <span>75 RON · reveal mic și solar</span>
+                <button class="option-card selected" data-size="Petite Box" data-price="75" data-slide="petite" data-size-key="petite">
+                  <strong>Petite Box — 75 RON</strong>
+                  <span>Un prim reveal delicat, dar complet.</span>
                 </button>
-                <button class="option-card" data-size="Signature Box" data-price="105" data-slide="signature">
-                  <strong>Signature Box</strong>
-                  <span>105 RON · experiență luminoasă</span>
+
+                <button class="option-card" data-size="Signature Box" data-price="105" data-slide="signature" data-size-key="signature">
+                  <strong>Signature Box — 105 RON</strong>
+                  <span>Mai mult styling, mai multă personalitate.</span>
                 </button>
-                <button class="option-card" data-size="Grand Box" data-price="135" data-slide="grand">
-                  <strong>Grand Box</strong>
-                  <span>135 RON · varianta radiantă</span>
+
+                <button class="option-card" data-size="Grand Box" data-price="135" data-slide="grand" data-size-key="grand">
+                  <strong>Grand Box — 135 RON</strong>
+                  <span>Varianta cea mai bogată a experienței.</span>
                 </button>
+              </div>
+
+              <div class="size-contents-box">
+                <div class="size-contents-panel active" data-size-panel="petite">
+                  <h4>Ce conține Petite Box</h4>
+                  <ul>
+                    <li>plușul mystery</li>
+                    <li>un accesoriu</li>
+                    <li>un accesoriu inspirat de pasiunea aleasă</li>
+                    <li>un QR code cu muzica</li>
+                    <li>o mică povestioară despre plus, care te transpune în universul ales</li>
+                  </ul>
+                </div>
+
+                <div class="size-contents-panel" data-size-panel="signature">
+                  <h4>Ce conține Signature Box</h4>
+                  <ul>
+                    <li>tot ce conține Petite Box</li>
+                    <li>o hăinuță pentru pluș</li>
+                  </ul>
+                </div>
+
+                <div class="size-contents-panel" data-size-panel="grand">
+                  <h4>Ce conține Grand Box</h4>
+                  <ul>
+                    <li>tot ce conține Signature Box</li>
+                    <li>încă o hăinuță pentru pluș</li>
+                  </ul>
+                </div>
               </div>
             </div>
 
-            <div class="step-block">
+            <div class="step-block reveal-up">
               <h3 class="step-title">Alege pasiunea</h3>
               <div class="option-grid two passion-options" data-group="passion">
                 <button class="option-card selected" data-passion="Lectură">
@@ -1834,30 +2227,54 @@
               </div>
             </div>
 
-            <div class="step-block">
+            <div class="step-block reveal-up">
               <h3 class="step-title">Alege music mood</h3>
               <div class="option-grid two mood-options" data-group="mood">
-                <button class="option-card selected" data-mood="Indie Pop">
-                  <strong>Indie Pop</strong>
-                  <span>light și warm</span>
+                <button class="option-card selected" data-mood="Pop">
+                  <strong>Pop</strong>
+                  <span>ușor de iubit, catchy, cald</span>
                 </button>
-                <button class="option-card" data-mood="Cinematic">
-                  <strong>Cinematic</strong>
-                  <span>grand și luminous</span>
+
+                <button class="option-card" data-mood="Rock">
+                  <strong>Rock</strong>
+                  <span>mai intens, mai puternic, mai bold</span>
                 </button>
-                <button class="option-card" data-mood="Soul Soft">
-                  <strong>Soul Soft</strong>
-                  <span>catifelat și elegant</span>
+
+                <button class="option-card" data-mood="Romantic">
+                  <strong>Romantic</strong>
+                  <span>emoțional, tandru, cu atmosferă</span>
                 </button>
-                <button class="option-card" data-mood="Acoustic Glow">
-                  <strong>Acoustic Glow</strong>
-                  <span>cald și blând</span>
+
+                <button class="option-card" data-mood="Acoustic">
+                  <strong>Acoustic</strong>
+                  <span>blând, intim și cozy</span>
                 </button>
+              </div>
+            </div>
+
+            <div class="step-block reveal-up">
+              <h3 class="step-title">Melodie aleasă de tine? <span class="optional-mark">(opțional)</span></h3>
+
+              <label class="song-toggle">
+                <input type="checkbox" class="custom-song-toggle">
+                <span>Vreau să aleg chiar eu melodia pentru cineva drag</span>
+              </label>
+
+              <div class="custom-song-fields">
+                <label>
+                  Melodia
+                  <input type="text" class="custom-song-title" placeholder="Ex: Perfect">
+                </label>
+
+                <label>
+                  Artistul / formația
+                  <input type="text" class="custom-song-artist" placeholder="Ex: Ed Sheeran">
+                </label>
               </div>
             </div>
           </div>
 
-          <div class="vibe-right">
+          <div class="vibe-right reveal-soft">
             <div class="slideshow-shell">
               <img src="images/worlds/golden-hour/golden-hour-petite.jpg" class="size-slide active" data-size-slide="petite" alt="Golden Hour Petite">
               <img src="images/worlds/golden-hour/golden-hour-signature.jpg" class="size-slide" data-size-slide="signature" alt="Golden Hour Signature">
@@ -1882,7 +2299,11 @@
               </div>
               <div class="summary-line">
                 <span>Music mood</span>
-                <strong class="summary-mood">Indie Pop</strong>
+                <strong class="summary-mood">Pop</strong>
+              </div>
+              <div class="summary-line summary-custom-song-row" style="display:none;">
+                <span>Melodie aleasă de tine</span>
+                <strong class="summary-custom-song">—</strong>
               </div>
             </div>
 
@@ -1988,6 +2409,7 @@
 
     const revealItems = document.querySelectorAll('.reveal-up, .reveal-soft');
     const cursorGlow = document.getElementById('cursorGlow');
+    const heroInner = document.querySelector('.page-hero-inner');
 
     const vibeCards = document.querySelectorAll('.vibe-card');
     const vibePages = document.querySelectorAll('.vibe-page');
@@ -2152,26 +2574,38 @@
     });
 
     function hideAllVibePages() {
-      vibePages.forEach(page => page.classList.remove('active'));
-      document.body.classList.remove(
-        'vibe-soft-romance',
-        'vibe-blue-dream',
-        'vibe-dark-cherry',
-        'vibe-golden-hour'
-      );
+      vibePages.forEach(page => {
+        page.classList.remove(
+          'active',
+          'theme-soft-romance',
+          'theme-blue-dream',
+          'theme-dark-cherry',
+          'theme-golden-hour'
+        );
+      });
     }
 
     function openVibePage(vibe) {
       hideAllVibePages();
+
       const page = document.getElementById(`page-${vibe}`);
       if (!page) return;
 
+      vibeSelectorSection.style.display = 'none';
       page.classList.add('active');
 
-      if (vibe === 'soft-romance') document.body.classList.add('vibe-soft-romance');
-      if (vibe === 'blue-dream') document.body.classList.add('vibe-blue-dream');
-      if (vibe === 'dark-cherry') document.body.classList.add('vibe-dark-cherry');
-      if (vibe === 'golden-hour') document.body.classList.add('vibe-golden-hour');
+      if (vibe === 'soft-romance') {
+        page.classList.add('theme-soft-romance');
+      }
+      if (vibe === 'blue-dream') {
+        page.classList.add('theme-blue-dream');
+      }
+      if (vibe === 'dark-cherry') {
+        page.classList.add('theme-dark-cherry');
+      }
+      if (vibe === 'golden-hour') {
+        page.classList.add('theme-golden-hour');
+      }
 
       page.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -2185,6 +2619,7 @@
     backButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         hideAllVibePages();
+        vibeSelectorSection.style.display = '';
         vibeSelectorSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
@@ -2197,12 +2632,20 @@
       const passionButtons = page.querySelectorAll('.passion-options .option-card');
       const moodButtons = page.querySelectorAll('.mood-options .option-card');
       const slides = page.querySelectorAll('.size-slide');
+      const sizePanels = page.querySelectorAll('[data-size-panel]');
+
+      const customSongToggle = page.querySelector('.custom-song-toggle');
+      const customSongFields = page.querySelector('.custom-song-fields');
+      const customSongTitle = page.querySelector('.custom-song-title');
+      const customSongArtist = page.querySelector('.custom-song-artist');
 
       const summaryVibe = page.querySelector('.summary-vibe');
       const summarySize = page.querySelector('.summary-size');
       const summaryPassion = page.querySelector('.summary-passion');
       const summaryMood = page.querySelector('.summary-mood');
       const summaryTotal = page.querySelector('.summary-total');
+      const summaryCustomSongRow = page.querySelector('.summary-custom-song-row');
+      const summaryCustomSong = page.querySelector('.summary-custom-song');
 
       const addBtn = page.querySelector('.add-btn');
       const successBox = page.querySelector('.success-box');
@@ -2214,7 +2657,11 @@
         size: 'Petite Box',
         price: 75,
         passion: 'Lectură',
-        mood: config.defaultMood
+        mood: 'Pop',
+        sizeKey: 'petite',
+        customSongEnabled: false,
+        customSongTitle: '',
+        customSongArtist: ''
       };
 
       function selectOne(buttons, selectedButton) {
@@ -2228,12 +2675,31 @@
         });
       }
 
+      function updateSizePanels(sizeKey) {
+        sizePanels.forEach(panel => {
+          panel.classList.toggle('active', panel.dataset.sizePanel === sizeKey);
+        });
+      }
+
       function renderSummary() {
         summaryVibe.textContent = state.vibe;
         summarySize.textContent = state.size;
         summaryPassion.textContent = state.passion;
         summaryMood.textContent = state.mood;
         summaryTotal.textContent = formatPrice(state.price);
+
+        const hasCustomSong =
+          state.customSongEnabled &&
+          state.customSongTitle.trim() &&
+          state.customSongArtist.trim();
+
+        if (hasCustomSong) {
+          summaryCustomSongRow.style.display = 'flex';
+          summaryCustomSong.textContent = `${state.customSongTitle} — ${state.customSongArtist}`;
+        } else {
+          summaryCustomSongRow.style.display = 'none';
+          summaryCustomSong.textContent = '—';
+        }
       }
 
       sizeButtons.forEach(btn => {
@@ -2241,7 +2707,9 @@
           selectOne(sizeButtons, btn);
           state.size = btn.dataset.size;
           state.price = Number(btn.dataset.price);
+          state.sizeKey = btn.dataset.sizeKey;
           updateSlides(btn.dataset.slide);
+          updateSizePanels(btn.dataset.sizeKey);
           renderSummary();
         });
       });
@@ -2262,20 +2730,53 @@
         });
       });
 
+      if (customSongToggle) {
+        customSongToggle.addEventListener('change', () => {
+          state.customSongEnabled = customSongToggle.checked;
+          customSongFields.classList.toggle('show', customSongToggle.checked);
+          renderSummary();
+        });
+      }
+
+      if (customSongTitle) {
+        customSongTitle.addEventListener('input', () => {
+          state.customSongTitle = customSongTitle.value;
+          renderSummary();
+        });
+      }
+
+      if (customSongArtist) {
+        customSongArtist.addEventListener('input', () => {
+          state.customSongArtist = customSongArtist.value;
+          renderSummary();
+        });
+      }
+
       addBtn.addEventListener('click', () => {
         const cart = getCart();
+
+        const details = [
+          `Vibe: ${state.vibe}`,
+          `Mărime: ${state.size}`,
+          `Pasiune: ${state.passion}`,
+          `Music mood: ${state.mood}`
+        ];
+
+        const hasCustomSong =
+          state.customSongEnabled &&
+          state.customSongTitle.trim() &&
+          state.customSongArtist.trim();
+
+        if (hasCustomSong) {
+          details.push(`Melodie aleasă: ${state.customSongTitle} — ${state.customSongArtist}`);
+        }
 
         cart.push({
           name: 'Secretul Maison',
           price: state.price,
           quantity: 1,
           image: config.cartImage,
-          details: [
-            `Vibe: ${state.vibe}`,
-            `Mărime: ${state.size}`,
-            `Pasiune: ${state.passion}`,
-            `Music mood: ${state.mood}`
-          ]
+          details
         });
 
         setCart(cart);
@@ -2291,30 +2792,28 @@
         openCart();
       });
 
+      updateSlides('petite');
+      updateSizePanels('petite');
       renderSummary();
     }
 
     setupVibePage('page-soft-romance', {
       vibeName: 'Soft Romance',
-      defaultMood: 'Dream Pop',
       cartImage: 'images/worlds/soft-romance/soft-romance-cover.jpg'
     });
 
     setupVibePage('page-blue-dream', {
       vibeName: 'Blue Dream',
-      defaultMood: 'Ambient',
       cartImage: 'images/worlds/blue-dream/blue-dream-cover.jpg'
     });
 
     setupVibePage('page-dark-cherry', {
       vibeName: 'Dark Cherry',
-      defaultMood: 'Alternative Pop',
       cartImage: 'images/worlds/dark-cherry/dark-cherry-cover.jpg'
     });
 
     setupVibePage('page-golden-hour', {
       vibeName: 'Golden Hour',
-      defaultMood: 'Indie Pop',
       cartImage: 'images/worlds/golden-hour/golden-hour-cover.jpg'
     });
 
@@ -2339,10 +2838,24 @@
 
     document.addEventListener('mouseleave', () => {
       if (cursorGlow) cursorGlow.style.opacity = '0';
+      if (heroInner) heroInner.style.transform = '';
     });
 
     document.addEventListener('mouseenter', () => {
       if (cursorGlow && window.innerWidth > 760) cursorGlow.style.opacity = '0.85';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!heroInner || window.innerWidth <= 760) return;
+
+      const rect = heroInner.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      const moveX = (e.clientX - centerX) * 0.008;
+      const moveY = (e.clientY - centerY) * 0.008;
+
+      heroInner.style.transform = `translate(${moveX}px, ${moveY}px)`;
     });
 
     updateCartBadge();
