@@ -222,7 +222,8 @@
 
     .cart-btn{position:relative}
 
-    #cart-count{
+    #cart-count,
+    #mobile-cart-count{
       position:absolute;
       top:-4px;
       right:-4px;
@@ -1319,7 +1320,6 @@
       }
 
       .split-grid,
-      .product-entry-grid,
       .reviews-grid,
       .contact-wrap,
       .about-wrap,
@@ -1342,6 +1342,54 @@
 
       .cart-drawer{
         width:100%;
+      }
+
+      /* PRODUSELE DIN ATELIER PE TELEFON: un card principal + puțin din următorul */
+      .product-entry-grid{
+        display:flex;
+        gap:12px;
+        overflow-x:auto;
+        overflow-y:hidden;
+        scroll-snap-type:x mandatory;
+        -webkit-overflow-scrolling:touch;
+        padding:4px 12px 10px 0;
+        margin-top:22px;
+      }
+
+      .product-entry-grid::-webkit-scrollbar{
+        display:none;
+      }
+
+      .product-entry-card{
+        flex:0 0 84%;
+        min-width:84%;
+        scroll-snap-align:start;
+        border-radius:22px;
+      }
+
+      .product-entry-card img{
+        aspect-ratio:1 / 1.02;
+      }
+
+      .product-entry-body{
+        padding:14px 14px 16px;
+      }
+
+      .product-entry-body h3{
+        font-size:1.45rem;
+        margin-bottom:6px;
+      }
+
+      .product-entry-body p{
+        font-size:.84rem;
+        line-height:1.6;
+        margin-bottom:10px;
+      }
+
+      .product-entry-btn{
+        width:100%;
+        padding:11px 14px;
+        font-size:.84rem;
       }
     }
   </style>
@@ -1609,32 +1657,37 @@
               Ne bucurăm enorm să auzim de la voi. Ai întrebări, feedback sau vrei ceva personalizat? Scrie-ne și povestim cu drag.
             </p>
 
-            <form class="contact-form" id="contactForm">
+            <form
+              action="https://formspree.io/f/xqegbpjb"
+              method="POST"
+              class="contact-form"
+            >
               <label>
                 Nume și prenume *
-                <input type="text" id="contactName" placeholder="Numele tău" required>
+                <input type="text" name="name" placeholder="Numele tău" required>
               </label>
 
               <label>
                 Email *
-                <input type="email" id="contactEmail" placeholder="emailul tău" required>
+                <input type="email" name="email" placeholder="emailul tău" required>
               </label>
 
               <label>
                 Telefon
-                <input type="text" id="contactPhone" placeholder="opțional">
+                <input type="text" name="phone" placeholder="opțional">
               </label>
 
               <label>
                 Scrie mesajul tău mai jos: *
-                <textarea id="contactMessage" placeholder="Spune-ne ce ai în minte..." required></textarea>
+                <textarea name="message" placeholder="Spune-ne ce ai în minte..." required></textarea>
               </label>
 
+              <input type="hidden" name="_subject" value="Mesaj nou de pe site - Maison Doucette">
               <button type="submit" class="contact-submit">Trimite!</button>
             </form>
 
             <div class="contact-note">
-              Mesajul va fi pregătit automat către: <strong>maisondoucette.dd@gmail.com</strong>
+              Mesajele vor ajunge la: <strong>maisondoucette.dd@gmail.com</strong>
             </div>
           </div>
         </div>
@@ -1796,7 +1849,6 @@
     const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
 
     const mysterySlides = Array.from(document.querySelectorAll('.mystery-slide'));
-    const contactForm = document.getElementById('contactForm');
 
     let mysteryIndex = 0;
 
@@ -1966,27 +2018,6 @@
 
     setInterval(nextMysterySlide, 3600);
     updateCartBadge();
-
-    contactForm?.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const name = document.getElementById('contactName').value.trim();
-      const email = document.getElementById('contactEmail').value.trim();
-      const phone = document.getElementById('contactPhone').value.trim();
-      const message = document.getElementById('contactMessage').value.trim();
-
-      const subject = encodeURIComponent(`Mesaj nou de pe site - ${name}`);
-      const body = encodeURIComponent(
-`Nume: ${name}
-Email: ${email}
-Telefon: ${phone || '-'}
-        
-Mesaj:
-${message}`
-      );
-
-      window.location.href = `mailto:maisondoucette.dd@gmail.com?subject=${subject}&body=${body}`;
-    });
 
     /*
       EXEMPLE DE ITEMI PE CARE ÎI POȚI SALVA ÎN COȘ DIN ALTE PAGINI:
