@@ -6,7 +6,7 @@
   <title>Maison Doucette — atelier handmade & mystery experience</title>
   <meta
     name="description"
-    content="Maison Doucette — Atelierul Maison Doucette și Maison Mystery Experience. Plușuri personalizate și experiențe mystery într-un univers elegant, handmade."
+    content="Maison Doucette — personalizează-ți plușul sau intră în Mystery Experience. Un univers handmade, elegant și memorabil."
   />
   <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -27,16 +27,16 @@
       --shadow:0 18px 45px rgba(101,79,67,0.10);
       --shadow-strong:0 28px 60px rgba(101,79,67,0.16);
 
-      --romance:#d9b9b2;
-      --blue:#b7c7d6;
-      --cherry:#9a7b73;
-      --golden:#d7be8a;
+      --romance:#f2c8d8;
+      --blue:#bfd7f1;
+      --cherry:#8b1538;
+      --golden:#d9ba7a;
 
       --radius-xl:40px;
       --radius-lg:28px;
       --radius-md:20px;
       --container:1240px;
-      --nav-h:88px;
+      --nav-h:96px;
       --ease:cubic-bezier(.22,.61,.36,1);
     }
 
@@ -54,8 +54,9 @@
 
     img{display:block;max-width:100%}
     a{text-decoration:none;color:inherit}
-    button{font:inherit}
-    .display,h1,h2,h3,.brand-text,.world-title,.quote-text{
+    button,input,textarea,select{font:inherit}
+
+    .display,h1,h2,h3,.brand-text,.hero-sub,.quote-text{
       font-family:'Cormorant Garamond', serif;
       letter-spacing:-0.02em;
     }
@@ -70,7 +71,7 @@
     .top-bar{
       position:sticky;
       top:0;
-      z-index:1200;
+      z-index:1500;
       background:linear-gradient(135deg, var(--taupe-deep), var(--gold));
       color:#fffdfa;
       text-align:center;
@@ -94,8 +95,8 @@
 
     .site-header{
       position:sticky;
-      top:46px;
-      z-index:1100;
+      top:48px;
+      z-index:1400;
       background:rgba(255,250,245,0.88);
       backdrop-filter:blur(12px);
       border-bottom:1px solid var(--line);
@@ -117,13 +118,8 @@
       min-width:0;
     }
 
-    .nav-left{
-      justify-content:flex-start;
-    }
-
-    .nav-right{
-      justify-content:flex-end;
-    }
+    .nav-left{justify-content:flex-start}
+    .nav-right{justify-content:flex-end}
 
     .nav-links{
       display:flex;
@@ -145,6 +141,13 @@
       transform:translateY(-1px);
     }
 
+    .nav-pill{
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.72);
+      border:1px solid var(--line);
+    }
+
     .logo-wrap{
       display:flex;
       align-items:center;
@@ -155,13 +158,13 @@
     }
 
     .logo-wrap img{
-      width:64px;
-      height:64px;
+      width:72px;
+      height:72px;
       object-fit:contain;
       border-radius:50%;
-      background:rgba(255,255,255,0.9);
+      background:rgba(255,255,255,.92);
       padding:5px;
-      box-shadow:0 10px 22px rgba(101,79,67,0.10);
+      box-shadow:0 12px 24px rgba(101,79,67,0.10);
       flex-shrink:0;
     }
 
@@ -173,7 +176,7 @@
     }
 
     .brand-text{
-      font-size:1.72rem;
+      font-size:1.9rem;
       font-weight:700;
       color:var(--brown);
       letter-spacing:.03em;
@@ -192,7 +195,7 @@
       height:46px;
       border-radius:50%;
       border:1px solid var(--line);
-      background:rgba(255,255,255,.72);
+      background:rgba(255,255,255,.74);
       display:flex;
       align-items:center;
       justify-content:center;
@@ -217,9 +220,7 @@
       stroke-width:1.8;
     }
 
-    .cart-btn{
-      position:relative;
-    }
+    .cart-btn{position:relative}
 
     #cart-count{
       position:absolute;
@@ -237,6 +238,18 @@
       justify-content:center;
       padding:0 4px;
       box-shadow:0 6px 14px rgba(174,127,67,0.22);
+    }
+
+    .mobile-left{
+      display:none;
+      align-items:center;
+      justify-content:flex-start;
+    }
+
+    .mobile-right{
+      display:none;
+      align-items:center;
+      justify-content:flex-end;
     }
 
     .hero-shell{
@@ -306,7 +319,6 @@
       font-size:clamp(1.42rem, 4vw, 2.2rem);
       line-height:1.02;
       color:var(--brown);
-      font-family:'Cormorant Garamond', serif;
     }
 
     .hero-copy{
@@ -383,20 +395,6 @@
       position:relative;
     }
 
-    .world-intro::before{
-      content:"";
-      position:absolute;
-      inset:0 0 auto 0;
-      height:90px;
-      background:
-        radial-gradient(ellipse at 10% 0%, rgba(233,219,201,0.45) 0 24%, transparent 25%),
-        radial-gradient(ellipse at 34% 0%, rgba(233,219,201,0.30) 0 24%, transparent 25%),
-        radial-gradient(ellipse at 60% 0%, rgba(233,219,201,0.38) 0 24%, transparent 25%),
-        radial-gradient(ellipse at 88% 0%, rgba(233,219,201,0.34) 0 24%, transparent 25%);
-      opacity:.8;
-      pointer-events:none;
-    }
-
     .split-grid{
       display:grid;
       grid-template-columns:1fr 1fr;
@@ -428,10 +426,7 @@
       pointer-events:none;
     }
 
-    .world-card > *{
-      position:relative;
-      z-index:1;
-    }
+    .world-card > *{position:relative; z-index:1}
 
     .atelier-card{
       background:linear-gradient(160deg, #b79671, #7b5f4d);
@@ -441,7 +436,7 @@
       background:linear-gradient(160deg, #d6c0a4, #9a7d63);
     }
 
-    .world-badge{
+    .world-kicker{
       display:inline-flex;
       width:max-content;
       padding:9px 14px;
@@ -458,6 +453,7 @@
       font-size:clamp(2.3rem, 5vw, 3.8rem);
       line-height:.9;
       font-weight:700;
+      font-family:'Cormorant Garamond', serif;
     }
 
     .world-copy{
@@ -497,30 +493,19 @@
       flex-wrap:wrap;
     }
 
-    .world-btn,
-    .world-btn-secondary{
+    .world-btn{
       display:inline-flex;
       align-items:center;
       justify-content:center;
       padding:14px 22px;
       border-radius:999px;
-      transition:transform .24s ease, background .24s ease;
-    }
-
-    .world-btn{
       background:rgba(255,255,255,.92);
       color:var(--brown);
       font-weight:700;
+      transition:transform .24s ease;
     }
 
-    .world-btn-secondary{
-      background:rgba(255,255,255,.12);
-      border:1px solid rgba(255,255,255,.24);
-      color:#fff;
-    }
-
-    .world-btn:hover,
-    .world-btn-secondary:hover{
+    .world-btn:hover{
       transform:translateY(-2px);
     }
 
@@ -538,7 +523,7 @@
       text-align:center;
     }
 
-    .story-box .quote-text{
+    .quote-text{
       font-size:clamp(2rem, 6vw, 3.6rem);
       line-height:1.02;
       color:var(--brown);
@@ -732,6 +717,111 @@
       font-weight:600;
     }
 
+    .contact-wrap{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:24px;
+      align-items:stretch;
+      margin-top:28px;
+    }
+
+    .contact-image{
+      min-height:100%;
+      border-radius:34px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+
+    .contact-image img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      min-height:100%;
+    }
+
+    .contact-form-box{
+      background:linear-gradient(180deg, #d9b8a9 0%, #c79682 100%);
+      color:#fff;
+      border-radius:34px;
+      padding:28px;
+      box-shadow:var(--shadow-strong);
+    }
+
+    .contact-form-box h3{
+      margin:0 0 12px;
+      font-size:3rem;
+      line-height:.9;
+      font-family:'Cormorant Garamond', serif;
+      font-weight:700;
+    }
+
+    .contact-form-box p{
+      margin:0 0 20px;
+      line-height:1.8;
+      color:rgba(255,255,255,.94);
+      font-size:.96rem;
+    }
+
+    .contact-form{
+      display:grid;
+      gap:14px;
+    }
+
+    .contact-form label{
+      display:grid;
+      gap:8px;
+      font-size:.92rem;
+      font-weight:600;
+    }
+
+    .contact-form input,
+    .contact-form textarea{
+      width:100%;
+      border:1.5px solid rgba(255,255,255,.58);
+      background:rgba(255,255,255,.10);
+      color:#fff;
+      border-radius:999px;
+      padding:14px 16px;
+      outline:none;
+    }
+
+    .contact-form textarea{
+      min-height:140px;
+      border-radius:24px;
+      resize:vertical;
+    }
+
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder{
+      color:rgba(255,255,255,.75);
+    }
+
+    .contact-submit{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:54px;
+      border:none;
+      border-radius:999px;
+      background:rgba(255,255,255,.94);
+      color:var(--brown);
+      font-weight:700;
+      cursor:pointer;
+      margin-top:4px;
+      transition:transform .22s ease;
+    }
+
+    .contact-submit:hover{
+      transform:translateY(-2px);
+    }
+
+    .contact-note{
+      margin-top:10px;
+      font-size:.84rem;
+      color:rgba(255,255,255,.86);
+      line-height:1.7;
+    }
+
     .reviews-grid{
       display:grid;
       grid-template-columns:repeat(3, minmax(0,1fr));
@@ -883,7 +973,6 @@
       color:var(--brown-soft);
     }
 
-    /* CART DRAWER */
     .cart-overlay{
       position:fixed;
       inset:0;
@@ -891,7 +980,7 @@
       opacity:0;
       pointer-events:none;
       transition:opacity .25s ease;
-      z-index:1300;
+      z-index:2000;
     }
 
     .cart-overlay.open{
@@ -909,7 +998,7 @@
       box-shadow:-20px 0 50px rgba(52,38,32,.18);
       transform:translateX(100%);
       transition:transform .3s var(--ease);
-      z-index:1400;
+      z-index:2100;
       display:flex;
       flex-direction:column;
     }
@@ -1064,6 +1153,7 @@
       background:#fff;
       border:1px solid var(--line);
       color:var(--brown);
+      cursor:pointer;
     }
 
     .cart-primary:hover,
@@ -1071,17 +1161,83 @@
       transform:translateY(-1px);
     }
 
+    .mobile-menu-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(64,45,35,.28);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .25s ease;
+      z-index:1800;
+    }
+
+    .mobile-menu-overlay.open{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .mobile-menu{
+      position:fixed;
+      top:0;
+      left:0;
+      width:min(340px, 100%);
+      height:100vh;
+      background:#fffdf9;
+      box-shadow:20px 0 50px rgba(52,38,32,.14);
+      transform:translateX(-100%);
+      transition:transform .3s var(--ease);
+      z-index:1900;
+      padding:24px 20px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .mobile-menu.open{
+      transform:translateX(0);
+    }
+
+    .mobile-menu-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .mobile-menu-title{
+      font-size:1.8rem;
+      font-family:'Cormorant Garamond', serif;
+      font-weight:700;
+    }
+
+    .mobile-close{
+      border:none;
+      background:none;
+      font-size:1.5rem;
+      color:var(--brown-soft);
+      cursor:pointer;
+    }
+
+    .mobile-menu a{
+      padding:12px 0;
+      border-bottom:1px solid var(--line);
+      font-size:1rem;
+      color:var(--brown);
+    }
+
     @media (max-width: 1080px){
       .split-grid,
       .mystery-grid,
       .product-entry-grid,
       .reviews-grid,
+      .contact-wrap,
       .about-wrap,
       .footer-grid{
         grid-template-columns:1fr 1fr;
       }
 
       .mystery-grid,
+      .contact-wrap,
       .about-wrap,
       .footer-grid{
         grid-template-columns:1fr;
@@ -1089,14 +1245,6 @@
     }
 
     @media (max-width: 760px){
-      :root{
-        --nav-h:166px;
-      }
-
-      .container{
-        width:min(var(--container), calc(100% - 18px));
-      }
-
       .top-bar{
         padding:10px 12px;
         font-size:.82rem;
@@ -1109,30 +1257,28 @@
       }
 
       .site-header{
-        top:52px;
+        position:relative;
+        top:0;
       }
 
       .nav{
-        grid-template-columns:1fr;
-        padding:12px 0;
+        grid-template-columns:1fr auto 1fr;
+        min-height:78px;
       }
 
       .nav-left,
       .nav-right{
-        justify-content:center;
-        flex-wrap:wrap;
+        display:none;
       }
 
-      .nav-links{
-        justify-content:center;
-        flex-wrap:wrap;
-        gap:10px 14px;
-        font-size:.84rem;
-        text-align:center;
+      .mobile-left,
+      .mobile-right{
+        display:flex;
       }
 
-      .logo-wrap{
-        order:-1;
+      .logo-wrap img{
+        width:58px;
+        height:58px;
       }
 
       .brand-text{
@@ -1140,7 +1286,7 @@
       }
 
       .brand-sub{
-        font-size:.66rem;
+        display:none;
       }
 
       .hero{
@@ -1175,6 +1321,7 @@
       .split-grid,
       .product-entry-grid,
       .reviews-grid,
+      .contact-wrap,
       .about-wrap,
       .footer-grid,
       .mystery-grid{
@@ -1207,6 +1354,16 @@
 
   <header class="site-header">
     <div class="container nav">
+      <div class="mobile-left">
+        <button class="icon-btn" id="mobileMenuOpenBtn" aria-label="Deschide meniul">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 6h18"></path>
+            <path d="M3 12h18"></path>
+            <path d="M3 18h18"></path>
+          </svg>
+        </button>
+      </div>
+
       <div class="nav-left">
         <nav>
           <ul class="nav-links">
@@ -1228,7 +1385,7 @@
       <div class="nav-right">
         <nav>
           <ul class="nav-links">
-            <li><a href="#mystery">Maison Mystery Experience</a></li>
+            <li><a href="#mystery">Mystery Experience</a></li>
             <li><a href="#about">Despre</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
@@ -1241,6 +1398,17 @@
             <path d="M2 3h3l2.2 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.5L21 6H7.1"></path>
           </svg>
           <span id="cart-count">0</span>
+        </button>
+      </div>
+
+      <div class="mobile-right">
+        <button class="icon-btn cart-btn" id="mobileCartOpenBtn" aria-label="Deschide coșul">
+          <svg viewBox="0 0 24 24">
+            <circle cx="9" cy="20" r="1"></circle>
+            <circle cx="18" cy="20" r="1"></circle>
+            <path d="M2 3h3l2.2 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.5L21 6H7.1"></path>
+          </svg>
+          <span id="mobile-cart-count">0</span>
         </button>
       </div>
     </div>
@@ -1259,12 +1427,12 @@
           </div>
 
           <div class="hero-copy">
-            Maison Doucette are două lumi: una în care alegi fiecare detaliu al creației tale și una în care alegi doar direcția, iar noi construim misterul în jurul ei.
+            Poți să îți personalizezi plușul exact așa cum ți-l imaginezi sau poți să intri într-o experiență mystery, unde alegi doar direcția, iar noi creăm magia.
           </div>
 
           <div class="hero-actions">
             <a href="#worlds" class="hero-btn">Cumpără acum</a>
-            <a href="#about" class="hero-btn-secondary">Descoperă povestea</a>
+            <a href="#contact" class="hero-btn-secondary">Scrie-ne</a>
           </div>
         </div>
       </div>
@@ -1273,19 +1441,19 @@
     <section class="world-intro" id="worlds">
       <div class="container">
         <div class="section-head">
-          <h2>Două lumi, un singur univers</h2>
+          <h2>Două moduri de a intra în Maison Doucette</h2>
           <p>
-            Alege dacă vrei să creezi tu fiecare detaliu sau dacă vrei să te lași purtată de mister.
+            Unul este despre control, detalii și personalizare. Celălalt este despre atmosferă, intuiție și reveal.
           </p>
         </div>
 
         <div class="split-grid">
           <div class="world-card atelier-card" id="atelier">
             <div>
-              <div class="world-badge">lumea 01</div>
-              <div class="world-title">Atelierul Maison Doucette</div>
+              <div class="world-kicker">atelier personalizat</div>
+              <div class="world-title">Personalizează-ți plușul</div>
               <div class="world-copy">
-                Aici intri dacă vrei să personalizezi un produs ales de tine — de la culoare și accesorii până la toate detaliile care îl fac al tău.
+                Aici intri dacă vrei să alegi produsul și toate detaliile sale — culoare, accesorii, atmosferă și tot ce îl face al tău.
               </div>
 
               <div class="world-list">
@@ -1296,40 +1464,38 @@
             </div>
 
             <div class="world-actions">
-              <a href="atelier.html" class="world-btn">Intră în atelier</a>
-              <a href="#atelier-products" class="world-btn-secondary">Vezi produsele</a>
+              <a href="#atelier-products" class="world-btn">Intră în atelier</a>
             </div>
           </div>
 
           <div class="world-card mystery-card" id="mystery">
             <div>
-              <div class="world-badge">lumea 02</div>
-              <div class="world-title">Maison Mystery Experience</div>
+              <div class="world-kicker">reveal mystery</div>
+              <div class="world-title">Intră în Mystery Experience</div>
               <div class="world-copy">
-                Aici nu știi exact ce produs vei primi. Alegi vibe-ul, energia, paleta și câteva indicii, iar noi creăm pentru tine un reveal misterios.
+                Aici nu știi exact ce produs vei primi. Alegi vibe-ul, energia și câteva indicii, iar noi construim pentru tine un reveal misterios.
               </div>
 
               <div class="world-list">
                 <div>Nu știi exact produsul final</div>
                 <div>Alegi vibe-ul și direcția estetică</div>
-                <div>Primești o experiență mystery creată special pentru tine</div>
+                <div>Primești un produs-surpriză creat în universul ales</div>
               </div>
             </div>
 
             <div class="world-actions">
-              <a href="mystery.html" class="world-btn">Descoperă Secret de Maison</a>
-              <a href="#mystery-story" class="world-btn-secondary">Cum funcționează?</a>
+              <a href="mystery.html" class="world-btn">Descoperă Secretul Maison</a>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="story-section" id="mystery-story">
+    <section class="story-section">
       <div class="container">
         <div class="story-box">
           <div class="quote-text">
-            Secret de Maison este o experiență mystery în care tu alegi lumea, iar noi alegem felul în care ea prinde viață.
+            Secretul Maison este o experiență mystery în care tu alegi lumea, iar noi alegem felul în care ea prinde viață.
           </div>
           <p>
             Nu este doar un produs surpriză. Este o poveste, o atmosferă și o paletă transformată într-o creație Maison Doucette.
@@ -1338,7 +1504,7 @@
 
         <div class="mystery-grid">
           <div class="mystery-text">
-            <div class="mystery-lead">Cum funcționează Maison Mystery Experience?</div>
+            <div class="mystery-lead">Cum funcționează Mystery Experience?</div>
             <p>
               Alegi un vibe, o pasiune, o energie și câteva preferințe. Noi luăm aceste indicii și construim în jurul lor un produs care rămâne secret până la reveal.
             </p>
@@ -1349,22 +1515,22 @@
             <div class="vibe-row">
               <div class="vibe-chip">
                 <div class="vibe-dot dot-romance"></div>
-                <div><strong>Soft Romance</strong><br><span>blând, romantic, delicat</span></div>
+                <div><strong>Soft Romance</strong><br><span>baby pink, delicat, blând, romantic</span></div>
               </div>
 
               <div class="vibe-chip">
                 <div class="vibe-dot dot-blue"></div>
-                <div><strong>Blue Dream</strong><br><span>calm, airy, dreamy</span></div>
+                <div><strong>Blue Dream</strong><br><span>baby blue, airy, calm, dreamy</span></div>
               </div>
 
               <div class="vibe-chip">
                 <div class="vibe-dot dot-cherry"></div>
-                <div><strong>Dark Cherry</strong><br><span>misterios, profund, velvet</span></div>
+                <div><strong>Dark Cherry</strong><br><span>burgundy vibrant, misterios, profund</span></div>
               </div>
 
               <div class="vibe-chip">
                 <div class="vibe-dot dot-golden"></div>
-                <div><strong>Golden Hour</strong><br><span>cald, luminos, elegant</span></div>
+                <div><strong>Golden Hour</strong><br><span>auriu cald, luminos, elegant</span></div>
               </div>
             </div>
 
@@ -1376,7 +1542,7 @@
               <img src="images/atelier-box/atelier-box-1.jpg" alt="Preview mystery experience" class="mystery-slide active">
               <img src="images/atelier-box/atelier-box-2.jpg" alt="Preview mystery experience" class="mystery-slide">
               <img src="images/atelier-box/atelier-box-3.jpg" alt="Preview mystery experience" class="mystery-slide">
-              <div class="floating-badge">Secret de Maison</div>
+              <div class="floating-badge">Secretul Maison</div>
             </div>
           </div>
         </div>
@@ -1423,6 +1589,58 @@
       </div>
     </section>
 
+    <section id="contact">
+      <div class="container">
+        <div class="section-head">
+          <h2>Contactează-ne</h2>
+          <p>
+            Întrebări, idei, comenzi personalizate sau orice vrei să ne spui — scrie-ne și povestim cu drag.
+          </p>
+        </div>
+
+        <div class="contact-wrap">
+          <div class="contact-image">
+            <img src="images/contact.jpg" alt="Maison Doucette contact aesthetic">
+          </div>
+
+          <div class="contact-form-box">
+            <h3>Scrie-ne!</h3>
+            <p>
+              Ne bucurăm enorm să auzim de la voi. Ai întrebări, feedback sau vrei ceva personalizat? Scrie-ne și povestim cu drag.
+            </p>
+
+            <form class="contact-form" id="contactForm">
+              <label>
+                Nume și prenume *
+                <input type="text" id="contactName" placeholder="Numele tău" required>
+              </label>
+
+              <label>
+                Email *
+                <input type="email" id="contactEmail" placeholder="emailul tău" required>
+              </label>
+
+              <label>
+                Telefon
+                <input type="text" id="contactPhone" placeholder="opțional">
+              </label>
+
+              <label>
+                Scrie mesajul tău mai jos: *
+                <textarea id="contactMessage" placeholder="Spune-ne ce ai în minte..." required></textarea>
+              </label>
+
+              <button type="submit" class="contact-submit">Trimite!</button>
+            </form>
+
+            <div class="contact-note">
+              Mesajul va fi pregătit automat către: <strong>maisondoucette.dd@gmail.com</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section>
       <div class="container">
         <div class="section-head">
@@ -1456,13 +1674,13 @@
         <div class="section-head">
           <h2>Întrebări frecvente</h2>
           <p>
-            Tot ce ai vrea să știi înainte să alegi una dintre cele două lumi Maison Doucette.
+            Tot ce ai vrea să știi înainte să alegi una dintre cele două direcții Maison Doucette.
           </p>
         </div>
 
         <div class="faq">
           <div class="faq-item">
-            <h3>Care este diferența dintre Atelierul Maison Doucette și Maison Mystery Experience?</h3>
+            <h3>Care este diferența dintre Atelierul Maison Doucette și Mystery Experience?</h3>
             <p>În atelier alegi produsul și toate detaliile lui. În mystery alegi doar vibe-ul și câteva preferințe, iar produsul final rămâne secret până la reveal.</p>
           </div>
 
@@ -1473,7 +1691,7 @@
 
           <div class="faq-item">
             <h3>Este potrivit și pentru cadouri?</h3>
-            <p>Da. Ambele lumi sunt gândite să se simtă speciale, dar Maison Mystery Experience este mai ales ideală pentru acel efect de reveal.</p>
+            <p>Da. Ambele direcții sunt gândite să se simtă speciale, dar Mystery Experience este ideală pentru acel efect de reveal.</p>
           </div>
         </div>
       </div>
@@ -1491,14 +1709,14 @@
             <p>
               Fie că alegi să personalizezi fiecare detaliu sau să intri într-o experiență mystery, totul este creat în același spirit: delicat, elegant și autentic.
             </p>
-            <a href="#worlds" class="about-btn">Alege-ți lumea</a>
+            <a href="#worlds" class="about-btn">Alege-ți direcția</a>
           </div>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="footer" id="contact">
+  <footer class="footer">
     <div class="container footer-grid">
       <div class="footer-card">
         <h3>Hai să creăm ceva frumos</h3>
@@ -1510,7 +1728,7 @@
       <div class="footer-card">
         <div class="contact-list">
           <div><strong>Instagram:</strong> maison.doucette</div>
-          <div><strong>Email:</strong> hello@maisondoucette.com</div>
+          <div><strong>Email:</strong> maisondoucette.dd@gmail.com</div>
           <div><strong>Telefon:</strong> 0754233314 | 0749765214</div>
           <div><strong>Locație:</strong> Galați, România</div>
         </div>
@@ -1543,17 +1761,42 @@
     </div>
   </aside>
 
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+  <aside class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-head">
+      <div class="mobile-menu-title">Maison Doucette</div>
+      <button class="mobile-close" id="mobileMenuCloseBtn">×</button>
+    </div>
+
+    <a href="#home" class="mobile-link">Acasă</a>
+    <a href="#worlds" class="mobile-link">Cumpără acum</a>
+    <a href="#atelier" class="mobile-link">Atelierul Maison Doucette</a>
+    <a href="#mystery" class="mobile-link">Mystery Experience</a>
+    <a href="#contact" class="mobile-link">Contact</a>
+  </aside>
+
   <script>
     const cartKey = 'cart';
+
     const cartOpenBtn = document.getElementById('cartOpenBtn');
+    const mobileCartOpenBtn = document.getElementById('mobileCartOpenBtn');
     const cartCloseBtn = document.getElementById('cartCloseBtn');
     const cartOverlay = document.getElementById('cartOverlay');
     const cartDrawer = document.getElementById('cartDrawer');
     const cartBody = document.getElementById('cartBody');
     const cartTotal = document.getElementById('cartTotal');
     const cartCount = document.getElementById('cart-count');
+    const mobileCartCount = document.getElementById('mobile-cart-count');
     const continueShoppingBtn = document.getElementById('continueShoppingBtn');
+
+    const mobileMenuOpenBtn = document.getElementById('mobileMenuOpenBtn');
+    const mobileMenuCloseBtn = document.getElementById('mobileMenuCloseBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+
     const mysterySlides = Array.from(document.querySelectorAll('.mystery-slide'));
+    const contactForm = document.getElementById('contactForm');
 
     let mysteryIndex = 0;
 
@@ -1576,8 +1819,16 @@
     function updateCartBadge() {
       const cart = getCart();
       const totalQty = cart.reduce((sum, item) => sum + Number(item.quantity || 1), 0);
-      cartCount.textContent = totalQty;
-      cartCount.style.display = totalQty === 0 ? 'none' : 'flex';
+
+      if (cartCount) {
+        cartCount.textContent = totalQty;
+        cartCount.style.display = totalQty === 0 ? 'none' : 'flex';
+      }
+
+      if (mobileCartCount) {
+        mobileCartCount.textContent = totalQty;
+        mobileCartCount.style.display = totalQty === 0 ? 'none' : 'flex';
+      }
     }
 
     function renderCart() {
@@ -1587,7 +1838,7 @@
       if (!cart.length) {
         cartBody.innerHTML = `
           <div class="cart-empty">
-            Coșul este gol momentan. Alege o lume, adaugă produse și ele vor apărea aici.
+            Coșul este gol momentan. Alege o direcție, adaugă produse și ele vor apărea aici.
           </div>
         `;
         cartTotal.textContent = formatPrice(0);
@@ -1614,9 +1865,7 @@
             <img src="${image}" alt="${item.name}">
             <div>
               <h4>${item.name}</h4>
-              <div class="cart-meta">
-                ${detailsHtml}
-              </div>
+              <div class="cart-meta">${detailsHtml}</div>
               <div class="qty-row">
                 <button class="qty-btn" onclick="changeQuantity(${index}, -1)">−</button>
                 <div class="qty-value">${qty}</div>
@@ -1644,7 +1893,9 @@
       cartDrawer.classList.remove('open');
       cartOverlay.classList.remove('open');
       cartDrawer.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
+      if (!mobileMenu.classList.contains('open')) {
+        document.body.style.overflow = '';
+      }
     }
 
     function removeCartItem(index) {
@@ -1668,17 +1919,41 @@
       renderCart();
     }
 
+    function openMobileMenu() {
+      mobileMenu.classList.add('open');
+      mobileMenuOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileMenu() {
+      mobileMenu.classList.remove('open');
+      mobileMenuOverlay.classList.remove('open');
+      if (!cartDrawer.classList.contains('open')) {
+        document.body.style.overflow = '';
+      }
+    }
+
     window.removeCartItem = removeCartItem;
     window.changeQuantity = changeQuantity;
 
-    cartOpenBtn.addEventListener('click', openCart);
-    cartCloseBtn.addEventListener('click', closeCart);
-    cartOverlay.addEventListener('click', closeCart);
-    continueShoppingBtn.addEventListener('click', closeCart);
+    cartOpenBtn?.addEventListener('click', openCart);
+    mobileCartOpenBtn?.addEventListener('click', openCart);
+    cartCloseBtn?.addEventListener('click', closeCart);
+    cartOverlay?.addEventListener('click', closeCart);
+    continueShoppingBtn?.addEventListener('click', closeCart);
+
+    mobileMenuOpenBtn?.addEventListener('click', openMobileMenu);
+    mobileMenuCloseBtn?.addEventListener('click', closeMobileMenu);
+    mobileMenuOverlay?.addEventListener('click', closeMobileMenu);
+
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', closeMobileMenu);
+    });
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeCart();
+        closeMobileMenu();
       }
     });
 
@@ -1692,6 +1967,27 @@
     setInterval(nextMysterySlide, 3600);
     updateCartBadge();
 
+    contactForm?.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('contactName').value.trim();
+      const email = document.getElementById('contactEmail').value.trim();
+      const phone = document.getElementById('contactPhone').value.trim();
+      const message = document.getElementById('contactMessage').value.trim();
+
+      const subject = encodeURIComponent(`Mesaj nou de pe site - ${name}`);
+      const body = encodeURIComponent(
+`Nume: ${name}
+Email: ${email}
+Telefon: ${phone || '-'}
+        
+Mesaj:
+${message}`
+      );
+
+      window.location.href = `mailto:maisondoucette.dd@gmail.com?subject=${subject}&body=${body}`;
+    });
+
     /*
       EXEMPLE DE ITEMI PE CARE ÎI POȚI SALVA ÎN COȘ DIN ALTE PAGINI:
 
@@ -1704,7 +2000,7 @@
       }
 
       {
-        name: 'Secret de Maison',
+        name: 'Secretul Maison',
         price: 105,
         quantity: 1,
         image: 'images/atelier-box-cover.jpg',
