@@ -3,808 +3,1448 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chocolate Covered Strawberry – Maison Doucette</title>
-<link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <title>Maison Doucette — Chocolate Covered Strawberry</title>
+  <meta
+    name="description"
+    content="Chocolate Covered Strawberry Maison Doucette — o creație croșetată mică, dulce și inedită, perfectă pentru un cadou delicat."
+  />
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
     :root{
-      --bg: #f7f1eb;
-      --bg-soft: #fbf7f3;
-      --cream: #fffaf6;
-      --ocre: #d2b08d;
-      --ocre-deep: #b88e67;
-      --brown: #6a5145;
-      --brown-soft: #8b6f61;
-      --line: rgba(184, 142, 103, 0.20);
-      --shadow: 0 20px 50px rgba(106, 81, 69, 0.12);
-      --shadow-soft: 0 14px 28px rgba(106, 81, 69, 0.08);
-      --shadow-strong: 0 24px 54px rgba(106, 81, 69, 0.18);
-      --radius-xl: 36px;
-      --radius-lg: 26px;
-      --radius-md: 18px;
-      --ease: cubic-bezier(.22,.61,.36,1);
+      --bg:#f7f1eb;
+      --bg-2:#efe4d8;
+      --cream:#fffaf5;
+      --taupe:#d8c0a5;
+      --taupe-deep:#b99266;
+      --gold:#d2ad73;
+      --gold-deep:#ae7f43;
+      --brown:#654f43;
+      --brown-soft:#866f61;
+      --line:rgba(101,79,67,0.12);
+      --shadow:0 18px 45px rgba(101,79,67,0.10);
+      --shadow-strong:0 28px 60px rgba(101,79,67,0.16);
+
+      --radius-xl:40px;
+      --radius-lg:28px;
+      --radius-md:20px;
+      --container:1240px;
+      --nav-h:96px;
+      --ease:cubic-bezier(.22,.61,.36,1);
     }
 
-    *{ box-sizing: border-box; }
-    html{ scroll-behavior: smooth; }
-
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{
-      margin: 0;
-      font-family: Georgia, serif;
-      color: var(--brown);
+      margin:0;
+      font-family:'Manrope', sans-serif;
+      color:var(--brown);
       background:
-        radial-gradient(circle at top left, rgba(255,255,255,0.75), transparent 22%),
-        radial-gradient(circle at bottom right, rgba(210,176,141,0.10), transparent 25%),
-        linear-gradient(180deg, #f9f4ef 0%, #f4ece4 100%);
-      overflow-x: hidden;
+        radial-gradient(circle at top left, rgba(255,255,255,0.92), transparent 24%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+      overflow-x:hidden;
     }
 
-    a{ text-decoration: none; color: inherit; }
-    img{ display: block; max-width: 100%; }
+    img{display:block;max-width:100%}
+    a{text-decoration:none;color:inherit}
+    button{font:inherit}
+
+    .display,h1,h2,h3,.brand-text,.product-price{
+      font-family:'Cormorant Garamond', serif;
+      letter-spacing:-0.02em;
+    }
+
+    .container{
+      width:min(var(--container), calc(100% - 28px));
+      margin:0 auto;
+      position:relative;
+      z-index:2;
+    }
 
     .cursor-glow{
-      position: fixed;
-      width: 340px;
-      height: 340px;
-      left: 0;
-      top: 0;
-      pointer-events: none;
-      z-index: 0;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(210,176,141,0.16) 0%, rgba(210,176,141,0.08) 36%, rgba(210,176,141,0.02) 62%, transparent 74%);
-      transform: translate(-50%, -50%);
-      transition: opacity 0.25s ease;
-      mix-blend-mode: multiply;
-      opacity: 0.9;
+      position:fixed;
+      width:280px;
+      height:280px;
+      left:0;
+      top:0;
+      transform:translate(-50%, -50%);
+      border-radius:50%;
+      pointer-events:none;
+      z-index:0;
+      background:radial-gradient(circle, rgba(210,173,115,0.12) 0%, rgba(210,173,115,0.06) 40%, transparent 72%);
+      opacity:.85;
+      mix-blend-mode:multiply;
+      transition:opacity .22s ease;
+    }
+
+    .top-bar{
+      position:sticky;
+      top:0;
+      z-index:1500;
+      background:linear-gradient(135deg, var(--taupe-deep), var(--gold));
+      color:#fffdfa;
+      text-align:center;
+      padding:12px 16px;
+      font-size:.9rem;
+      line-height:1.4;
+      box-shadow:0 8px 22px rgba(174,127,67,0.18);
+    }
+
+    .top-bar a{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      margin-left:10px;
+      padding:8px 18px;
+      border-radius:999px;
+      background:rgba(255,255,255,.9);
+      color:var(--gold-deep);
+      font-weight:700;
     }
 
     .site-header{
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 1000;
-      background: rgba(255, 250, 246, 0.78);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--line);
-      transition: box-shadow 0.3s ease, background 0.3s ease;
-    }
-
-    .site-header.scrolled{
-      background: rgba(255, 250, 246, 0.86);
-      box-shadow: 0 8px 22px rgba(106, 81, 69, 0.08);
+      position:sticky;
+      top:48px;
+      z-index:1400;
+      background:rgba(255,250,245,0.88);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--line);
     }
 
     .nav{
-      max-width: 1220px;
-      margin: auto;
-      min-height: 88px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      padding: 0 20px;
-      position: relative;
-      z-index: 2;
+      min-height:var(--nav-h);
+      display:grid;
+      grid-template-columns:1fr auto 1fr;
+      align-items:center;
+      gap:12px;
     }
 
-    .logo{
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: transform 0.35s var(--ease);
+    .nav-left,
+    .nav-right{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      min-width:0;
     }
 
-    .logo:hover{ transform: translateY(-1px); }
+    .nav-left{justify-content:flex-start}
+    .nav-right{justify-content:flex-end}
 
-    .logo img{
-      width: 58px;
-      height: 58px;
-      object-fit: cover;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.95);
-      padding: 4px;
-      box-shadow: 0 8px 18px rgba(106, 81, 69, 0.10);
-      transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+    .nav-links{
+      display:flex;
+      gap:18px;
+      align-items:center;
+      list-style:none;
+      margin:0;
+      padding:0;
+      font-size:.92rem;
     }
 
-    .logo:hover img{
-      transform: scale(1.04);
-      box-shadow: 0 12px 24px rgba(106, 81, 69, 0.14);
+    .nav-links a{
+      opacity:.92;
+      transition:opacity .22s ease, transform .22s ease;
     }
 
-    .logo span{
-      font-size: 1.03rem;
-      letter-spacing: 0.04em;
+    .nav-links a:hover{
+      opacity:1;
+      transform:translateY(-1px);
     }
 
-    .menu{
-      display: flex;
-      gap: 28px;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      font-size: 0.96rem;
+    .nav-pill{
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.72);
+      border:1px solid var(--line);
     }
 
-    .menu a{
-      position: relative;
-      transition: opacity 0.25s ease, transform 0.25s ease;
+    .logo-wrap{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      min-width:0;
+      text-align:center;
     }
 
-    .menu a:hover{
-      opacity: 0.68;
-      transform: translateY(-1px);
+    .logo-wrap img{
+      width:72px;
+      height:72px;
+      object-fit:contain;
+      border-radius:50%;
+      background:rgba(255,255,255,.92);
+      padding:5px;
+      box-shadow:0 12px 24px rgba(101,79,67,0.10);
+      flex-shrink:0;
     }
 
-    .page{
-      max-width: 1240px;
-      margin: auto;
-      padding: 138px 20px 70px;
-      position: relative;
-      z-index: 2;
+    .brand-stack{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      line-height:1;
     }
 
-    .top-note{
-      text-align: center;
-      margin-bottom: 28px;
-      opacity: 0;
-      transform: translateY(22px);
-      animation: fadeUp 0.8s var(--ease) forwards 0.12s;
+    .brand-text{
+      font-size:1.9rem;
+      font-weight:700;
+      color:var(--brown);
+      letter-spacing:.03em;
     }
 
-    .top-note span{
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 16px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.72);
-      border: 1px solid var(--line);
-      font-size: 0.78rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--brown-soft);
-      box-shadow: 0 8px 20px rgba(106, 81, 69, 0.05);
+    .brand-sub{
+      margin-top:4px;
+      font-size:.72rem;
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      color:var(--brown-soft);
     }
 
-    .product-shell{
-      position: relative;
-      display: flex;
-      gap: 42px;
-      align-items: center;
-      padding: 28px;
-      background: rgba(255,250,246,0.82);
-      border: 1px solid var(--line);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      opacity: 0;
-      transform: translateY(28px);
-      animation: fadeUp 0.95s var(--ease) forwards 0.25s;
-      transition: box-shadow 0.35s ease;
+    .icon-btn{
+      width:46px;
+      height:46px;
+      border-radius:50%;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.74);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      box-shadow:0 10px 18px rgba(101,79,67,0.08);
+      transition:transform .22s ease, box-shadow .22s ease;
+      padding:0;
     }
 
-    .product-shell:hover{ box-shadow: var(--shadow-strong); }
-
-    .product-shell::before{
-      content: "";
-      position: absolute;
-      width: 280px;
-      height: 280px;
-      border-radius: 50%;
-      background: rgba(210,176,141,0.10);
-      top: -110px;
-      right: -90px;
-      pointer-events: none;
-      animation: driftOne 10s ease-in-out infinite;
+    .icon-btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 14px 24px rgba(101,79,67,0.12);
     }
 
-    .product-shell::after{
-      content: "";
-      position: absolute;
-      width: 220px;
-      height: 220px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.45);
-      bottom: -120px;
-      left: -60px;
-      pointer-events: none;
-      animation: driftTwo 12s ease-in-out infinite;
+    .icon-btn svg{
+      width:22px;
+      height:22px;
+      stroke:var(--brown);
+      fill:none;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+      stroke-width:1.8;
     }
 
-    .gallery{
-      width: 470px;
-      flex-shrink: 0;
-      position: relative;
-      z-index: 1;
+    .cart-btn{position:relative}
+
+    #cart-count,
+    #mobile-cart-count{
+      position:absolute;
+      top:-4px;
+      right:-4px;
+      min-width:18px;
+      height:18px;
+      border-radius:999px;
+      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
+      color:#fff;
+      font-size:10px;
+      font-weight:700;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:0 4px;
+      box-shadow:0 6px 14px rgba(174,127,67,0.22);
     }
 
-    .gallery-frame{
-      background: linear-gradient(180deg, #fffdfb 0%, #f7efe8 100%);
-      border: 1px solid rgba(184,142,103,0.18);
-      border-radius: 30px;
-      padding: 16px;
-      box-shadow: var(--shadow-soft);
-      position: relative;
-      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    .mobile-left,
+    .mobile-right{
+      display:none;
+      align-items:center;
     }
 
-    .gallery-frame:hover{
-      transform: translateY(-2px);
-      box-shadow: var(--shadow);
+    .mobile-left{justify-content:flex-start}
+    .mobile-right{justify-content:flex-end}
+
+    .hero{
+      padding:58px 0 34px;
     }
 
-    .slide{
-      display: none;
-      width: 100%;
-      aspect-ratio: 1 / 1.08;
-      object-fit: cover;
-      border-radius: 22px;
-      box-shadow: 0 18px 36px rgba(0,0,0,0.08);
+    .hero-card{
+      background:linear-gradient(180deg, rgba(255,250,245,0.86), rgba(255,247,241,0.96));
+      border:1px solid var(--line);
+      border-radius:34px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
     }
 
-    .slide.active{
-      display: block;
-      animation: fadeImage 0.45s ease;
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.02fr .98fr;
+      gap:0;
+      align-items:stretch;
     }
 
-    .slide-btn{
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 44px;
-      height: 44px;
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 22px;
-      color: var(--brown);
-      background: rgba(255,250,246,0.92);
-      box-shadow: 0 8px 18px rgba(106,81,69,0.14);
-      transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.25s ease;
+    .hero-visual{
+      padding:18px;
     }
 
-    .slide-btn:hover{
-      transform: translateY(-50%) scale(1.05);
-      box-shadow: 0 12px 22px rgba(106,81,69,0.18);
+    .slideshow-shell{
+      position:relative;
+      border-radius:26px;
+      overflow:hidden;
+      aspect-ratio:4 / 5;
+      background:#eadccf;
     }
 
-    .prev{ left: 16px; }
-    .next{ right: 16px; }
-
-    .thumbs{
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-top: 14px;
+    .slide-img{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      opacity:0;
+      transition:opacity .8s ease, transform .8s ease;
+      transform:scale(1.02);
     }
 
-    .thumb{
-      border: none;
-      background: none;
-      padding: 0;
-      cursor: pointer;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 8px 18px rgba(106,81,69,0.08);
-      opacity: 0.72;
-      transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.25s ease;
+    .slide-img.active{
+      opacity:1;
+      transform:scale(1);
     }
 
-    .thumb:hover,
-    .thumb.active{
-      opacity: 1;
-      transform: translateY(-2px);
-      box-shadow: 0 12px 22px rgba(106,81,69,0.12);
+    .slide-badge{
+      position:absolute;
+      left:16px;
+      bottom:16px;
+      z-index:2;
+      padding:9px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.9);
+      color:var(--gold-deep);
+      font-size:.78rem;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      backdrop-filter:blur(8px);
     }
 
-    .thumb img{
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
+    .hero-copy{
+      padding:34px 34px 34px 10px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
     }
-
-    .product-info{
-      max-width: 500px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .product-info > *{
-      opacity: 0;
-      transform: translateY(18px);
-      animation: fadeUp 0.75s var(--ease) forwards;
-    }
-
-    .product-info .eyebrow{ animation-delay: 0.42s; }
-    .product-info h1{ animation-delay: 0.50s; }
-    .product-info .subtitle{ animation-delay: 0.58s; }
-    .product-info .price{ animation-delay: 0.66s; }
-    .product-info .story:nth-of-type(2){ animation-delay: 0.74s; }
-    .product-info .story:nth-of-type(3){ animation-delay: 0.82s; }
-    .product-info .mini-quote{ animation-delay: 0.90s; }
-    .product-info .detail-pills{ animation-delay: 0.98s; }
-    .product-info .button-row{ animation-delay: 1.06s; }
 
     .eyebrow{
-      display: inline-block;
-      margin-bottom: 18px;
-      color: var(--ocre-deep);
-      font-size: 0.85rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
+      display:inline-flex;
+      width:max-content;
+      align-items:center;
+      justify-content:center;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.72);
+      border:1px solid var(--line);
+      color:var(--brown-soft);
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-size:.72rem;
+      margin-bottom:18px;
     }
 
-    h1{
-      margin: 0 0 12px;
-      font-size: clamp(2.6rem, 5vw, 4.3rem);
-      line-height: 0.98;
-      font-weight: 500;
+    .hero-copy h1{
+      margin:0 0 12px;
+      font-size:clamp(2.7rem, 7vw, 4.8rem);
+      line-height:.9;
+      color:var(--brown);
     }
 
-    .subtitle{
-      margin: 0 0 18px;
-      font-size: 1.04rem;
-      color: var(--brown-soft);
-      line-height: 1.8;
-      max-width: 460px;
+    .product-price{
+      margin:0 0 16px;
+      font-size:2rem;
+      line-height:.95;
+      color:var(--gold-deep);
+      font-weight:700;
     }
 
-    .price{
-      display: inline-flex;
-      align-items: center;
-      padding: 10px 16px;
-      margin-bottom: 22px;
-      border-radius: 999px;
-      background: #f7eee6;
-      color: var(--ocre-deep);
-      font-size: 1rem;
-      box-shadow: 0 8px 20px rgba(184,142,103,0.08);
+    .hero-copy p{
+      margin:0 0 14px;
+      color:var(--brown-soft);
+      line-height:1.85;
+      font-size:.98rem;
     }
 
-    .story{
-      margin-bottom: 16px;
-      line-height: 1.95;
-      color: var(--brown-soft);
-      font-size: 1rem;
+    .detail-list{
+      display:grid;
+      gap:10px;
+      margin:8px 0 22px;
     }
 
-    .mini-quote{
-      margin: 20px 0 24px;
-      padding-left: 16px;
-      border-left: 2px solid rgba(184,142,103,0.35);
-      color: var(--brown);
-      font-style: italic;
-      line-height: 1.8;
+    .detail-item{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:12px 14px;
+      border-radius:18px;
+      background:#fffdf9;
+      border:1px solid var(--line);
     }
 
-    .detail-pills{
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 24px 0 28px;
+    .detail-dot{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
+      margin-top:7px;
+      flex-shrink:0;
     }
 
-    .pill{
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.72);
-      border: 1px solid rgba(184,142,103,0.14);
-      font-size: 0.92rem;
-      color: var(--brown);
-      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    .detail-item span{
+      color:var(--brown-soft);
+      font-size:.92rem;
+      line-height:1.7;
     }
 
-    .pill:hover{
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(106,81,69,0.08);
+    .action-row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:6px;
     }
 
-    .button-row{
-      display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-top: 8px;
+    .primary-btn,
+    .secondary-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:52px;
+      padding:14px 22px;
+      border-radius:999px;
+      transition:transform .22s ease, box-shadow .22s ease, background .22s ease;
     }
 
-    .button{
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 235px;
-      padding: 16px 28px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, var(--ocre-deep), var(--ocre));
-      color: #fffaf7;
-      box-shadow: 0 16px 30px rgba(184,142,103,0.28);
-      transition: transform 0.22s ease, opacity 0.22s ease, box-shadow 0.25s ease;
-      position: relative;
-      overflow: hidden;
+    .primary-btn{
+      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
+      color:#fff;
+      box-shadow:0 16px 34px rgba(174,127,67,0.22);
+      font-weight:700;
     }
 
-    .button::after{
-      content: "";
-      position: absolute;
-      top: 0;
-      left: -140%;
-      width: 90%;
-      height: 100%;
-      transform: skewX(-22deg);
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
-      transition: left 0.7s ease;
+    .secondary-btn{
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--brown);
     }
 
-    .button:hover::after{ left: 160%; }
-
-    .button:hover{
-      transform: translateY(-2px);
-      opacity: 0.96;
-      box-shadow: 0 22px 38px rgba(184,142,103,0.34);
+    .primary-btn:hover,
+    .secondary-btn:hover{
+      transform:translateY(-2px);
     }
 
-    .soft-link{
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 180px;
-      padding: 16px 24px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.72);
-      border: 1px solid var(--line);
-      color: var(--brown);
-      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    section{
+      padding:68px 0;
     }
 
-    .soft-link:hover{
-      transform: translateY(-2px);
-      box-shadow: 0 12px 22px rgba(106,81,69,0.10);
+    .section-head{
+      max-width:820px;
+      margin:0 auto 28px;
+      text-align:center;
     }
 
-    .below-section{
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-      margin-top: 28px;
-      position: relative;
-      z-index: 2;
+    .section-head h2{
+      margin:0 0 10px;
+      font-size:clamp(2.3rem, 6vw, 3.8rem);
+      line-height:.92;
+      color:var(--brown);
+    }
+
+    .section-head p{
+      margin:0;
+      color:var(--brown-soft);
+      line-height:1.85;
+      font-size:.97rem;
+    }
+
+    .info-grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:16px;
     }
 
     .info-card{
-      background: rgba(255,250,246,0.76);
-      border: 1px solid var(--line);
-      border-radius: 22px;
-      padding: 20px;
-      box-shadow: var(--shadow-soft);
-      opacity: 0;
-      transform: translateY(30px);
-      transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.85s var(--ease);
-    }
-
-    .info-card.is-visible{
-      opacity: 1;
-      transform: translateY(0);
+      background:rgba(255,250,246,0.86);
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:22px;
+      box-shadow:var(--shadow);
+      transition:transform .24s ease, box-shadow .24s ease;
     }
 
     .info-card:hover{
-      transform: translateY(-4px);
-      box-shadow: var(--shadow);
+      transform:translateY(-4px);
+      box-shadow:var(--shadow-strong);
     }
 
     .info-card h3{
-      margin: 0 0 10px;
-      font-size: 1.08rem;
-      font-weight: 500;
+      margin:0 0 10px;
+      font-size:1.9rem;
+      line-height:.95;
+      color:var(--brown);
     }
 
     .info-card p{
-      margin: 0;
-      color: var(--brown-soft);
-      line-height: 1.8;
-      font-size: 0.96rem;
+      margin:0;
+      color:var(--brown-soft);
+      line-height:1.8;
+      font-size:.93rem;
     }
 
     .footer{
-      margin-top: 60px;
-      padding: 40px 20px;
-      text-align: center;
-      color: var(--brown-soft);
-      background: linear-gradient(180deg, rgba(240,223,214,0.55), rgba(233,214,199,0.84));
-      border-top-left-radius: 36px;
-      border-top-right-radius: 36px;
-      position: relative;
-      z-index: 2;
+      margin-top:34px;
+      padding:74px 0 30px;
+      background:linear-gradient(180deg, #efe6e0, #e8ddd7);
+      border-top-left-radius:34px;
+      border-top-right-radius:34px;
     }
 
-    @keyframes fadeUp{
-      to{
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .footer-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:18px;
     }
 
-    @keyframes fadeImage{
-      from{
-        opacity: 0;
-        transform: scale(0.985);
-      }
-      to{
-        opacity: 1;
-        transform: scale(1);
-      }
+    .footer-card{
+      background:rgba(255,250,246,0.78);
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:22px;
+      box-shadow:var(--shadow);
+      transition:transform .24s ease, box-shadow .24s ease;
     }
 
-    @keyframes driftOne{
-      0%, 100% { transform: translate(0, 0); }
-      50% { transform: translate(14px, -10px); }
+    .footer-card:hover{
+      transform:translateY(-3px);
+      box-shadow:var(--shadow-strong);
     }
 
-    @keyframes driftTwo{
-      0%, 100% { transform: translate(0, 0); }
-      50% { transform: translate(-12px, 12px); }
+    .footer-card h3{
+      margin:0 0 10px;
+      font-size:2.2rem;
+      line-height:.95;
+      font-family:'Cormorant Garamond', serif;
+      font-weight:700;
     }
 
-    @media (prefers-reduced-motion: reduce){
-      *,
-      *::before,
-      *::after{
-        animation: none !important;
-        transition: none !important;
-        scroll-behavior: auto !important;
-      }
+    .footer-card p{
+      margin:0;
+      color:var(--brown-soft);
+      line-height:1.8;
+      font-size:.95rem;
     }
 
-    @media (max-width: 980px){
-      .product-shell{
-        flex-wrap: wrap;
+    .contact-list{
+      display:grid;
+      gap:10px;
+      font-size:.95rem;
+      color:var(--brown-soft);
+    }
+
+    .tiny-note{
+      margin-top:18px;
+      text-align:center;
+      font-size:.85rem;
+      color:var(--brown-soft);
+    }
+
+    .cart-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(64,45,35,.28);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .25s ease;
+      z-index:2000;
+    }
+
+    .cart-overlay.open{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .cart-drawer{
+      position:fixed;
+      top:0;
+      right:0;
+      width:min(430px, 100%);
+      height:100vh;
+      background:#fffdf9;
+      box-shadow:-20px 0 50px rgba(52,38,32,.18);
+      transform:translateX(100%);
+      transition:transform .3s var(--ease);
+      z-index:2100;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .cart-drawer.open{
+      transform:translateX(0);
+    }
+
+    .cart-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:22px 20px 16px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .cart-head h3{
+      margin:0;
+      font-size:2rem;
+      font-family:'Cormorant Garamond', serif;
+      font-weight:700;
+    }
+
+    .cart-close{
+      border:none;
+      background:none;
+      font-size:1.5rem;
+      cursor:pointer;
+      color:var(--brown-soft);
+    }
+
+    .cart-body{
+      flex:1;
+      overflow:auto;
+      padding:18px 20px;
+    }
+
+    .cart-empty{
+      color:var(--brown-soft);
+      line-height:1.8;
+      padding:10px 0;
+    }
+
+    .cart-item{
+      display:grid;
+      grid-template-columns:76px 1fr auto;
+      gap:14px;
+      padding:14px 0;
+      border-bottom:1px solid var(--line);
+      align-items:start;
+    }
+
+    .cart-item img{
+      width:76px;
+      height:76px;
+      object-fit:cover;
+      border-radius:16px;
+      background:#f2e8df;
+    }
+
+    .cart-item h4{
+      margin:0 0 6px;
+      font-size:1rem;
+      line-height:1.35;
+    }
+
+    .cart-meta{
+      font-size:.85rem;
+      color:var(--brown-soft);
+      line-height:1.6;
+    }
+
+    .cart-price{
+      font-size:.95rem;
+      font-weight:700;
+      color:var(--brown);
+      margin-top:6px;
+    }
+
+    .cart-remove{
+      border:none;
+      background:none;
+      color:var(--brown-soft);
+      cursor:pointer;
+      padding:4px;
+      font-size:1.05rem;
+    }
+
+    .qty-row{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .qty-btn{
+      width:28px;
+      height:28px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      cursor:pointer;
+      color:var(--brown);
+    }
+
+    .qty-value{
+      min-width:18px;
+      text-align:center;
+      font-size:.92rem;
+    }
+
+    .cart-footer{
+      border-top:1px solid var(--line);
+      padding:18px 20px 22px;
+      background:#fffdf9;
+    }
+
+    .cart-total{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:1rem;
+      margin-bottom:14px;
+    }
+
+    .cart-total strong{
+      font-size:1.12rem;
+    }
+
+    .cart-actions{
+      display:grid;
+      gap:10px;
+    }
+
+    .cart-primary,
+    .cart-secondary{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:50px;
+      border-radius:999px;
+      transition:transform .22s ease;
+    }
+
+    .cart-primary{
+      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
+      color:#fff;
+      font-weight:700;
+    }
+
+    .cart-secondary{
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--brown);
+      cursor:pointer;
+    }
+
+    .cart-primary:hover,
+    .cart-secondary:hover{
+      transform:translateY(-1px);
+    }
+
+    .mobile-menu-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(64,45,35,.28);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .25s ease;
+      z-index:1800;
+    }
+
+    .mobile-menu-overlay.open{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .mobile-menu{
+      position:fixed;
+      top:0;
+      left:0;
+      width:min(340px, 100%);
+      height:100vh;
+      background:#fffdf9;
+      box-shadow:20px 0 50px rgba(52,38,32,.14);
+      transform:translateX(-100%);
+      transition:transform .3s var(--ease);
+      z-index:1900;
+      padding:24px 20px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .mobile-menu.open{
+      transform:translateX(0);
+    }
+
+    .mobile-menu-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .mobile-menu-title{
+      font-size:1.8rem;
+      font-family:'Cormorant Garamond', serif;
+      font-weight:700;
+    }
+
+    .mobile-close{
+      border:none;
+      background:none;
+      font-size:1.5rem;
+      color:var(--brown-soft);
+      cursor:pointer;
+    }
+
+    .mobile-menu a{
+      padding:12px 0;
+      border-bottom:1px solid var(--line);
+      font-size:1rem;
+      color:var(--brown);
+    }
+
+    .reveal-up,
+    .reveal-soft{
+      opacity:0;
+      will-change:transform, opacity;
+    }
+
+    .reveal-up{
+      transform:translateY(34px);
+      transition:opacity .9s var(--ease), transform .9s var(--ease);
+    }
+
+    .reveal-soft{
+      transform:scale(.985) translateY(24px);
+      transition:opacity .95s var(--ease), transform .95s var(--ease);
+    }
+
+    .reveal-up.is-visible,
+    .reveal-soft.is-visible{
+      opacity:1;
+      transform:translateY(0) scale(1);
+    }
+
+    @media (max-width: 1080px){
+      .hero-grid,
+      .footer-grid{
+        grid-template-columns:1fr;
       }
 
-      .gallery,
-      .product-info{
-        width: 100%;
-        max-width: 100%;
+      .hero-copy{
+        padding:14px 26px 28px;
       }
 
-      .below-section{
-        grid-template-columns: 1fr;
+      .info-grid{
+        grid-template-columns:1fr;
       }
     }
 
     @media (max-width: 760px){
-      .cursor-glow{ display: none; }
+      .cursor-glow{display:none}
+
+      .top-bar{
+        padding:10px 12px;
+        font-size:.82rem;
+      }
+
+      .top-bar a{
+        display:block;
+        width:max-content;
+        margin:8px auto 0;
+      }
+
+      .site-header{
+        position:relative;
+        top:0;
+      }
 
       .nav{
-        flex-direction: column;
-        justify-content: center;
-        padding: 12px 20px;
+        grid-template-columns:1fr auto 1fr;
+        min-height:78px;
       }
 
-      .menu{
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 16px;
-        font-size: 0.92rem;
+      .nav-left,
+      .nav-right{
+        display:none;
       }
 
-      .page{
-        padding-top: 170px;
+      .mobile-left,
+      .mobile-right{
+        display:flex;
       }
 
-      .product-shell{
-        gap: 26px;
-        padding: 18px;
+      .logo-wrap img{
+        width:58px;
+        height:58px;
       }
 
-      .gallery{
-        width: 100%;
+      .brand-text{
+        font-size:1.52rem;
       }
 
-      .button-row{
-        flex-direction: column;
+      .brand-sub{
+        display:none;
       }
 
-      .button,
-      .soft-link{
-        width: 100%;
+      .hero{
+        padding:28px 0 18px;
+      }
+
+      .hero-card{
+        border-radius:24px;
+      }
+
+      .hero-visual{
+        padding:12px;
+      }
+
+      .slideshow-shell{
+        border-radius:20px;
+      }
+
+      .hero-copy{
+        padding:6px 16px 18px;
+      }
+
+      .hero-copy h1{
+        font-size:clamp(2.2rem, 10vw, 3.3rem);
+      }
+
+      .product-price{
+        font-size:1.6rem;
+      }
+
+      .hero-copy p{
+        font-size:.9rem;
+        line-height:1.72;
+      }
+
+      .eyebrow{
+        font-size:.65rem;
+      }
+
+      .detail-item{
+        border-radius:16px;
+        padding:11px 12px;
+      }
+
+      .detail-item span{
+        font-size:.84rem;
+        line-height:1.6;
+      }
+
+      .action-row{
+        flex-direction:column;
+      }
+
+      .primary-btn,
+      .secondary-btn{
+        width:100%;
+        min-height:48px;
+      }
+
+      section{
+        padding:54px 0;
+      }
+
+      .section-head{
+        margin-bottom:20px;
+      }
+
+      .section-head h2{
+        font-size:clamp(2rem, 9vw, 2.9rem);
+      }
+
+      .section-head p{
+        font-size:.9rem;
+      }
+
+      .info-card{
+        border-radius:18px;
+        padding:16px;
+      }
+
+      .info-card h3{
+        font-size:1.55rem;
+      }
+
+      .info-card p{
+        font-size:.86rem;
+        line-height:1.65;
+      }
+
+      .footer-card{
+        border-radius:18px;
+        padding:16px;
+      }
+
+      .footer-card h3{
+        font-size:1.8rem;
+      }
+
+      .footer-card p,
+      .contact-list{
+        font-size:.86rem;
+        line-height:1.65;
+      }
+
+      .cart-drawer{
+        width:100%;
       }
     }
   </style>
 </head>
 <body>
-
   <div class="cursor-glow" id="cursorGlow"></div>
 
-  <header class="site-header" id="siteHeader">
-    <div class="nav">
-      <a href="index.html" class="logo">
-        <img src="images/logo.jpg" alt="Maison Doucette logo">
-        <span>Maison Doucette</span>
+  <div class="top-bar">
+    NOU • Descoperă și Mystery Experience
+    <a href="mystery.html">Vezi acum</a>
+  </div>
+
+  <header class="site-header">
+    <div class="container nav">
+      <div class="mobile-left">
+        <button class="icon-btn" id="mobileMenuOpenBtn" aria-label="Deschide meniul">
+          <svg viewBox="0 0 24 24">
+            <path d="M3 6h18"></path>
+            <path d="M3 12h18"></path>
+            <path d="M3 18h18"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="nav-left">
+        <nav>
+          <ul class="nav-links">
+            <li><a href="index.html#home">Acasă</a></li>
+            <li><a href="index.html#worlds">Cumpără acum</a></li>
+            <li><a href="index.html#atelier" class="nav-pill">Atelierul Maison Doucette</a></li>
+          </ul>
+        </nav>
+      </div>
+
+      <a href="index.html#home" class="logo-wrap" aria-label="Maison Doucette Acasă">
+        <img src="images/logo.jpg" alt="Logo Maison Doucette">
+        <div class="brand-stack">
+          <span class="brand-text">Maison Doucette</span>
+          <span class="brand-sub">strawberry</span>
+        </div>
       </a>
 
-      <ul class="menu">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="index.html#shop">Our collection</a></li>
-        <li><a href="index.html#about">About us</a></li>
-        <li><a href="index.html#contact">Contact us</a></li>
-      </ul>
+      <div class="nav-right">
+        <nav>
+          <ul class="nav-links">
+            <li><a href="mystery.html">Mystery Experience</a></li>
+            <li><a href="index.html#about">Despre</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+          </ul>
+        </nav>
+
+        <button class="icon-btn cart-btn" id="cartOpenBtn" aria-label="Deschide coșul">
+          <svg viewBox="0 0 24 24">
+            <circle cx="9" cy="20" r="1"></circle>
+            <circle cx="18" cy="20" r="1"></circle>
+            <path d="M2 3h3l2.2 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.5L21 6H7.1"></path>
+          </svg>
+          <span id="cart-count">0</span>
+        </button>
+      </div>
+
+      <div class="mobile-right">
+        <button class="icon-btn cart-btn" id="mobileCartOpenBtn" aria-label="Deschide coșul">
+          <svg viewBox="0 0 24 24">
+            <circle cx="9" cy="20" r="1"></circle>
+            <circle cx="18" cy="20" r="1"></circle>
+            <path d="M2 3h3l2.2 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.5L21 6H7.1"></path>
+          </svg>
+          <span id="mobile-cart-count">0</span>
+        </button>
+      </div>
     </div>
   </header>
 
-  <main class="page">
-    <div class="top-note">
-      <span>A little handmade treasure</span>
-    </div>
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-card reveal-up">
+          <div class="hero-grid">
+            <div class="hero-visual reveal-soft">
+              <div class="slideshow-shell">
+                <img src="images/strawberry-details-1.jpg" alt="Chocolate Covered Strawberry Maison Doucette" class="slide-img active">
+                <img src="images/strawberry-details-2.jpg" alt="Chocolate Covered Strawberry Maison Doucette" class="slide-img">
+                <img src="images/strawberry-details-3.jpg" alt="Chocolate Covered Strawberry Maison Doucette" class="slide-img">
+                <div class="slide-badge">Chocolate Covered Strawberry</div>
+              </div>
+            </div>
 
-    <section class="product-shell" id="productShell">
-      <div class="gallery">
-        <div class="gallery-frame">
-          <img class="slide active" src="images/strawberry1.jpg" alt="Chocolate Covered Strawberry photo 1">
-          <img class="slide" src="images/strawberry2.jpg" alt="Chocolate Covered Strawberry photo 2">
+            <div class="hero-copy reveal-up">
+              <span class="eyebrow">petit cadeau handmade</span>
+              <h1 class="display">Chocolate Covered Strawberry</h1>
+              <div class="product-price">20 RON</div>
 
-          <button class="slide-btn prev" onclick="prevSlide()">‹</button>
-          <button class="slide-btn next" onclick="nextSlide()">›</button>
-        </div>
+              <p>
+                Chocolate Covered Strawberry este una dintre acele piese mici care atrag imediat atenția — dulce, jucăușă și foarte ușor de oferit cadou.
+              </p>
 
-        <div class="thumbs">
-          <button class="thumb active" onclick="setSlide(0)">
-            <img src="images/strawberry1.jpg" alt="Chocolate Covered Strawberry thumbnail 1">
-          </button>
-          <button class="thumb" onclick="setSlide(1)">
-            <img src="images/strawberry2.jpg" alt="Chocolate Covered Strawberry thumbnail 2">
-          </button>
-        </div>
-      </div>
+              <p>
+                Are un aer delicat și inedit, perfect pentru un mic gest cu personalitate, mai ales atunci când vrei ceva simpatic, dar totuși elegant.
+              </p>
 
-      <div class="product-info">
-        <div class="eyebrow">Maison Doucette Chocolate Covered Strawberry</div>
-        <h1>Chocolate Covered Strawberry</h1>
+              <div class="detail-list">
+                <div class="detail-item">
+                  <div class="detail-dot"></div>
+                  <span>un produs mic, memorabil și foarte ușor de dăruit</span>
+                </div>
 
-        <p class="subtitle">
-          Sweet, delicate and charming, this little handmade piece is made to feel like a tiny keepsake from a softer world.
-        </p>
+                <div class="detail-item">
+                  <div class="detail-dot"></div>
+                  <span>ideal pentru comenzi simple, cadouri simbolice sau mici surprize cute</span>
+                </div>
 
-        <div class="price">20 RON</div>
+                <div class="detail-item">
+                  <div class="detail-dot"></div>
+                  <span>perfect pentru acel vibe dulce, feminin și puțin playful</span>
+                </div>
+              </div>
 
-        <p class="story">
-          This handmade chocolate covered strawberry is carefully crocheted with warmth and attention to the sweetest little details, making it feel playful, giftable and full of charm.
-        </p>
-
-        <p class="story">
-          Small but memorable, it is designed to bring a touch of sweetness and handmade tenderness — whether chosen as a tiny gift or a lovely little keepsake.
-        </p>
-
-        <div class="mini-quote">
-          A small little treasure, made to charm at first glance.
-        </div>
-
-        <div class="detail-pills">
-          <span class="pill">Handmade</span>
-          <span class="pill">Giftable piece</span>
-          <span class="pill">Sweet little details</span>
-        </div>
-
-        <div class="button-row">
-          <a class="button" href="ChocoStrawberry.html">Step Into the Atelier</a>
-          <a class="soft-link" href="index.html#shop">Back to Collection</a>
+              <div class="action-row">
+                <a href="strawberry.html" class="primary-btn">Vezi produsul</a>
+                <a href="index.html#atelier" class="secondary-btn">Înapoi în atelier</a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="below-section">
-      <div class="info-card reveal-card">
-        <h3>Why it feels special</h3>
-        <p>This tiny handmade piece feels charming and memorable, like a small keepsake with a sweet little story.</p>
-      </div>
+    <section class="reveal-up">
+      <div class="container">
+        <div class="section-head reveal-up">
+          <h2>De ce este atât de adorabilă?</h2>
+          <p>
+            E genul de creație mică ce reușește să fie în același timp drăguță, estetică și foarte ușor de reținut. Tocmai dimensiunea și forma ei o fac atât de specială.
+          </p>
+        </div>
 
-      <div class="info-card reveal-card">
-        <h3>Handmade detail</h3>
-        <p>Carefully crocheted with attention to color, texture and softness, it brings warmth even in the smallest form.</p>
-      </div>
+        <div class="info-grid">
+          <div class="info-card reveal-up">
+            <h3>Mică și cute</h3>
+            <p>
+              Are acel farmec al lucrurilor mici care par imediat mai prețioase și mai personale.
+            </p>
+          </div>
 
-      <div class="info-card reveal-card">
-        <h3>Gift-ready charm</h3>
-        <p>Delicate, playful and eye-catching, it makes a lovely little gift or a precious addition to the collection.</p>
+          <div class="info-card reveal-up">
+            <h3>Inedită</h3>
+            <p>
+              Nu este un produs clasic, iar tocmai asta o face să iasă în evidență într-un mod foarte plăcut.
+            </p>
+          </div>
+
+          <div class="info-card reveal-up">
+            <h3>Perfectă pentru cadou</h3>
+            <p>
+              Este ideală pentru un gest dulce, o atenție mică sau un mic detaliu care să aducă zâmbetul acela imediat.
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer class="footer">
-    © Maison Doucette — handmade with love
+  <footer class="footer reveal-up">
+    <div class="container footer-grid">
+      <div class="footer-card reveal-up">
+        <h3>Hai să creăm ceva frumos</h3>
+        <p>
+          Pentru comenzi personalizate, întrebări sau colaborări, ne poți scrie și îți răspundem cu drag.
+        </p>
+      </div>
+
+      <div class="footer-card reveal-up">
+        <div class="contact-list">
+          <div><strong>Instagram:</strong> maison.doucette</div>
+          <div><strong>Email:</strong> maisondoucette.dd@gmail.com</div>
+          <div><strong>Telefon:</strong> 0754233314 | 0749765214</div>
+          <div><strong>Locație:</strong> Galați, România</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container tiny-note">© Maison Doucette — handmade cu drag.</div>
   </footer>
 
+  <div class="cart-overlay" id="cartOverlay"></div>
+
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+    <div class="cart-head">
+      <h3>Coșul tău</h3>
+      <button class="cart-close" id="cartCloseBtn" aria-label="Închide coșul">×</button>
+    </div>
+
+    <div class="cart-body" id="cartBody"></div>
+
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Total estimat</span>
+        <strong id="cartTotal">0 RON</strong>
+      </div>
+
+      <div class="cart-actions">
+        <a href="checkout.html" class="cart-primary">Continuă spre checkout</a>
+        <button class="cart-secondary" id="continueShoppingBtn">Continuă cumpărăturile</button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+  <aside class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-head">
+      <div class="mobile-menu-title">Maison Doucette</div>
+      <button class="mobile-close" id="mobileMenuCloseBtn">×</button>
+    </div>
+
+    <a href="index.html#home" class="mobile-link">Acasă</a>
+    <a href="index.html#worlds" class="mobile-link">Cumpără acum</a>
+    <a href="index.html#atelier" class="mobile-link">Atelierul Maison Doucette</a>
+    <a href="mystery.html" class="mobile-link">Mystery Experience</a>
+    <a href="index.html#contact" class="mobile-link">Contact</a>
+  </aside>
+
   <script>
+    const cartKey = 'cart';
+
+    const cartOpenBtn = document.getElementById('cartOpenBtn');
+    const mobileCartOpenBtn = document.getElementById('mobileCartOpenBtn');
+    const cartCloseBtn = document.getElementById('cartCloseBtn');
+    const cartOverlay = document.getElementById('cartOverlay');
+    const cartDrawer = document.getElementById('cartDrawer');
+    const cartBody = document.getElementById('cartBody');
+    const cartTotal = document.getElementById('cartTotal');
+    const cartCount = document.getElementById('cart-count');
+    const mobileCartCount = document.getElementById('mobile-cart-count');
+    const continueShoppingBtn = document.getElementById('continueShoppingBtn');
+
+    const mobileMenuOpenBtn = document.getElementById('mobileMenuOpenBtn');
+    const mobileMenuCloseBtn = document.getElementById('mobileMenuCloseBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+
+    const revealItems = document.querySelectorAll('.reveal-up, .reveal-soft');
+    const cursorGlow = document.getElementById('cursorGlow');
+    const heroCard = document.querySelector('.hero-card');
+    const slides = Array.from(document.querySelectorAll('.slide-img'));
+
     let slideIndex = 0;
-    const slides = document.querySelectorAll(".slide");
-    const thumbs = document.querySelectorAll(".thumb");
-    const revealCards = document.querySelectorAll(".reveal-card");
-    const cursorGlow = document.getElementById("cursorGlow");
-    const siteHeader = document.getElementById("siteHeader");
-    const productShell = document.getElementById("productShell");
 
-    function showSlide(index){
-      slides.forEach(slide => slide.classList.remove("active"));
-      thumbs.forEach(thumb => thumb.classList.remove("active"));
-      slides[index].classList.add("active");
-      thumbs[index].classList.add("active");
-    }
-
-    function nextSlide(){
-      slideIndex++;
-      if(slideIndex >= slides.length){
-        slideIndex = 0;
-      }
-      showSlide(slideIndex);
-    }
-
-    function prevSlide(){
-      slideIndex--;
-      if(slideIndex < 0){
-        slideIndex = slides.length - 1;
-      }
-      showSlide(slideIndex);
-    }
-
-    function setSlide(index){
-      slideIndex = index;
-      showSlide(slideIndex);
-    }
-
-    function handleHeaderShadow(){
-      if(window.scrollY > 14){
-        siteHeader.classList.add("scrolled");
-      } else {
-        siteHeader.classList.remove("scrolled");
+    function getCart() {
+      try {
+        return JSON.parse(localStorage.getItem(cartKey)) || [];
+      } catch {
+        return [];
       }
     }
+
+    function setCart(cart) {
+      localStorage.setItem(cartKey, JSON.stringify(cart));
+    }
+
+    function formatPrice(value) {
+      return `${Number(value).toFixed(0)} RON`;
+    }
+
+    function updateCartBadge() {
+      const cart = getCart();
+      const totalQty = cart.reduce((sum, item) => sum + Number(item.quantity || 1), 0);
+
+      if (cartCount) {
+        cartCount.textContent = totalQty;
+        cartCount.style.display = totalQty === 0 ? 'none' : 'flex';
+      }
+
+      if (mobileCartCount) {
+        mobileCartCount.textContent = totalQty;
+        mobileCartCount.style.display = totalQty === 0 ? 'none' : 'flex';
+      }
+    }
+
+    function renderCart() {
+      const cart = getCart();
+      updateCartBadge();
+
+      if (!cart.length) {
+        cartBody.innerHTML = `
+          <div class="cart-empty">
+            Coșul este gol momentan. Alege un produs și el va apărea aici.
+          </div>
+        `;
+        cartTotal.textContent = formatPrice(0);
+        return;
+      }
+
+      let total = 0;
+
+      cartBody.innerHTML = cart.map((item, index) => {
+        const qty = Number(item.quantity || 1);
+        const price = Number(item.price || 0);
+        const lineTotal = qty * price;
+        total += lineTotal;
+
+        const details = item.details || [];
+        const detailsHtml = details.length
+          ? details.map(detail => `<div>${detail}</div>`).join('')
+          : '';
+
+        const image = item.image || 'images/placeholder-product.jpg';
+
+        return `
+          <div class="cart-item">
+            <img src="${image}" alt="${item.name}">
+            <div>
+              <h4>${item.name}</h4>
+              <div class="cart-meta">${detailsHtml}</div>
+              <div class="qty-row">
+                <button class="qty-btn" onclick="changeQuantity(${index}, -1)">−</button>
+                <div class="qty-value">${qty}</div>
+                <button class="qty-btn" onclick="changeQuantity(${index}, 1)">+</button>
+              </div>
+              <div class="cart-price">${formatPrice(lineTotal)}</div>
+            </div>
+            <button class="cart-remove" onclick="removeCartItem(${index})" aria-label="Șterge produsul">🗑</button>
+          </div>
+        `;
+      }).join('');
+
+      cartTotal.textContent = formatPrice(total);
+    }
+
+    function openCart() {
+      renderCart();
+      cartDrawer.classList.add('open');
+      cartOverlay.classList.add('open');
+      cartDrawer.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCart() {
+      cartDrawer.classList.remove('open');
+      cartOverlay.classList.remove('open');
+      cartDrawer.setAttribute('aria-hidden', 'true');
+      if (!mobileMenu.classList.contains('open')) {
+        document.body.style.overflow = '';
+      }
+    }
+
+    function removeCartItem(index) {
+      const cart = getCart();
+      cart.splice(index, 1);
+      setCart(cart);
+      renderCart();
+    }
+
+    function changeQuantity(index, delta) {
+      const cart = getCart();
+      if (!cart[index]) return;
+
+      cart[index].quantity = Number(cart[index].quantity || 1) + delta;
+
+      if (cart[index].quantity <= 0) {
+        cart.splice(index, 1);
+      }
+
+      setCart(cart);
+      renderCart();
+    }
+
+    function openMobileMenu() {
+      mobileMenu.classList.add('open');
+      mobileMenuOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileMenu() {
+      mobileMenu.classList.remove('open');
+      mobileMenuOverlay.classList.remove('open');
+      if (!cartDrawer.classList.contains('open')) {
+        document.body.style.overflow = '';
+      }
+    }
+
+    function nextSlide() {
+      if (!slides.length) return;
+      slides[slideIndex].classList.remove('active');
+      slideIndex = (slideIndex + 1) % slides.length;
+      slides[slideIndex].classList.add('active');
+    }
+
+    window.removeCartItem = removeCartItem;
+    window.changeQuantity = changeQuantity;
+
+    cartOpenBtn?.addEventListener('click', openCart);
+    mobileCartOpenBtn?.addEventListener('click', openCart);
+    cartCloseBtn?.addEventListener('click', closeCart);
+    cartOverlay?.addEventListener('click', closeCart);
+    continueShoppingBtn?.addEventListener('click', closeCart);
+
+    mobileMenuOpenBtn?.addEventListener('click', openMobileMenu);
+    mobileMenuCloseBtn?.addEventListener('click', closeMobileMenu);
+    mobileMenuOverlay?.addEventListener('click', closeMobileMenu);
+
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', closeMobileMenu);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeCart();
+        closeMobileMenu();
+      }
+    });
 
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if(entry.isIntersecting){
-          entry.target.classList.add("is-visible");
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
           revealObserver.unobserve(entry.target);
         }
       });
     }, {
-      threshold: 0.16
+      threshold: 0.12
     });
 
-    revealCards.forEach(card => revealObserver.observe(card));
+    revealItems.forEach(item => revealObserver.observe(item));
 
-    document.addEventListener("mousemove", (e) => {
-      if(!cursorGlow) return;
+    document.addEventListener('mousemove', (e) => {
+      if (!cursorGlow || window.innerWidth <= 760) return;
       cursorGlow.style.left = `${e.clientX}px`;
       cursorGlow.style.top = `${e.clientY}px`;
     });
 
-    document.addEventListener("mouseleave", () => {
-      if(cursorGlow) cursorGlow.style.opacity = "0";
+    document.addEventListener('mouseleave', () => {
+      if (cursorGlow) cursorGlow.style.opacity = '0';
+      if (heroCard) heroCard.style.transform = '';
     });
 
-    document.addEventListener("mouseenter", () => {
-      if(cursorGlow) cursorGlow.style.opacity = "0.9";
+    document.addEventListener('mouseenter', () => {
+      if (cursorGlow && window.innerWidth > 760) cursorGlow.style.opacity = '0.85';
     });
 
-    document.addEventListener("mousemove", (e) => {
-      if(!productShell || window.innerWidth < 980) return;
+    document.addEventListener('mousemove', (e) => {
+      if (!heroCard || window.innerWidth <= 760) return;
 
-      const rect = productShell.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const rect = heroCard.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
 
-      if(x >= 0 && x <= rect.width && y >= 0 && y <= rect.height){
-        const rotateY = ((x / rect.width) - 0.5) * 3.5;
-        const rotateX = ((y / rect.height) - 0.5) * -3.5;
-        productShell.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-      } else {
-        productShell.style.transform = "";
-      }
+      const moveX = (e.clientX - centerX) * 0.008;
+      const moveY = (e.clientY - centerY) * 0.008;
+
+      heroCard.style.transform = `translate(${moveX}px, ${moveY}px)`;
     });
 
-    document.addEventListener("mouseleave", () => {
-      if(productShell) productShell.style.transform = "";
-    });
-
-    window.addEventListener("scroll", handleHeaderShadow);
-    window.addEventListener("load", handleHeaderShadow);
+    setInterval(nextSlide, 3600);
+    updateCartBadge();
   </script>
 </body>
 </html>
