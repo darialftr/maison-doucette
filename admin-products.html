@@ -20,7 +20,11 @@
       --line:rgba(101,79,67,0.12);
       --shadow:0 18px 45px rgba(101,79,67,0.10);
       --shadow-strong:0 28px 60px rgba(101,79,67,0.16);
-      --container:1100px;
+      --container:1180px;
+      --danger:#8b1538;
+      --danger-soft:#fff4f6;
+      --success:#2f7a52;
+      --success-soft:#f4fbf7;
     }
 
     *{box-sizing:border-box}
@@ -265,7 +269,7 @@
       margin-top:16px;
     }
 
-    .btn-primary,.btn-secondary,.btn-danger{
+    .btn-primary,.btn-secondary,.btn-danger,.btn-success{
       display:inline-flex;
       align-items:center;
       justify-content:center;
@@ -274,7 +278,8 @@
       border-radius:999px;
       border:none;
       cursor:pointer;
-      transition:transform .22s ease, box-shadow .22s ease;
+      transition:transform .22s ease, box-shadow .22s ease, opacity .22s ease;
+      text-decoration:none;
     }
 
     .btn-primary{
@@ -292,11 +297,17 @@
 
     .btn-danger{
       background:#fff;
-      border:1px solid var(--line);
-      color:#8b1538;
+      border:1px solid rgba(139,21,56,.22);
+      color:var(--danger);
     }
 
-    .btn-primary:hover,.btn-secondary:hover,.btn-danger:hover{
+    .btn-success{
+      background:#fff;
+      border:1px solid rgba(47,122,82,.22);
+      color:var(--success);
+    }
+
+    .btn-primary:hover,.btn-secondary:hover,.btn-danger:hover,.btn-success:hover{
       transform:translateY(-1px);
     }
 
@@ -319,49 +330,131 @@
 
     .product-list{
       display:grid;
-      gap:12px;
+      gap:18px;
     }
 
-    .product-item{
+    .product-card{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.72);
+      border-radius:24px;
+      padding:16px;
+      box-shadow:var(--shadow);
+    }
+
+    .product-card.is-hidden{
+      opacity:.7;
+      background:rgba(255,248,245,.72);
+      border-color:rgba(139,21,56,.12);
+    }
+
+    .product-top{
       display:grid;
-      grid-template-columns:84px 1fr auto;
+      grid-template-columns:96px 1fr auto;
       gap:14px;
       align-items:start;
-      padding:12px 0;
-      border-bottom:1px solid var(--line);
+      margin-bottom:14px;
     }
 
-    .product-item:last-child{
-      border-bottom:none;
-      padding-bottom:0;
-    }
-
-    .product-item img{
-      width:84px;
-      height:84px;
+    .product-top img{
+      width:96px;
+      height:96px;
       object-fit:cover;
       border-radius:18px;
       background:#efe4d8;
       border:1px solid var(--line);
     }
 
-    .product-item h3{
-      margin:0 0 6px;
-      font-size:1.45rem;
-      line-height:.92;
-      color:var(--brown);
-    }
-
-    .product-meta{
+    .product-order-box{
       display:grid;
-      gap:4px;
+      gap:8px;
+      min-width:110px;
     }
 
-    .product-meta div{
+    .order-badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:38px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--brown);
+      font-size:.84rem;
+      font-weight:700;
+    }
+
+    .order-actions{
+      display:grid;
+      gap:8px;
+    }
+
+    .mini-btn{
+      min-height:38px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--brown);
+      cursor:pointer;
+      transition:transform .18s ease;
+    }
+
+    .mini-btn:hover{
+      transform:translateY(-1px);
+    }
+
+    .mini-btn:disabled{
+      opacity:.45;
+      cursor:not-allowed;
+      transform:none;
+    }
+
+    .mini-btn.hide-btn{
+      color:var(--danger);
+      border-color:rgba(139,21,56,.20);
+      background:var(--danger-soft);
+    }
+
+    .mini-btn.show-btn{
+      color:var(--success);
+      border-color:rgba(47,122,82,.20);
+      background:var(--success-soft);
+    }
+
+    .product-fields{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .product-fields .full{
+      grid-column:1 / -1;
+    }
+
+    .inline-preview{
+      width:100%;
+      max-width:200px;
+      aspect-ratio:1 / 1;
+      object-fit:cover;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#efe4d8;
+      margin-top:10px;
+    }
+
+    .product-card-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+
+    .small-note{
+      margin-top:8px;
+      font-size:.8rem;
       color:var(--brown-soft);
-      font-size:.86rem;
       line-height:1.6;
-      word-break:break-word;
     }
 
     .empty-state{
@@ -369,6 +462,33 @@
       color:var(--brown-soft);
       line-height:1.8;
       font-size:.92rem;
+    }
+
+    .hidden-pill,
+    .visible-pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:max-content;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:.72rem;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      margin-top:6px;
+    }
+
+    .hidden-pill{
+      background:var(--danger-soft);
+      color:var(--danger);
+      border:1px solid rgba(139,21,56,.16);
+    }
+
+    .visible-pill{
+      background:var(--success-soft);
+      color:var(--success);
+      border:1px solid rgba(47,122,82,.16);
     }
 
     @media (max-width: 980px){
@@ -382,11 +502,30 @@
       .brand-sub{display:none}
       .hero-card,.panel{border-radius:22px;padding:16px}
       .form-grid{grid-template-columns:1fr}
-      .product-item{grid-template-columns:72px 1fr}
-      .product-item img{width:72px;height:72px;border-radius:16px}
-      .product-item .btn-danger{grid-column:2;width:100%;margin-top:6px}
-      .actions{flex-direction:column}
-      .btn-primary,.btn-secondary,.btn-danger{width:100%}
+      .product-top{
+        grid-template-columns:72px 1fr;
+      }
+      .product-top img{
+        width:72px;
+        height:72px;
+        border-radius:16px;
+      }
+      .product-order-box{
+        grid-column:1 / -1;
+        min-width:0;
+      }
+      .product-fields{
+        grid-template-columns:1fr;
+      }
+      .actions,.product-card-actions{
+        flex-direction:column;
+      }
+      .btn-primary,.btn-secondary,.btn-danger,.btn-success{
+        width:100%;
+      }
+      .mini-btn{
+        width:100%;
+      }
     }
   </style>
 </head>
@@ -415,7 +554,7 @@
         <div class="hero-card">
           <div class="eyebrow">panou privat</div>
           <h1>Administrare produse</h1>
-          <p>De aici te autentifici, încarci imaginea direct din telefon sau laptop și adaugi produse noi în atelierul Maison Doucette.</p>
+          <p>De aici te autentifici, încarci imaginea direct din telefon sau laptop, editezi produsele existente, le ascunzi sau le afișezi pe site și modifici ordinea lor.</p>
         </div>
       </div>
     </section>
@@ -495,11 +634,13 @@
       <div class="container">
         <div class="panel" id="productsPanel" style="display:none;">
           <h2>Produse existente</h2>
-          <p>Aici poți vedea ce produse sunt deja publicate și le poți șterge dacă ai nevoie.</p>
+          <p>Aici poți edita tot, schimba ordinea, ascunde sau afișa produsele pe site și șterge produsele de care nu mai ai nevoie.</p>
 
           <div class="product-list" id="productsList">
             <div class="empty-state">Se încarcă produsele...</div>
           </div>
+
+          <div class="status" id="listStatus"></div>
         </div>
       </div>
     </section>
@@ -513,6 +654,8 @@
       window.SUPABASE_URL,
       window.SUPABASE_ANON_KEY
     );
+
+    const PRODUCTS_BUCKET = 'products';
 
     const loginEmail = document.getElementById('loginEmail');
     const loginPassword = document.getElementById('loginPassword');
@@ -531,7 +674,10 @@
     const productImageFile = document.getElementById('productImageFile');
     const imagePreview = document.getElementById('imagePreview');
     const productStatus = document.getElementById('productStatus');
+    const listStatus = document.getElementById('listStatus');
     const productsList = document.getElementById('productsList');
+
+    let productsCache = [];
 
     function showStatus(element, message) {
       element.textContent = message;
@@ -557,71 +703,294 @@
         .replace(/^-+|-+$/g, '');
     }
 
-    async function loadProducts() {
-      productsList.innerHTML = `<div class="empty-state">Se actualizează produsele...</div>`;
+    function getStoragePathFromPublicUrl(imageUrl) {
+      const prefix = `${window.SUPABASE_URL}/storage/v1/object/public/${PRODUCTS_BUCKET}/`;
+      if (!imageUrl || !imageUrl.startsWith(prefix)) return null;
+      return imageUrl.replace(prefix, '');
+    }
+
+    async function getNextSortOrder() {
       const { data, error } = await db
         .from('products')
-        .select('*')
-        .order('created_at', { ascending: true });
+        .select('sort_order')
+        .order('sort_order', { ascending: false })
+        .limit(1);
 
-      if (error) {
-        productsList.innerHTML = `<div class="empty-state">Nu am putut încărca produsele.</div>`;
-        showStatus(productStatus, `Eroare la încărcarea produselor: ${error.message}`);
-        return;
-      }
+      if (error) return 0;
+      if (!data || !data.length) return 0;
 
-      if (!data || data.length === 0) {
+      return Number(data[0].sort_order || 0) + 1;
+    }
+
+    function renderProducts(data) {
+      productsCache = Array.isArray(data) ? data : [];
+
+      if (!productsCache.length) {
         productsList.innerHTML = `<div class="empty-state">Nu există încă produse în tabel.</div>`;
         return;
       }
 
-      productsList.innerHTML = data.map(product => `
-        <div class="product-item">
-          <img src="${product.image}" alt="${product.name}">
-          <div>
-            <h3>${product.name}</h3>
-            <div class="product-meta">
-              <div><strong>${product.text}</strong></div>
-              <div>${product.description}</div>
-              <div>${product.link}</div>
+      productsList.innerHTML = productsCache.map((product, index) => `
+        <div class="product-card ${product.is_visible === false ? 'is-hidden' : ''}" data-product-id="${product.id}">
+          <div class="product-top">
+            <div>
+              <img src="${product.image || ''}" alt="${product.name || 'Produs'}">
+              ${product.is_visible === false
+                ? `<div class="hidden-pill">Ascuns pe site</div>`
+                : `<div class="visible-pill">Vizibil pe site</div>`}
+            </div>
+
+            <div>
+              <h3>${product.name || 'Produs fără nume'}</h3>
+              <div class="small-note">ID: ${product.id}</div>
+              <div class="small-note">Ordine curentă: ${Number(product.sort_order || 0)}</div>
+            </div>
+
+            <div class="product-order-box">
+              <div class="order-badge">Poziția ${index + 1}</div>
+              <div class="order-actions">
+                <button class="mini-btn" type="button" data-action="move-up" data-id="${product.id}" ${index === 0 ? 'disabled' : ''}>Mută mai sus</button>
+                <button class="mini-btn" type="button" data-action="move-down" data-id="${product.id}" ${index === productsCache.length - 1 ? 'disabled' : ''}>Mută mai jos</button>
+                <button class="mini-btn ${product.is_visible === false ? 'show-btn' : 'hide-btn'}" type="button" data-action="toggle-visibility" data-id="${product.id}">
+                  ${product.is_visible === false ? 'Show pe site' : 'Hide de pe site'}
+                </button>
+              </div>
             </div>
           </div>
-          <button class="btn-danger" type="button" data-delete-id="${product.id}" data-delete-image="${product.image}">
-            Șterge
-          </button>
+
+          <div class="product-fields">
+            <label>
+              Nume produs
+              <input type="text" data-field="name" value="${escapeHtml(product.name || '')}">
+            </label>
+
+            <label>
+              Text / preț
+              <input type="text" data-field="text" value="${escapeHtml(product.text || '')}">
+            </label>
+
+            <label class="full">
+              Descriere
+              <textarea data-field="description">${escapeHtml(product.description || '')}</textarea>
+            </label>
+
+            <label class="full">
+              Link pagină detalii
+              <input type="text" data-field="link" value="${escapeHtml(product.link || '')}">
+            </label>
+
+            <label class="full">
+              Imagine nouă (opțional)
+              <div class="file-wrap">
+                <input type="file" data-field="image-file" accept="image/*">
+                <div class="file-note">Dacă alegi o imagine nouă și salvezi, imaginea veche va fi înlocuită.</div>
+              </div>
+            </label>
+
+            <label class="full">
+              Preview imagine curentă
+              <img src="${product.image || ''}" alt="${product.name || 'Produs'}" class="inline-preview" data-role="current-preview">
+            </label>
+          </div>
+
+          <div class="product-card-actions">
+            <button class="btn-primary" type="button" data-action="save" data-id="${product.id}">Salvează modificările</button>
+            <button class="btn-danger" type="button" data-action="delete" data-id="${product.id}" data-image="${product.image || ''}">Șterge produsul</button>
+          </div>
         </div>
       `).join('');
+    }
 
-      document.querySelectorAll('[data-delete-id]').forEach(button => {
-        button.addEventListener('click', async () => {
-          const productId = button.getAttribute('data-delete-id');
-          const imageUrl = button.getAttribute('data-delete-image');
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
 
-          const confirmed = window.confirm('Sigur vrei să ștergi acest produs?');
-          if (!confirmed) return;
+    async function loadProducts() {
+      clearStatus(listStatus);
+      productsList.innerHTML = `<div class="empty-state">Se actualizează produsele...</div>`;
 
-          clearStatus(productStatus);
+      const { data, error } = await db
+        .from('products')
+        .select('*')
+        .order('sort_order', { ascending: true })
+        .order('created_at', { ascending: true });
 
-          const { error: deleteError } = await db
-            .from('products')
-            .delete()
-            .eq('id', productId);
+      if (error) {
+        productsList.innerHTML = `<div class="empty-state">Nu am putut încărca produsele.</div>`;
+        showStatus(listStatus, `Eroare la încărcarea produselor: ${error.message}`);
+        return;
+      }
 
-          if (deleteError) {
-            showStatus(productStatus, `Produsul nu a putut fi șters: ${deleteError.message}`);
-            return;
-          }
+      renderProducts(data || []);
+    }
 
-          const prefix = `${window.SUPABASE_URL}/storage/v1/object/public/products/`;
-          if (imageUrl && imageUrl.startsWith(prefix)) {
-            const path = imageUrl.replace(prefix, '');
-            await db.storage.from('products').remove([path]);
-          }
+    async function swapSortOrder(firstProduct, secondProduct) {
+      const firstOrder = Number(firstProduct.sort_order || 0);
+      const secondOrder = Number(secondProduct.sort_order || 0);
 
-          showStatus(productStatus, 'Produsul a fost șters.');
-          loadProducts();
-        });
-      });
+      const { error: errorFirst } = await db
+        .from('products')
+        .update({ sort_order: secondOrder })
+        .eq('id', firstProduct.id);
+
+      if (errorFirst) {
+        showStatus(listStatus, `Nu am putut muta produsul: ${errorFirst.message}`);
+        return false;
+      }
+
+      const { error: errorSecond } = await db
+        .from('products')
+        .update({ sort_order: firstOrder })
+        .eq('id', secondProduct.id);
+
+      if (errorSecond) {
+        showStatus(listStatus, `Nu am putut finaliza schimbarea ordinii: ${errorSecond.message}`);
+        return false;
+      }
+
+      return true;
+    }
+
+    async function handleMove(productId, direction) {
+      clearStatus(listStatus);
+
+      const index = productsCache.findIndex(product => String(product.id) === String(productId));
+      if (index === -1) return;
+
+      const swapIndex = direction === 'up' ? index - 1 : index + 1;
+      if (swapIndex < 0 || swapIndex >= productsCache.length) return;
+
+      const ok = await swapSortOrder(productsCache[index], productsCache[swapIndex]);
+      if (!ok) return;
+
+      showStatus(listStatus, 'Ordinea produselor a fost actualizată.');
+      await loadProducts();
+    }
+
+    async function handleToggleVisibility(productId) {
+      clearStatus(listStatus);
+
+      const product = productsCache.find(item => String(item.id) === String(productId));
+      if (!product) return;
+
+      const nextVisibility = !(product.is_visible === false);
+
+      const { error } = await db
+        .from('products')
+        .update({ is_visible: !nextVisibility ? false : true })
+        .eq('id', productId);
+
+      if (error) {
+        showStatus(listStatus, `Nu am putut schimba vizibilitatea: ${error.message}`);
+        return;
+      }
+
+      showStatus(listStatus, nextVisibility ? 'Produsul a fost ascuns de pe site.' : 'Produsul a fost afișat din nou pe site.');
+      await loadProducts();
+    }
+
+    async function handleDelete(productId, imageUrl) {
+      clearStatus(listStatus);
+
+      const confirmed = window.confirm('Sigur vrei să ștergi acest produs?');
+      if (!confirmed) return;
+
+      const { error: deleteError } = await db
+        .from('products')
+        .delete()
+        .eq('id', productId);
+
+      if (deleteError) {
+        showStatus(listStatus, `Produsul nu a putut fi șters: ${deleteError.message}`);
+        return;
+      }
+
+      const oldPath = getStoragePathFromPublicUrl(imageUrl);
+      if (oldPath) {
+        await db.storage.from(PRODUCTS_BUCKET).remove([oldPath]);
+      }
+
+      showStatus(listStatus, 'Produsul a fost șters.');
+      await loadProducts();
+    }
+
+    async function handleSave(productId) {
+      clearStatus(listStatus);
+
+      const card = document.querySelector(`[data-product-id="${productId}"]`);
+      if (!card) return;
+
+      const name = card.querySelector('[data-field="name"]').value.trim();
+      const text = card.querySelector('[data-field="text"]').value.trim();
+      const description = card.querySelector('[data-field="description"]').value.trim();
+      const link = card.querySelector('[data-field="link"]').value.trim();
+      const imageFileInput = card.querySelector('[data-field="image-file"]');
+      const file = imageFileInput.files?.[0] || null;
+
+      if (!name || !text || !description || !link) {
+        showStatus(listStatus, 'Completează toate câmpurile produsului înainte să salvezi.');
+        return;
+      }
+
+      const existingProduct = productsCache.find(item => String(item.id) === String(productId));
+      if (!existingProduct) {
+        showStatus(listStatus, 'Nu am găsit produsul în listă.');
+        return;
+      }
+
+      let finalImageUrl = existingProduct.image || '';
+
+      if (file) {
+        const cleanName = slugify(name || 'product');
+        const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+        const filePath = `${Date.now()}-${cleanName}.${ext}`;
+
+        const { error: uploadError } = await db
+          .storage
+          .from(PRODUCTS_BUCKET)
+          .upload(filePath, file, { upsert: false });
+
+        if (uploadError) {
+          showStatus(listStatus, `Noua imagine nu a putut fi încărcată: ${uploadError.message}`);
+          return;
+        }
+
+        const { data: publicData } = db
+          .storage
+          .from(PRODUCTS_BUCKET)
+          .getPublicUrl(filePath);
+
+        finalImageUrl = publicData.publicUrl;
+
+        const oldPath = getStoragePathFromPublicUrl(existingProduct.image);
+        if (oldPath) {
+          await db.storage.from(PRODUCTS_BUCKET).remove([oldPath]);
+        }
+      }
+
+      const { error: updateError } = await db
+        .from('products')
+        .update({
+          name,
+          text,
+          description,
+          link,
+          image: finalImageUrl
+        })
+        .eq('id', productId);
+
+      if (updateError) {
+        showStatus(listStatus, `Produsul nu a putut fi actualizat: ${updateError.message}`);
+        return;
+      }
+
+      showStatus(listStatus, 'Produsul a fost actualizat cu succes.');
+      await loadProducts();
     }
 
     productImageFile.addEventListener('change', () => {
@@ -685,7 +1054,7 @@
 
       const { error: uploadError } = await db
         .storage
-        .from('products')
+        .from(PRODUCTS_BUCKET)
         .upload(filePath, file, { upsert: false });
 
       if (uploadError) {
@@ -695,10 +1064,11 @@
 
       const { data: publicData } = db
         .storage
-        .from('products')
+        .from(PRODUCTS_BUCKET)
         .getPublicUrl(filePath);
 
       const imageUrl = publicData.publicUrl;
+      const nextSortOrder = await getNextSortOrder();
 
       const { error: insertError } = await db
         .from('products')
@@ -707,7 +1077,9 @@
           text: productText.value.trim(),
           description: productDescription.value.trim(),
           image: imageUrl,
-          link: productLink.value.trim()
+          link: productLink.value.trim(),
+          is_visible: true,
+          sort_order: nextSortOrder
         });
 
       if (insertError) {
@@ -723,6 +1095,35 @@
       await loadProducts();
     });
 
+    productsList.addEventListener('click', async (e) => {
+      const button = e.target.closest('button[data-action]');
+      if (!button) return;
+
+      const action = button.getAttribute('data-action');
+      const productId = button.getAttribute('data-id');
+      const imageUrl = button.getAttribute('data-image');
+
+      if (action === 'save') {
+        await handleSave(productId);
+      }
+
+      if (action === 'delete') {
+        await handleDelete(productId, imageUrl);
+      }
+
+      if (action === 'toggle-visibility') {
+        await handleToggleVisibility(productId);
+      }
+
+      if (action === 'move-up') {
+        await handleMove(productId, 'up');
+      }
+
+      if (action === 'move-down') {
+        await handleMove(productId, 'down');
+      }
+    });
+
     async function initSession() {
       try {
         const { data, error } = await db.auth.getSession();
@@ -735,7 +1136,7 @@
         if (data?.session) {
           setAdminVisible(true);
           showStatus(authStatus, 'Ești deja autentificată.');
-          loadProducts();
+          await loadProducts();
         } else {
           setAdminVisible(false);
         }
