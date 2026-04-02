@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Maison Doucette – Teddy Bear Customizer</title>
   <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
@@ -23,7 +23,6 @@
       --radius-lg:22px;
       --radius-md:16px;
       --ease:cubic-bezier(.22,.61,.36,1);
-      --topbar-h:68px;
     }
 
     *{ box-sizing:border-box; }
@@ -31,7 +30,7 @@
 
     body{
       margin:0;
-      font-family:'Inter',sans-serif;
+      font-family:'Manrope',sans-serif;
       color:var(--brown);
       background:
         radial-gradient(circle at top left, rgba(255,255,255,0.78), transparent 26%),
@@ -43,6 +42,11 @@
     a{ color:inherit; text-decoration:none; }
     img{ display:block; max-width:100%; }
     button, select{ font:inherit; }
+
+    .display,h1,h2,h3,.brand-text,.section-title,.stepper-title{
+      font-family:'Cormorant Garamond',serif;
+      letter-spacing:-0.02em;
+    }
 
     .cursor-glow{
       position:fixed;
@@ -60,111 +64,204 @@
       opacity:0.9;
     }
 
-    .app-shell{
-      max-width:1160px;
-      margin:0 auto;
-      min-height:100vh;
-      position:relative;
-      z-index:2;
-      padding:0 18px 28px;
-    }
-
-    .topbar{
+    .top-bar{
       position:sticky;
       top:0;
-      z-index:1000;
-      background:rgba(255,250,246,0.86);
-      backdrop-filter:blur(14px);
+      z-index:1600;
+      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
+      color:#fffdfa;
+      text-align:center;
+      padding:12px 16px;
+      font-size:.88rem;
+      line-height:1.4;
+      box-shadow:0 8px 22px rgba(174,127,67,0.18);
+    }
+
+    .top-bar a{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      margin-left:10px;
+      padding:8px 18px;
+      border-radius:999px;
+      background:rgba(255,255,255,.9);
+      color:var(--gold-deep);
+      font-weight:700;
+    }
+
+    .site-header{
+      position:sticky;
+      top:48px;
+      z-index:1500;
+      background:rgba(255,250,246,0.88);
+      backdrop-filter:blur(12px);
       border-bottom:1px solid var(--line);
-      margin:0 -18px;
+    }
+
+    .header-shell{
+      max-width:1160px;
+      margin:0 auto;
       padding:0 18px;
     }
 
-    .topbar-inner{
-      max-width:1160px;
-      margin:0 auto;
-      min-height:var(--topbar-h);
+    .nav{
+      min-height:84px;
       display:grid;
-      grid-template-columns:44px 1fr auto;
+      grid-template-columns:1fr auto 1fr;
       align-items:center;
       gap:12px;
     }
 
-    .icon-btn,
-    .top-cart{
-      width:42px;
-      height:42px;
-      border-radius:50%;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,0.82);
+    .nav-left,
+    .nav-right{
       display:flex;
       align-items:center;
-      justify-content:center;
-      box-shadow:var(--shadow-soft);
-      transition:transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
-      cursor:pointer;
-      padding:0;
-    }
-
-    .icon-btn:hover,
-    .top-cart:hover{
-      transform:translateY(-1px);
-      box-shadow:0 14px 22px rgba(106,81,69,0.12);
-      background:#fff;
-    }
-
-    .icon-btn svg,
-    .top-cart svg{
-      width:20px;
-      height:20px;
-      stroke:var(--brown);
-    }
-
-    .top-title{
-      text-align:center;
+      gap:18px;
       min-width:0;
     }
 
-    .top-title .label{
-      display:inline-flex;
+    .nav-left{justify-content:flex-start}
+    .nav-right{justify-content:flex-end}
+
+    .nav-links{
+      display:flex;
+      gap:18px;
       align-items:center;
-      gap:8px;
-      font-weight:600;
+      list-style:none;
+      margin:0;
+      padding:0;
+      font-size:.92rem;
+    }
+
+    .nav-links a{
+      opacity:.92;
+      transition:opacity .22s ease, transform .22s ease;
+    }
+
+    .nav-links a:hover{
+      opacity:1;
+      transform:translateY(-1px);
+    }
+
+    .nav-pill{
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.72);
+      border:1px solid var(--line);
+    }
+
+    .logo-wrap{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      min-width:0;
+      text-align:center;
+    }
+
+    .logo-wrap img{
+      width:68px;
+      height:68px;
+      object-fit:contain;
+      border-radius:50%;
+      background:rgba(255,255,255,.92);
+      padding:5px;
+      box-shadow:0 12px 24px rgba(101,79,67,0.10);
+      flex-shrink:0;
+    }
+
+    .brand-stack{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      line-height:1;
+    }
+
+    .brand-text{
+      font-size:1.9rem;
+      font-weight:700;
       color:var(--brown);
-      font-size:1.02rem;
-      letter-spacing:0.01em;
+      letter-spacing:.03em;
     }
 
-    .top-title .sub{
-      display:block;
-      margin-top:2px;
-      font-size:0.72rem;
-      color:var(--brown-soft);
-      letter-spacing:0.08em;
+    .brand-sub{
+      margin-top:4px;
+      font-size:.72rem;
       text-transform:uppercase;
+      letter-spacing:.18em;
+      color:var(--brown-soft);
     }
 
-    .top-cart-wrap{
-      position:relative;
+    .icon-btn{
+      width:46px;
+      height:46px;
+      border-radius:50%;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.74);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      box-shadow:0 10px 18px rgba(101,79,67,0.08);
+      transition:transform .22s ease, box-shadow .22s ease, background .22s ease;
+      padding:0;
     }
 
-    #cart-count{
+    .icon-btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 14px 24px rgba(101,79,67,0.12);
+      background:#fff;
+    }
+
+    .icon-btn svg{
+      width:22px;
+      height:22px;
+      stroke:var(--brown);
+      fill:none;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+      stroke-width:1.8;
+    }
+
+    .cart-btn{ position:relative; }
+
+    #cart-count,
+    #mobile-cart-count{
       position:absolute;
       top:-4px;
-      right:-3px;
+      right:-4px;
       min-width:18px;
       height:18px;
-      padding:0 5px;
       border-radius:999px;
-      background:linear-gradient(135deg,var(--gold-deep),var(--gold));
+      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
       color:#fff;
       font-size:10px;
       font-weight:700;
       display:flex;
       align-items:center;
       justify-content:center;
-      box-shadow:0 7px 14px rgba(184,142,103,0.28);
-      line-height:1;
+      padding:0 4px;
+      box-shadow:0 6px 14px rgba(174,127,67,0.22);
+    }
+
+    .mobile-left,
+    .mobile-right{
+      display:none;
+      align-items:center;
+      justify-content:flex-start;
+    }
+
+    .mobile-right{
+      justify-content:flex-end;
+    }
+
+    .app-shell{
+      max-width:1160px;
+      margin:0 auto;
+      min-height:100vh;
+      position:relative;
+      z-index:2;
+      padding:16px 18px 28px;
     }
 
     .customizer-layout{
@@ -172,7 +269,6 @@
       grid-template-columns:minmax(320px, 1.02fr) minmax(320px, 0.98fr);
       gap:22px;
       align-items:start;
-      padding-top:16px;
     }
 
     .left-column,
@@ -190,22 +286,6 @@
       backdrop-filter:blur(6px);
     }
 
-    .preview-card,
-    .stepper-card,
-    .step-card,
-    .order-card,
-    .rec-card{
-      opacity:0;
-      transform:translateY(22px);
-      animation:fadeUp 0.82s var(--ease) forwards;
-    }
-
-    .preview-card{ animation-delay:0.05s; }
-    .stepper-card{ animation-delay:0.10s; }
-    .step-card{ animation-delay:0.15s; }
-    .order-card{ animation-delay:0.22s; }
-    .rec-card{ animation-delay:0.30s; }
-
     .preview-card{
       padding:18px;
     }
@@ -220,7 +300,6 @@
 
     .preview-head h1{
       margin:0;
-      font-family:'Playfair Display',serif;
       font-size:1.55rem;
       font-weight:500;
       line-height:1.1;
@@ -314,7 +393,6 @@
       display:none;
     }
 
-    /* TEDDY MAI MIC */
     #teddyImage{
       position:absolute;
       left:50%;
@@ -346,7 +424,6 @@
       transform:translate(-50%,-50%);
     }
 
-    /* FUNDIȚĂ MAI PE URECHE */
     #bowImg{
       left:68%;
       top:29%;
@@ -390,7 +467,6 @@
 
     .stepper-title{
       margin:0 0 12px;
-      font-family:'Playfair Display',serif;
       font-size:1.22rem;
       font-weight:500;
     }
@@ -461,7 +537,6 @@
 
     .section-title{
       margin:0 0 6px;
-      font-family:'Playfair Display',serif;
       font-size:1.28rem;
       font-weight:500;
     }
@@ -519,8 +594,8 @@
 
     .swatch-grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit, minmax(62px, 1fr));
-      gap:12px;
+      grid-template-columns:repeat(auto-fit, minmax(54px, 1fr));
+      gap:10px;
     }
 
     .swatch-btn{
@@ -532,6 +607,7 @@
       display:flex;
       align-items:center;
       justify-content:center;
+      min-height:46px;
     }
 
     .swatch-btn:hover{
@@ -540,38 +616,54 @@
 
     .swatch-circle{
       display:block;
-      width:44px;
-      height:44px;
+      width:36px;
+      height:36px;
       aspect-ratio:1 / 1;
       border-radius:50%;
-      border:2px solid rgba(184,142,103,0.42);
+      border:1.5px solid rgba(184,142,103,0.35);
       box-shadow:
-        0 0 0 3px rgba(255,250,246,0.95),
-        0 10px 18px rgba(106,81,69,0.08);
-      transition:all 0.2s ease;
+        0 0 0 2px rgba(255,250,246,0.96),
+        0 8px 16px rgba(106,81,69,0.08);
+      transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease,
+        border-color 0.22s ease,
+        filter 0.22s ease;
       flex-shrink:0;
+      position:relative;
     }
 
     .swatch-btn.active .swatch-circle{
-      border-color:var(--gold-deep);
+      border-color:rgba(184,142,103,0.95);
       box-shadow:
-        0 0 0 4px rgba(255,250,246,1),
-        0 0 0 6px rgba(210,176,141,0.34),
-        0 12px 22px rgba(106,81,69,0.12);
-      transform:scale(1.04);
+        0 0 0 2px rgba(255,250,246,1),
+        0 0 0 5px rgba(210,176,141,0.22),
+        0 0 0 8px rgba(255,255,255,0.92),
+        0 14px 24px rgba(106,81,69,0.14);
+      transform:scale(1.05);
+      filter:saturate(1.03);
+    }
+
+    .swatch-btn.active .swatch-circle::after{
+      content:"";
+      position:absolute;
+      inset:-7px;
+      border-radius:50%;
+      border:1px solid rgba(184,142,103,0.32);
+      pointer-events:none;
     }
 
     .option-grid{
       display:grid;
       grid-template-columns:repeat(3, minmax(0, 1fr));
-      gap:12px;
+      gap:8px;
     }
 
     .option-card{
       border:1px solid var(--line);
       background:rgba(255,255,255,0.8);
-      border-radius:18px;
-      padding:10px;
+      border-radius:16px;
+      padding:8px;
       cursor:pointer;
       transition:all 0.22s ease;
       box-shadow:var(--shadow-soft);
@@ -591,35 +683,35 @@
     .option-thumb{
       width:100%;
       aspect-ratio:1/1;
-      border-radius:14px;
+      border-radius:12px;
       display:flex;
       align-items:center;
       justify-content:center;
       background:#f7f2ec;
       border:1px solid rgba(184,142,103,0.16);
       overflow:hidden;
-      margin-bottom:10px;
+      margin-bottom:8px;
       position:relative;
     }
 
     .option-thumb img{
-      width:76%;
-      height:76%;
+      width:72%;
+      height:72%;
       object-fit:contain;
     }
 
     .option-card h3{
-      margin:0 0 4px;
-      font-size:0.88rem;
+      margin:0 0 3px;
+      font-size:0.8rem;
       line-height:1.2;
       font-weight:600;
     }
 
     .option-card p{
       margin:0;
-      font-size:0.76rem;
+      font-size:0.7rem;
       color:var(--brown-soft);
-      line-height:1.4;
+      line-height:1.35;
     }
 
     .hint{
@@ -644,6 +736,28 @@
     .helper-box strong{
       color:var(--brown);
       font-weight:600;
+    }
+
+    .qty-box{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-top:8px;
+      flex-wrap:wrap;
+    }
+
+    .qty-control{
+      padding:10px 14px;
+      min-width:52px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .qty-display{
+      padding:10px 16px;
+      min-width:68px;
+      text-align:center;
     }
 
     .step-actions{
@@ -690,134 +804,6 @@
       border:none;
     }
 
-    .order-card{
-      padding:16px;
-    }
-
-    .order-top{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      margin-bottom:14px;
-    }
-
-    .order-top h2{
-      margin:0;
-      font-family:'Playfair Display',serif;
-      font-size:1.35rem;
-      font-weight:500;
-    }
-
-    .price-box{
-      text-align:right;
-    }
-
-    .price-box .label{
-      display:block;
-      font-size:0.7rem;
-      text-transform:uppercase;
-      letter-spacing:0.14em;
-      color:var(--brown-soft);
-      margin-bottom:5px;
-    }
-
-    .price-box .value{
-      font-family:'Playfair Display',serif;
-      font-size:1.7rem;
-      line-height:1;
-      color:var(--brown);
-    }
-
-    .order-grid{
-      display:grid;
-      grid-template-columns:1fr auto;
-      gap:14px;
-      align-items:end;
-    }
-
-    .qty-box{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      margin-top:8px;
-    }
-
-    .qty-btn{
-      width:42px;
-      height:42px;
-      border-radius:14px;
-      border:1px solid #d8d2ca;
-      background:#fff;
-      color:var(--brown);
-      font-size:1.2rem;
-      cursor:pointer;
-      transition:transform 0.2s ease, box-shadow 0.22s ease, background 0.22s ease;
-    }
-
-    .qty-btn:hover{
-      transform:translateY(-1px);
-      box-shadow:0 10px 18px rgba(106,81,69,0.08);
-      background:#fffdfa;
-    }
-
-    .qty-value{
-      min-width:30px;
-      text-align:center;
-      font-weight:700;
-      font-size:1rem;
-    }
-
-    .actions{
-      margin-top:16px;
-      display:grid;
-      gap:10px;
-    }
-
-    .action-btn{
-      width:100%;
-      padding:15px 16px;
-      border:none;
-      border-radius:16px;
-      cursor:pointer;
-      transition:transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease, background 0.22s ease;
-      letter-spacing:0.06em;
-      font-size:0.84rem;
-      font-weight:600;
-      text-transform:uppercase;
-    }
-
-    .action-btn:hover{ transform:translateY(-1px); }
-
-    .primary-btn{
-      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
-      color:#fff;
-      box-shadow:0 16px 28px rgba(184,142,103,0.24);
-    }
-
-    .primary-btn:hover{
-      box-shadow:0 22px 34px rgba(184,142,103,0.30);
-    }
-
-    .primary-btn:disabled{
-      background:#d7cfc6;
-      box-shadow:none;
-      cursor:not-allowed;
-      transform:none;
-    }
-
-    .dark-btn{
-      background:#3e3a36;
-      color:#fff;
-      display:none;
-    }
-
-    .soft-btn{
-      background:rgba(255,255,255,0.78);
-      color:var(--brown);
-      border:1px solid var(--line);
-    }
-
     .rec-card{
       padding:16px;
     }
@@ -832,7 +818,6 @@
 
     .rec-head h2{
       margin:0;
-      font-family:'Playfair Display',serif;
       font-size:1.28rem;
       font-weight:500;
     }
@@ -913,11 +898,278 @@
       transform:translateY(0);
     }
 
-    @keyframes fadeUp{
-      to{
-        opacity:1;
-        transform:translateY(0);
-      }
+    .cart-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(64,45,35,.28);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .25s ease;
+      z-index:2000;
+    }
+
+    .cart-overlay.open{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .cart-drawer{
+      position:fixed;
+      top:0;
+      right:0;
+      width:min(430px, 100%);
+      height:100vh;
+      background:#fffdf9;
+      box-shadow:-20px 0 50px rgba(52,38,32,.18);
+      transform:translateX(100%);
+      transition:transform .3s var(--ease);
+      z-index:2100;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .cart-drawer.open{
+      transform:translateX(0);
+    }
+
+    .cart-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:22px 20px 16px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .cart-head h3{
+      margin:0;
+      font-size:2rem;
+      font-weight:700;
+      font-family:'Cormorant Garamond',serif;
+    }
+
+    .cart-close{
+      border:none;
+      background:none;
+      font-size:1.5rem;
+      cursor:pointer;
+      color:var(--brown-soft);
+    }
+
+    .cart-body{
+      flex:1;
+      overflow:auto;
+      padding:18px 20px;
+    }
+
+    .cart-empty{
+      color:var(--brown-soft);
+      line-height:1.8;
+      padding:10px 0;
+    }
+
+    .cart-item{
+      display:grid;
+      grid-template-columns:76px 1fr auto;
+      gap:14px;
+      padding:14px 0;
+      border-bottom:1px solid var(--line);
+      align-items:start;
+    }
+
+    .cart-item img{
+      width:76px;
+      height:76px;
+      object-fit:cover;
+      border-radius:16px;
+      background:#f2e8df;
+    }
+
+    .cart-item h4{
+      margin:0 0 6px;
+      font-size:1rem;
+      line-height:1.35;
+    }
+
+    .cart-meta{
+      font-size:.85rem;
+      color:var(--brown-soft);
+      line-height:1.6;
+    }
+
+    .cart-price{
+      font-size:.95rem;
+      font-weight:700;
+      color:var(--brown);
+      margin-top:6px;
+    }
+
+    .cart-remove{
+      border:none;
+      background:none;
+      color:var(--brown-soft);
+      cursor:pointer;
+      padding:4px;
+      font-size:1.05rem;
+    }
+
+    .qty-row{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .qty-btn{
+      width:28px;
+      height:28px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      cursor:pointer;
+      color:var(--brown);
+    }
+
+    .qty-value{
+      min-width:18px;
+      text-align:center;
+      font-size:.92rem;
+    }
+
+    .cart-footer{
+      border-top:1px solid var(--line);
+      padding:18px 20px 22px;
+      background:#fffdf9;
+    }
+
+    .cart-total{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:1rem;
+      margin-bottom:14px;
+    }
+
+    .cart-total strong{
+      font-size:1.12rem;
+    }
+
+    .cart-actions{
+      display:grid;
+      gap:10px;
+    }
+
+    .cart-primary,
+    .cart-secondary{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:50px;
+      border-radius:999px;
+      transition:transform .22s ease;
+    }
+
+    .cart-primary{
+      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
+      color:#fff;
+      font-weight:700;
+    }
+
+    .cart-secondary{
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--brown);
+      cursor:pointer;
+    }
+
+    .cart-primary:hover,
+    .cart-secondary:hover{
+      transform:translateY(-1px);
+    }
+
+    .mobile-menu-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(64,45,35,.28);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .25s ease;
+      z-index:1800;
+    }
+
+    .mobile-menu-overlay.open{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .mobile-menu{
+      position:fixed;
+      top:0;
+      left:0;
+      width:min(340px, 100%);
+      height:100vh;
+      background:#fffdf9;
+      box-shadow:20px 0 50px rgba(52,38,32,.14);
+      transform:translateX(-100%);
+      transition:transform .3s var(--ease);
+      z-index:1900;
+      padding:24px 20px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .mobile-menu.open{
+      transform:translateX(0);
+    }
+
+    .mobile-menu-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .mobile-menu-title{
+      font-size:1.8rem;
+      font-family:'Cormorant Garamond',serif;
+      font-weight:700;
+    }
+
+    .mobile-close{
+      border:none;
+      background:none;
+      font-size:1.5rem;
+      color:var(--brown-soft);
+      cursor:pointer;
+    }
+
+    .mobile-menu a{
+      padding:12px 0;
+      border-bottom:1px solid var(--line);
+      font-size:1rem;
+      color:var(--brown);
+    }
+
+    .reveal-up,
+    .reveal-soft{
+      opacity:0;
+      will-change:transform, opacity;
+    }
+
+    .reveal-up{
+      transform:translateY(34px);
+      transition:opacity .9s var(--ease), transform .9s var(--ease);
+    }
+
+    .reveal-soft{
+      transform:scale(.985) translateY(24px);
+      transition:opacity .95s var(--ease), transform .95s var(--ease);
+    }
+
+    .reveal-up.is-visible,
+    .reveal-soft.is-visible{
+      opacity:1;
+      transform:translateY(0) scale(1);
     }
 
     @keyframes previewAppear{
@@ -944,33 +1196,98 @@
     @media (max-width: 760px){
       .cursor-glow{ display:none; }
 
-      .app-shell{
-        padding:0 10px 18px;
+      .top-bar{
+        padding:10px 12px;
+        font-size:.82rem;
       }
 
-      .topbar{
-        margin:0 -10px;
+      .top-bar a{
+        display:block;
+        width:max-content;
+        margin:8px auto 0;
+      }
+
+      .site-header{
+        position:relative;
+        top:0;
+      }
+
+      .header-shell{
         padding:0 10px;
       }
 
-      .topbar-inner{
-        grid-template-columns:42px 1fr 42px;
-        min-height:64px;
+      .nav{
+        grid-template-columns:1fr auto 1fr;
+        min-height:78px;
       }
 
-      .top-title .label{
-        font-size:0.98rem;
+      .nav-left,
+      .nav-right{
+        display:none;
       }
 
-      .top-title .sub{
-        font-size:0.66rem;
+      .mobile-left,
+      .mobile-right{
+        display:flex;
+      }
+
+      .logo-wrap img{
+        width:58px;
+        height:58px;
+      }
+
+      .brand-text{
+        font-size:1.52rem;
+      }
+
+      .brand-sub{
+        display:none;
+      }
+
+      .app-shell{
+        padding:10px 10px 18px;
       }
 
       .customizer-layout{
         display:flex;
         flex-direction:column;
         gap:14px;
-        padding-top:12px;
+        padding-top:0;
+      }
+
+      .left-column{
+        display:grid;
+        gap:12px;
+      }
+
+      .preview-card{
+        position:sticky;
+        top:74px;
+        z-index:30;
+        padding:10px;
+        border-radius:22px;
+        box-shadow:0 14px 30px rgba(106,81,69,0.10);
+      }
+
+      .preview-head{
+        margin-bottom:8px;
+        gap:8px;
+      }
+
+      .preview-head h1{
+        font-size:1.18rem;
+      }
+
+      .preview-head p{
+        font-size:0.76rem;
+        line-height:1.4;
+        margin-top:3px;
+      }
+
+      .preview-badge{
+        padding:7px 9px;
+        font-size:0.62rem;
+        letter-spacing:0.10em;
       }
 
       .preview-stage{
@@ -978,7 +1295,6 @@
         border-radius:22px;
       }
 
-      /* PHONE FRIENDLY */
       #teddyImage{
         width:min(155%, 560px);
         bottom:-52px;
@@ -996,31 +1312,84 @@
         left:69%;
       }
 
+      .summary-row{
+        margin-top:8px;
+        gap:8px;
+      }
+
+      .summary-chip{
+        min-height:auto;
+        padding:8px 9px;
+        border-radius:14px;
+      }
+
+      .summary-chip .k{
+        font-size:0.56rem;
+        margin-bottom:4px;
+      }
+
+      .summary-chip .v{
+        font-size:0.74rem;
+        line-height:1.25;
+      }
+
+      .stepper-card{
+        padding:10px;
+      }
+
+      .stepper-title{
+        font-size:1rem;
+        margin-bottom:10px;
+      }
+
       .stepper{
         grid-template-columns:repeat(4, minmax(0,1fr));
         gap:6px;
       }
 
+      .step-badge .dot{
+        width:30px;
+        height:30px;
+        font-size:0.75rem;
+      }
+
       .step-badge .txt{
-        font-size:0.66rem;
+        font-size:0.62rem;
       }
 
       .step-card,
-      .order-card,
-      .rec-card,
-      .stepper-card,
-      .preview-card{
+      .rec-card{
         padding:12px;
+        border-radius:22px;
+      }
+
+      .section-title{
+        font-size:1.12rem;
+      }
+
+      .section-text{
+        font-size:0.82rem;
+        line-height:1.5;
+        margin-bottom:14px;
+      }
+
+      .control-label{
+        font-size:0.64rem;
+        margin-bottom:8px;
       }
 
       .swatch-grid{
         grid-template-columns:repeat(4, minmax(0,1fr));
-        gap:10px;
+        gap:8px;
+      }
+
+      .swatch-btn{
+        min-height:38px;
       }
 
       .swatch-circle{
-        width:38px;
-        height:38px;
+        width:30px;
+        height:30px;
       }
 
       .option-grid{
@@ -1028,12 +1397,74 @@
         gap:10px;
       }
 
-      .order-grid{
-        grid-template-columns:1fr;
+      .option-card{
+        padding:7px;
+        border-radius:14px;
+      }
+
+      .option-thumb{
+        border-radius:10px;
+        margin-bottom:6px;
+      }
+
+      .option-card h3{
+        font-size:0.68rem;
+      }
+
+      .option-card p{
+        font-size:0.6rem;
+      }
+
+      .step-actions{
+        gap:8px;
+        margin-top:14px;
+      }
+
+      .step-btn{
+        width:100%;
+        padding:13px 14px;
+        font-size:0.74rem;
+      }
+
+      .qty-box{
+        display:flex;
+        align-items:center;
+        justify-content:flex-start;
+        gap:10px;
+        flex-wrap:nowrap;
+      }
+
+      .qty-box .step-btn{
+        width:52px !important;
+        min-width:52px;
+        flex:0 0 52px;
+        padding:10px 0;
+      }
+
+      .qty-box .qty-display{
+        min-width:68px;
+        flex:0 0 auto;
+        margin:0;
       }
 
       .rec-grid{
         gap:8px;
+      }
+
+      .rec-item{
+        padding:8px;
+      }
+
+      .rec-name{
+        font-size:0.74rem;
+      }
+
+      .rec-price{
+        font-size:0.66rem;
+      }
+
+      .cart-drawer{
+        width:100%;
       }
 
       .toast{
@@ -1046,6 +1477,11 @@
     }
 
     @media (max-width: 420px){
+      .preview-card{
+        top:70px;
+        padding:9px;
+      }
+
       .preview-stage{
         min-height:346px;
       }
@@ -1066,48 +1502,100 @@
         top:31%;
         left:69%;
       }
+
+      .swatch-circle{
+        width:26px;
+        height:26px;
+      }
+
+      .summary-chip .v{
+        font-size:0.7rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="cursor-glow" id="cursorGlow"></div>
 
-  <div class="app-shell">
-    <header class="topbar">
-      <div class="topbar-inner">
-        <button class="icon-btn" type="button" aria-label="Back" onclick="window.location.href='index.html#shop'">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M15 18l-6-6 6-6"></path>
-          </svg>
-        </button>
+  <div class="top-bar">
+    NOU • Maison Mystery Experience este aici
+    <a href="mystery.html">Descoperă acum</a>
+  </div>
 
-        <div class="top-title">
-          <span class="label">Customize Teddy Bear</span>
-          <span class="sub">Maison Doucette Atelier</span>
+  <header class="site-header">
+    <div class="header-shell">
+      <div class="nav">
+        <div class="mobile-left">
+          <button class="icon-btn" id="mobileMenuOpenBtn" aria-label="Deschide meniul">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 6h18"></path>
+              <path d="M3 12h18"></path>
+              <path d="M3 18h18"></path>
+            </svg>
+          </button>
         </div>
 
-        <div class="top-cart-wrap">
-          <a class="top-cart" href="cart.html" aria-label="View cart">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <div class="nav-left">
+          <nav>
+            <ul class="nav-links">
+              <li><a href="index.html">Acasă</a></li>
+              <li><a href="index.html#worlds">Cumpără acum</a></li>
+              <li><a href="index.html#atelier-products" class="nav-pill">Atelierul Maison Doucette</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <a href="index.html" class="logo-wrap" aria-label="Maison Doucette Acasă">
+          <img src="images/logo.jpg" alt="Logo Maison Doucette">
+          <div class="brand-stack">
+            <span class="brand-text">Maison Doucette</span>
+            <span class="brand-sub">atelier handmade</span>
+          </div>
+        </a>
+
+        <div class="nav-right">
+          <nav>
+            <ul class="nav-links">
+              <li><a href="mystery.html">Mystery Experience</a></li>
+              <li><a href="index.html#about">Despre</a></li>
+              <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+          </nav>
+
+          <button class="icon-btn cart-btn" id="cartOpenBtn" aria-label="Deschide coșul">
+            <svg viewBox="0 0 24 24">
               <circle cx="9" cy="20" r="1"></circle>
               <circle cx="18" cy="20" r="1"></circle>
               <path d="M2 3h3l2.2 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.5L21 6H7.1"></path>
             </svg>
-          </a>
-          <span id="cart-count">0</span>
+            <span id="cart-count">0</span>
+          </button>
+        </div>
+
+        <div class="mobile-right">
+          <button class="icon-btn cart-btn" id="mobileCartOpenBtn" aria-label="Deschide coșul">
+            <svg viewBox="0 0 24 24">
+              <circle cx="9" cy="20" r="1"></circle>
+              <circle cx="18" cy="20" r="1"></circle>
+              <path d="M2 3h3l2.2 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.5L21 6H7.1"></path>
+            </svg>
+            <span id="mobile-cart-count">0</span>
+          </button>
         </div>
       </div>
-    </header>
+    </div>
+  </header>
 
+  <div class="app-shell">
     <main class="customizer-layout">
       <div class="left-column">
-        <section class="card preview-card">
+        <section class="card preview-card reveal-soft">
           <div class="preview-head">
             <div>
-              <h1>Your Teddy</h1>
-              <p>Create your own soft little companion, one detail at a time.</p>
+              <h1>Ursulețul tău</h1>
+              <p>Creează-ți propriul companion soft, un detaliu după altul.</p>
             </div>
-            <div class="preview-badge">Live preview</div>
+            <div class="preview-badge">Preview live</div>
           </div>
 
           <div class="preview-stage">
@@ -1120,194 +1608,191 @@
             <div class="stage-block b6"></div>
             <div class="stage-floor"></div>
 
-            <div id="previewMessage">Choose your teddy details to see it come to life 🧸</div>
+            <div id="previewMessage">Alege detaliile ursulețului pentru a-l vedea cum prinde viață 🧸</div>
 
-            <img id="teddyImage" alt="Teddy preview">
-            <img id="heartImg" class="accessory-img" alt="Heart accessory">
-            <img id="starImg" class="accessory-img" alt="Star accessory">
-            <img id="bowImg" class="accessory-img" alt="Bow accessory">
+            <img id="teddyImage" alt="Preview ursuleț">
+            <img id="heartImg" class="accessory-img" alt="Accesoriu inimă">
+            <img id="starImg" class="accessory-img" alt="Accesoriu stea">
+            <img id="bowImg" class="accessory-img" alt="Accesoriu fundă">
           </div>
 
           <div class="summary-row">
             <div class="summary-chip">
-              <div class="k">Size</div>
-              <div class="v" id="summarySize">Not selected</div>
+              <div class="k">Mărime</div>
+              <div class="v" id="summarySize">Neselectată</div>
             </div>
 
             <div class="summary-chip">
-              <div class="k">Body</div>
+              <div class="k">Corp</div>
               <div class="v" id="summaryBody">Cream</div>
             </div>
 
             <div class="summary-chip">
-              <div class="k">Accessory</div>
-              <div class="v" id="summaryAccessory">Not selected</div>
+              <div class="k">Accesoriu</div>
+              <div class="v" id="summaryAccessory">Neselectat</div>
             </div>
           </div>
         </section>
 
-        <section class="card stepper-card">
-          <h2 class="stepper-title">Create your teddy</h2>
+        <section class="card stepper-card reveal-up">
+          <h2 class="stepper-title">Creează ursulețul</h2>
           <div class="stepper">
             <div class="step-badge active" data-step-badge="1">
               <div class="dot">1</div>
-              <div class="txt">Body</div>
+              <div class="txt">Corp</div>
             </div>
             <div class="step-badge" data-step-badge="2">
               <div class="dot">2</div>
-              <div class="txt">Accessories</div>
+              <div class="txt">Accesorii</div>
             </div>
             <div class="step-badge" data-step-badge="3">
               <div class="dot">3</div>
-              <div class="txt">Details</div>
+              <div class="txt">Detalii</div>
             </div>
             <div class="step-badge" data-step-badge="4">
               <div class="dot">4</div>
-              <div class="txt">Order</div>
+              <div class="txt">Comandă</div>
             </div>
           </div>
         </section>
       </div>
 
       <div class="right-column">
-        <section class="card step-card active" id="step-1">
-          <h2 class="section-title">Choose body details</h2>
-          <p class="section-text">Pick the teddy size and then choose the body colour.</p>
+        <section class="card step-card active reveal-up" id="step-1">
+          <h2 class="section-title">Alege detaliile corpului</h2>
+          <p class="section-text">Alege mărimea ursulețului, apoi culoarea corpului.</p>
 
           <div class="control-block">
-            <label class="control-label" for="size">Size</label>
+            <label class="control-label" for="size">Mărime</label>
             <select id="size">
-              <option value="">Select...</option>
-              <option value="0">Small (+0RON)</option>
-              <option value="15">Medium (+15RON)</option>
-              <option value="25">Large (+25RON)</option>
+              <option value="">Selectează...</option>
+              <option value="0">Mic (+0 RON)</option>
+              <option value="15">Mediu (+15 RON)</option>
+              <option value="25">Mare (+25 RON)</option>
             </select>
           </div>
 
           <div class="control-block">
-            <label class="control-label">Body Colour</label>
+            <label class="control-label">Culoarea corpului</label>
             <div class="swatch-grid" id="bodySwatches"></div>
           </div>
 
           <div class="step-actions">
-            <button class="step-btn primary" id="nextFromBody" type="button" disabled>Next — accessories</button>
+            <button class="step-btn primary" id="nextFromBody" type="button" disabled>Mai departe — accesorii</button>
           </div>
         </section>
 
-        <section class="card step-card" id="step-2">
-          <h2 class="section-title">Choose accessories</h2>
-          <p class="section-text">Pick a single accessory or a two-piece combination with the bow.</p>
+        <section class="card step-card reveal-up" id="step-2">
+          <h2 class="section-title">Alege accesoriile</h2>
+          <p class="section-text">Poți alege un singur accesoriu sau o combinație cu fundă.</p>
 
           <div class="option-grid" id="accessoryOptionsGrid"></div>
 
           <div id="accessoryColorArea" style="display:none; margin-top:18px;">
             <div id="heartColorWrap" class="control-block" style="display:none;">
-              <label class="control-label">Heart Colour</label>
+              <label class="control-label">Culoare inimă</label>
               <div class="swatch-grid" id="heartSwatches"></div>
               <div class="hint" id="heartHint"></div>
             </div>
 
             <div id="starColorWrap" class="control-block" style="display:none;">
-              <label class="control-label">Star Colour</label>
+              <label class="control-label">Culoare stea</label>
               <div class="swatch-grid" id="starSwatches"></div>
               <div class="hint" id="starHint"></div>
             </div>
 
             <div id="bowColorWrap" class="control-block" style="display:none;">
-              <label class="control-label">Bow Colour</label>
+              <label class="control-label">Culoare fundă</label>
               <div class="swatch-grid" id="bowSwatches"></div>
               <div class="hint" id="bowHint"></div>
             </div>
           </div>
 
           <div class="step-actions">
-            <button class="step-btn soft" type="button" data-prev-step="1">Back</button>
-            <button class="step-btn primary" id="nextFromAccessories" type="button" disabled>Next — details</button>
+            <button class="step-btn soft" type="button" data-prev-step="1">Înapoi</button>
+            <button class="step-btn primary" id="nextFromAccessories" type="button" disabled>Mai departe — detalii</button>
           </div>
         </section>
 
-        <section class="card step-card" id="step-3">
-          <h2 class="section-title">Details</h2>
-          <p class="section-text">Review the teddy you created before bringing it to life.</p>
+        <section class="card step-card reveal-up" id="step-3">
+          <h2 class="section-title">Detalii</h2>
+          <p class="section-text">Verifică ursulețul creat înainte să-l adaugi în coș.</p>
 
           <div class="helper-box" style="margin-bottom:14px;">
-            <strong>Chosen size:</strong> <span id="detailsSize">Not selected</span><br>
-            <strong>Chosen body colour:</strong> <span id="detailsBody">Cream</span><br>
-            <strong>Chosen accessory:</strong> <span id="detailsAccessory">Not selected</span>
+            <strong>Mărime aleasă:</strong> <span id="detailsSize">Neselectată</span><br>
+            <strong>Culoare corp:</strong> <span id="detailsBody">Cream</span><br>
+            <strong>Accesoriu ales:</strong> <span id="detailsAccessory">Neselectat</span>
           </div>
 
           <div class="helper-box">
-            Every teddy is handmade, so your final piece will feel special and one of a kind.
+            Fiecare ursuleț este handmade, așa că piesa ta finală va fi specială și unică.
           </div>
 
           <div class="step-actions">
-            <button class="step-btn soft" type="button" data-prev-step="2">Back</button>
-            <button class="step-btn primary" type="button" id="nextFromDetails">Next — order</button>
+            <button class="step-btn soft" type="button" data-prev-step="2">Înapoi</button>
+            <button class="step-btn primary" type="button" id="nextFromDetails">Mai departe — comandă</button>
           </div>
         </section>
 
-        <section class="card step-card" id="step-4">
-          <div class="order-top">
-            <h2>Order & bring it to life</h2>
+        <section class="card step-card reveal-up" id="step-4">
+          <div class="section-title" style="margin-bottom:12px;">Finalizează alegerea</div>
 
-            <div class="price-box">
-              <span class="label">Total</span>
-              <span class="value"><span id="price">45</span> RON</span>
-            </div>
+          <div class="helper-box" style="margin-bottom:14px;">
+            <strong>Total:</strong> <span id="price">45</span> RON
           </div>
 
-          <div class="order-grid">
-            <div>
-              <label class="control-label">Quantity</label>
-              <div class="qty-box">
-                <button class="qty-btn" type="button" id="minusBtn">−</button>
-                <span class="qty-value" id="quantity">1</span>
-                <button class="qty-btn" type="button" id="plusBtn">+</button>
+          <div class="control-block">
+            <label class="control-label">Cantitate</label>
+            <div class="qty-box">
+              <button class="step-btn soft qty-control" type="button" id="minusBtn">−</button>
+              <div class="helper-box qty-display">
+                <strong id="quantity">1</strong>
               </div>
-            </div>
-
-            <div class="helper-box">
-              Handmade just for you.
+              <button class="step-btn soft qty-control" type="button" id="plusBtn">+</button>
             </div>
           </div>
 
-          <div class="actions">
-            <button class="action-btn primary-btn" id="addBtn" type="button" disabled>Add to cart</button>
-            <button class="action-btn dark-btn" id="checkoutBtn" type="button">Go to cart</button>
-            <button class="action-btn soft-btn" type="button" onclick="window.location.href='index.html#shop'">Continue shopping</button>
-            <button class="action-btn soft-btn" type="button" data-prev-step="3">Back to details</button>
+          <div class="helper-box" style="margin-bottom:14px;">
+            Creat manual, special pentru tine.
+          </div>
+
+          <div class="step-actions">
+            <button class="step-btn primary" id="addBtn" type="button" disabled>Adaugă în coș</button>
+            <button class="step-btn soft" id="checkoutBtn" type="button" style="display:none;">Vezi coșul</button>
+            <button class="step-btn soft" type="button" onclick="window.location.href='index.html#atelier-products'">Continuă cumpărăturile</button>
+            <button class="step-btn soft" type="button" data-prev-step="3">Înapoi la detalii</button>
           </div>
         </section>
 
-        <section class="card rec-card">
+        <section class="card rec-card reveal-up">
           <div class="rec-head">
-            <h2>You may also like</h2>
-            <span>More lovely pieces</span>
+            <h2>S-ar putea să-ți placă și</h2>
+            <span>Mai multe creații Maison</span>
           </div>
 
           <div class="rec-grid">
             <a class="rec-item" href="bunny-details.html">
               <div class="rec-thumb">
-                <img src="images/bunny1.jpg" alt="Bunny">
+                <img src="images/bunny1.jpg" alt="Iepuraș">
               </div>
-              <div class="rec-name">Bunny</div>
-              <div class="rec-price">From 45 RON</div>
+              <div class="rec-name">Iepuraș</div>
+              <div class="rec-price">De la 45 RON</div>
             </a>
 
             <a class="rec-item" href="strawberry-details.html">
               <div class="rec-thumb">
-                <img src="images/strawberry1.jpg" alt="Chocolate Covered Strawberry">
+                <img src="images/strawberry1.jpg" alt="Căpșună">
               </div>
-              <div class="rec-name">Strawberry</div>
+              <div class="rec-name">Căpșună</div>
               <div class="rec-price">20 RON</div>
             </a>
 
-            <a class="rec-item" href="index.html#shop">
+            <a class="rec-item" href="index.html#atelier-products">
               <div class="rec-thumb">
-                <img src="images/teddy1.jpg" alt="See all products">
+                <img src="images/teddy1.jpg" alt="Mai multe creații">
               </div>
-              <div class="rec-name">More creations</div>
-              <div class="rec-price">View collection</div>
+              <div class="rec-name">Mai multe creații</div>
+              <div class="rec-price">Vezi colecția</div>
             </a>
           </div>
         </section>
@@ -1315,7 +1800,45 @@
     </main>
   </div>
 
-  <div id="toast" class="toast">Product added to cart successfully.</div>
+  <div id="toast" class="toast">Produsul a fost adăugat în coș.</div>
+
+  <div class="cart-overlay" id="cartOverlay"></div>
+
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+    <div class="cart-head">
+      <h3>Coșul tău</h3>
+      <button class="cart-close" id="cartCloseBtn" aria-label="Închide coșul">×</button>
+    </div>
+
+    <div class="cart-body" id="cartBody"></div>
+
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Total estimat</span>
+        <strong id="cartTotal">0 RON</strong>
+      </div>
+
+      <div class="cart-actions">
+        <a href="checkout.html" class="cart-primary">Continuă spre checkout</a>
+        <button class="cart-secondary" id="continueShoppingBtn">Continuă cumpărăturile</button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+  <aside class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-head">
+      <div class="mobile-menu-title">Maison Doucette</div>
+      <button class="mobile-close" id="mobileMenuCloseBtn">×</button>
+    </div>
+
+    <a href="index.html" class="mobile-link">Acasă</a>
+    <a href="index.html#worlds" class="mobile-link">Cumpără acum</a>
+    <a href="index.html#atelier-products" class="mobile-link">Atelierul Maison Doucette</a>
+    <a href="mystery.html" class="mobile-link">Mystery Experience</a>
+    <a href="index.html#contact" class="mobile-link">Contact</a>
+  </aside>
 
   <script>
     let basePrice = 45;
@@ -1327,6 +1850,8 @@
     let starColor = "";
     let bowColor = "";
     let currentStep = 1;
+
+    const cartKey = "cart";
 
     const size = document.getElementById("size");
     const priceEl = document.getElementById("price");
@@ -1344,6 +1869,7 @@
     const starImg = document.getElementById("starImg");
     const bowImg = document.getElementById("bowImg");
     const cartCount = document.getElementById("cart-count");
+    const mobileCartCount = document.getElementById("mobile-cart-count");
     const cursorGlow = document.getElementById("cursorGlow");
 
     const summarySize = document.getElementById("summarySize");
@@ -1366,9 +1892,25 @@
     const starSwatches = document.getElementById("starSwatches");
     const bowSwatches = document.getElementById("bowSwatches");
 
+    const cartOpenBtn = document.getElementById("cartOpenBtn");
+    const mobileCartOpenBtn = document.getElementById("mobileCartOpenBtn");
+    const cartCloseBtn = document.getElementById("cartCloseBtn");
+    const cartOverlay = document.getElementById("cartOverlay");
+    const cartDrawer = document.getElementById("cartDrawer");
+    const cartBody = document.getElementById("cartBody");
+    const cartTotal = document.getElementById("cartTotal");
+    const continueShoppingBtn = document.getElementById("continueShoppingBtn");
+
+    const mobileMenuOpenBtn = document.getElementById("mobileMenuOpenBtn");
+    const mobileMenuCloseBtn = document.getElementById("mobileMenuCloseBtn");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const mobileMenuOverlay = document.getElementById("mobileMenuOverlay");
+
+    const revealItems = document.querySelectorAll(".reveal-up, .reveal-soft");
+
     document.getElementById("minusBtn").addEventListener("click", () => changeQty(-1));
     document.getElementById("plusBtn").addEventListener("click", () => changeQty(1));
-    checkoutBtn.addEventListener("click", goToCart);
+    checkoutBtn.addEventListener("click", openCart);
     addBtn.addEventListener("click", addToCart);
 
     nextFromBody.addEventListener("click", () => goToStep(2));
@@ -1402,16 +1944,16 @@
     const accessoryOptions = [
       {
         value: "0",
-        label: "Nothing - 0RON",
-        title: "None",
+        label: "Fără accesoriu - 0 RON",
+        title: "Fără",
         price: 0,
         combo: { heart:false, star:false, bow:false },
         kind: "none"
       },
       {
         value: "7",
-        label: "Heart - 7RON",
-        title: "Heart",
+        label: "Inimă - 7 RON",
+        title: "Inimă",
         price: 7,
         combo: { heart:true, star:false, bow:false },
         thumbType: "heart",
@@ -1420,8 +1962,8 @@
       },
       {
         value: "8",
-        label: "Star - 8RON",
-        title: "Star",
+        label: "Stea - 8 RON",
+        title: "Stea",
         price: 8,
         combo: { heart:false, star:true, bow:false },
         thumbType: "star",
@@ -1430,8 +1972,8 @@
       },
       {
         value: "3",
-        label: "Bow - 3RON",
-        title: "Bow",
+        label: "Fundă - 3 RON",
+        title: "Fundă",
         price: 3,
         combo: { heart:false, star:false, bow:true },
         thumbType: "bow",
@@ -1440,8 +1982,8 @@
       },
       {
         value: "9",
-        label: "Heart + Bow - 9RON",
-        title: "Heart + Bow",
+        label: "Inimă + Fundă - 9 RON",
+        title: "Inimă + Fundă",
         price: 9,
         combo: { heart:true, star:false, bow:true },
         thumbType: "heart-bow",
@@ -1449,14 +1991,172 @@
       },
       {
         value: "10",
-        label: "Star + Bow - 10RON",
-        title: "Star + Bow",
+        label: "Stea + Fundă - 10 RON",
+        title: "Stea + Fundă",
         price: 10,
         combo: { heart:false, star:true, bow:true },
         thumbType: "star-bow",
         defaultColors: { star: "Yellow", bow: "Bright pink" }
       }
     ];
+
+    function getCart() {
+      try {
+        return JSON.parse(localStorage.getItem(cartKey)) || [];
+      } catch {
+        return [];
+      }
+    }
+
+    function setCart(cart) {
+      localStorage.setItem(cartKey, JSON.stringify(cart));
+    }
+
+    function formatPrice(value) {
+      return `${Number(value).toFixed(0)} RON`;
+    }
+
+    function updateCartBadge() {
+      const cart = getCart();
+      const totalQty = cart.reduce((sum, item) => sum + Number(item.quantity || 1), 0);
+
+      if (cartCount) {
+        cartCount.textContent = totalQty;
+        cartCount.style.display = totalQty === 0 ? "none" : "flex";
+      }
+
+      if (mobileCartCount) {
+        mobileCartCount.textContent = totalQty;
+        mobileCartCount.style.display = totalQty === 0 ? "none" : "flex";
+      }
+    }
+
+    function renderCart() {
+      const cart = getCart();
+      updateCartBadge();
+
+      if (!cart.length) {
+        cartBody.innerHTML = `
+          <div class="cart-empty">
+            Coșul este gol momentan. Alege un produs și el va apărea aici.
+          </div>
+        `;
+        cartTotal.textContent = formatPrice(0);
+        return;
+      }
+
+      let total = 0;
+
+      cartBody.innerHTML = cart.map((item, index) => {
+        const qty = Number(item.quantity || 1);
+        const price = Number(item.price || 0);
+        const lineTotal = qty * price;
+        total += lineTotal;
+
+        const details = [];
+        if(item.size) details.push(`Mărime: ${item.size}`);
+        if(item.bodyColor) details.push(`Corp: ${item.bodyColor}`);
+        if(item.accessory) details.push(`Accesoriu: ${item.accessory}`);
+
+        const detailsHtml = details.map(detail => `<div>${detail}</div>`).join("");
+        const image = item.image || item.bodyImage || "images/placeholder-product.jpg";
+
+        return `
+          <div class="cart-item">
+            <img src="${image}" alt="${item.name}">
+            <div>
+              <h4>${item.name}</h4>
+              <div class="cart-meta">${detailsHtml}</div>
+              <div class="qty-row">
+                <button class="qty-btn" onclick="changeCartQuantity(${index}, -1)">−</button>
+                <div class="qty-value">${qty}</div>
+                <button class="qty-btn" onclick="changeCartQuantity(${index}, 1)">+</button>
+              </div>
+              <div class="cart-price">${formatPrice(lineTotal)}</div>
+            </div>
+            <button class="cart-remove" onclick="removeCartItem(${index})" aria-label="Șterge produsul">🗑</button>
+          </div>
+        `;
+      }).join("");
+
+      cartTotal.textContent = formatPrice(total);
+    }
+
+    function openCart() {
+      renderCart();
+      cartDrawer.classList.add("open");
+      cartOverlay.classList.add("open");
+      cartDrawer.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeCart() {
+      cartDrawer.classList.remove("open");
+      cartOverlay.classList.remove("open");
+      cartDrawer.setAttribute("aria-hidden", "true");
+      if (!mobileMenu.classList.contains("open")) {
+        document.body.style.overflow = "";
+      }
+    }
+
+    function removeCartItem(index) {
+      const cart = getCart();
+      cart.splice(index, 1);
+      setCart(cart);
+      renderCart();
+    }
+
+    function changeCartQuantity(index, delta) {
+      const cart = getCart();
+      if (!cart[index]) return;
+
+      cart[index].quantity = Number(cart[index].quantity || 1) + delta;
+
+      if (cart[index].quantity <= 0) {
+        cart.splice(index, 1);
+      }
+
+      setCart(cart);
+      renderCart();
+    }
+
+    function openMobileMenu() {
+      mobileMenu.classList.add("open");
+      mobileMenuOverlay.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeMobileMenu() {
+      mobileMenu.classList.remove("open");
+      mobileMenuOverlay.classList.remove("open");
+      if (!cartDrawer.classList.contains("open")) {
+        document.body.style.overflow = "";
+      }
+    }
+
+    window.removeCartItem = removeCartItem;
+    window.changeCartQuantity = changeCartQuantity;
+
+    cartOpenBtn?.addEventListener("click", openCart);
+    mobileCartOpenBtn?.addEventListener("click", openCart);
+    cartCloseBtn?.addEventListener("click", closeCart);
+    cartOverlay?.addEventListener("click", closeCart);
+    continueShoppingBtn?.addEventListener("click", closeCart);
+
+    mobileMenuOpenBtn?.addEventListener("click", openMobileMenu);
+    mobileMenuCloseBtn?.addEventListener("click", closeMobileMenu);
+    mobileMenuOverlay?.addEventListener("click", closeMobileMenu);
+
+    document.querySelectorAll(".mobile-link").forEach(link => {
+      link.addEventListener("click", closeMobileMenu);
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeCart();
+        closeMobileMenu();
+      }
+    });
 
     function goToStep(step){
       currentStep = step;
@@ -1472,7 +2172,7 @@
       });
 
       const activeCard = document.getElementById(`step-${step}`);
-      if (activeCard && window.innerWidth <= 980) {
+      if (activeCard && window.innerWidth > 760) {
         activeCard.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }
@@ -1541,7 +2241,7 @@
         el.textContent = "";
         el.classList.remove("error");
       }else{
-        el.textContent = `Could not find image like: ${example}`;
+        el.textContent = `Nu am găsit imagine de tipul: ${example}`;
         el.classList.add("error");
       }
     }
@@ -1632,8 +2332,8 @@
           thumbHTML = `
             <div class="option-thumb" style="background:#f8f3ee;">
               <div style="
-                width:54px;
-                height:54px;
+                width:46px;
+                height:46px;
                 border-radius:50%;
                 border:2px solid rgba(184,142,103,0.34);
                 position:relative;
@@ -1645,7 +2345,7 @@
                   left:50%;
                   top:50%;
                   width:2px;
-                  height:40px;
+                  height:34px;
                   background:#b88e67;
                   transform:translate(-50%,-50%) rotate(45deg);
                   border-radius:999px;
@@ -1675,7 +2375,7 @@
           const src = await getAccessoryThumbSrc(option.thumbType, option.thumbColor);
           thumbHTML = `
             <div class="option-thumb">
-              ${src ? `<img src="${src}" alt="">` : `<span style="font-size:0.8rem;color:#9b9087;">Accessory</span>`}
+              ${src ? `<img src="${src}" alt="">` : `<span style="font-size:0.8rem;color:#9b9087;">Accesoriu</span>`}
             </div>
           `;
         }
@@ -1879,6 +2579,19 @@
       if(selected.combo.bow) await renderAccessory("bow", bowColor);
     }
 
+    function animatePreviewElement(el, type = "default"){
+      el.style.animation = "none";
+      void el.offsetWidth;
+
+      if(type === "bow"){
+        el.style.animation = "previewAppearBow 0.26s cubic-bezier(.22,.61,.36,1) forwards";
+      }else if(type === "centered"){
+        el.style.animation = "previewAppearCenter 0.26s cubic-bezier(.22,.61,.36,1) forwards";
+      }else{
+        el.style.animation = "previewAppear 0.26s cubic-bezier(.22,.61,.36,1) forwards";
+      }
+    }
+
     function updatePreview(){
       const chosen = bodyOptions.find(item => item.name === bodyColor) || bodyOptions[0];
       const src = chosen.src;
@@ -1897,7 +2610,7 @@
       teddyImage.onerror = () => {
         teddyImage.style.display = "none";
         previewMessage.style.display = "block";
-        previewMessage.textContent = "Could not load teddy image 🤍";
+        previewMessage.textContent = "Nu am putut încărca imaginea ursulețului 🤍";
       };
     }
 
@@ -1921,21 +2634,21 @@
     }
 
     function getSizeText(){
-      return size.options[size.selectedIndex]?.text || "Not selected";
+      return size.options[size.selectedIndex]?.text || "Neselectată";
     }
 
     function getAccessoryText(){
       const selected = getSelectedAccessory();
-      return selected ? selected.label : "Not selected";
+      return selected ? selected.label : "Neselectat";
     }
 
     function updateSummary(){
       summarySize.textContent = getSizeText();
-      summaryBody.textContent = bodyColor || "Not selected";
+      summaryBody.textContent = bodyColor || "Neselectat";
       summaryAccessory.textContent = getAccessoryText();
 
       detailsSize.textContent = getSizeText();
-      detailsBody.textContent = bodyColor || "Not selected";
+      detailsBody.textContent = bodyColor || "Neselectat";
       detailsAccessory.textContent = getAccessoryText();
     }
 
@@ -1962,28 +2675,9 @@
       addBtn.disabled = !valid;
     }
 
-    function updateCartCount(){
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
-      let total = 0;
-
-      cart.forEach(item => {
-        total += Number(item.quantity || 1);
-      });
-
-      if(!cartCount) return;
-
-      cartCount.textContent = total;
-
-      if(total === 0){
-        cartCount.style.display = "none";
-      } else {
-        cartCount.style.display = "flex";
-      }
-    }
-
     function addToCart(){
       const item = {
-        name: "Teddy Bear",
+        name: "Ursuleț",
         size: size.options[size.selectedIndex].text,
         bodyColor: bodyColor,
         accessory: getAccessoryText(),
@@ -1994,61 +2688,22 @@
         heartImage: heartImg.getAttribute("src") || "",
         starImage: starImg.getAttribute("src") || "",
         bowImage: bowImg.getAttribute("src") || "",
-        bodyStyle: {
-          top: "0px",
-          left: "0px",
-          width: "100%",
-          height: "100%",
-          transform: "none",
-          maxWidth: "none",
-          maxHeight: "none"
-        },
-        heartStyle: heartImg.getAttribute("src") ? {
-          top: "66%",
-          left: "50%",
-          width: "54%",
-          height: "auto",
-          transform: "translate(-50%,-50%)",
-          maxWidth: "none",
-          maxHeight: "none"
-        } : null,
-        starStyle: starImg.getAttribute("src") ? {
-          top: "66%",
-          left: "50%",
-          width: "54%",
-          height: "auto",
-          transform: "translate(-50%,-50%)",
-          maxWidth: "none",
-          maxHeight: "none"
-        } : null,
-        bowStyle: bowImg.getAttribute("src") ? {
-          top: "29%",
-          left: "68%",
-          width: "28%",
-          height: "auto",
-          transform: "translate(-50%,-50%) rotate(18deg)",
-          maxWidth: "none",
-          maxHeight: "none"
-        } : null,
         image: teddyImage.getAttribute("src") || "",
         price: getUnitPrice(),
         quantity: quantity
       };
 
-      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const cart = getCart();
       cart.push(item);
-      localStorage.setItem("cart", JSON.stringify(cart));
+      setCart(cart);
 
       checkoutBtn.style.display = "block";
-      updateCartCount();
+      updateCartBadge();
+      renderCart();
 
       const toast = document.getElementById("toast");
       toast.classList.add("show");
       setTimeout(() => toast.classList.remove("show"), 4000);
-    }
-
-    function goToCart(){
-      window.location.href = "cart.html";
     }
 
     size.addEventListener("change", () => {
@@ -2076,16 +2731,28 @@
       renderAccessories();
     });
 
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    revealItems.forEach(item => revealObserver.observe(item));
+
     window.addEventListener("load", async () => {
       buildBodySwatches();
       await buildAccessoryCards();
       updatePreview();
       updatePrice();
       updateSummary();
-      updateCartCount();
+      updateCartBadge();
       updateStepButtons();
       validateForm();
       goToStep(1);
+      renderCart();
     });
   </script>
 </body>
