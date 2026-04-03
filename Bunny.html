@@ -982,6 +982,7 @@
       margin:0;
       font-size:2rem;
       font-weight:700;
+      font-family:'Cormorant Garamond',serif;
     }
 
     .cart-close{
@@ -1021,6 +1022,20 @@
       background:#f2e8df;
     }
 
+    .cart-item-link{
+      display:contents;
+    }
+
+    .cart-item-title-link{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    .cart-item-title-link:hover h4{
+      text-decoration:underline;
+      text-decoration-thickness:1px;
+    }
+
     .cart-item h4{
       margin:0 0 6px;
       font-size:1rem;
@@ -1031,6 +1046,34 @@
       font-size:.85rem;
       color:var(--brown-soft);
       line-height:1.6;
+      display:grid;
+      gap:2px;
+    }
+
+    .cart-meta strong{
+      color:var(--brown);
+      font-weight:600;
+    }
+
+    .cart-edit-link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      margin-top:10px;
+      min-height:34px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--brown);
+      font-size:.78rem;
+      font-weight:700;
+      width:max-content;
+      transition:transform .2s ease;
+    }
+
+    .cart-edit-link:hover{
+      transform:translateY(-1px);
     }
 
     .cart-price{
@@ -1910,6 +1953,11 @@
     let currentStep = 1;
 
     const cartKey = "cart";
+    const editCartIndexParam = new URLSearchParams(window.location.search).get("editCartIndex");
+    const editCartIndex = editCartIndexParam !== null && !Number.isNaN(Number(editCartIndexParam))
+      ? Number(editCartIndexParam)
+      : null;
+    let isEditingCartItem = editCartIndex !== null;
 
     const size = document.getElementById("size");
     const priceEl = document.getElementById("price");
@@ -2087,6 +2135,24 @@
       return `${Number(value).toFixed(0)} RON`;
     }
 
+    function getEditUrl(item, index) {
+      if (item.editUrl) return `${item.editUrl}${item.editUrl.includes("?") ? "&" : "?"}editCartIndex=${index}`;
+      return `Bunny.html?editCartIndex=${index}`;
+    }
+
+    function getCartDetails(item) {
+      const details = [];
+
+      if (item.size) details.push(`<div><strong>Mărime:</strong> ${item.size}</div>`);
+      if (item.bodyColor) details.push(`<div><strong>Culoare corp:</strong> ${item.bodyColor}</div>`);
+      if (item.accessory && item.accessory !== "Neselectat") details.push(`<div><strong>Accesoriu:</strong> ${item.accessory}</div>`);
+      if (item.heartColor) details.push(`<div><strong>Culoare inimă:</strong> ${item.heartColor}</div>`);
+      if (item.starColor) details.push(`<div><strong>Culoare stea:</strong> ${item.starColor}</div>`);
+      if (item.bowColor) details.push(`<div><strong>Culoare fundă:</strong> ${item.bowColor}</div>`);
+
+      return details.join("");
+    }
+
     function updateCartBadge() {
       const cart = getCart();
       const totalQty = cart.reduce((sum, item) => sum + Number(item.quantity || 1), 0);
@@ -2124,27 +2190,33 @@
         const lineTotal = qty * price;
         total += lineTotal;
 
-        const details = [];
-        if(item.size) details.push(`Mărime: ${item.size}`);
-        if(item.bodyColor) details.push(`Corp: ${item.bodyColor}`);
-        if(item.accessory) details.push(`Accesoriu: ${item.accessory}`);
-
-        const detailsHtml = details.map(detail => `<div>${detail}</div>`).join("");
+        const detailsHtml = getCartDetails(item);
         const image = item.image || item.bodyImage || "images/placeholder-product.jpg";
+        const editUrl = getEditUrl(item, index);
 
         return `
           <div class="cart-item">
-            <img src="${image}" alt="${item.name}">
+            <a href="${editUrl}" class="cart-item-link" aria-label="Editează ${item.name}">
+              <img src="${image}" alt="${item.name}">
+            </a>
+
             <div>
-              <h4>${item.name}</h4>
+              <a href="${editUrl}" class="cart-item-title-link">
+                <h4>${item.name}</h4>
+              </a>
+
               <div class="cart-meta">${detailsHtml}</div>
+              <a href="${editUrl}" class="cart-edit-link">Editează produsul</a>
+
               <div class="qty-row">
                 <button class="qty-btn" onclick="changeCartQuantity(${index}, -1)">−</button>
                 <div class="qty-value">${qty}</div>
                 <button class="qty-btn" onclick="changeCartQuantity(${index}, 1)">+</button>
               </div>
+
               <div class="cart-price">${formatPrice(lineTotal)}</div>
             </div>
+
             <button class="cart-remove" onclick="removeCartItem(${index})" aria-label="Șterge produsul">🗑</button>
           </div>
         `;
@@ -2345,8 +2417,7 @@
 
         btn.addEventListener("click", () => {
           bodyColor = option.name;
-          document.querySelectorAll("#bodySwatches .swatch-btn").forEach(el => el.classList.remove("active"));
-          btn.classList.add("active");
+          syncBodySwatches();
           updatePreview();
           updatePrice();
           validateForm();
@@ -2355,6 +2426,12 @@
         });
 
         bodySwatches.appendChild(btn);
+      });
+    }
+
+    function syncBodySwatches() {
+      document.querySelectorAll("#bodySwatches .swatch-btn").forEach(el => {
+        el.classList.toggle("active", el.dataset.value === bodyColor);
       });
     }
 
@@ -2460,8 +2537,6 @@
 
         card.addEventListener("click", () => {
           accessoryValue = option.value;
-          document.querySelectorAll("#accessoryOptionsGrid .option-card").forEach(el => el.classList.remove("active"));
-          card.classList.add("active");
 
           const combo = option.combo;
           const defaults = option.defaultColors || {};
@@ -2474,6 +2549,7 @@
           if(!combo.star) starColor = "";
           if(!combo.bow) bowColor = "";
 
+          syncAccessoryCards();
           updateAccessoryColorUI();
           renderAccessories();
           updatePrice();
@@ -2484,6 +2560,14 @@
 
         accessoryOptionsGrid.appendChild(card);
       }
+
+      syncAccessoryCards();
+    }
+
+    function syncAccessoryCards() {
+      document.querySelectorAll("#accessoryOptionsGrid .option-card").forEach(el => {
+        el.classList.toggle("active", el.dataset.value === accessoryValue);
+      });
     }
 
     function getSelectedAccessory(){
@@ -2651,19 +2735,6 @@
       if(selected.combo.bow) await renderAccessory("bow", bowColor);
     }
 
-    function animatePreviewElement(el, type = "default"){
-      el.style.animation = "none";
-      void el.offsetWidth;
-
-      if(type === "bow"){
-        el.style.animation = "previewAppearBow 0.26s cubic-bezier(.22,.61,.36,1) forwards";
-      }else if(type === "centered"){
-        el.style.animation = "previewAppearCenter 0.26s cubic-bezier(.22,.61,.36,1) forwards";
-      }else{
-        el.style.animation = "previewAppear 0.26s cubic-bezier(.22,.61,.36,1) forwards";
-      }
-    }
-
     function updatePreview(){
       const chosen = bodyOptions.find(item => item.name === bodyColor) || bodyOptions[0];
       const src = chosen.src;
@@ -2747,8 +2818,74 @@
       addBtn.disabled = !valid;
     }
 
-    function addToCart(){
-      const item = {
+    function setSizeFromText(sizeText) {
+      const normalized = String(sizeText || "").trim().toLowerCase();
+
+      const match = Array.from(size.options).find(option =>
+        option.text.trim().toLowerCase() === normalized
+      );
+
+      if (match) {
+        size.value = match.value;
+        return;
+      }
+
+      if (normalized.includes("mic")) size.value = "0";
+      else if (normalized.includes("mediu")) size.value = "15";
+      else if (normalized.includes("mare")) size.value = "25";
+    }
+
+    function setAccessoryFromStoredValue(accessoryText) {
+      const normalized = String(accessoryText || "").trim().toLowerCase();
+
+      const match = accessoryOptions.find(option =>
+        option.label.trim().toLowerCase() === normalized ||
+        option.title.trim().toLowerCase() === normalized
+      );
+
+      if (!match) return;
+
+      accessoryValue = match.value;
+
+      const combo = match.combo;
+      const defaults = match.defaultColors || {};
+
+      heartColor = combo.heart ? (heartColor || defaults.heart || "Red") : "";
+      starColor = combo.star ? (starColor || defaults.star || "Yellow") : "";
+      bowColor = combo.bow ? (bowColor || defaults.bow || "Bright pink") : "";
+
+      if(!combo.heart) heartColor = "";
+      if(!combo.star) starColor = "";
+      if(!combo.bow) bowColor = "";
+    }
+
+    function loadEditItemFromCart() {
+      if (editCartIndex === null) return;
+
+      const cart = getCart();
+      const item = cart[editCartIndex];
+
+      if (!item) {
+        isEditingCartItem = false;
+        return;
+      }
+
+      if (item.size) setSizeFromText(item.size);
+      if (item.bodyColor) bodyColor = item.bodyColor;
+      if (item.accessory) accessoryValue = "";
+      if (item.heartColor) heartColor = item.heartColor;
+      if (item.starColor) starColor = item.starColor;
+      if (item.bowColor) bowColor = item.bowColor;
+      if (item.accessory) setAccessoryFromStoredValue(item.accessory);
+      if (item.quantity) quantity = Math.max(1, Math.min(20, Number(item.quantity)));
+
+      qtyEl.textContent = String(quantity);
+      addBtn.textContent = "Actualizează produsul";
+      checkoutBtn.style.display = "block";
+    }
+
+    function buildCartItemPayload() {
+      return {
         name: "Iepuraș",
         size: size.options[size.selectedIndex].text,
         bodyColor: bodyColor,
@@ -2762,11 +2899,21 @@
         bowImage: bowImg.getAttribute("src") || "",
         image: bunnyImage.getAttribute("src") || "",
         price: getUnitPrice(),
-        quantity: quantity
+        quantity: quantity,
+        editUrl: "Bunny.html"
       };
+    }
 
+    function addToCart(){
       const cart = getCart();
-      cart.push(item);
+      const item = buildCartItemPayload();
+
+      if (isEditingCartItem && editCartIndex !== null && cart[editCartIndex]) {
+        cart[editCartIndex] = item;
+      } else {
+        cart.push(item);
+      }
+
       setCart(cart);
 
       checkoutBtn.style.display = "block";
@@ -2774,6 +2921,7 @@
       renderCart();
 
       const toast = document.getElementById("toast");
+      toast.textContent = isEditingCartItem ? "Produsul a fost actualizat în coș." : "Produsul a fost adăugat în coș.";
       toast.classList.add("show");
       setTimeout(() => toast.classList.remove("show"), 4000);
     }
@@ -2816,8 +2964,15 @@
 
     window.addEventListener("load", async () => {
       buildBodySwatches();
+      loadEditItemFromCart();
       await buildAccessoryCards();
+
+      syncBodySwatches();
+      syncAccessoryCards();
+      updateAccessoryColorUI();
+
       updatePreview();
+      await renderAccessories();
       updatePrice();
       updateSummary();
       updateCartBadge();
