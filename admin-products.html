@@ -330,7 +330,7 @@
 
     .product-list{
       display:grid;
-      gap:18px;
+      gap:16px;
     }
 
     .product-card{
@@ -342,62 +342,111 @@
     }
 
     .product-card.is-hidden{
-      opacity:.7;
+      opacity:.78;
       background:rgba(255,248,245,.72);
       border-color:rgba(139,21,56,.12);
     }
 
-    .product-top{
+    .product-summary{
       display:grid;
-      grid-template-columns:96px 1fr auto;
+      grid-template-columns:92px 1fr auto;
       gap:14px;
       align-items:start;
-      margin-bottom:14px;
     }
 
-    .product-top img{
-      width:96px;
-      height:96px;
+    .product-summary img{
+      width:92px;
+      height:92px;
       object-fit:cover;
       border-radius:18px;
       background:#efe4d8;
       border:1px solid var(--line);
     }
 
-    .product-order-box{
-      display:grid;
-      gap:8px;
-      min-width:110px;
+    .product-main h3{
+      margin:0 0 6px;
+      font-size:1.55rem;
+      line-height:.92;
+      color:var(--brown);
     }
 
-    .order-badge{
+    .product-meta{
+      display:grid;
+      gap:4px;
+      margin-top:6px;
+    }
+
+    .product-meta div{
+      color:var(--brown-soft);
+      font-size:.86rem;
+      line-height:1.6;
+      word-break:break-word;
+    }
+
+    .status-row{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+
+    .hidden-pill,
+    .visible-pill{
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      min-height:38px;
-      padding:8px 12px;
+      width:max-content;
+      padding:6px 10px;
       border-radius:999px;
-      border:1px solid var(--line);
-      background:#fff;
-      color:var(--brown);
-      font-size:.84rem;
+      font-size:.72rem;
       font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
     }
 
-    .order-actions{
+    .hidden-pill{
+      background:var(--danger-soft);
+      color:var(--danger);
+      border:1px solid rgba(139,21,56,.16);
+    }
+
+    .visible-pill{
+      background:var(--success-soft);
+      color:var(--success);
+      border:1px solid rgba(47,122,82,.16);
+    }
+
+    .sort-pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:max-content;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:.72rem;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      background:#fff;
+      color:var(--brown-soft);
+      border:1px solid var(--line);
+    }
+
+    .product-actions{
       display:grid;
       gap:8px;
+      min-width:170px;
     }
 
     .mini-btn{
-      min-height:38px;
+      min-height:40px;
       padding:8px 12px;
       border-radius:999px;
       border:1px solid var(--line);
       background:#fff;
       color:var(--brown);
       cursor:pointer;
-      transition:transform .18s ease;
+      transition:transform .18s ease, opacity .18s ease;
     }
 
     .mini-btn:hover{
@@ -420,6 +469,17 @@
       color:var(--success);
       border-color:rgba(47,122,82,.20);
       background:var(--success-soft);
+    }
+
+    .editor-wrap{
+      display:none;
+      margin-top:16px;
+      padding-top:16px;
+      border-top:1px solid var(--line);
+    }
+
+    .editor-wrap.open{
+      display:block;
     }
 
     .product-fields{
@@ -464,33 +524,6 @@
       font-size:.92rem;
     }
 
-    .hidden-pill,
-    .visible-pill{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      width:max-content;
-      padding:6px 10px;
-      border-radius:999px;
-      font-size:.72rem;
-      font-weight:700;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      margin-top:6px;
-    }
-
-    .hidden-pill{
-      background:var(--danger-soft);
-      color:var(--danger);
-      border:1px solid rgba(139,21,56,.16);
-    }
-
-    .visible-pill{
-      background:var(--success-soft);
-      color:var(--success);
-      border:1px solid rgba(47,122,82,.16);
-    }
-
     @media (max-width: 980px){
       .admin-grid{grid-template-columns:1fr}
     }
@@ -502,15 +535,15 @@
       .brand-sub{display:none}
       .hero-card,.panel{border-radius:22px;padding:16px}
       .form-grid{grid-template-columns:1fr}
-      .product-top{
+      .product-summary{
         grid-template-columns:72px 1fr;
       }
-      .product-top img{
+      .product-summary img{
         width:72px;
         height:72px;
         border-radius:16px;
       }
-      .product-order-box{
+      .product-actions{
         grid-column:1 / -1;
         min-width:0;
       }
@@ -690,8 +723,11 @@
     }
 
     function setAdminVisible(visible) {
-      addProductPanel.style.display = visible ? 'block' : 'none';
+      addProductPanel.style.display = visible ? 'block' : 'block';
       productsPanel.style.display = visible ? 'block' : 'none';
+      if (!visible) {
+        addProductPanel.style.display = 'none';
+      }
     }
 
     function slugify(value) {
@@ -701,6 +737,15 @@
         .replace(/[\u0300-\u036f]/g, '')
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/^-+|-+$/g, '');
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
     }
 
     function getStoragePathFromPublicUrl(imageUrl) {
@@ -732,82 +777,82 @@
 
       productsList.innerHTML = productsCache.map((product, index) => `
         <div class="product-card ${product.is_visible === false ? 'is-hidden' : ''}" data-product-id="${product.id}">
-          <div class="product-top">
-            <div>
-              <img src="${product.image || ''}" alt="${product.name || 'Produs'}">
-              ${product.is_visible === false
-                ? `<div class="hidden-pill">Ascuns pe site</div>`
-                : `<div class="visible-pill">Vizibil pe site</div>`}
-            </div>
+          <div class="product-summary">
+            <img src="${product.image || ''}" alt="${escapeHtml(product.name || 'Produs')}">
 
-            <div>
-              <h3>${product.name || 'Produs fără nume'}</h3>
-              <div class="small-note">ID: ${product.id}</div>
-              <div class="small-note">Ordine curentă: ${Number(product.sort_order || 0)}</div>
-            </div>
+            <div class="product-main">
+              <h3>${escapeHtml(product.name || 'Produs fără nume')}</h3>
 
-            <div class="product-order-box">
-              <div class="order-badge">Poziția ${index + 1}</div>
-              <div class="order-actions">
-                <button class="mini-btn" type="button" data-action="move-up" data-id="${product.id}" ${index === 0 ? 'disabled' : ''}>Mută mai sus</button>
-                <button class="mini-btn" type="button" data-action="move-down" data-id="${product.id}" ${index === productsCache.length - 1 ? 'disabled' : ''}>Mută mai jos</button>
-                <button class="mini-btn ${product.is_visible === false ? 'show-btn' : 'hide-btn'}" type="button" data-action="toggle-visibility" data-id="${product.id}">
-                  ${product.is_visible === false ? 'Show pe site' : 'Hide de pe site'}
-                </button>
+              <div class="product-meta">
+                <div><strong>${escapeHtml(product.text || '')}</strong></div>
+                <div>${escapeHtml(product.description || '')}</div>
+                <div>${escapeHtml(product.link || '')}</div>
               </div>
+
+              <div class="status-row">
+                ${product.is_visible === false
+                  ? `<div class="hidden-pill">Ascuns pe site</div>`
+                  : `<div class="visible-pill">Vizibil pe site</div>`}
+                <div class="sort-pill">Poziția ${index + 1}</div>
+              </div>
+            </div>
+
+            <div class="product-actions">
+              <button class="mini-btn" type="button" data-action="move-up" data-id="${product.id}" ${index === 0 ? 'disabled' : ''}>Mută mai sus</button>
+              <button class="mini-btn" type="button" data-action="move-down" data-id="${product.id}" ${index === productsCache.length - 1 ? 'disabled' : ''}>Mută mai jos</button>
+              <button class="mini-btn" type="button" data-action="toggle-editor" data-id="${product.id}">Editează produsul</button>
+              <button class="mini-btn ${product.is_visible === false ? 'show-btn' : 'hide-btn'}" type="button" data-action="toggle-visibility" data-id="${product.id}">
+                ${product.is_visible === false ? 'Show pe site' : 'Hide de pe site'}
+              </button>
+              <button class="mini-btn hide-btn" type="button" data-action="delete" data-id="${product.id}" data-image="${product.image || ''}">
+                Șterge produsul
+              </button>
             </div>
           </div>
 
-          <div class="product-fields">
-            <label>
-              Nume produs
-              <input type="text" data-field="name" value="${escapeHtml(product.name || '')}">
-            </label>
+          <div class="editor-wrap" id="editor-${product.id}">
+            <div class="product-fields">
+              <label>
+                Nume produs
+                <input type="text" data-field="name" value="${escapeHtml(product.name || '')}">
+              </label>
 
-            <label>
-              Text / preț
-              <input type="text" data-field="text" value="${escapeHtml(product.text || '')}">
-            </label>
+              <label>
+                Text / preț
+                <input type="text" data-field="text" value="${escapeHtml(product.text || '')}">
+              </label>
 
-            <label class="full">
-              Descriere
-              <textarea data-field="description">${escapeHtml(product.description || '')}</textarea>
-            </label>
+              <label class="full">
+                Descriere
+                <textarea data-field="description">${escapeHtml(product.description || '')}</textarea>
+              </label>
 
-            <label class="full">
-              Link pagină detalii
-              <input type="text" data-field="link" value="${escapeHtml(product.link || '')}">
-            </label>
+              <label class="full">
+                Link pagină detalii
+                <input type="text" data-field="link" value="${escapeHtml(product.link || '')}">
+              </label>
 
-            <label class="full">
-              Imagine nouă (opțional)
-              <div class="file-wrap">
-                <input type="file" data-field="image-file" accept="image/*">
-                <div class="file-note">Dacă alegi o imagine nouă și salvezi, imaginea veche va fi înlocuită.</div>
-              </div>
-            </label>
+              <label class="full">
+                Imagine nouă (opțional)
+                <div class="file-wrap">
+                  <input type="file" data-field="image-file" accept="image/*">
+                  <div class="file-note">Dacă alegi o imagine nouă și salvezi, imaginea veche va fi înlocuită.</div>
+                </div>
+              </label>
 
-            <label class="full">
-              Preview imagine curentă
-              <img src="${product.image || ''}" alt="${product.name || 'Produs'}" class="inline-preview" data-role="current-preview">
-            </label>
-          </div>
+              <label class="full">
+                Preview imagine curentă
+                <img src="${product.image || ''}" alt="${escapeHtml(product.name || 'Produs')}" class="inline-preview">
+              </label>
+            </div>
 
-          <div class="product-card-actions">
-            <button class="btn-primary" type="button" data-action="save" data-id="${product.id}">Salvează modificările</button>
-            <button class="btn-danger" type="button" data-action="delete" data-id="${product.id}" data-image="${product.image || ''}">Șterge produsul</button>
+            <div class="product-card-actions">
+              <button class="btn-primary" type="button" data-action="save" data-id="${product.id}">Salvează modificările</button>
+              <button class="btn-secondary" type="button" data-action="toggle-editor" data-id="${product.id}">Închide editarea</button>
+            </div>
           </div>
         </div>
       `).join('');
-    }
-
-    function escapeHtml(value) {
-      return String(value)
-        .replaceAll('&', '&amp;')
-        .replaceAll('<', '&lt;')
-        .replaceAll('>', '&gt;')
-        .replaceAll('"', '&quot;')
-        .replaceAll("'", '&#039;');
     }
 
     async function loadProducts() {
@@ -827,6 +872,12 @@
       }
 
       renderProducts(data || []);
+    }
+
+    function toggleEditor(productId) {
+      const editor = document.getElementById(`editor-${productId}`);
+      if (!editor) return;
+      editor.classList.toggle('open');
     }
 
     async function swapSortOrder(firstProduct, secondProduct) {
@@ -878,11 +929,11 @@
       const product = productsCache.find(item => String(item.id) === String(productId));
       if (!product) return;
 
-      const nextVisibility = !(product.is_visible === false);
+      const newValue = product.is_visible === false ? true : false;
 
       const { error } = await db
         .from('products')
-        .update({ is_visible: !nextVisibility ? false : true })
+        .update({ is_visible: newValue })
         .eq('id', productId);
 
       if (error) {
@@ -890,7 +941,7 @@
         return;
       }
 
-      showStatus(listStatus, nextVisibility ? 'Produsul a fost ascuns de pe site.' : 'Produsul a fost afișat din nou pe site.');
+      showStatus(listStatus, newValue ? 'Produsul a fost afișat pe site.' : 'Produsul a fost ascuns de pe site.');
       await loadProducts();
     }
 
@@ -1103,24 +1154,34 @@
       const productId = button.getAttribute('data-id');
       const imageUrl = button.getAttribute('data-image');
 
+      if (action === 'toggle-editor') {
+        toggleEditor(productId);
+        return;
+      }
+
       if (action === 'save') {
         await handleSave(productId);
+        return;
       }
 
       if (action === 'delete') {
         await handleDelete(productId, imageUrl);
+        return;
       }
 
       if (action === 'toggle-visibility') {
         await handleToggleVisibility(productId);
+        return;
       }
 
       if (action === 'move-up') {
         await handleMove(productId, 'up');
+        return;
       }
 
       if (action === 'move-down') {
         await handleMove(productId, 'down');
+        return;
       }
     });
 
