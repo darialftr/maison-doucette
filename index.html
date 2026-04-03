@@ -1195,6 +1195,20 @@
       background:#f2e8df;
     }
 
+    .cart-item-link{
+      display:contents;
+    }
+
+    .cart-item-title-link{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    .cart-item-title-link:hover h4{
+      text-decoration:underline;
+      text-decoration-thickness:1px;
+    }
+
     .cart-item h4{
       margin:0 0 6px;
       font-size:1rem;
@@ -1205,6 +1219,34 @@
       font-size:.85rem;
       color:var(--brown-soft);
       line-height:1.6;
+      display:grid;
+      gap:2px;
+    }
+
+    .cart-meta strong{
+      color:var(--brown);
+      font-weight:600;
+    }
+
+    .cart-edit-link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      margin-top:10px;
+      min-height:34px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--brown);
+      font-size:.78rem;
+      font-weight:700;
+      width:max-content;
+      transition:transform .2s ease;
+    }
+
+    .cart-edit-link:hover{
+      transform:translateY(-1px);
     }
 
     .cart-price{
@@ -2190,6 +2232,65 @@
       }
     }
 
+    function getEditUrl(item, index) {
+      if (item.editUrl) return `${item.editUrl}${item.editUrl.includes('?') ? '&' : '?'}editCartIndex=${index}`;
+      if (item.customizerUrl) return `${item.customizerUrl}${item.customizerUrl.includes('?') ? '&' : '?'}editCartIndex=${index}`;
+      if (item.link && (item.link.includes('Bunny') || item.link.includes('TeddyBear'))) {
+        return `${item.link}${item.link.includes('?') ? '&' : '?'}editCartIndex=${index}`;
+      }
+
+      const name = String(item.name || '').toLowerCase();
+
+      if (name.includes('bunny') || name.includes('iepura')) {
+        return `Bunny.html?editCartIndex=${index}`;
+      }
+
+      if (name.includes('teddy') || name.includes('urs')) {
+        return `TeddyBear.html?editCartIndex=${index}`;
+      }
+
+      if (name.includes('secretul maison') || name.includes('mystery')) {
+        return `mystery.html?editCartIndex=${index}`;
+      }
+
+      return item.link || '#';
+    }
+
+    function getCartDetails(item) {
+      const details = [];
+
+      if (item.size) details.push(`<div><strong>Mărime:</strong> ${item.size}</div>`);
+      if (item.bodyColor) details.push(`<div><strong>Culoare corp:</strong> ${item.bodyColor}</div>`);
+      if (item.accessory && item.accessory !== 'Not selected' && item.accessory !== 'Neselectat') {
+        details.push(`<div><strong>Accesoriu:</strong> ${item.accessory}</div>`);
+      }
+
+      if (item.heartColor) details.push(`<div><strong>Culoare inimă:</strong> ${item.heartColor}</div>`);
+      if (item.starColor) details.push(`<div><strong>Culoare stea:</strong> ${item.starColor}</div>`);
+      if (item.bowColor) details.push(`<div><strong>Culoare fundă:</strong> ${item.bowColor}</div>`);
+
+      if (Array.isArray(item.details) && item.details.length) {
+        item.details.forEach(detail => {
+          const detailText = String(detail || '').trim();
+          if (!detailText) return;
+
+          const alreadyIncluded = details.some(existing =>
+            existing.toLowerCase().includes(detailText.toLowerCase())
+          );
+
+          if (!alreadyIncluded) {
+            details.push(`<div>${detailText}</div>`);
+          }
+        });
+      }
+
+      if (!details.length) {
+        details.push(`<div>Fără detalii suplimentare.</div>`);
+      }
+
+      return details.join('');
+    }
+
     function renderCart() {
       const cart = getCart();
       updateCartBadge();
@@ -2212,26 +2313,34 @@
         const lineTotal = qty * price;
         total += lineTotal;
 
-        const details = item.details || [];
-        const detailsHtml = details.length
-          ? details.map(detail => `<div>${detail}</div>`).join('')
-          : '';
-
-        const image = item.image || 'images/placeholder-product.jpg';
+        const detailsHtml = getCartDetails(item);
+        const image = item.image || item.bodyImage || 'images/placeholder-product.jpg';
+        const editUrl = getEditUrl(item, index);
 
         return `
           <div class="cart-item">
-            <img src="${image}" alt="${item.name}">
+            <a href="${editUrl}" class="cart-item-link" aria-label="Editează ${item.name}">
+              <img src="${image}" alt="${item.name}">
+            </a>
+
             <div>
-              <h4>${item.name}</h4>
+              <a href="${editUrl}" class="cart-item-title-link">
+                <h4>${item.name}</h4>
+              </a>
+
               <div class="cart-meta">${detailsHtml}</div>
+
+              <a href="${editUrl}" class="cart-edit-link">Editează produsul</a>
+
               <div class="qty-row">
                 <button class="qty-btn" onclick="changeQuantity(${index}, -1)">−</button>
                 <div class="qty-value">${qty}</div>
                 <button class="qty-btn" onclick="changeQuantity(${index}, 1)">+</button>
               </div>
+
               <div class="cart-price">${formatPrice(lineTotal)}</div>
             </div>
+
             <button class="cart-remove" onclick="removeCartItem(${index})" aria-label="Șterge produsul">🗑</button>
           </div>
         `;
@@ -2305,15 +2414,17 @@
       }
 
       try {
-        const response = await fetch(
-          `${window.SUPABASE_URL}/rest/v1/products?select=*&order=created_at.asc`,
-          {
-            headers: {
-              apikey: window.SUPABASE_ANON_KEY,
-              Authorization: `Bearer ${window.SUPABASE_ANON_KEY}`
-            }
+        const url = new URL(`${window.SUPABASE_URL}/rest/v1/products`);
+        url.searchParams.set('select', '*');
+        url.searchParams.set('is_visible', 'eq.true');
+        url.searchParams.set('order', 'sort_order.asc,created_at.asc');
+
+        const response = await fetch(url.toString(), {
+          headers: {
+            apikey: window.SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${window.SUPABASE_ANON_KEY}`
           }
-        );
+        });
 
         if (!response.ok) {
           throw new Error('Fetch failed');
@@ -2466,15 +2577,24 @@
         price: 45,
         quantity: 1,
         image: 'images/bunny1.jpg',
-        details: ['Culoare: crem', 'Accesorii: fundă aurie']
+        editUrl: 'Bunny.html',
+        size: 'Mediu (+15 RON)',
+        bodyColor: 'Cream',
+        accessory: 'Inimă + Fundă - 10 RON',
+        heartColor: 'Red',
+        bowColor: 'Bright pink'
       }
 
       {
-        name: 'Secretul Maison',
-        price: 105,
+        name: 'Ursuleț',
+        price: 45,
         quantity: 1,
-        image: 'images/atelier-box-cover.jpg',
-        details: ['Vibe: Soft Romance', 'Pasiune: lectură']
+        image: 'images/teddy1.jpg',
+        editUrl: 'TeddyBear.html',
+        size: 'Mic (+0 RON)',
+        bodyColor: 'Light blue',
+        accessory: 'Stea - 8 RON',
+        starColor: 'Yellow'
       }
     */
   </script>
