@@ -1,184 +1,1120 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Atelier Editor</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atelier Editor</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<style>
-body{
-  margin:0;
-  font-family:'Manrope', sans-serif;
-  background:#f7f1eb;
-  color:#5a463b;
-}
+  <style>
+    :root{
+      --bg:#f7f1eb;
+      --bg-2:#efe4d8;
+      --panel:#fffaf5;
+      --line:rgba(101,79,67,0.12);
+      --gold:#d2ad73;
+      --gold-deep:#ae7f43;
+      --brown:#654f43;
+      --brown-soft:#866f61;
+      --danger:#9b5248;
+      --success:#5f7d5b;
+      --shadow:0 18px 45px rgba(101,79,67,0.10);
+      --radius-xl:30px;
+      --radius-lg:22px;
+      --radius-md:16px;
+    }
 
-.container{
-  max-width:900px;
-  margin:40px auto;
-  background:white;
-  padding:30px;
-  border-radius:20px;
-  box-shadow:0 20px 40px rgba(0,0,0,0.08);
-}
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:'Manrope', sans-serif;
+      color:var(--brown);
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.92), transparent 24%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+    }
 
-h1{
-  font-family:'Cormorant Garamond', serif;
-}
+    h1,h2,h3,.serif{
+      font-family:'Cormorant Garamond', serif;
+      letter-spacing:-0.02em;
+    }
 
-input, textarea{
-  width:100%;
-  padding:12px;
-  margin:8px 0 16px;
-  border-radius:10px;
-  border:1px solid #ddd;
-}
+    .hidden{display:none !important}
 
-button{
-  padding:12px 20px;
-  border:none;
-  border-radius:999px;
-  background:#b88e67;
-  color:white;
-  cursor:pointer;
-}
+    .auth-screen{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
 
-.message{
-  margin-top:10px;
-  font-size:14px;
-}
-</style>
+    .auth-card{
+      width:min(480px, 100%);
+      background:rgba(255,250,245,.93);
+      border:1px solid var(--line);
+      border-radius:var(--radius-xl);
+      box-shadow:var(--shadow);
+      padding:28px;
+    }
+
+    .auth-card h1{
+      margin:0 0 8px;
+      font-size:3rem;
+      line-height:.92;
+    }
+
+    .auth-card p{
+      margin:0 0 20px;
+      color:var(--brown-soft);
+      line-height:1.7;
+      font-size:.95rem;
+    }
+
+    .app{
+      width:min(1480px, calc(100% - 24px));
+      margin:18px auto;
+      display:grid;
+      grid-template-columns:420px minmax(0, 1fr);
+      gap:18px;
+      align-items:start;
+    }
+
+    .panel{
+      background:rgba(255,250,245,.92);
+      border:1px solid var(--line);
+      border-radius:var(--radius-xl);
+      box-shadow:var(--shadow);
+      padding:20px;
+    }
+
+    .sticky{
+      position:sticky;
+      top:18px;
+      max-height:calc(100vh - 36px);
+      overflow:auto;
+    }
+
+    .sticky::-webkit-scrollbar{width:10px}
+    .sticky::-webkit-scrollbar-thumb{
+      background:rgba(101,79,67,.12);
+      border-radius:999px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:18px;
+    }
+
+    .topbar h1{
+      margin:0 0 6px;
+      font-size:2.8rem;
+      line-height:.92;
+    }
+
+    .topbar p{
+      margin:0;
+      color:var(--brown-soft);
+      line-height:1.7;
+      font-size:.92rem;
+    }
+
+    .pill-row{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+
+    .pill{
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.85);
+      border:1px solid var(--line);
+      color:var(--brown-soft);
+      font-size:.76rem;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+
+    .btn,
+    .btn-secondary,
+    .btn-soft{
+      border:none;
+      border-radius:999px;
+      min-height:44px;
+      padding:12px 18px;
+      cursor:pointer;
+      font:inherit;
+      transition:transform .18s ease, opacity .18s ease;
+    }
+
+    .btn:hover,
+    .btn-secondary:hover,
+    .btn-soft:hover{
+      transform:translateY(-1px);
+    }
+
+    .btn{
+      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
+      color:#fff;
+      font-weight:700;
+    }
+
+    .btn-secondary{
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--brown);
+    }
+
+    .btn-soft{
+      background:rgba(255,255,255,.7);
+      border:1px dashed var(--line);
+      color:var(--brown-soft);
+    }
+
+    .message{
+      min-height:22px;
+      margin-top:12px;
+      font-size:.92rem;
+      line-height:1.5;
+    }
+
+    .message.success{color:var(--success)}
+    .message.error{color:var(--danger)}
+    .message.neutral{color:var(--brown-soft)}
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:7px;
+      margin-bottom:14px;
+    }
+
+    .field-row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    label{
+      font-size:.8rem;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:var(--brown-soft);
+    }
+
+    input, textarea, select{
+      width:100%;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:14px;
+      padding:13px 14px;
+      font:inherit;
+      color:var(--brown);
+      outline:none;
+    }
+
+    textarea{
+      min-height:95px;
+      resize:vertical;
+      line-height:1.7;
+    }
+
+    .small-textarea{min-height:78px}
+
+    .helper{
+      color:var(--brown-soft);
+      font-size:.82rem;
+      line-height:1.5;
+    }
+
+    .section-title{
+      margin:22px 0 12px;
+      font-size:1.7rem;
+      line-height:.95;
+    }
+
+    .product-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .product-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:12px 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+
+    .product-card.active{
+      border-color:rgba(174,127,67,.35);
+      box-shadow:0 10px 22px rgba(174,127,67,.10);
+      background:linear-gradient(180deg,#fffdfa,#fff8f1);
+    }
+
+    .product-meta{
+      color:var(--brown-soft);
+      font-size:.88rem;
+      line-height:1.5;
+    }
+
+    .preview-shell{
+      display:grid;
+      gap:16px;
+    }
+
+    .preview-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .preview-head h2{
+      margin:0 0 4px;
+      font-size:2rem;
+      line-height:.95;
+    }
+
+    .preview-head p{
+      margin:0;
+      color:var(--brown-soft);
+      font-size:.92rem;
+      line-height:1.6;
+    }
+
+    .preview-link{
+      color:var(--gold-deep);
+      font-weight:700;
+      text-decoration:none;
+    }
+
+    .preview-frame{
+      width:100%;
+      min-height:78vh;
+      border:none;
+      border-radius:22px;
+      background:#fff;
+      box-shadow:var(--shadow);
+    }
+
+    .empty-preview{
+      min-height:320px;
+      border-radius:22px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.7), rgba(255,250,245,.96));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      color:var(--brown-soft);
+      padding:22px;
+      line-height:1.8;
+    }
+
+    .thumb-grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .thumb{
+      aspect-ratio:4/5;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      background:#efe2d5;
+    }
+
+    .thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+
+    .thumb-placeholder{
+      width:100%;
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--brown-soft);
+      text-align:center;
+      padding:10px;
+      font-size:.84rem;
+    }
+
+    @media (max-width: 1100px){
+      .app{
+        grid-template-columns:1fr;
+      }
+      .sticky{
+        position:relative;
+        top:auto;
+        max-height:none;
+        overflow:visible;
+      }
+      .preview-frame{
+        min-height:560px;
+      }
+    }
+
+    @media (max-width: 760px){
+      .auth-card{padding:20px}
+      .auth-card h1,.topbar h1{font-size:2.25rem}
+      .app{
+        width:min(100%, calc(100% - 14px));
+        margin:10px auto;
+        gap:12px;
+      }
+      .panel{padding:16px}
+      .field-row{
+        grid-template-columns:1fr;
+      }
+      .thumb-grid{
+        grid-template-columns:1fr 1fr 1fr;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="container" id="loginBox">
-  <h1>Login</h1>
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="password" placeholder="Parolă">
-  <button onclick="login()">Login</button>
-  <div class="message" id="loginMsg"></div>
-</div>
+  <section id="authScreen" class="auth-screen">
+    <div class="auth-card">
+      <h1>Atelier Editor</h1>
+      <p>Intră cu emailul și parola ta pentru a edita produsele Maison Doucette.</p>
 
-<div class="container" id="editorBox" style="display:none;">
-  <h1>Adaugă produs</h1>
+      <form id="loginForm">
+        <div class="field">
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" type="email" required placeholder="you@example.com" autocomplete="email">
+        </div>
 
-  <input id="title" placeholder="Titlu">
-  <input id="slug" placeholder="Slug (auto)">
+        <div class="field">
+          <label for="loginPassword">Parolă</label>
+          <input id="loginPassword" type="password" required placeholder="Parola ta" autocomplete="current-password">
+        </div>
 
-  <input id="price" type="number" placeholder="Preț">
+        <div class="actions">
+          <button class="btn" type="submit" id="loginBtn">Intră în editor</button>
+        </div>
+      </form>
 
-  <textarea id="p1" placeholder="Paragraf 1"></textarea>
-  <textarea id="p2" placeholder="Paragraf 2"></textarea>
+      <div id="authMessage" class="message neutral">Autentifică-te pentru a continua.</div>
+    </div>
+  </section>
 
-  <input id="d1" placeholder="Detail 1">
-  <input id="d2" placeholder="Detail 2">
-  <input id="d3" placeholder="Detail 3">
+  <section id="editorScreen" class="hidden">
+    <div class="app">
+      <aside class="panel sticky">
+        <div class="topbar">
+          <div>
+            <h1>Atelier Editor</h1>
+            <p>De aici adaugi și editezi produsele din <strong>atelier_products</strong>.</p>
+          </div>
+          <button id="logoutBtn" class="btn-secondary" type="button">Logout</button>
+        </div>
 
-  <input id="stitle" placeholder="Special title">
-  <textarea id="sdesc" placeholder="Special description"></textarea>
+        <div class="pill-row">
+          <div class="pill">atelier_products</div>
+          <div class="pill">atelier-images</div>
+          <div class="pill">supabase auth</div>
+        </div>
 
-  <input id="i1t" placeholder="Info 1 title">
-  <input id="i1d" placeholder="Info 1 text">
+        <div class="actions">
+          <button id="newBtn" class="btn" type="button">Produs nou</button>
+          <button id="saveBtn" class="btn-secondary" type="button">Salvează</button>
+          <button id="reloadBtn" class="btn-soft" type="button">Reîncarcă lista</button>
+        </div>
 
-  <input id="i2t" placeholder="Info 2 title">
-  <input id="i2d" placeholder="Info 2 text">
+        <div id="saveMessage" class="message neutral">Completează produsul și salvează.</div>
 
-  <input id="i3t" placeholder="Info 3 title">
-  <input id="i3d" placeholder="Info 3 text">
+        <h2 class="section-title">Produse existente</h2>
+        <div id="productList" class="product-list"></div>
 
-  <input id="btntext" placeholder="Text buton">
-  <input id="btnurl" placeholder="Link personalizare">
+        <h2 class="section-title">Informații de bază</h2>
 
-  <input id="img1" placeholder="Image 1 URL">
-  <input id="img2" placeholder="Image 2 URL">
-  <input id="img3" placeholder="Image 3 URL">
+        <div class="field">
+          <label for="title">Titlu</label>
+          <input id="title" type="text" placeholder="Bunny">
+        </div>
 
-  <button onclick="saveProduct()">Salvează</button>
-  <div class="message" id="saveMsg"></div>
-</div>
+        <div class="field">
+          <label for="slug">Slug</label>
+          <input id="slug" type="text" placeholder="bunny">
+          <div class="helper">Se generează automat, dar îl poți modifica și manual.</div>
+        </div>
 
-<script type="module">
-import { supabase } from './supabase-config.js';
+        <div class="field">
+          <label for="basePrice">Preț de bază</label>
+          <input id="basePrice" type="number" min="0" step="1" placeholder="45">
+        </div>
 
-window.login = async function(){
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+        <h2 class="section-title">Descriere</h2>
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password
-  });
+        <div class="field">
+          <label for="paragraph1">Paragraf 1</label>
+          <textarea id="paragraph1" placeholder="Prima descriere a produsului"></textarea>
+        </div>
 
-  if(error){
-    document.getElementById('loginMsg').innerText = "Email sau parolă greșită";
-  } else {
-    document.getElementById('loginBox').style.display = "none";
-    document.getElementById('editorBox').style.display = "block";
-  }
-}
+        <div class="field">
+          <label for="paragraph2">Paragraf 2</label>
+          <textarea id="paragraph2" placeholder="A doua descriere a produsului"></textarea>
+        </div>
 
-function generateSlug(text){
-  return text
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '');
-}
+        <div class="field">
+          <label for="detail1">Detail 1</label>
+          <textarea id="detail1" class="small-textarea"></textarea>
+        </div>
 
-document.getElementById('title').addEventListener('input', (e)=>{
-  document.getElementById('slug').value = generateSlug(e.target.value);
-});
+        <div class="field">
+          <label for="detail2">Detail 2</label>
+          <textarea id="detail2" class="small-textarea"></textarea>
+        </div>
 
-window.saveProduct = async function(){
+        <div class="field">
+          <label for="detail3">Detail 3</label>
+          <textarea id="detail3" class="small-textarea"></textarea>
+        </div>
 
-  const data = {
-    title: title.value,
-    slug: slug.value,
-    base_price: Number(price.value),
+        <h2 class="section-title">Secțiune specială</h2>
 
-    short_paragraph_1: p1.value,
-    short_paragraph_2: p2.value,
+        <div class="field">
+          <label for="specialTitle">Titlu secțiune</label>
+          <input id="specialTitle" type="text" placeholder="De ce este atât de special?">
+        </div>
 
-    detail_1: d1.value,
-    detail_2: d2.value,
-    detail_3: d3.value,
+        <div class="field">
+          <label for="specialDescription">Descriere secțiune</label>
+          <textarea id="specialDescription"></textarea>
+        </div>
 
-    special_title: stitle.value,
-    special_description: sdesc.value,
+        <h2 class="section-title">Carduri info</h2>
 
-    info_title_1: i1t.value,
-    info_text_1: i1d.value,
+        <div class="field-row">
+          <div class="field">
+            <label for="infoTitle1">Card 1 titlu</label>
+            <input id="infoTitle1" type="text">
+          </div>
+          <div class="field">
+            <label for="infoTitle2">Card 2 titlu</label>
+            <input id="infoTitle2" type="text">
+          </div>
+        </div>
 
-    info_title_2: i2t.value,
-    info_text_2: i2d.value,
+        <div class="field">
+          <label for="infoText1">Card 1 text</label>
+          <textarea id="infoText1" class="small-textarea"></textarea>
+        </div>
 
-    info_title_3: i3t.value,
-    info_text_3: i3d.value,
+        <div class="field">
+          <label for="infoText2">Card 2 text</label>
+          <textarea id="infoText2" class="small-textarea"></textarea>
+        </div>
 
-    customize_button_text: btntext.value,
-    customize_url: btnurl.value,
+        <div class="field-row">
+          <div class="field">
+            <label for="infoTitle3">Card 3 titlu</label>
+            <input id="infoTitle3" type="text">
+          </div>
+          <div class="field">
+            <label for="isActive">Produs activ</label>
+            <select id="isActive">
+              <option value="true">Da</option>
+              <option value="false">Nu</option>
+            </select>
+          </div>
+        </div>
 
-    image_1: img1.value,
-    image_2: img2.value,
-    image_3: img3.value,
+        <div class="field">
+          <label for="infoText3">Card 3 text</label>
+          <textarea id="infoText3" class="small-textarea"></textarea>
+        </div>
 
-    is_active: true
-  };
+        <h2 class="section-title">Buton personalizare</h2>
 
-  const { error } = await supabase
-    .from('atelier_products')
-    .insert([data]);
+        <div class="field-row">
+          <div class="field">
+            <label for="buttonText">Text buton</label>
+            <input id="buttonText" type="text" placeholder="Personalizează iepurașul">
+          </div>
+          <div class="field">
+            <label for="buttonUrl">Link personalizare</label>
+            <input id="buttonUrl" type="text" placeholder="Bunny.html">
+          </div>
+        </div>
 
-  if(error){
-    document.getElementById('saveMsg').innerText = "Eroare la salvare";
-  } else {
-    document.getElementById('saveMsg').innerText = "Salvat cu succes ✨";
-  }
-}
+        <h2 class="section-title">Imagini</h2>
 
-</script>
+        <div class="field-row">
+          <div class="field">
+            <label for="file1">Încarcă imagine 1</label>
+            <input id="file1" type="file" accept="image/*">
+          </div>
+          <div class="field">
+            <label for="image1">sau URL imagine 1</label>
+            <input id="image1" type="text" placeholder="https://...">
+          </div>
+        </div>
 
+        <div class="field-row">
+          <div class="field">
+            <label for="file2">Încarcă imagine 2</label>
+            <input id="file2" type="file" accept="image/*">
+          </div>
+          <div class="field">
+            <label for="image2">sau URL imagine 2</label>
+            <input id="image2" type="text" placeholder="https://...">
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="file3">Încarcă imagine 3</label>
+            <input id="file3" type="file" accept="image/*">
+          </div>
+          <div class="field">
+            <label for="image3">sau URL imagine 3</label>
+            <input id="image3" type="text" placeholder="https://...">
+          </div>
+        </div>
+
+        <div id="thumbGrid" class="thumb-grid">
+          <div class="thumb"><div class="thumb-placeholder">Imagine 1</div></div>
+          <div class="thumb"><div class="thumb-placeholder">Imagine 2</div></div>
+          <div class="thumb"><div class="thumb-placeholder">Imagine 3</div></div>
+        </div>
+      </aside>
+
+      <main class="panel preview-shell">
+        <div class="preview-head">
+          <div>
+            <h2>Preview</h2>
+            <p>Previzualizarea se deschide în pagina ta `product-details.html`.</p>
+          </div>
+          <a id="previewLink" class="preview-link" href="#" target="_blank" rel="noopener noreferrer">Deschide preview-ul</a>
+        </div>
+
+        <iframe id="previewFrame" class="preview-frame"></iframe>
+        <div id="emptyPreview" class="empty-preview hidden">
+          Scrie titlul sau slug-ul și preview-ul va apărea aici.
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <script type="module">
+    import { supabase } from './supabase-config.js';
+
+    const TABLE_NAME = 'atelier_products';
+    const BUCKET_NAME = 'atelier-images';
+    const PREVIEW_PAGE = 'product-details.html';
+
+    const authScreen = document.getElementById('authScreen');
+    const editorScreen = document.getElementById('editorScreen');
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const authMessage = document.getElementById('authMessage');
+    const saveMessage = document.getElementById('saveMessage');
+    const productList = document.getElementById('productList');
+    const newBtn = document.getElementById('newBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const reloadBtn = document.getElementById('reloadBtn');
+    const previewFrame = document.getElementById('previewFrame');
+    const previewLink = document.getElementById('previewLink');
+    const emptyPreview = document.getElementById('emptyPreview');
+    const thumbGrid = document.getElementById('thumbGrid');
+
+    const titleInput = document.getElementById('title');
+    const slugInput = document.getElementById('slug');
+    const basePriceInput = document.getElementById('basePrice');
+    const paragraph1Input = document.getElementById('paragraph1');
+    const paragraph2Input = document.getElementById('paragraph2');
+    const detail1Input = document.getElementById('detail1');
+    const detail2Input = document.getElementById('detail2');
+    const detail3Input = document.getElementById('detail3');
+    const specialTitleInput = document.getElementById('specialTitle');
+    const specialDescriptionInput = document.getElementById('specialDescription');
+    const infoTitle1Input = document.getElementById('infoTitle1');
+    const infoText1Input = document.getElementById('infoText1');
+    const infoTitle2Input = document.getElementById('infoTitle2');
+    const infoText2Input = document.getElementById('infoText2');
+    const infoTitle3Input = document.getElementById('infoTitle3');
+    const infoText3Input = document.getElementById('infoText3');
+    const buttonTextInput = document.getElementById('buttonText');
+    const buttonUrlInput = document.getElementById('buttonUrl');
+    const image1Input = document.getElementById('image1');
+    const image2Input = document.getElementById('image2');
+    const image3Input = document.getElementById('image3');
+    const file1Input = document.getElementById('file1');
+    const file2Input = document.getElementById('file2');
+    const file3Input = document.getElementById('file3');
+    const isActiveInput = document.getElementById('isActive');
+
+    let currentProductId = null;
+    let slugTouched = false;
+
+    function setAuthMessage(text, type = 'neutral') {
+      authMessage.textContent = text;
+      authMessage.className = `message ${type}`;
+    }
+
+    function setSaveMessage(text, type = 'neutral') {
+      saveMessage.textContent = text;
+      saveMessage.className = `message ${type}`;
+    }
+
+    function showEditor() {
+      authScreen.classList.add('hidden');
+      editorScreen.classList.remove('hidden');
+    }
+
+    function showAuth() {
+      editorScreen.classList.add('hidden');
+      authScreen.classList.remove('hidden');
+    }
+
+    function normalizeRomanian(text) {
+      return String(text || '')
+        .replace(/[ăâ]/g, 'a')
+        .replace(/[ĂÂ]/g, 'A')
+        .replace(/[î]/g, 'i')
+        .replace(/[Î]/g, 'I')
+        .replace(/[șş]/g, 's')
+        .replace(/[ȘŞ]/g, 'S')
+        .replace(/[țţ]/g, 't')
+        .replace(/[ȚŢ]/g, 'T');
+    }
+
+    function generateSlug(text) {
+      return normalizeRomanian(text)
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/-{2,}/g, '-')
+        .replace(/^-+|-+$/g, '');
+    }
+
+    function mapAuthError(error) {
+      const msg = (error?.message || '').toLowerCase();
+      if (msg.includes('invalid login credentials')) return 'Emailul sau parola sunt greșite.';
+      if (msg.includes('email not confirmed')) return 'Emailul nu este confirmat încă.';
+      if (msg.includes('too many requests')) return 'Prea multe încercări. Încearcă din nou mai târziu.';
+      if (msg.includes('network')) return 'Eroare de conexiune. Verifică internetul.';
+      return error?.message || 'Autentificarea a eșuat.';
+    }
+
+    function clearFileInputs() {
+      file1Input.value = '';
+      file2Input.value = '';
+      file3Input.value = '';
+    }
+
+    function resetForm() {
+      currentProductId = null;
+      slugTouched = false;
+
+      titleInput.value = '';
+      slugInput.value = '';
+      basePriceInput.value = '';
+      paragraph1Input.value = '';
+      paragraph2Input.value = '';
+      detail1Input.value = '';
+      detail2Input.value = '';
+      detail3Input.value = '';
+      specialTitleInput.value = '';
+      specialDescriptionInput.value = '';
+      infoTitle1Input.value = '';
+      infoText1Input.value = '';
+      infoTitle2Input.value = '';
+      infoText2Input.value = '';
+      infoTitle3Input.value = '';
+      infoText3Input.value = '';
+      buttonTextInput.value = '';
+      buttonUrlInput.value = '';
+      image1Input.value = '';
+      image2Input.value = '';
+      image3Input.value = '';
+      isActiveInput.value = 'true';
+
+      clearFileInputs();
+      updateThumbs();
+      refreshPreview();
+      highlightActiveProduct(null);
+      setSaveMessage('Produs nou pregătit.', 'neutral');
+    }
+
+    function fillForm(product) {
+      currentProductId = product.id;
+      titleInput.value = product.title || '';
+      slugInput.value = product.slug || '';
+      basePriceInput.value = product.base_price ?? '';
+      paragraph1Input.value = product.short_paragraph_1 || '';
+      paragraph2Input.value = product.short_paragraph_2 || '';
+      detail1Input.value = product.detail_1 || '';
+      detail2Input.value = product.detail_2 || '';
+      detail3Input.value = product.detail_3 || '';
+      specialTitleInput.value = product.special_title || '';
+      specialDescriptionInput.value = product.special_description || '';
+      infoTitle1Input.value = product.info_title_1 || '';
+      infoText1Input.value = product.info_text_1 || '';
+      infoTitle2Input.value = product.info_title_2 || '';
+      infoText2Input.value = product.info_text_2 || '';
+      infoTitle3Input.value = product.info_title_3 || '';
+      infoText3Input.value = product.info_text_3 || '';
+      buttonTextInput.value = product.customize_button_text || '';
+      buttonUrlInput.value = product.customize_url || '';
+      image1Input.value = product.image_1 || '';
+      image2Input.value = product.image_2 || '';
+      image3Input.value = product.image_3 || '';
+      isActiveInput.value = String(product.is_active ?? true);
+
+      slugTouched = Boolean(product.slug);
+      clearFileInputs();
+      updateThumbs();
+      refreshPreview();
+      highlightActiveProduct(product.id);
+      setSaveMessage(`Editezi produsul „${product.title}”.`, 'neutral');
+    }
+
+    function highlightActiveProduct(id) {
+      document.querySelectorAll('.product-card').forEach(card => {
+        card.classList.toggle('active', card.dataset.id === id);
+      });
+    }
+
+    function buildThumb(src, label) {
+      if (!src) {
+        return `<div class="thumb"><div class="thumb-placeholder">${label}</div></div>`;
+      }
+      return `<div class="thumb"><img src="${src}" alt="${label}"></div>`;
+    }
+
+    function updateThumbs() {
+      thumbGrid.innerHTML = [
+        buildThumb(image1Input.value.trim(), 'Imagine 1'),
+        buildThumb(image2Input.value.trim(), 'Imagine 2'),
+        buildThumb(image3Input.value.trim(), 'Imagine 3')
+      ].join('');
+    }
+
+    function refreshPreview() {
+      const slug = generateSlug(slugInput.value.trim() || titleInput.value.trim());
+
+      if (!slug) {
+        previewFrame.classList.add('hidden');
+        emptyPreview.classList.remove('hidden');
+        previewLink.href = '#';
+        return;
+      }
+
+      const url = `${PREVIEW_PAGE}?slug=${encodeURIComponent(slug)}`;
+      previewFrame.src = url;
+      previewLink.href = url;
+      previewFrame.classList.remove('hidden');
+      emptyPreview.classList.add('hidden');
+    }
+
+    function getPayload() {
+      return {
+        title: titleInput.value.trim(),
+        slug: generateSlug(slugInput.value.trim() || titleInput.value.trim()),
+        base_price: Number(basePriceInput.value || 0),
+        short_paragraph_1: paragraph1Input.value.trim(),
+        short_paragraph_2: paragraph2Input.value.trim(),
+        detail_1: detail1Input.value.trim(),
+        detail_2: detail2Input.value.trim(),
+        detail_3: detail3Input.value.trim(),
+        special_title: specialTitleInput.value.trim(),
+        special_description: specialDescriptionInput.value.trim(),
+        info_title_1: infoTitle1Input.value.trim(),
+        info_text_1: infoText1Input.value.trim(),
+        info_title_2: infoTitle2Input.value.trim(),
+        info_text_2: infoText2Input.value.trim(),
+        info_title_3: infoTitle3Input.value.trim(),
+        info_text_3: infoText3Input.value.trim(),
+        customize_button_text: buttonTextInput.value.trim(),
+        customize_url: buttonUrlInput.value.trim(),
+        image_1: image1Input.value.trim(),
+        image_2: image2Input.value.trim(),
+        image_3: image3Input.value.trim(),
+        is_active: isActiveInput.value === 'true'
+      };
+    }
+
+    async function slugExists(slug, excludeId = null) {
+      let query = supabase
+        .from(TABLE_NAME)
+        .select('id')
+        .eq('slug', slug);
+
+      if (excludeId) query = query.neq('id', excludeId);
+
+      const { data, error } = await query;
+      if (error) throw error;
+      return Array.isArray(data) && data.length > 0;
+    }
+
+    async function uploadFile(file, slug, index) {
+      if (!file) return null;
+
+      const safeSlug = generateSlug(slug || 'product') || 'product';
+      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase();
+      const path = `${safeSlug}/${Date.now()}-${index}.${ext}`;
+
+      const { error } = await supabase
+        .storage
+        .from(BUCKET_NAME)
+        .upload(path, file, { upsert: true });
+
+      if (error) throw error;
+
+      const { data } = supabase.storage.from(BUCKET_NAME).getPublicUrl(path);
+      return data.publicUrl;
+    }
+
+    async function handleUploads(payload) {
+      if (file1Input.files[0]) {
+        payload.image_1 = await uploadFile(file1Input.files[0], payload.slug, 1);
+      }
+      if (file2Input.files[0]) {
+        payload.image_2 = await uploadFile(file2Input.files[0], payload.slug, 2);
+      }
+      if (file3Input.files[0]) {
+        payload.image_3 = await uploadFile(file3Input.files[0], payload.slug, 3);
+      }
+      return payload;
+    }
+
+    async function loadProducts() {
+      const { data, error } = await supabase
+        .from(TABLE_NAME)
+        .select('id, title, slug, is_active, updated_at')
+        .order('updated_at', { ascending: false });
+
+      if (error) {
+        setSaveMessage('Nu am putut încărca produsele.', 'error');
+        productList.innerHTML = '';
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        productList.innerHTML = `<div class="product-meta">Nu există produse încă.</div>`;
+        return;
+      }
+
+      productList.innerHTML = data.map(product => `
+        <div class="product-card ${product.id === currentProductId ? 'active' : ''}" data-id="${product.id}">
+          <div>
+            <strong>${product.title || '(fără titlu)'}</strong>
+            <div class="product-meta">/${product.slug || ''} ${product.is_active ? '• activ' : '• inactiv'}</div>
+          </div>
+          <button class="btn-secondary open-product-btn" type="button" data-id="${product.id}">Editează</button>
+        </div>
+      `).join('');
+
+      document.querySelectorAll('.open-product-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = btn.dataset.id;
+          const { data, error } = await supabase
+            .from(TABLE_NAME)
+            .select('*')
+            .eq('id', id)
+            .single();
+
+          if (error || !data) {
+            setSaveMessage('Nu am putut deschide produsul.', 'error');
+            return;
+          }
+
+          fillForm(data);
+        });
+      });
+    }
+
+    async function handleLogin(event) {
+      event.preventDefault();
+      loginBtn.disabled = true;
+      setAuthMessage('Se verifică datele de autentificare...', 'neutral');
+
+      try {
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+
+        if (!email || !password) {
+          throw new Error('Completează emailul și parola.');
+        }
+
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        if (!data.session) throw new Error('Nu s-a putut crea sesiunea.');
+
+        setAuthMessage('Autentificare reușită.', 'success');
+        showEditor();
+        await loadProducts();
+      } catch (error) {
+        setAuthMessage(mapAuthError(error), 'error');
+      } finally {
+        loginBtn.disabled = false;
+      }
+    }
+
+    async function handleLogout() {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        setSaveMessage('Nu am putut face logout.', 'error');
+        return;
+      }
+      showAuth();
+      setAuthMessage('Te-ai delogat cu succes.', 'success');
+    }
+
+    async function saveProduct() {
+      saveBtn.disabled = true;
+      setSaveMessage('Se salvează...', 'neutral');
+
+      try {
+        let payload = getPayload();
+
+        if (!payload.title) {
+          throw new Error('Titlul este obligatoriu.');
+        }
+
+        if (!payload.slug) {
+          throw new Error('Slug-ul este obligatoriu.');
+        }
+
+        if (await slugExists(payload.slug, currentProductId)) {
+          throw new Error('Există deja un produs cu acest slug.');
+        }
+
+        payload = await handleUploads(payload);
+
+        let response;
+        if (currentProductId) {
+          response = await supabase
+            .from(TABLE_NAME)
+            .update(payload)
+            .eq('id', currentProductId)
+            .select()
+            .single();
+        } else {
+          response = await supabase
+            .from(TABLE_NAME)
+            .insert(payload)
+            .select()
+            .single();
+        }
+
+        if (response.error) throw response.error;
+
+        fillForm(response.data);
+        await loadProducts();
+        setSaveMessage('Produsul a fost salvat cu succes.', 'success');
+      } catch (error) {
+        setSaveMessage(error.message || 'A apărut o eroare la salvare.', 'error');
+      } finally {
+        saveBtn.disabled = false;
+      }
+    }
+
+    async function boot() {
+      const { data, error } = await supabase.auth.getSession();
+
+      if (error) {
+        showAuth();
+        setAuthMessage('Nu am putut verifica sesiunea.', 'error');
+        return;
+      }
+
+      if (data.session) {
+        showEditor();
+        await loadProducts();
+      } else {
+        showAuth();
+      }
+    }
+
+    loginForm.addEventListener('submit', handleLogin);
+    logoutBtn.addEventListener('click', handleLogout);
+    newBtn.addEventListener('click', resetForm);
+    saveBtn.addEventListener('click', saveProduct);
+    reloadBtn.addEventListener('click', loadProducts);
+
+    titleInput.addEventListener('input', () => {
+      if (!slugTouched || !slugInput.value.trim()) {
+        slugInput.value = generateSlug(titleInput.value);
+      }
+      refreshPreview();
+    });
+
+    slugInput.addEventListener('input', () => {
+      slugTouched = slugInput.value.trim().length > 0;
+      slugInput.value = generateSlug(slugInput.value);
+      refreshPreview();
+    });
+
+    [
+      basePriceInput, paragraph1Input, paragraph2Input, detail1Input, detail2Input, detail3Input,
+      specialTitleInput, specialDescriptionInput, infoTitle1Input, infoText1Input, infoTitle2Input,
+      infoText2Input, infoTitle3Input, infoText3Input, buttonTextInput, buttonUrlInput,
+      image1Input, image2Input, image3Input, isActiveInput
+    ].forEach(el => {
+      el.addEventListener('input', () => {
+        updateThumbs();
+        refreshPreview();
+      });
+      el.addEventListener('change', () => {
+        updateThumbs();
+        refreshPreview();
+      });
+    });
+
+    [file1Input, file2Input, file3Input].forEach((fileInput, index) => {
+      fileInput.addEventListener('change', () => {
+        const file = fileInput.files?.[0];
+        if (!file) return;
+        const localUrl = URL.createObjectURL(file);
+        if (index === 0) image1Input.value = localUrl;
+        if (index === 1) image2Input.value = localUrl;
+        if (index === 2) image3Input.value = localUrl;
+        updateThumbs();
+      });
+    });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        showEditor();
+      } else {
+        showAuth();
+      }
+    });
+
+    resetForm();
+    boot();
+  </script>
 </body>
 </html>
