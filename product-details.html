@@ -1008,364 +1008,155 @@
     <a href="index.html#contact" class="mobile-link">Contact</a>
   </aside>
 
-  <script type="module">
-    import { supabase } from './supabase-config.js';
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
 
-    const app = document.getElementById('app');
-    const brandSub = document.getElementById('brandSub');
-    const cartKey = 'cart';
-    const cartOpenBtn = document.getElementById('cartOpenBtn');
-    const mobileCartOpenBtn = document.getElementById('mobileCartOpenBtn');
-    const cartCloseBtn = document.getElementById('cartCloseBtn');
-    const cartOverlay = document.getElementById('cartOverlay');
-    const cartDrawer = document.getElementById('cartDrawer');
-    const cartBody = document.getElementById('cartBody');
-    const cartTotal = document.getElementById('cartTotal');
-    const cartCount = document.getElementById('cart-count');
-    const mobileCartCount = document.getElementById('mobile-cart-count');
-    const continueShoppingBtn = document.getElementById('continueShoppingBtn');
-    const mobileMenuOpenBtn = document.getElementById('mobileMenuOpenBtn');
-    const mobileMenuCloseBtn = document.getElementById('mobileMenuCloseBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
-    const cursorGlow = document.getElementById('cursorGlow');
+<script>
+const supabase = window.supabase.createClient(
+  window.SUPABASE_URL,
+  window.SUPABASE_ANON_KEY
+);
 
-    let currentProduct = null;
-    let slideIndex = 0;
-    let slideInterval = null;
+const DRAFT_KEY = 'atelier_live_preview_draft';
 
-    function escapeHtml(value = '') {
-      return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
-    }
+const app = document.getElementById('app');
+const brandSub = document.getElementById('brandSub');
 
-    function formatPrice(value) {
-      return `${Number(value || 0).toFixed(0)} RON`;
-    }
+// ================= UTILS =================
+function escapeHtml(value = '') {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
 
-    function buildSlides(product) {
-      const images = [product.image_1, product.image_2, product.image_3].filter(Boolean);
-      if (!images.length) {
-        return `
-          <div class="thumb-placeholder">Imagine indisponibilă momentan.</div>
-          <div class="slide-badge">${escapeHtml(product.title || 'Maison Doucette')}</div>
-        `;
-      }
+function formatPrice(value) {
+  return `${Number(value || 0).toFixed(0)} RON`;
+}
 
-      return `
-        ${images.map((src, index) => `
-          <img src="${escapeHtml(src)}" alt="${escapeHtml(product.title)}" class="slide-img ${index === 0 ? 'active' : ''}">
-        `).join('')}
-        <div class="slide-badge">${escapeHtml(product.title || 'Maison Doucette')}</div>
-      `;
-    }
+function getQueryParam(name) {
+  return new URLSearchParams(window.location.search).get(name);
+}
 
-    function renderProduct(product) {
-      currentProduct = product;
-      document.title = `Maison Doucette — ${product.title}`;
-      brandSub.textContent = (product.title || 'product').toLowerCase();
+// ================= 🔥 LIVE PREVIEW =================
+function getLiveDraftIfAny() {
+  const isPreview = getQueryParam('preview') === '1';
+  if (!isPreview) return null;
 
-      app.innerHTML = `
-        <section class="hero">
-          <div class="container">
-            <div class="hero-card reveal-up">
-              <div class="hero-grid">
-                <div class="hero-visual reveal-soft">
-                  <div class="slideshow-shell" id="slideshowShell">
-                    ${buildSlides(product)}
-                  </div>
-                </div>
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (!raw) return null;
 
-                <div class="hero-copy reveal-up">
-                  <span class="eyebrow">atelier personalizabil</span>
-                  <h1 class="display">${escapeHtml(product.title || '')}</h1>
-                  <div class="product-price">de la ${formatPrice(product.base_price)}</div>
+    const draft = JSON.parse(raw);
+    const slug = getQueryParam('slug');
 
-                  <p>${escapeHtml(product.short_paragraph_1 || '')}</p>
-                  <p>${escapeHtml(product.short_paragraph_2 || '')}</p>
+    if (!draft.slug || draft.slug !== slug) return null;
 
-                  <div class="detail-list">
-                    ${product.detail_1 ? `<div class="detail-item"><div class="detail-dot"></div><span>${escapeHtml(product.detail_1)}</span></div>` : ''}
-                    ${product.detail_2 ? `<div class="detail-item"><div class="detail-dot"></div><span>${escapeHtml(product.detail_2)}</span></div>` : ''}
-                    ${product.detail_3 ? `<div class="detail-item"><div class="detail-dot"></div><span>${escapeHtml(product.detail_3)}</span></div>` : ''}
-                  </div>
+    return draft;
+  } catch {
+    return null;
+  }
+}
 
-                  <div class="action-row">
-                    <a href="${escapeHtml(product.customize_url || '#')}" class="primary-btn">${escapeHtml(product.customize_button_text || 'Personalizează produsul')}</a>
-                    <a href="index.html#atelier" class="secondary-btn">Înapoi în atelier</a>
-                  </div>
-                </div>
+// ================= RENDER =================
+function buildSlides(product) {
+  const images = [product.image_1, product.image_2, product.image_3].filter(Boolean);
+
+  if (!images.length) {
+    return `<div class="thumb-placeholder">Imagine indisponibilă</div>`;
+  }
+
+  return images.map((src, i) => `
+    <img src="${src}" class="slide-img ${i === 0 ? 'active' : ''}">
+  `).join('');
+}
+
+function renderProduct(product) {
+  document.title = `Maison Doucette — ${product.title}`;
+  brandSub.textContent = (product.title || '').toLowerCase();
+
+  app.innerHTML = `
+    <section class="hero">
+      <div class="container">
+        <div class="hero-card">
+          <div class="hero-grid">
+            <div class="hero-visual">
+              <div class="slideshow-shell">
+                ${buildSlides(product)}
+              </div>
+            </div>
+
+            <div class="hero-copy">
+              <span class="eyebrow">atelier personalizabil</span>
+              <h1>${escapeHtml(product.title)}</h1>
+              <div class="product-price">de la ${formatPrice(product.base_price)}</div>
+
+              <p>${escapeHtml(product.short_paragraph_1 || '')}</p>
+              <p>${escapeHtml(product.short_paragraph_2 || '')}</p>
+
+              <div class="detail-list">
+                ${product.detail_1 ? `<div class="detail-item"><span>${escapeHtml(product.detail_1)}</span></div>` : ''}
+                ${product.detail_2 ? `<div class="detail-item"><span>${escapeHtml(product.detail_2)}</span></div>` : ''}
+                ${product.detail_3 ? `<div class="detail-item"><span>${escapeHtml(product.detail_3)}</span></div>` : ''}
+              </div>
+
+              <div class="action-row">
+                <a href="${product.customize_url || '#'}" class="primary-btn">
+                  ${product.customize_button_text || 'Personalizează'}
+                </a>
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </div>
+    </section>
+  `;
+}
 
-        <section class="reveal-up">
-          <div class="container">
-            <div class="section-head reveal-up">
-              <h2>${escapeHtml(product.special_title || 'De ce este atât de special?')}</h2>
-              <p>${escapeHtml(product.special_description || '')}</p>
-            </div>
+// ================= LOAD =================
+async function loadProduct() {
+  const slug = getQueryParam('slug');
 
-            <div class="info-grid">
-              ${product.info_title_1 || product.info_text_1 ? `
-                <div class="info-card reveal-up">
-                  <h3>${escapeHtml(product.info_title_1 || '')}</h3>
-                  <p>${escapeHtml(product.info_text_1 || '')}</p>
-                </div>
-              ` : ''}
+  if (!slug) {
+    app.innerHTML = `<div class="error-state">Lipsește slug</div>`;
+    return;
+  }
 
-              ${product.info_title_2 || product.info_text_2 ? `
-                <div class="info-card reveal-up">
-                  <h3>${escapeHtml(product.info_title_2 || '')}</h3>
-                  <p>${escapeHtml(product.info_text_2 || '')}</p>
-                </div>
-              ` : ''}
+  // 🔥 dacă vine din editor
+  const liveDraft = getLiveDraftIfAny();
+  if (liveDraft) {
+    renderProduct(liveDraft);
+    return;
+  }
 
-              ${product.info_title_3 || product.info_text_3 ? `
-                <div class="info-card reveal-up">
-                  <h3>${escapeHtml(product.info_title_3 || '')}</h3>
-                  <p>${escapeHtml(product.info_text_3 || '')}</p>
-                </div>
-              ` : ''}
-            </div>
-          </div>
-        </section>
-      `;
+  const { data, error } = await supabase
+    .from('atelier_products')
+    .select('*')
+    .eq('slug', slug)
+    .single();
 
-      initSlides();
-      initReveal();
-      initHeroTilt();
-    }
+  if (error || !data) {
+    app.innerHTML = `<div class="error-state">Produsul nu există</div>`;
+    return;
+  }
 
-    function initSlides() {
-      if (slideInterval) clearInterval(slideInterval);
-      const slides = Array.from(document.querySelectorAll('.slide-img'));
-      slideIndex = 0;
+  renderProduct(data);
+}
 
-      if (slides.length <= 1) return;
+// ================= LIVE UPDATE =================
+window.addEventListener('message', (event) => {
+  if (event.data?.type !== 'ATELIER_PREVIEW_UPDATED') return;
 
-      slideInterval = setInterval(() => {
-        slides[slideIndex].classList.remove('active');
-        slideIndex = (slideIndex + 1) % slides.length;
-        slides[slideIndex].classList.add('active');
-      }, 3600);
-    }
+  const draft = getLiveDraftIfAny();
+  if (draft) {
+    renderProduct(draft);
+  }
+});
 
-    function initReveal() {
-      const revealItems = document.querySelectorAll('.reveal-up, .reveal-soft');
-      const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            revealObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.12 });
-
-      revealItems.forEach(item => revealObserver.observe(item));
-    }
-
-    function initHeroTilt() {
-      const heroCard = document.querySelector('.hero-card');
-      if (!heroCard) return;
-
-      document.addEventListener('mouseleave', () => {
-        heroCard.style.transform = '';
-      });
-
-      document.addEventListener('mousemove', (e) => {
-        if (window.innerWidth <= 760) return;
-        const rect = heroCard.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        const moveX = (e.clientX - centerX) * 0.008;
-        const moveY = (e.clientY - centerY) * 0.008;
-        heroCard.style.transform = `translate(${moveX}px, ${moveY}px)`;
-      });
-    }
-
-    async function loadProduct() {
-      const params = new URLSearchParams(window.location.search);
-      const slug = params.get('slug');
-
-      if (!slug) {
-        app.innerHTML = `<div class="error-state">Lipsește slug-ul produsului.</div>`;
-        return;
-      }
-
-      const { data, error } = await supabase
-        .from('atelier_products')
-        .select('*')
-        .eq('slug', slug)
-        .eq('is_active', true)
-        .single();
-
-      if (error || !data) {
-        app.innerHTML = `<div class="error-state">Produsul nu a fost găsit.</div>`;
-        return;
-      }
-
-      renderProduct(data);
-    }
-
-    function getCart() {
-      try {
-        return JSON.parse(localStorage.getItem(cartKey)) || [];
-      } catch {
-        return [];
-      }
-    }
-
-    function setCart(cart) {
-      localStorage.setItem(cartKey, JSON.stringify(cart));
-    }
-
-    function updateCartBadge() {
-      const cart = getCart();
-      const totalQty = cart.reduce((sum, item) => sum + Number(item.quantity || 1), 0);
-
-      if (cartCount) {
-        cartCount.textContent = totalQty;
-        cartCount.style.display = totalQty === 0 ? 'none' : 'flex';
-      }
-
-      if (mobileCartCount) {
-        mobileCartCount.textContent = totalQty;
-        mobileCartCount.style.display = totalQty === 0 ? 'none' : 'flex';
-      }
-    }
-
-    function renderCart() {
-      const cart = getCart();
-      updateCartBadge();
-
-      if (!cart.length) {
-        cartBody.innerHTML = `<div class="cart-empty">Coșul este gol momentan. Alege un produs și el va apărea aici.</div>`;
-        cartTotal.textContent = formatPrice(0);
-        return;
-      }
-
-      let total = 0;
-      cartBody.innerHTML = cart.map((item, index) => {
-        const qty = Number(item.quantity || 1);
-        const price = Number(item.price || 0);
-        const lineTotal = qty * price;
-        total += lineTotal;
-
-        const details = item.details || [];
-        const detailsHtml = details.length ? details.map(detail => `<div>${escapeHtml(detail)}</div>`).join('') : '';
-        const image = item.image || 'images/placeholder-product.jpg';
-
-        return `
-          <div class="cart-item">
-            <img src="${escapeHtml(image)}" alt="${escapeHtml(item.name || 'Produs')}">
-            <div>
-              <h4>${escapeHtml(item.name || '')}</h4>
-              <div class="cart-meta">${detailsHtml}</div>
-              <div class="qty-row">
-                <button class="qty-btn" onclick="changeQuantity(${index}, -1)">−</button>
-                <div class="qty-value">${qty}</div>
-                <button class="qty-btn" onclick="changeQuantity(${index}, 1)">+</button>
-              </div>
-              <div class="cart-price">${formatPrice(lineTotal)}</div>
-            </div>
-            <button class="cart-remove" onclick="removeCartItem(${index})" aria-label="Șterge produsul">🗑</button>
-          </div>
-        `;
-      }).join('');
-
-      cartTotal.textContent = formatPrice(total);
-    }
-
-    function openCart() {
-      renderCart();
-      cartDrawer.classList.add('open');
-      cartOverlay.classList.add('open');
-      cartDrawer.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeCart() {
-      cartDrawer.classList.remove('open');
-      cartOverlay.classList.remove('open');
-      cartDrawer.setAttribute('aria-hidden', 'true');
-      if (!mobileMenu.classList.contains('open')) document.body.style.overflow = '';
-    }
-
-    function removeCartItem(index) {
-      const cart = getCart();
-      cart.splice(index, 1);
-      setCart(cart);
-      renderCart();
-    }
-
-    function changeQuantity(index, delta) {
-      const cart = getCart();
-      if (!cart[index]) return;
-
-      cart[index].quantity = Number(cart[index].quantity || 1) + delta;
-      if (cart[index].quantity <= 0) cart.splice(index, 1);
-
-      setCart(cart);
-      renderCart();
-    }
-
-    function openMobileMenu() {
-      mobileMenu.classList.add('open');
-      mobileMenuOverlay.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeMobileMenu() {
-      mobileMenu.classList.remove('open');
-      mobileMenuOverlay.classList.remove('open');
-      if (!cartDrawer.classList.contains('open')) document.body.style.overflow = '';
-    }
-
-    window.removeCartItem = removeCartItem;
-    window.changeQuantity = changeQuantity;
-
-    cartOpenBtn?.addEventListener('click', openCart);
-    mobileCartOpenBtn?.addEventListener('click', openCart);
-    cartCloseBtn?.addEventListener('click', closeCart);
-    cartOverlay?.addEventListener('click', closeCart);
-    continueShoppingBtn?.addEventListener('click', closeCart);
-    mobileMenuOpenBtn?.addEventListener('click', openMobileMenu);
-    mobileMenuCloseBtn?.addEventListener('click', closeMobileMenu);
-    mobileMenuOverlay?.addEventListener('click', closeMobileMenu);
-
-    document.querySelectorAll('.mobile-link').forEach(link => {
-      link.addEventListener('click', closeMobileMenu);
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeCart();
-        closeMobileMenu();
-      }
-    });
-
-    document.addEventListener('mousemove', (e) => {
-      if (!cursorGlow || window.innerWidth <= 760) return;
-      cursorGlow.style.left = `${e.clientX}px`;
-      cursorGlow.style.top = `${e.clientY}px`;
-    });
-
-    document.addEventListener('mouseleave', () => {
-      if (cursorGlow) cursorGlow.style.opacity = '0';
-    });
-
-    document.addEventListener('mouseenter', () => {
-      if (cursorGlow && window.innerWidth > 760) cursorGlow.style.opacity = '0.85';
-    });
-
-    updateCartBadge();
-    loadProduct();
-  </script>
+// ================= INIT =================
+loadProduct();
+</script>
 </body>
 </html>
