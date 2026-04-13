@@ -741,34 +741,32 @@
       file3Input.value = '';
     }
 
-    function getDraftPayload() {
-      return {
-        id: currentProductId,
-        title: titleInput.value.trim(),
-        slug: generateSlug(slugInput.value.trim() || titleInput.value.trim()),
-        base_price: Number(basePriceInput.value || 0),
-        short_paragraph_1: paragraph1Input.value.trim(),
-        short_paragraph_2: paragraph2Input.value.trim(),
-        detail_1: detail1Input.value.trim(),
-        detail_2: detail2Input.value.trim(),
-        detail_3: detail3Input.value.trim(),
-        special_title: specialTitleInput.value.trim(),
-        special_description: specialDescriptionInput.value.trim(),
-        info_title_1: infoTitle1Input.value.trim(),
-        info_text_1: infoText1Input.value.trim(),
-        info_title_2: infoTitle2Input.value.trim(),
-        info_text_2: infoText2Input.value.trim(),
-        info_title_3: infoTitle3Input.value.trim(),
-        info_text_3: infoText3Input.value.trim(),
-        customize_button_text: buttonTextInput.value.trim(),
-        customize_url: buttonUrlInput.value.trim(),
-        image_1: image1Input.value.trim(),
-        image_2: image2Input.value.trim(),
-        image_3: image3Input.value.trim(),
-        is_active: isActiveInput.value === 'true'
-      };
-    }
-
+function getDraftPayload() {
+  return {
+    title: titleInput.value.trim(),
+    slug: generateSlug(slugInput.value.trim() || titleInput.value.trim()),
+    base_price: Number(basePriceInput.value || 0),
+    short_paragraph_1: paragraph1Input.value.trim(),
+    short_paragraph_2: paragraph2Input.value.trim(),
+    detail_1: detail1Input.value.trim(),
+    detail_2: detail2Input.value.trim(),
+    detail_3: detail3Input.value.trim(),
+    special_title: specialTitleInput.value.trim(),
+    special_description: specialDescriptionInput.value.trim(),
+    info_title_1: infoTitle1Input.value.trim(),
+    info_text_1: infoText1Input.value.trim(),
+    info_title_2: infoTitle2Input.value.trim(),
+    info_text_2: infoText2Input.value.trim(),
+    info_title_3: infoTitle3Input.value.trim(),
+    info_text_3: infoText3Input.value.trim(),
+    customize_button_text: buttonTextInput.value.trim(),
+    customize_url: buttonUrlInput.value.trim(),
+    image_1: image1Input.value.trim(),
+    image_2: image2Input.value.trim(),
+    image_3: image3Input.value.trim(),
+    is_active: isActiveInput.value === 'true'
+  };
+}
     function writePreviewDraft() {
       const draft = getDraftPayload();
       localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
