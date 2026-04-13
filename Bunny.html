@@ -1325,7 +1325,7 @@
       }
 
       .app-shell{
-        padding:10px 10px 18px;
+        padding:10px 10px calc(330px + env(safe-area-inset-bottom, 0px)) 18px;
       }
 
       .customizer-layout{
@@ -1341,12 +1341,15 @@
       }
 
       .preview-card{
-        position:sticky;
-        top:74px;
-        z-index:30;
+        position:fixed;
+        left:10px;
+        right:10px;
+        bottom:10px;
+        top:auto;
+        z-index:1200;
         padding:10px;
         border-radius:22px;
-        box-shadow:0 14px 30px rgba(106,81,69,0.10);
+        box-shadow:0 14px 30px rgba(106,81,69,0.12);
       }
 
       .preview-head{
@@ -1554,8 +1557,14 @@
     }
 
     @media (max-width: 420px){
+      .app-shell{
+        padding:10px 8px calc(305px + env(safe-area-inset-bottom, 0px)) 18px;
+      }
+
       .preview-card{
-        top:70px;
+        left:8px;
+        right:8px;
+        bottom:8px;
         padding:9px;
       }
 
