@@ -318,6 +318,20 @@
       backdrop-filter:blur(8px);
     }
 
+    .thumb-placeholder{
+      width:100%;
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:18px;
+      color:var(--brown-soft);
+      font-size:.95rem;
+      line-height:1.7;
+      background:linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,250,245,.35));
+    }
+
     .hero-copy{
       padding:34px 34px 34px 10px;
       display:flex;
@@ -1008,155 +1022,412 @@
     <a href="index.html#contact" class="mobile-link">Contact</a>
   </aside>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
 
-<script>
-const supabaseClient = window.supabase.createClient(
-  window.SUPABASE_URL,
-  window.SUPABASE_ANON_KEY
-);
+  <script>
+    const supabaseClient = window.supabase.createClient(
+      window.SUPABASE_URL,
+      window.SUPABASE_ANON_KEY
+    );
 
-const DRAFT_KEY = 'atelier_live_preview_draft';
+    const DRAFT_KEY = 'atelier_live_preview_draft';
+    const CART_KEY = 'maison_cart';
 
-const app = document.getElementById('app');
-const brandSub = document.getElementById('brandSub');
+    const app = document.getElementById('app');
+    const brandSub = document.getElementById('brandSub');
+    const cursorGlow = document.getElementById('cursorGlow');
 
-// ================= UTILS =================
-function escapeHtml(value = '') {
-  return String(value)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
+    const cartOverlay = document.getElementById('cartOverlay');
+    const cartDrawer = document.getElementById('cartDrawer');
+    const cartBody = document.getElementById('cartBody');
+    const cartTotal = document.getElementById('cartTotal');
+    const cartCount = document.getElementById('cart-count');
+    const mobileCartCount = document.getElementById('mobile-cart-count');
+    const cartOpenBtn = document.getElementById('cartOpenBtn');
+    const mobileCartOpenBtn = document.getElementById('mobileCartOpenBtn');
+    const cartCloseBtn = document.getElementById('cartCloseBtn');
+    const continueShoppingBtn = document.getElementById('continueShoppingBtn');
 
-function formatPrice(value) {
-  return `${Number(value || 0).toFixed(0)} RON`;
-}
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+    const mobileMenuOpenBtn = document.getElementById('mobileMenuOpenBtn');
+    const mobileMenuCloseBtn = document.getElementById('mobileMenuCloseBtn');
 
-function getQueryParam(name) {
-  return new URLSearchParams(window.location.search).get(name);
-}
+    let currentProduct = null;
+    let slideshowTimer = null;
 
-// ================= 🔥 LIVE PREVIEW =================
-function getLiveDraftIfAny() {
-  const isPreview = getQueryParam('preview') === '1';
-  if (!isPreview) return null;
+    function escapeHtml(value = '') {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
 
-  try {
-    const raw = localStorage.getItem(DRAFT_KEY);
-    if (!raw) return null;
+    function formatPrice(value) {
+      return `${Number(value || 0).toFixed(0)} RON`;
+    }
 
-    const draft = JSON.parse(raw);
-    const slug = getQueryParam('slug');
+    function getQueryParam(name) {
+      return new URLSearchParams(window.location.search).get(name);
+    }
 
-    if (!draft.slug || draft.slug !== slug) return null;
+    function getLiveDraftIfAny() {
+      const isPreview = getQueryParam('preview') === '1';
+      if (!isPreview) return null;
 
-    return draft;
-  } catch {
-    return null;
-  }
-}
+      try {
+        const raw = localStorage.getItem(DRAFT_KEY);
+        if (!raw) return null;
 
-// ================= RENDER =================
-function buildSlides(product) {
-  const images = [product.image_1, product.image_2, product.image_3].filter(Boolean);
+        const draft = JSON.parse(raw);
+        const slug = getQueryParam('slug');
 
-  if (!images.length) {
-    return `<div class="thumb-placeholder">Imagine indisponibilă</div>`;
-  }
+        if (!draft.slug || draft.slug !== slug) return null;
 
-  return images.map((src, i) => `
-    <img src="${src}" class="slide-img ${i === 0 ? 'active' : ''}">
-  `).join('');
-}
+        return draft;
+      } catch {
+        return null;
+      }
+    }
 
-function renderProduct(product) {
-  document.title = `Maison Doucette — ${product.title}`;
-  brandSub.textContent = (product.title || '').toLowerCase();
+    function buildSlides(product) {
+      const images = [product.image_1, product.image_2, product.image_3].filter(Boolean);
 
-  app.innerHTML = `
-    <section class="hero">
-      <div class="container">
-        <div class="hero-card">
-          <div class="hero-grid">
-            <div class="hero-visual">
-              <div class="slideshow-shell">
-                ${buildSlides(product)}
-              </div>
+      if (!images.length) {
+        return `<div class="thumb-placeholder">Imagine indisponibilă pentru acest produs.</div>`;
+      }
+
+      return images.map((src, i) => `
+        <img src="${escapeHtml(src)}" alt="${escapeHtml(product.title || 'Produs Maison Doucette')}" class="slide-img ${i === 0 ? 'active' : ''}">
+      `).join('');
+    }
+
+    function buildInfoCards(product) {
+      const cards = [
+        { title: product.info_title_1, text: product.info_text_1 },
+        { title: product.info_title_2, text: product.info_text_2 },
+        { title: product.info_title_3, text: product.info_text_3 }
+      ].filter(card => card.title || card.text);
+
+      if (!cards.length) return '';
+
+      return `
+        <section class="reveal-up">
+          <div class="container">
+            <div class="section-head reveal-up">
+              <h2>${escapeHtml(product.special_title || 'Detalii care fac diferența')}</h2>
+              <p>${escapeHtml(product.special_description || 'Fiecare creație Maison Doucette este gândită cu grijă, delicatețe și un strop de magie.')}</p>
             </div>
 
-            <div class="hero-copy">
-              <span class="eyebrow">atelier personalizabil</span>
-              <h1>${escapeHtml(product.title)}</h1>
-              <div class="product-price">de la ${formatPrice(product.base_price)}</div>
+            <div class="info-grid">
+              ${cards.map(card => `
+                <article class="info-card reveal-soft">
+                  <h3>${escapeHtml(card.title || '')}</h3>
+                  <p>${escapeHtml(card.text || '')}</p>
+                </article>
+              `).join('')}
+            </div>
+          </div>
+        </section>
+      `;
+    }
 
-              <p>${escapeHtml(product.short_paragraph_1 || '')}</p>
-              <p>${escapeHtml(product.short_paragraph_2 || '')}</p>
+    function renderProduct(product) {
+      currentProduct = product;
+      document.title = `Maison Doucette — ${product.title || 'Product'}`;
+      brandSub.textContent = (product.title || 'product').toLowerCase();
 
-              <div class="detail-list">
-                ${product.detail_1 ? `<div class="detail-item"><span>${escapeHtml(product.detail_1)}</span></div>` : ''}
-                ${product.detail_2 ? `<div class="detail-item"><span>${escapeHtml(product.detail_2)}</span></div>` : ''}
-                ${product.detail_3 ? `<div class="detail-item"><span>${escapeHtml(product.detail_3)}</span></div>` : ''}
-              </div>
+      app.innerHTML = `
+        <section class="hero">
+          <div class="container">
+            <div class="hero-card reveal-soft">
+              <div class="hero-grid">
+                <div class="hero-visual">
+                  <div class="slideshow-shell" id="slideshowShell">
+                    ${buildSlides(product)}
+                    <div class="slide-badge">handmade creation</div>
+                  </div>
+                </div>
 
-              <div class="action-row">
-                <a href="${product.customize_url || '#'}" class="primary-btn">
-                  ${product.customize_button_text || 'Personalizează'}
-                </a>
+                <div class="hero-copy">
+                  <span class="eyebrow">atelier personalizabil</span>
+                  <h1>${escapeHtml(product.title || '')}</h1>
+                  <div class="product-price">de la ${formatPrice(product.base_price)}</div>
+
+                  ${product.short_paragraph_1 ? `<p>${escapeHtml(product.short_paragraph_1)}</p>` : ''}
+                  ${product.short_paragraph_2 ? `<p>${escapeHtml(product.short_paragraph_2)}</p>` : ''}
+
+                  <div class="detail-list">
+                    ${product.detail_1 ? `<div class="detail-item"><div class="detail-dot"></div><span>${escapeHtml(product.detail_1)}</span></div>` : ''}
+                    ${product.detail_2 ? `<div class="detail-item"><div class="detail-dot"></div><span>${escapeHtml(product.detail_2)}</span></div>` : ''}
+                    ${product.detail_3 ? `<div class="detail-item"><div class="detail-dot"></div><span>${escapeHtml(product.detail_3)}</span></div>` : ''}
+                  </div>
+
+                  <div class="action-row">
+                    <a href="${escapeHtml(product.customize_url || '#')}" class="primary-btn">
+                      ${escapeHtml(product.customize_button_text || 'Personalizează')}
+                    </a>
+                    <button type="button" class="secondary-btn" id="addToCartBtn">
+                      Adaugă în coș
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+        </section>
+
+        ${buildInfoCards(product)}
+      `;
+
+      initSlideshow();
+      bindProductActions();
+      initReveal();
+    }
+
+    function renderError(message) {
+      app.innerHTML = `<div class="error-state">${escapeHtml(message)}</div>`;
+    }
+
+    async function loadProduct() {
+      const slug = getQueryParam('slug');
+
+      if (!slug) {
+        renderError('Lipsește slug-ul produsului.');
+        return;
+      }
+
+      const liveDraft = getLiveDraftIfAny();
+      if (liveDraft) {
+        renderProduct(liveDraft);
+        return;
+      }
+
+      const { data, error } = await supabaseClient
+        .from('atelier_products')
+        .select('*')
+        .eq('slug', slug)
+        .single();
+
+      if (error || !data) {
+        renderError('Produsul nu există sau nu a putut fi încărcat.');
+        return;
+      }
+
+      renderProduct(data);
+    }
+
+    function initSlideshow() {
+      clearInterval(slideshowTimer);
+
+      const slides = Array.from(document.querySelectorAll('.slide-img'));
+      if (slides.length <= 1) return;
+
+      let currentIndex = 0;
+
+      slideshowTimer = setInterval(() => {
+        slides[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % slides.length;
+        slides[currentIndex].classList.add('active');
+      }, 3200);
+    }
+
+    function getCart() {
+      try {
+        return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveCart(cart) {
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    }
+
+    function updateCartCount() {
+      const cart = getCart();
+      const totalQty = cart.reduce((sum, item) => sum + Number(item.quantity || 1), 0);
+      cartCount.textContent = totalQty;
+      mobileCartCount.textContent = totalQty;
+    }
+
+    function renderCart() {
+      const cart = getCart();
+
+      if (!cart.length) {
+        cartBody.innerHTML = `<div class="cart-empty">Coșul tău este momentan gol.</div>`;
+        cartTotal.textContent = '0 RON';
+        updateCartCount();
+        return;
+      }
+
+      cartBody.innerHTML = cart.map((item, index) => `
+        <div class="cart-item">
+          <img src="${escapeHtml(item.image || 'images/logo.jpg')}" alt="${escapeHtml(item.title || 'Produs')}">
+          <div>
+            <h4>${escapeHtml(item.title || '')}</h4>
+            <div class="cart-meta">${escapeHtml(item.slug || '')}</div>
+            <div class="cart-price">${formatPrice(item.price || 0)}</div>
+            <div class="qty-row">
+              <button class="qty-btn" type="button" data-action="decrease" data-index="${index}">−</button>
+              <span class="qty-value">${Number(item.quantity || 1)}</span>
+              <button class="qty-btn" type="button" data-action="increase" data-index="${index}">+</button>
+            </div>
+          </div>
+          <button class="cart-remove" type="button" data-action="remove" data-index="${index}" aria-label="Șterge">×</button>
         </div>
-      </div>
-    </section>
-  `;
-}
+      `).join('');
 
-// ================= LOAD =================
-async function loadProduct() {
-  const slug = getQueryParam('slug');
+      const total = cart.reduce((sum, item) => {
+        return sum + Number(item.price || 0) * Number(item.quantity || 1);
+      }, 0);
 
-  if (!slug) {
-    app.innerHTML = `<div class="error-state">Lipsește slug</div>`;
-    return;
-  }
+      cartTotal.textContent = formatPrice(total);
+      updateCartCount();
 
-  // 🔥 dacă vine din editor
-  const liveDraft = getLiveDraftIfAny();
-  if (liveDraft) {
-    renderProduct(liveDraft);
-    return;
-  }
+      cartBody.querySelectorAll('[data-action]').forEach(button => {
+        button.addEventListener('click', () => {
+          const action = button.dataset.action;
+          const index = Number(button.dataset.index);
+          const updatedCart = getCart();
 
-  const { data, error } = await supabase
-    .from('atelier_products')
-    .select('*')
-    .eq('slug', slug)
-    .single();
+          if (!updatedCart[index]) return;
 
-  if (error || !data) {
-    app.innerHTML = `<div class="error-state">Produsul nu există</div>`;
-    return;
-  }
+          if (action === 'increase') {
+            updatedCart[index].quantity = Number(updatedCart[index].quantity || 1) + 1;
+          }
 
-  renderProduct(data);
-}
+          if (action === 'decrease') {
+            updatedCart[index].quantity = Math.max(1, Number(updatedCart[index].quantity || 1) - 1);
+          }
 
-// ================= LIVE UPDATE =================
-window.addEventListener('message', (event) => {
-  if (event.data?.type !== 'ATELIER_PREVIEW_UPDATED') return;
+          if (action === 'remove') {
+            updatedCart.splice(index, 1);
+          }
 
-  const draft = getLiveDraftIfAny();
-  if (draft) {
-    renderProduct(draft);
-  }
-});
+          saveCart(updatedCart);
+          renderCart();
+        });
+      });
+    }
 
-// ================= INIT =================
-loadProduct();
-</script>
+    function addCurrentProductToCart() {
+      if (!currentProduct) return;
+
+      const cart = getCart();
+      const existingIndex = cart.findIndex(item => item.slug === currentProduct.slug);
+
+      if (existingIndex >= 0) {
+        cart[existingIndex].quantity = Number(cart[existingIndex].quantity || 1) + 1;
+      } else {
+        cart.push({
+          slug: currentProduct.slug,
+          title: currentProduct.title,
+          price: Number(currentProduct.base_price || 0),
+          quantity: 1,
+          image: currentProduct.image_1 || currentProduct.image_2 || currentProduct.image_3 || ''
+        });
+      }
+
+      saveCart(cart);
+      renderCart();
+      openCart();
+    }
+
+    function openCart() {
+      cartOverlay.classList.add('open');
+      cartDrawer.classList.add('open');
+      cartDrawer.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeCart() {
+      cartOverlay.classList.remove('open');
+      cartDrawer.classList.remove('open');
+      cartDrawer.setAttribute('aria-hidden', 'true');
+    }
+
+    function openMobileMenu() {
+      mobileMenuOverlay.classList.add('open');
+      mobileMenu.classList.add('open');
+    }
+
+    function closeMobileMenu() {
+      mobileMenuOverlay.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    }
+
+    function bindProductActions() {
+      const addToCartBtn = document.getElementById('addToCartBtn');
+      if (addToCartBtn) {
+        addToCartBtn.addEventListener('click', addCurrentProductToCart);
+      }
+    }
+
+    function initReveal() {
+      const revealElements = document.querySelectorAll('.reveal-up, .reveal-soft');
+
+      if (!('IntersectionObserver' in window)) {
+        revealElements.forEach(el => el.classList.add('is-visible'));
+        return;
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        });
+      }, { threshold: 0.12 });
+
+      revealElements.forEach(el => observer.observe(el));
+    }
+
+    function initCursorGlow() {
+      if (!cursorGlow || window.innerWidth <= 760) return;
+
+      window.addEventListener('mousemove', (event) => {
+        cursorGlow.style.left = `${event.clientX}px`;
+        cursorGlow.style.top = `${event.clientY}px`;
+      });
+
+      document.addEventListener('mouseleave', () => {
+        cursorGlow.style.opacity = '0';
+      });
+
+      document.addEventListener('mouseenter', () => {
+        cursorGlow.style.opacity = '.85';
+      });
+    }
+
+    window.addEventListener('message', (event) => {
+      if (event.data?.type !== 'ATELIER_PREVIEW_UPDATED') return;
+
+      const draft = getLiveDraftIfAny();
+      if (draft) {
+        renderProduct(draft);
+      }
+    });
+
+    cartOpenBtn.addEventListener('click', openCart);
+    mobileCartOpenBtn.addEventListener('click', openCart);
+    cartCloseBtn.addEventListener('click', closeCart);
+    cartOverlay.addEventListener('click', closeCart);
+    continueShoppingBtn.addEventListener('click', closeCart);
+
+    mobileMenuOpenBtn.addEventListener('click', openMobileMenu);
+    mobileMenuCloseBtn.addEventListener('click', closeMobileMenu);
+    mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', closeMobileMenu);
+    });
+
+    updateCartCount();
+    renderCart();
+    initCursorGlow();
+    loadProduct();
+  </script>
 </body>
 </html>
