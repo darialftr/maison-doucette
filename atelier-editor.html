@@ -930,7 +930,7 @@ function getDraftPayload() {
       const { error } = await supabaseClient
         .storage
         .from(BUCKET_NAME)
-        .upload(path, file, { upsert: true });
+        .upload(path, file, { upsert: false });
 
       if (error) throw error;
 
