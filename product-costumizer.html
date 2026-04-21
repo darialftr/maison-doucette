@@ -1,0 +1,2457 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maison Doucette – Customizer</title>
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+
+  <style>
+    :root{
+      --bg:#f7f1eb;
+      --panel:#fffaf6;
+      --line:rgba(184,142,103,0.20);
+      --brown:#6a5145;
+      --brown-soft:#8b6f61;
+      --muted:#a19389;
+      --gold:#d2b08d;
+      --gold-deep:#b88e67;
+      --shadow:0 20px 50px rgba(106,81,69,0.10);
+      --shadow-soft:0 12px 26px rgba(106,81,69,0.08);
+      --radius-xl:30px;
+      --radius-lg:22px;
+      --radius-md:16px;
+      --ease:cubic-bezier(.22,.61,.36,1);
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+
+    body{
+      margin:0;
+      font-family:'Manrope',sans-serif;
+      color:var(--brown);
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.78), transparent 26%),
+        radial-gradient(circle at bottom right, rgba(210,176,141,0.10), transparent 28%),
+        linear-gradient(180deg, #faf5f0 0%, #f4ece4 100%);
+      overflow-x:hidden;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    img{ display:block; max-width:100%; }
+    button, select, input, textarea{ font:inherit; }
+
+    .display,h1,h2,h3,.brand-text,.hero-sub,.quote-text,.section-title,.stepper-title{
+      font-family:'Cormorant Garamond',serif;
+      letter-spacing:-0.02em;
+    }
+
+    .cursor-glow{
+      position:fixed;
+      width:340px;
+      height:340px;
+      left:0;
+      top:0;
+      pointer-events:none;
+      z-index:0;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(210,176,141,0.16) 0%, rgba(210,176,141,0.08) 36%, rgba(210,176,141,0.02) 62%, transparent 74%);
+      transform:translate(-50%, -50%);
+      transition:opacity 0.25s ease;
+      mix-blend-mode:multiply;
+      opacity:0.9;
+    }
+
+    .top-bar{
+      position:sticky;
+      top:0;
+      z-index:1600;
+      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
+      color:#fffdfa;
+      text-align:center;
+      padding:12px 16px;
+      font-size:.88rem;
+      line-height:1.4;
+      box-shadow:0 8px 22px rgba(174,127,67,0.18);
+    }
+
+    .top-bar a{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      margin-left:10px;
+      padding:8px 18px;
+      border-radius:999px;
+      background:rgba(255,255,255,.9);
+      color:var(--gold-deep);
+      font-weight:700;
+    }
+
+    .site-header{
+      position:sticky;
+      top:48px;
+      z-index:1500;
+      background:rgba(255,250,246,0.88);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--line);
+    }
+
+    .header-shell{
+      max-width:1160px;
+      margin:0 auto;
+      padding:0 18px;
+    }
+
+    .nav{
+      min-height:84px;
+      display:grid;
+      grid-template-columns:1fr auto 1fr;
+      align-items:center;
+      gap:12px;
+    }
+
+    .nav-left,
+    .nav-right{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      min-width:0;
+    }
+
+    .nav-left{justify-content:flex-start}
+    .nav-right{justify-content:flex-end}
+
+    .nav-links{
+      display:flex;
+      gap:18px;
+      align-items:center;
+      list-style:none;
+      margin:0;
+      padding:0;
+      font-size:.92rem;
+    }
+
+    .nav-links a{
+      opacity:.92;
+      transition:opacity .22s ease, transform .22s ease;
+    }
+
+    .nav-links a:hover{
+      opacity:1;
+      transform:translateY(-1px);
+    }
+
+    .nav-pill{
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.72);
+      border:1px solid var(--line);
+    }
+
+    .logo-wrap{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
+      min-width:0;
+      text-align:center;
+    }
+
+    .logo-wrap img{
+      width:68px;
+      height:68px;
+      object-fit:contain;
+      border-radius:50%;
+      background:rgba(255,255,255,.92);
+      padding:5px;
+      box-shadow:0 12px 24px rgba(101,79,67,0.10);
+      flex-shrink:0;
+    }
+
+    .brand-stack{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      line-height:1;
+    }
+
+    .brand-text{
+      font-size:1.9rem;
+      font-weight:700;
+      color:var(--brown);
+      letter-spacing:.03em;
+    }
+
+    .brand-sub{
+      margin-top:4px;
+      font-size:.72rem;
+      text-transform:uppercase;
+      letter-spacing:.18em;
+      color:var(--brown-soft);
+    }
+
+    .icon-btn{
+      width:46px;
+      height:46px;
+      border-radius:50%;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.74);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      box-shadow:0 10px 18px rgba(101,79,67,0.08);
+      transition:transform .22s ease, box-shadow .22s ease, background .22s ease;
+      padding:0;
+    }
+
+    .icon-btn:hover{
+      transform:translateY(-2px);
+      box-shadow:0 14px 24px rgba(101,79,67,0.12);
+      background:#fff;
+    }
+
+    .icon-btn svg{
+      width:22px;
+      height:22px;
+      stroke:var(--brown);
+      fill:none;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+      stroke-width:1.8;
+    }
+
+    .cart-btn{ position:relative; }
+
+    #cart-count,
+    #mobile-cart-count{
+      position:absolute;
+      top:-4px;
+      right:-4px;
+      min-width:18px;
+      height:18px;
+      border-radius:999px;
+      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
+      color:#fff;
+      font-size:10px;
+      font-weight:700;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:0 4px;
+      box-shadow:0 6px 14px rgba(174,127,67,0.22);
+    }
+
+    .mobile-left,
+    .mobile-right{
+      display:none;
+      align-items:center;
+      justify-content:flex-start;
+    }
+
+    .mobile-right{
+      justify-content:flex-end;
+    }
+
+    .app-shell{
+      max-width:1160px;
+      margin:0 auto;
+      min-height:100vh;
+      position:relative;
+      z-index:2;
+      padding:16px 18px 28px;
+    }
+
+    .customizer-layout{
+      display:grid;
+      grid-template-columns:minmax(320px, 1.02fr) minmax(320px, 0.98fr);
+      gap:22px;
+      align-items:start;
+    }
+
+    .left-column,
+    .right-column{
+      display:grid;
+      gap:18px;
+    }
+
+    .card{
+      background:rgba(255,250,246,0.88);
+      border:1px solid var(--line);
+      border-radius:var(--radius-xl);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      backdrop-filter:blur(6px);
+    }
+
+    .preview-card{
+      padding:18px;
+    }
+
+    .preview-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:12px;
+    }
+
+    .preview-head h1{
+      margin:0;
+      font-size:1.55rem;
+      font-weight:500;
+      line-height:1.1;
+    }
+
+    .preview-head p{
+      margin:4px 0 0;
+      font-size:0.88rem;
+      color:var(--brown-soft);
+      line-height:1.5;
+    }
+
+    .preview-badge{
+      flex-shrink:0;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:9px 12px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--brown-soft);
+      font-size:0.74rem;
+      text-transform:uppercase;
+      letter-spacing:0.12em;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .preview-stage{
+      position:relative;
+      width:100%;
+      aspect-ratio:0.92/1;
+      min-height:450px;
+      border-radius:26px;
+      overflow:hidden;
+      background:linear-gradient(180deg, #f5f3f1 0%, #ebe8e3 100%);
+      border:1px solid rgba(185,177,170,0.52);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.75);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .stage-block{
+      position:absolute;
+      background:#d9d4ce;
+      border-radius:18px;
+      opacity:0.62;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+
+    .b1{ width:98px; height:122px; left:-26px; top:26px; }
+    .b2{ width:116px; height:88px; right:10px; top:34px; }
+    .b3{ width:128px; height:138px; left:10px; bottom:94px; }
+    .b4{ width:142px; height:96px; right:-24px; bottom:118px; }
+    .b5{ width:78px; height:78px; left:50%; transform:translateX(-50%); top:32px; }
+    .b6{ width:168px; height:62px; left:50%; transform:translateX(-50%); bottom:58px; border-radius:22px; }
+
+    .stage-floor{
+      position:absolute;
+      left:8%;
+      right:8%;
+      bottom:18px;
+      height:58px;
+      border-radius:50%;
+      background:radial-gradient(ellipse at center, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.08) 38%, transparent 72%);
+      filter:blur(8px);
+      z-index:1;
+    }
+
+    .stage-glow{
+      position:absolute;
+      width:250px;
+      height:250px;
+      left:50%;
+      top:16px;
+      transform:translateX(-50%);
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.55) 36%, rgba(255,255,255,0) 72%);
+      z-index:1;
+    }
+
+    #previewMessage{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      text-align:center;
+      color:#aca29a;
+      font-size:0.96rem;
+      line-height:1.7;
+      z-index:3;
+      width:min(78%, 280px);
+      display:none;
+    }
+
+    #previewBaseImage{
+      position:absolute;
+      left:50%;
+      bottom:-10px;
+      transform:translateX(-50%);
+      width:min(120%, 780px);
+      max-width:none;
+      display:none;
+      opacity:1;
+      z-index:4;
+      filter:drop-shadow(0 18px 26px rgba(0,0,0,0.12));
+    }
+
+    .dynamic-layer{
+      position:absolute;
+      display:none;
+      opacity:1;
+      z-index:5;
+      pointer-events:none;
+      max-width:none;
+      filter:drop-shadow(0 10px 18px rgba(0,0,0,0.10));
+    }
+
+    .summary-row{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:10px;
+    }
+
+    .summary-chip{
+      background:rgba(255,255,255,0.8);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:11px 12px;
+      min-height:68px;
+    }
+
+    .summary-chip .k{
+      font-size:0.68rem;
+      text-transform:uppercase;
+      letter-spacing:0.12em;
+      color:var(--brown-soft);
+      margin-bottom:6px;
+    }
+
+    .summary-chip .v{
+      font-size:0.92rem;
+      line-height:1.35;
+      font-weight:500;
+      color:var(--brown);
+    }
+
+    .stepper-card{
+      padding:14px;
+    }
+
+    .stepper-title{
+      margin:0 0 12px;
+      font-size:1.22rem;
+      font-weight:500;
+    }
+
+    .stepper{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:8px;
+      align-items:start;
+    }
+
+    .step-badge{
+      display:grid;
+      justify-items:center;
+      gap:8px;
+      text-align:center;
+      opacity:0.66;
+      transition:opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .step-badge.active{
+      opacity:1;
+      transform:translateY(-1px);
+    }
+
+    .step-badge.done{
+      opacity:0.92;
+    }
+
+    .step-badge .dot{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      border:1px solid var(--line);
+      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:0.86rem;
+      font-weight:700;
+      color:var(--brown-soft);
+      box-shadow:var(--shadow-soft);
+      transition:all 0.2s ease;
+    }
+
+    .step-badge.active .dot,
+    .step-badge.done .dot{
+      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
+      color:#fff;
+      border-color:transparent;
+    }
+
+    .step-badge .txt{
+      font-size:0.73rem;
+      line-height:1.3;
+      color:var(--brown-soft);
+      font-weight:600;
+    }
+
+    .step-card{
+      padding:16px;
+      display:none;
+    }
+
+    .step-card.active{
+      display:block;
+    }
+
+    .section-title{
+      margin:0 0 6px;
+      font-size:1.28rem;
+      font-weight:500;
+    }
+
+    .section-text{
+      margin:0 0 16px;
+      color:var(--brown-soft);
+      font-size:0.92rem;
+      line-height:1.6;
+    }
+
+    .control-block{
+      margin-bottom:16px;
+    }
+
+    .control-label{
+      display:block;
+      font-size:0.72rem;
+      text-transform:uppercase;
+      letter-spacing:0.14em;
+      color:var(--brown-soft);
+      font-weight:600;
+      margin-bottom:10px;
+    }
+
+    select, input[type="text"], input[type="number"], textarea{
+      width:100%;
+      padding:14px 15px;
+      border-radius:14px;
+      border:1px solid #ddd3c8;
+      background:linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.90));
+      color:var(--brown);
+      outline:none;
+      transition:border-color 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+      box-shadow:0 8px 18px rgba(106,81,69,0.04);
+    }
+
+    select{
+      padding-right:42px;
+      appearance:none;
+      -webkit-appearance:none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, var(--brown-soft) 50%),
+        linear-gradient(135deg, var(--brown-soft) 50%, transparent 50%);
+      background-position:
+        calc(100% - 18px) calc(50% - 2px),
+        calc(100% - 12px) calc(50% - 2px);
+      background-size:6px 6px, 6px 6px;
+      background-repeat:no-repeat;
+    }
+
+    textarea{
+      min-height:110px;
+      resize:vertical;
+      line-height:1.6;
+    }
+
+    select:hover,
+    input[type="text"]:hover,
+    input[type="number"]:hover,
+    textarea:hover{
+      background-color:#fffdfb;
+    }
+
+    select:focus,
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    textarea:focus{
+      border-color:var(--gold);
+      box-shadow:0 0 0 4px rgba(210,176,141,0.12);
+    }
+
+    .swatch-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(54px, 1fr));
+      gap:10px;
+    }
+
+    .swatch-btn{
+      border:none;
+      background:transparent;
+      padding:0;
+      cursor:pointer;
+      transition:transform 0.18s ease;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:46px;
+    }
+
+    .swatch-btn:hover{
+      transform:translateY(-1px);
+    }
+
+    .swatch-circle{
+      display:block;
+      width:36px;
+      height:36px;
+      aspect-ratio:1 / 1;
+      border-radius:50%;
+      border:1.5px solid rgba(184,142,103,0.35);
+      box-shadow:
+        0 0 0 2px rgba(255,250,246,0.96),
+        0 8px 16px rgba(106,81,69,0.08);
+      transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease,
+        border-color 0.22s ease,
+        filter 0.22s ease;
+      flex-shrink:0;
+      position:relative;
+    }
+
+    .swatch-btn.active .swatch-circle{
+      border-color:rgba(184,142,103,0.95);
+      box-shadow:
+        0 0 0 2px rgba(255,250,246,1),
+        0 0 0 5px rgba(210,176,141,0.22),
+        0 0 0 8px rgba(255,255,255,0.92),
+        0 14px 24px rgba(106,81,69,0.14);
+      transform:scale(1.05);
+      filter:saturate(1.03);
+    }
+
+    .option-grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:8px;
+    }
+
+    .option-card{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.8);
+      border-radius:16px;
+      padding:8px;
+      cursor:pointer;
+      transition:all 0.22s ease;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .option-card:hover{
+      transform:translateY(-1px);
+      background:#fff;
+    }
+
+    .option-card.active{
+      border-color:var(--gold-deep);
+      box-shadow:0 0 0 3px rgba(210,176,141,0.18), var(--shadow-soft);
+      background:#fff;
+    }
+
+    .option-thumb{
+      width:100%;
+      aspect-ratio:1/1;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#f7f2ec;
+      border:1px solid rgba(184,142,103,0.16);
+      overflow:hidden;
+      margin-bottom:8px;
+      position:relative;
+    }
+
+    .option-thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .option-card h3{
+      margin:0 0 3px;
+      font-size:0.8rem;
+      line-height:1.2;
+      font-weight:600;
+    }
+
+    .option-card p{
+      margin:0;
+      font-size:0.7rem;
+      color:var(--brown-soft);
+      line-height:1.35;
+    }
+
+    .helper-box{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.72);
+      border-radius:18px;
+      padding:14px;
+      color:var(--brown-soft);
+      font-size:0.88rem;
+      line-height:1.6;
+    }
+
+    .helper-box strong{
+      color:var(--brown);
+      font-weight:600;
+    }
+
+    .toggle-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,0.8);
+    }
+
+    .toggle-row input{
+      width:20px;
+      height:20px;
+      accent-color: var(--gold-deep);
+    }
+
+    .qty-box{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-top:8px;
+      flex-wrap:wrap;
+    }
+
+    .qty-control{
+      padding:10px 14px;
+      min-width:52px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .qty-display{
+      padding:10px 16px;
+      min-width:68px;
+      text-align:center;
+    }
+
+    .step-actions{
+      margin-top:18px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .step-btn{
+      border:none;
+      border-radius:16px;
+      padding:14px 16px;
+      cursor:pointer;
+      font-weight:600;
+      letter-spacing:0.04em;
+      text-transform:uppercase;
+      transition:transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+      font-size:0.8rem;
+    }
+
+    .step-btn:hover{
+      transform:translateY(-1px);
+    }
+
+    .step-btn.primary{
+      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
+      color:#fff;
+      box-shadow:0 16px 28px rgba(184,142,103,0.24);
+    }
+
+    .step-btn.soft{
+      background:rgba(255,255,255,0.78);
+      color:var(--brown);
+      border:1px solid var(--line);
+    }
+
+    .step-btn[disabled]{
+      background:#d7cfc6;
+      color:#fff;
+      box-shadow:none;
+      cursor:not-allowed;
+      transform:none;
+      border:none;
+    }
+
+    .toast{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      z-index:9999;
+      background:#3e3a36;
+      color:#fff;
+      padding:14px 18px;
+      border-radius:14px;
+      box-shadow:0 12px 28px rgba(0,0,0,0.18);
+      font-size:0.84rem;
+      opacity:0;
+      visibility:hidden;
+      transform:translateY(12px);
+      transition:all 0.3s ease;
+      max-width:min(90vw, 340px);
+    }
+
+    .toast.show{
+      opacity:1;
+      visibility:visible;
+      transform:translateY(0);
+    }
+
+    .loading-state,
+    .error-state{
+      background:rgba(255,250,246,0.88);
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:36px 22px;
+      text-align:center;
+      color:var(--brown-soft);
+      line-height:1.8;
+    }
+
+    .cart-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(64,45,35,.28);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .25s ease;
+      z-index:2000;
+    }
+
+    .cart-overlay.open{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .cart-drawer{
+      position:fixed;
+      top:0;
+      right:0;
+      width:min(430px, 100%);
+      height:100vh;
+      background:#fffdf9;
+      box-shadow:-20px 0 50px rgba(52,38,32,.18);
+      transform:translateX(100%);
+      transition:transform .3s var(--ease);
+      z-index:2100;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .cart-drawer.open{
+      transform:translateX(0);
+    }
+
+    .cart-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:22px 20px 16px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .cart-head h3{
+      margin:0;
+      font-size:2rem;
+      font-weight:700;
+      font-family:'Cormorant Garamond',serif;
+    }
+
+    .cart-close{
+      border:none;
+      background:none;
+      font-size:1.5rem;
+      cursor:pointer;
+      color:var(--brown-soft);
+    }
+
+    .cart-body{
+      flex:1;
+      overflow:auto;
+      padding:18px 20px;
+    }
+
+    .cart-empty{
+      color:var(--brown-soft);
+      line-height:1.8;
+      padding:10px 0;
+    }
+
+    .cart-item{
+      display:grid;
+      grid-template-columns:76px 1fr auto;
+      gap:14px;
+      padding:14px 0;
+      border-bottom:1px solid var(--line);
+      align-items:start;
+    }
+
+    .cart-item img{
+      width:76px;
+      height:76px;
+      object-fit:cover;
+      border-radius:16px;
+      background:#f2e8df;
+    }
+
+    .cart-item h4{
+      margin:0 0 6px;
+      font-size:1rem;
+      line-height:1.35;
+    }
+
+    .cart-meta{
+      font-size:.85rem;
+      color:var(--brown-soft);
+      line-height:1.6;
+      display:grid;
+      gap:2px;
+    }
+
+    .cart-price{
+      font-size:.95rem;
+      font-weight:700;
+      color:var(--brown);
+      margin-top:6px;
+    }
+
+    .cart-remove{
+      border:none;
+      background:none;
+      color:var(--brown-soft);
+      cursor:pointer;
+      padding:4px;
+      font-size:1.05rem;
+    }
+
+    .qty-row{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .qty-btn{
+      width:28px;
+      height:28px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      cursor:pointer;
+      color:var(--brown);
+    }
+
+    .qty-value{
+      min-width:18px;
+      text-align:center;
+      font-size:.92rem;
+    }
+
+    .cart-footer{
+      border-top:1px solid var(--line);
+      padding:18px 20px 22px;
+      background:#fffdf9;
+    }
+
+    .cart-total{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-size:1rem;
+      margin-bottom:14px;
+    }
+
+    .cart-total strong{
+      font-size:1.12rem;
+    }
+
+    .cart-actions{
+      display:grid;
+      gap:10px;
+    }
+
+    .cart-primary,
+    .cart-secondary{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:50px;
+      border-radius:999px;
+      transition:transform .22s ease;
+    }
+
+    .cart-primary{
+      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
+      color:#fff;
+      font-weight:700;
+    }
+
+    .cart-secondary{
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--brown);
+      cursor:pointer;
+    }
+
+    .mobile-menu-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(64,45,35,.28);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .25s ease;
+      z-index:1800;
+    }
+
+    .mobile-menu-overlay.open{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .mobile-menu{
+      position:fixed;
+      top:0;
+      left:0;
+      width:min(340px, 100%);
+      height:100vh;
+      background:#fffdf9;
+      box-shadow:20px 0 50px rgba(52,38,32,.14);
+      transform:translateX(-100%);
+      transition:transform .3s var(--ease);
+      z-index:1900;
+      padding:24px 20px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .mobile-menu.open{
+      transform:translateX(0);
+    }
+
+    .mobile-menu-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .mobile-menu-title{
+      font-size:1.8rem;
+      font-family:'Cormorant Garamond',serif;
+      font-weight:700;
+    }
+
+    .mobile-close{
+      border:none;
+      background:none;
+      font-size:1.5rem;
+      color:var(--brown-soft);
+      cursor:pointer;
+    }
+
+    .mobile-menu a{
+      padding:12px 0;
+      border-bottom:1px solid var(--line);
+      font-size:1rem;
+      color:var(--brown);
+    }
+
+    @media (max-width: 980px){
+      .customizer-layout{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 760px){
+      .cursor-glow{ display:none; }
+
+      .top-bar{
+        padding:10px 12px;
+        font-size:.82rem;
+      }
+
+      .top-bar a{
+        display:block;
+        width:max-content;
+        margin:8px auto 0;
+      }
+
+      .site-header{
+        position:sticky;
+        top:48px;
+      }
+
+      .header-shell{
+        padding:0 10px;
+      }
+
+      .nav{
+        grid-template-columns:1fr auto 1fr;
+        min-height:78px;
+      }
+
+      .nav-left,
+      .nav-right{
+        display:none;
+      }
+
+      .mobile-left,
+      .mobile-right{
+        display:flex;
+      }
+
+      .logo-wrap img{
+        width:58px;
+        height:58px;
+      }
+
+      .brand-text{
+        font-size:1.52rem;
+      }
+
+      .brand-sub{
+        display:none;
+      }
+
+      .app-shell{
+        padding:10px 10px 18px;
+      }
+
+      .customizer-layout{
+        display:flex;
+        flex-direction:column;
+        gap:12px;
+      }
+
+      .left-column{
+        display:grid;
+        gap:12px;
+      }
+
+      .preview-card{
+        position:sticky;
+        top:136px;
+        z-index:1200;
+        padding:10px;
+        border-radius:22px;
+        box-shadow:0 14px 30px rgba(106,81,69,0.10);
+      }
+
+      .preview-head{
+        margin-bottom:8px;
+        gap:8px;
+      }
+
+      .preview-head h1{
+        font-size:1.18rem;
+      }
+
+      .preview-head p{
+        font-size:0.76rem;
+        line-height:1.4;
+        margin-top:3px;
+      }
+
+      .preview-badge{
+        padding:7px 9px;
+        font-size:0.62rem;
+        letter-spacing:0.10em;
+      }
+
+      .preview-stage{
+        min-height:250px;
+        max-height:250px;
+        border-radius:20px;
+      }
+
+      #previewBaseImage{
+        width:min(92%, 320px);
+        bottom:0;
+      }
+
+      .summary-row{
+        margin-top:8px;
+        gap:8px;
+      }
+
+      .summary-chip{
+        min-height:auto;
+        padding:8px 9px;
+        border-radius:14px;
+      }
+
+      .summary-chip .k{
+        font-size:0.56rem;
+        margin-bottom:4px;
+      }
+
+      .summary-chip .v{
+        font-size:0.74rem;
+        line-height:1.25;
+      }
+
+      .stepper-card{
+        padding:10px;
+      }
+
+      .stepper-title{
+        font-size:1rem;
+        margin-bottom:10px;
+      }
+
+      .stepper{
+        grid-template-columns:repeat(4, minmax(0,1fr));
+        gap:6px;
+      }
+
+      .step-badge .dot{
+        width:30px;
+        height:30px;
+        font-size:0.75rem;
+      }
+
+      .step-badge .txt{
+        font-size:0.62rem;
+      }
+
+      .step-card{
+        padding:12px;
+        border-radius:22px;
+      }
+
+      .section-title{
+        font-size:1.12rem;
+      }
+
+      .section-text{
+        font-size:0.82rem;
+        line-height:1.5;
+        margin-bottom:14px;
+      }
+
+      .control-label{
+        font-size:0.64rem;
+        margin-bottom:8px;
+      }
+
+      .swatch-grid{
+        grid-template-columns:repeat(4, minmax(0,1fr));
+        gap:8px;
+      }
+
+      .swatch-btn{
+        min-height:38px;
+      }
+
+      .swatch-circle{
+        width:30px;
+        height:30px;
+      }
+
+      .option-grid{
+        grid-template-columns:repeat(3, minmax(0, 1fr));
+        gap:8px;
+      }
+
+      .option-card{
+        padding:7px;
+        border-radius:14px;
+      }
+
+      .option-thumb{
+        border-radius:10px;
+        margin-bottom:6px;
+      }
+
+      .option-card h3{
+        font-size:0.68rem;
+      }
+
+      .option-card p{
+        font-size:0.6rem;
+      }
+
+      .step-actions{
+        gap:8px;
+        margin-top:14px;
+      }
+
+      .step-btn{
+        width:100%;
+        padding:13px 14px;
+        font-size:0.74rem;
+      }
+
+      .qty-box{
+        display:flex;
+        align-items:center;
+        justify-content:flex-start;
+        gap:10px;
+        flex-wrap:nowrap;
+      }
+
+      .qty-box .step-btn{
+        width:52px !important;
+        min-width:52px;
+        flex:0 0 52px;
+        padding:10px 0;
+      }
+
+      .qty-box .qty-display{
+        min-width:68px;
+        flex:0 0 auto;
+        margin:0;
+      }
+
+      .cart-drawer{
+        width:100%;
+      }
+
+      .toast{
+        right:10px;
+        left:10px;
+        bottom:12px;
+        max-width:none;
+        text-align:center;
+      }
+    }
+
+    @media (max-width: 420px){
+      .preview-card{
+        top:132px;
+        padding:9px;
+      }
+
+      .preview-stage{
+        min-height:228px;
+        max-height:228px;
+      }
+
+      #previewBaseImage{
+        width:min(88%, 280px);
+      }
+
+      .swatch-circle{
+        width:26px;
+        height:26px;
+      }
+
+      .summary-chip .v{
+        font-size:0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <div class="top-bar">
+    NOU • Maison Mystery Experience este aici
+    <a href="mystery.html">Descoperă acum</a>
+  </div>
+
+  <header class="site-header">
+    <div class="header-shell">
+      <div class="nav">
+        <div class="mobile-left">
+          <button class="icon-btn" id="mobileMenuOpenBtn" aria-label="Deschide meniul">
+            <svg viewBox="0 0 24 24">
+              <path d="M3 6h18"></path>
+              <path d="M3 12h18"></path>
+              <path d="M3 18h18"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="nav-left">
+          <nav>
+            <ul class="nav-links">
+              <li><a href="index.html">Acasă</a></li>
+              <li><a href="index.html#worlds">Cumpără acum</a></li>
+              <li><a href="index.html#atelier-products" class="nav-pill">Atelierul Maison Doucette</a></li>
+            </ul>
+          </nav>
+        </div>
+
+        <a href="index.html" class="logo-wrap" aria-label="Maison Doucette Acasă">
+          <img src="images/logo.jpg" alt="Logo Maison Doucette">
+          <div class="brand-stack">
+            <span class="brand-text">Maison Doucette</span>
+            <span class="brand-sub">atelier handmade</span>
+          </div>
+        </a>
+
+        <div class="nav-right">
+          <nav>
+            <ul class="nav-links">
+              <li><a href="mystery.html">Mystery Experience</a></li>
+              <li><a href="index.html#about">Despre</a></li>
+              <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+          </nav>
+
+          <button class="icon-btn cart-btn" id="cartOpenBtn" aria-label="Deschide coșul">
+            <svg viewBox="0 0 24 24">
+              <circle cx="9" cy="20" r="1"></circle>
+              <circle cx="18" cy="20" r="1"></circle>
+              <path d="M2 3h3l2.2 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.5L21 6H7.1"></path>
+            </svg>
+            <span id="cart-count">0</span>
+          </button>
+        </div>
+
+        <div class="mobile-right">
+          <button class="icon-btn cart-btn" id="mobileCartOpenBtn" aria-label="Deschide coșul">
+            <svg viewBox="0 0 24 24">
+              <circle cx="9" cy="20" r="1"></circle>
+              <circle cx="18" cy="20" r="1"></circle>
+              <path d="M2 3h3l2.2 10.2a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.5L21 6H7.1"></path>
+            </svg>
+            <span id="mobile-cart-count">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-shell">
+    <div id="loadingState" class="loading-state">Se încarcă produsul...</div>
+
+    <main id="customizerApp" class="customizer-layout" style="display:none;">
+      <div class="left-column">
+        <section class="card preview-card">
+          <div class="preview-head">
+            <div>
+              <h1 id="previewTitle">Produsul tău</h1>
+              <p id="previewSubtitle">Configurează produsul tău pas cu pas.</p>
+            </div>
+            <div class="preview-badge">Preview live</div>
+          </div>
+
+          <div class="preview-stage" id="previewStage">
+            <div class="stage-glow"></div>
+            <div class="stage-block b1"></div>
+            <div class="stage-block b2"></div>
+            <div class="stage-block b3"></div>
+            <div class="stage-block b4"></div>
+            <div class="stage-block b5"></div>
+            <div class="stage-block b6"></div>
+            <div class="stage-floor"></div>
+
+            <div id="previewMessage">Alege detaliile produsului pentru a-l vedea cum prinde viață ✨</div>
+            <img id="previewBaseImage" alt="Preview produs">
+          </div>
+
+          <div class="summary-row" id="summaryRow">
+            <div class="summary-chip">
+              <div class="k">Produs</div>
+              <div class="v" id="summaryProduct">—</div>
+            </div>
+            <div class="summary-chip">
+              <div class="k">Selecții</div>
+              <div class="v" id="summarySelection">Nicio selecție</div>
+            </div>
+            <div class="summary-chip">
+              <div class="k">Preț</div>
+              <div class="v" id="summaryPrice">0 RON</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card stepper-card">
+          <h2 class="stepper-title">Configurează produsul</h2>
+          <div class="stepper" id="stepper"></div>
+        </section>
+      </div>
+
+      <div class="right-column">
+        <div id="stepsContainer"></div>
+
+        <section class="card step-card active" id="finalStepCard" style="display:none;">
+          <div class="section-title" style="margin-bottom:12px;">Finalizează alegerea</div>
+
+          <div class="helper-box" style="margin-bottom:14px;">
+            <strong>Total:</strong> <span id="price">0</span> RON
+          </div>
+
+          <div class="control-block">
+            <label class="control-label">Cantitate</label>
+            <div class="qty-box">
+              <button class="step-btn soft qty-control" type="button" id="minusBtn">−</button>
+              <div class="helper-box qty-display">
+                <strong id="quantity">1</strong>
+              </div>
+              <button class="step-btn soft qty-control" type="button" id="plusBtn">+</button>
+            </div>
+          </div>
+
+          <div class="helper-box" style="margin-bottom:14px;" id="finalHelperText">
+            Creat manual, special pentru tine.
+          </div>
+
+          <div class="step-actions">
+            <button class="step-btn primary" id="addBtn" type="button" disabled>Adaugă în coș</button>
+            <button class="step-btn soft" id="checkoutBtn" type="button" style="display:none;">Vezi coșul</button>
+            <button class="step-btn soft" type="button" onclick="window.location.href='index.html#atelier-products'">Continuă cumpărăturile</button>
+            <button class="step-btn soft" type="button" id="backFromFinal">Înapoi</button>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast" class="toast">Produsul a fost adăugat în coș.</div>
+
+  <div class="cart-overlay" id="cartOverlay"></div>
+
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+    <div class="cart-head">
+      <h3>Coșul tău</h3>
+      <button class="cart-close" id="cartCloseBtn" aria-label="Închide coșul">×</button>
+    </div>
+
+    <div class="cart-body" id="cartBody"></div>
+
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Total estimat</span>
+        <strong id="cartTotal">0 RON</strong>
+      </div>
+
+      <div class="cart-actions">
+        <a href="checkout.html" class="cart-primary">Continuă spre checkout</a>
+        <button class="cart-secondary" id="continueShoppingBtn">Continuă cumpărăturile</button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+  <aside class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-head">
+      <div class="mobile-menu-title">Maison Doucette</div>
+      <button class="mobile-close" id="mobileMenuCloseBtn">×</button>
+    </div>
+
+    <a href="index.html" class="mobile-link">Acasă</a>
+    <a href="index.html#worlds" class="mobile-link">Cumpără acum</a>
+    <a href="index.html#atelier-products" class="mobile-link">Atelierul Maison Doucette</a>
+    <a href="mystery.html" class="mobile-link">Mystery Experience</a>
+    <a href="index.html#contact" class="mobile-link">Contact</a>
+  </aside>
+
+  <script>
+    const supabaseClient = window.supabase.createClient(
+      window.SUPABASE_URL,
+      window.SUPABASE_ANON_KEY
+    );
+
+    const cartKey = "cart";
+    const editCartIndexParam = new URLSearchParams(window.location.search).get("editCartIndex");
+    const editCartIndex = editCartIndexParam !== null && !Number.isNaN(Number(editCartIndexParam))
+      ? Number(editCartIndexParam)
+      : null;
+    let isEditingCartItem = editCartIndex !== null;
+
+    let product = null;
+    let details = null;
+    let customizer = null;
+    let config = null;
+
+    let currentStep = 0;
+    let quantity = 1;
+    let state = {};
+    let previewLayers = [];
+
+    const loadingState = document.getElementById("loadingState");
+    const customizerApp = document.getElementById("customizerApp");
+    const previewStage = document.getElementById("previewStage");
+    const previewBaseImage = document.getElementById("previewBaseImage");
+    const previewMessage = document.getElementById("previewMessage");
+    const previewTitle = document.getElementById("previewTitle");
+    const previewSubtitle = document.getElementById("previewSubtitle");
+    const stepper = document.getElementById("stepper");
+    const stepsContainer = document.getElementById("stepsContainer");
+    const finalStepCard = document.getElementById("finalStepCard");
+    const backFromFinal = document.getElementById("backFromFinal");
+
+    const summaryProduct = document.getElementById("summaryProduct");
+    const summarySelection = document.getElementById("summarySelection");
+    const summaryPrice = document.getElementById("summaryPrice");
+
+    const priceEl = document.getElementById("price");
+    const quantityEl = document.getElementById("quantity");
+    const addBtn = document.getElementById("addBtn");
+    const checkoutBtn = document.getElementById("checkoutBtn");
+
+    const cartOpenBtn = document.getElementById("cartOpenBtn");
+    const mobileCartOpenBtn = document.getElementById("mobileCartOpenBtn");
+    const cartCloseBtn = document.getElementById("cartCloseBtn");
+    const cartOverlay = document.getElementById("cartOverlay");
+    const cartDrawer = document.getElementById("cartDrawer");
+    const cartBody = document.getElementById("cartBody");
+    const cartTotal = document.getElementById("cartTotal");
+    const continueShoppingBtn = document.getElementById("continueShoppingBtn");
+    const cartCount = document.getElementById("cart-count");
+    const mobileCartCount = document.getElementById("mobile-cart-count");
+
+    const mobileMenuOpenBtn = document.getElementById("mobileMenuOpenBtn");
+    const mobileMenuCloseBtn = document.getElementById("mobileMenuCloseBtn");
+    const mobileMenu = document.getElementById("mobileMenu");
+    const mobileMenuOverlay = document.getElementById("mobileMenuOverlay");
+
+    const cursorGlow = document.getElementById("cursorGlow");
+    const minusBtn = document.getElementById("minusBtn");
+    const plusBtn = document.getElementById("plusBtn");
+
+    function getSlugFromUrl() {
+      return new URLSearchParams(window.location.search).get("slug");
+    }
+
+    function formatPrice(value) {
+      return `${Number(value || 0).toFixed(0)} RON`;
+    }
+
+    function escapeHtml(value = "") {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function showError(message) {
+      loadingState.className = "error-state";
+      loadingState.innerHTML = escapeHtml(message);
+      loadingState.style.display = "block";
+      customizerApp.style.display = "none";
+    }
+
+    function showApp() {
+      loadingState.style.display = "none";
+      customizerApp.style.display = "grid";
+    }
+
+    function getCart() {
+      try {
+        return JSON.parse(localStorage.getItem(cartKey)) || [];
+      } catch {
+        return [];
+      }
+    }
+
+    function setCart(cart) {
+      localStorage.setItem(cartKey, JSON.stringify(cart));
+    }
+
+    function updateCartBadge() {
+      const cart = getCart();
+      const totalQty = cart.reduce((sum, item) => sum + Number(item.quantity || 1), 0);
+
+      if (cartCount) {
+        cartCount.textContent = totalQty;
+        cartCount.style.display = totalQty === 0 ? "none" : "flex";
+      }
+
+      if (mobileCartCount) {
+        mobileCartCount.textContent = totalQty;
+        mobileCartCount.style.display = totalQty === 0 ? "none" : "flex";
+      }
+    }
+
+    function getCartDetails(item) {
+      const details = [];
+      if (item.configuration && typeof item.configuration === "object") {
+        Object.entries(item.configuration).forEach(([key, value]) => {
+          if (value === "" || value === null || value === undefined) return;
+          const label = key.replaceAll("_", " ");
+          if (typeof value === "boolean") {
+            details.push(`<div><strong>${escapeHtml(label)}:</strong> ${value ? "Da" : "Nu"}</div>`);
+          } else {
+            details.push(`<div><strong>${escapeHtml(label)}:</strong> ${escapeHtml(String(value))}</div>`);
+          }
+        });
+      }
+      return details.join("");
+    }
+
+    function getEditUrl(item, index) {
+      if (item.editUrl) return `${item.editUrl}${item.editUrl.includes("?") ? "&" : "?"}editCartIndex=${index}`;
+      return `product-customizer.html?slug=${encodeURIComponent(item.slug || "")}&editCartIndex=${index}`;
+    }
+
+    function renderCart() {
+      const cart = getCart();
+      updateCartBadge();
+
+      if (!cart.length) {
+        cartBody.innerHTML = `
+          <div class="cart-empty">
+            Coșul este gol momentan. Alege un produs și el va apărea aici.
+          </div>
+        `;
+        cartTotal.textContent = formatPrice(0);
+        return;
+      }
+
+      let total = 0;
+
+      cartBody.innerHTML = cart.map((item, index) => {
+        const qty = Number(item.quantity || 1);
+        const price = Number(item.price || 0);
+        const lineTotal = qty * price;
+        total += lineTotal;
+
+        const detailsHtml = getCartDetails(item);
+        const image = item.image || item.previewImage || "images/placeholder-product.jpg";
+        const editUrl = getEditUrl(item, index);
+
+        return `
+          <div class="cart-item">
+            <a href="${editUrl}">
+              <img src="${escapeHtml(image)}" alt="${escapeHtml(item.name || "Produs")}">
+            </a>
+
+            <div>
+              <a href="${editUrl}"><h4>${escapeHtml(item.name || "Produs")}</h4></a>
+              <div class="cart-meta">${detailsHtml}</div>
+
+              <div class="qty-row">
+                <button class="qty-btn" onclick="changeCartQuantity(${index}, -1)">−</button>
+                <div class="qty-value">${qty}</div>
+                <button class="qty-btn" onclick="changeCartQuantity(${index}, 1)">+</button>
+              </div>
+
+              <div class="cart-price">${formatPrice(lineTotal)}</div>
+            </div>
+
+            <button class="cart-remove" onclick="removeCartItem(${index})" aria-label="Șterge produsul">🗑</button>
+          </div>
+        `;
+      }).join("");
+
+      cartTotal.textContent = formatPrice(total);
+    }
+
+    function openCart() {
+      renderCart();
+      cartDrawer.classList.add("open");
+      cartOverlay.classList.add("open");
+      cartDrawer.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeCart() {
+      cartDrawer.classList.remove("open");
+      cartOverlay.classList.remove("open");
+      cartDrawer.setAttribute("aria-hidden", "true");
+      if (!mobileMenu.classList.contains("open")) {
+        document.body.style.overflow = "";
+      }
+    }
+
+    function removeCartItem(index) {
+      const cart = getCart();
+      cart.splice(index, 1);
+      setCart(cart);
+      renderCart();
+    }
+
+    function changeCartQuantity(index, delta) {
+      const cart = getCart();
+      if (!cart[index]) return;
+      cart[index].quantity = Number(cart[index].quantity || 1) + delta;
+      if (cart[index].quantity <= 0) cart.splice(index, 1);
+      setCart(cart);
+      renderCart();
+    }
+
+    window.removeCartItem = removeCartItem;
+    window.changeCartQuantity = changeCartQuantity;
+
+    function openMobileMenu() {
+      mobileMenu.classList.add("open");
+      mobileMenuOverlay.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeMobileMenu() {
+      mobileMenu.classList.remove("open");
+      mobileMenuOverlay.classList.remove("open");
+      if (!cartDrawer.classList.contains("open")) {
+        document.body.style.overflow = "";
+      }
+    }
+
+    cartOpenBtn?.addEventListener("click", openCart);
+    mobileCartOpenBtn?.addEventListener("click", openCart);
+    cartCloseBtn?.addEventListener("click", closeCart);
+    cartOverlay?.addEventListener("click", closeCart);
+    continueShoppingBtn?.addEventListener("click", closeCart);
+
+    mobileMenuOpenBtn?.addEventListener("click", openMobileMenu);
+    mobileMenuCloseBtn?.addEventListener("click", closeMobileMenu);
+    mobileMenuOverlay?.addEventListener("click", closeMobileMenu);
+
+    document.querySelectorAll(".mobile-link").forEach(link => {
+      link.addEventListener("click", closeMobileMenu);
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeCart();
+        closeMobileMenu();
+      }
+    });
+
+    minusBtn.addEventListener("click", () => changeQty(-1));
+    plusBtn.addEventListener("click", () => changeQty(1));
+    checkoutBtn.addEventListener("click", openCart);
+    addBtn.addEventListener("click", addToCart);
+    backFromFinal.addEventListener("click", () => goToStep(config.steps.length - 1));
+
+    function changeQty(delta) {
+      quantity += delta;
+      if (quantity < 1) quantity = 1;
+      if (quantity > 20) quantity = 20;
+      quantityEl.textContent = String(quantity);
+      updatePrice();
+    }
+
+    function getFieldMap() {
+      const map = {};
+      (config.fields || []).forEach(field => { map[field.id] = field; });
+      return map;
+    }
+
+    function getStepFields(step) {
+      const fieldMap = getFieldMap();
+      return (step.fields || []).map(id => fieldMap[id]).filter(Boolean);
+    }
+
+    function getFieldValue(fieldId) {
+      return state[fieldId];
+    }
+
+    function setFieldValue(fieldId, value) {
+      state[fieldId] = value;
+      updateAll();
+    }
+
+    function isFieldRequired(field) {
+      return !!field.required;
+    }
+
+    function isFieldFilled(field) {
+      const value = state[field.id];
+
+      if (field.type === "toggle") {
+        return !field.required || value === true || value === false;
+      }
+
+      if (field.type === "text" || field.type === "textarea") {
+        return !field.required || String(value || "").trim() !== "";
+      }
+
+      return !field.required || (value !== undefined && value !== null && String(value).trim() !== "");
+    }
+
+    function canGoFromStep(stepIndex) {
+      const step = config.steps[stepIndex];
+      if (!step) return true;
+      const fields = getStepFields(step);
+      return fields.every(isFieldFilled);
+    }
+
+    function getFieldPrice(field, value) {
+      if (value === undefined || value === null || value === "") return 0;
+      if (!field.options || !Array.isArray(field.options)) return 0;
+      const match = field.options.find(opt => String(opt.value) === String(value));
+      return Number(match?.price || 0);
+    }
+
+    function getUnitPrice() {
+      let total = Number(product.base_price || 0);
+      (config.fields || []).forEach(field => {
+        total += getFieldPrice(field, state[field.id]);
+      });
+      return total;
+    }
+
+    function updatePrice() {
+      const total = getUnitPrice() * quantity;
+      priceEl.textContent = String(total);
+      summaryPrice.textContent = formatPrice(total);
+    }
+
+    function getOptionLabel(field, value) {
+      if (!field.options || !Array.isArray(field.options)) return value;
+      const match = field.options.find(opt => String(opt.value) === String(value));
+      return match?.label || value;
+    }
+
+    function buildSummarySelectionText() {
+      const selectedParts = [];
+
+      (config.fields || []).forEach(field => {
+        const value = state[field.id];
+        if (value === undefined || value === null || value === "" || value === false) return;
+
+        let displayValue = value;
+        if (field.type === "toggle") {
+          displayValue = value ? "Da" : "Nu";
+        } else if (field.options) {
+          displayValue = getOptionLabel(field, value);
+        }
+
+        selectedParts.push(displayValue);
+      });
+
+      if (!selectedParts.length) return "Nicio selecție";
+      return selectedParts.slice(0, 3).join(" • ");
+    }
+
+    function updateSummary() {
+      summaryProduct.textContent = product.title || "Produs";
+      summarySelection.textContent = buildSummarySelectionText();
+    }
+
+    function animatePreviewBase() {
+      previewBaseImage.style.animation = "none";
+      void previewBaseImage.offsetWidth;
+      previewBaseImage.style.animation = "previewAppear 0.26s cubic-bezier(.22,.61,.36,1) forwards";
+    }
+
+    function renderBasePreview() {
+      const previewConf = config.preview || {};
+      const fallbackImage = product.card_image || "";
+      const baseImage = previewConf.baseImage || fallbackImage;
+
+      if (!baseImage) {
+        previewBaseImage.style.display = "none";
+        previewBaseImage.removeAttribute("src");
+        previewMessage.style.display = "block";
+        previewMessage.textContent = "Acest produs nu are încă imagine de preview.";
+        return;
+      }
+
+      previewMessage.style.display = "none";
+      previewBaseImage.src = baseImage;
+      previewBaseImage.style.display = "block";
+      previewBaseImage.onload = animatePreviewBase;
+      previewBaseImage.onerror = () => {
+        previewBaseImage.style.display = "none";
+        previewMessage.style.display = "block";
+        previewMessage.textContent = "Nu am putut încărca imaginea produsului.";
+      };
+    }
+
+    function clearDynamicLayers() {
+      previewLayers.forEach(layer => layer.remove());
+      previewLayers = [];
+    }
+
+    function renderDynamicLayers() {
+      clearDynamicLayers();
+      const previewConf = config.preview || {};
+      const layers = Array.isArray(previewConf.layers) ? previewConf.layers : [];
+
+      layers.forEach(layerConf => {
+        const sourceField = layerConf.sourceField;
+        const selectedValue = state[sourceField];
+        if (!sourceField || !selectedValue) return;
+        if (!layerConf.sources || typeof layerConf.sources !== "object") return;
+
+        const src = layerConf.sources[selectedValue];
+        if (!src) return;
+
+        const img = document.createElement("img");
+        img.className = "dynamic-layer";
+        img.src = src;
+        img.alt = "";
+
+        img.style.display = "block";
+        img.style.left = layerConf.left || "50%";
+        img.style.top = layerConf.top || "50%";
+        img.style.width = layerConf.width || "40%";
+        img.style.transform = layerConf.transform || "translate(-50%,-50%)";
+        img.style.zIndex = String(layerConf.zIndex || 5);
+
+        previewStage.appendChild(img);
+        previewLayers.push(img);
+      });
+    }
+
+    function renderPreview() {
+      renderBasePreview();
+      renderDynamicLayers();
+    }
+
+    function updateStepButtons() {
+      config.steps.forEach((step, index) => {
+        const btn = document.getElementById(`next-step-${index}`);
+        if (!btn) return;
+        btn.disabled = !canGoFromStep(index);
+      });
+
+      addBtn.disabled = !config.steps.every((_, index) => canGoFromStep(index));
+    }
+
+    function goToStep(stepIndex) {
+      currentStep = stepIndex;
+
+      document.querySelectorAll(".step-card.dynamic-step").forEach((card, index) => {
+        card.classList.toggle("active", index === stepIndex);
+      });
+
+      document.querySelectorAll("[data-step-badge]").forEach((el) => {
+        const n = Number(el.dataset.stepBadge);
+        el.classList.toggle("active", n === stepIndex);
+        el.classList.toggle("done", n < stepIndex);
+      });
+
+      finalStepCard.style.display = stepIndex === config.steps.length ? "block" : "none";
+      finalStepCard.classList.toggle("active", stepIndex === config.steps.length);
+
+      if (stepIndex < config.steps.length) {
+        const activeCard = document.querySelectorAll(".step-card.dynamic-step")[stepIndex];
+        if (activeCard && window.innerWidth > 760) {
+          activeCard.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+    }
+
+    function createSwatchesField(field) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "control-block";
+
+      const label = document.createElement("label");
+      label.className = "control-label";
+      label.textContent = field.label;
+      wrapper.appendChild(label);
+
+      const grid = document.createElement("div");
+      grid.className = "swatch-grid";
+
+      (field.options || []).forEach(option => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "swatch-btn" + (String(state[field.id] || "") === String(option.value) ? " active" : "");
+        btn.dataset.value = option.value;
+        btn.setAttribute("aria-label", option.label || option.value);
+
+        btn.innerHTML = `<span class="swatch-circle" style="background:${option.color || "#ddd"};"></span>`;
+
+        btn.addEventListener("click", () => setFieldValue(field.id, option.value));
+        grid.appendChild(btn);
+      });
+
+      wrapper.appendChild(grid);
+      return wrapper;
+    }
+
+    function createSelectField(field) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "control-block";
+
+      const label = document.createElement("label");
+      label.className = "control-label";
+      label.textContent = field.label;
+      wrapper.appendChild(label);
+
+      const select = document.createElement("select");
+      select.innerHTML = `<option value="">Selectează...</option>` + (field.options || []).map(option => {
+        const price = Number(option.price || 0);
+        const suffix = price ? ` (+${price} RON)` : "";
+        return `<option value="${escapeHtml(String(option.value))}">${escapeHtml(option.label || option.value)}${suffix}</option>`;
+      }).join("");
+
+      select.value = state[field.id] || "";
+      select.addEventListener("change", () => setFieldValue(field.id, select.value));
+
+      wrapper.appendChild(select);
+      return wrapper;
+    }
+
+    function createCardsField(field) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "control-block";
+
+      const label = document.createElement("label");
+      label.className = "control-label";
+      label.textContent = field.label;
+      wrapper.appendChild(label);
+
+      const grid = document.createElement("div");
+      grid.className = "option-grid";
+
+      (field.options || []).forEach(option => {
+        const card = document.createElement("button");
+        card.type = "button";
+        card.className = "option-card" + (String(state[field.id] || "") === String(option.value) ? " active" : "");
+
+        const price = Number(option.price || 0);
+        const priceText = price === 0 ? "0 RON" : `+${price} RON`;
+
+        card.innerHTML = `
+          <div class="option-thumb">
+            ${option.image ? `<img src="${escapeHtml(option.image)}" alt="${escapeHtml(option.label || option.value)}">` : `<span style="font-size:.72rem;color:#9b9087;">Opțiune</span>`}
+          </div>
+          <h3>${escapeHtml(option.label || option.value)}</h3>
+          <p>${escapeHtml(priceText)}</p>
+        `;
+
+        card.addEventListener("click", () => setFieldValue(field.id, option.value));
+        grid.appendChild(card);
+      });
+
+      wrapper.appendChild(grid);
+      return wrapper;
+    }
+
+    function createTextField(field) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "control-block";
+
+      const label = document.createElement("label");
+      label.className = "control-label";
+      label.textContent = field.label;
+      wrapper.appendChild(label);
+
+      const input = document.createElement("input");
+      input.type = "text";
+      input.placeholder = field.placeholder || "";
+      input.value = state[field.id] || "";
+      input.addEventListener("input", () => setFieldValue(field.id, input.value));
+
+      wrapper.appendChild(input);
+      return wrapper;
+    }
+
+    function createTextareaField(field) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "control-block";
+
+      const label = document.createElement("label");
+      label.className = "control-label";
+      label.textContent = field.label;
+      wrapper.appendChild(label);
+
+      const textarea = document.createElement("textarea");
+      textarea.placeholder = field.placeholder || "";
+      textarea.value = state[field.id] || "";
+      textarea.addEventListener("input", () => setFieldValue(field.id, textarea.value));
+
+      wrapper.appendChild(textarea);
+      return wrapper;
+    }
+
+    function createToggleField(field) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "control-block";
+
+      const row = document.createElement("label");
+      row.className = "toggle-row";
+
+      const span = document.createElement("span");
+      span.textContent = field.label;
+
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.checked = !!state[field.id];
+      input.addEventListener("change", () => setFieldValue(field.id, input.checked));
+
+      row.appendChild(span);
+      row.appendChild(input);
+      wrapper.appendChild(row);
+
+      return wrapper;
+    }
+
+    function createFieldElement(field) {
+      switch (field.type) {
+        case "swatches": return createSwatchesField(field);
+        case "select": return createSelectField(field);
+        case "cards": return createCardsField(field);
+        case "text": return createTextField(field);
+        case "textarea": return createTextareaField(field);
+        case "toggle": return createToggleField(field);
+        default: return createTextField(field);
+      }
+    }
+
+    function renderSteps() {
+      stepper.innerHTML = "";
+      stepsContainer.innerHTML = "";
+
+      config.steps.forEach((step, index) => {
+        const badge = document.createElement("div");
+        badge.className = "step-badge" + (index === 0 ? " active" : "");
+        badge.dataset.stepBadge = String(index);
+        badge.innerHTML = `
+          <div class="dot">${index + 1}</div>
+          <div class="txt">${escapeHtml(step.label || `Pas ${index + 1}`)}</div>
+        `;
+        stepper.appendChild(badge);
+
+        const card = document.createElement("section");
+        card.className = "card step-card dynamic-step" + (index === 0 ? " active" : "");
+        card.id = `dynamic-step-${index}`;
+
+        const title = document.createElement("h2");
+        title.className = "section-title";
+        title.textContent = step.label || `Pas ${index + 1}`;
+        card.appendChild(title);
+
+        const text = document.createElement("p");
+        text.className = "section-text";
+        text.textContent = step.description || "Alege opțiunile dorite pentru acest pas.";
+        card.appendChild(text);
+
+        const fields = getStepFields(step);
+        fields.forEach(field => {
+          card.appendChild(createFieldElement(field));
+        });
+
+        const actions = document.createElement("div");
+        actions.className = "step-actions";
+
+        if (index > 0) {
+          const back = document.createElement("button");
+          back.className = "step-btn soft";
+          back.type = "button";
+          back.textContent = "Înapoi";
+          back.addEventListener("click", () => goToStep(index - 1));
+          actions.appendChild(back);
+        }
+
+        const next = document.createElement("button");
+        next.className = "step-btn primary";
+        next.type = "button";
+        next.id = `next-step-${index}`;
+        next.textContent = index === config.steps.length - 1 ? "Mai departe — comandă" : "Mai departe";
+        next.addEventListener("click", () => {
+          if (index === config.steps.length - 1) {
+            goToStep(config.steps.length);
+          } else {
+            goToStep(index + 1);
+          }
+        });
+        actions.appendChild(next);
+
+        card.appendChild(actions);
+        stepsContainer.appendChild(card);
+      });
+    }
+
+    function updateAll() {
+      renderSteps();
+      renderPreview();
+      updateSummary();
+      updatePrice();
+      updateStepButtons();
+      goToStep(Math.min(currentStep, config.steps.length));
+    }
+
+    function buildCartItemPayload() {
+      const readableConfiguration = {};
+      (config.fields || []).forEach(field => {
+        let value = state[field.id];
+        if (value === undefined || value === null || value === "") return;
+
+        if (field.type === "toggle") {
+          readableConfiguration[field.label || field.id] = value ? "Da" : "Nu";
+          return;
+        }
+
+        if (field.options) {
+          value = getOptionLabel(field, value);
+        }
+
+        readableConfiguration[field.label || field.id] = value;
+      });
+
+      return {
+        name: product.title || "Produs",
+        slug: product.slug || "",
+        configuration: readableConfiguration,
+        image: product.card_image || previewBaseImage.getAttribute("src") || "",
+        previewImage: previewBaseImage.getAttribute("src") || "",
+        price: getUnitPrice(),
+        quantity: quantity,
+        editUrl: `product-customizer.html?slug=${encodeURIComponent(product.slug || "")}`
+      };
+    }
+
+    function addToCart() {
+      const cart = getCart();
+      const item = buildCartItemPayload();
+
+      if (isEditingCartItem && editCartIndex !== null && cart[editCartIndex]) {
+        cart[editCartIndex] = item;
+      } else {
+        cart.push(item);
+      }
+
+      setCart(cart);
+      checkoutBtn.style.display = "block";
+      updateCartBadge();
+      renderCart();
+
+      const toast = document.getElementById("toast");
+      toast.textContent = isEditingCartItem ? "Produsul a fost actualizat în coș." : "Produsul a fost adăugat în coș.";
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 4000);
+    }
+
+    function loadEditItemFromCart() {
+      if (editCartIndex === null) return;
+      const cart = getCart();
+      const item = cart[editCartIndex];
+      if (!item) {
+        isEditingCartItem = false;
+        return;
+      }
+
+      const conf = item.configuration || {};
+      (config.fields || []).forEach(field => {
+        const stored = conf[field.label || field.id];
+        if (stored === undefined) return;
+
+        if (field.type === "toggle") {
+          state[field.id] = stored === "Da";
+        } else if (field.options) {
+          const opt = field.options.find(o => o.label === stored || String(o.value) === String(stored));
+          state[field.id] = opt ? opt.value : stored;
+        } else {
+          state[field.id] = stored;
+        }
+      });
+
+      if (item.quantity) quantity = Math.max(1, Math.min(20, Number(item.quantity)));
+      quantityEl.textContent = String(quantity);
+      addBtn.textContent = "Actualizează produsul";
+      checkoutBtn.style.display = "block";
+    }
+
+    async function loadData() {
+      const slug = getSlugFromUrl();
+      if (!slug) {
+        showError("Lipsește slug-ul produsului.");
+        return;
+      }
+
+      const { data: productData, error: productError } = await supabaseClient
+        .from("products")
+        .select("*")
+        .eq("slug", slug)
+        .single();
+
+      if (productError || !productData) {
+        showError("Nu am găsit produsul.");
+        return;
+      }
+
+      product = productData;
+
+      const { data: detailsData } = await supabaseClient
+        .from("product_details")
+        .select("*")
+        .eq("product_id", product.id)
+        .maybeSingle();
+
+      const { data: customizerData } = await supabaseClient
+        .from("product_customizers")
+        .select("*")
+        .eq("product_id", product.id)
+        .maybeSingle();
+
+      details = detailsData || {};
+      customizer = customizerData || {};
+      config = customizer.config || { version: 1, steps: [], fields: [], preview: { enabled: true } };
+
+      if (!Array.isArray(config.steps) || !Array.isArray(config.fields)) {
+        showError("Configurația customizer-ului este invalidă.");
+        return;
+      }
+
+      if (!config.steps.length) {
+        config.steps = [
+          {
+            id: "step_1",
+            label: "Configurează produsul",
+            description: "Alege opțiunile dorite.",
+            fields: (config.fields || []).map(f => f.id)
+          }
+        ];
+      }
+
+      previewTitle.textContent = product.title || "Produsul tău";
+      previewSubtitle.textContent = details?.short_paragraph_1 || "Configurează produsul tău pas cu pas.";
+      quantityEl.textContent = String(quantity);
+
+      showApp();
+      loadEditItemFromCart();
+      updateAll();
+      renderCart();
+      updateCartBadge();
+    }
+
+    document.addEventListener("mousemove", (e) => {
+      if(!cursorGlow || window.innerWidth <= 760) return;
+      cursorGlow.style.left = `${e.clientX}px`;
+      cursorGlow.style.top = `${e.clientY}px`;
+    });
+
+    document.addEventListener("mouseleave", () => {
+      if(cursorGlow) cursorGlow.style.opacity = "0";
+    });
+
+    document.addEventListener("mouseenter", () => {
+      if(cursorGlow && window.innerWidth > 760) cursorGlow.style.opacity = "0.9";
+    });
+
+    window.addEventListener("load", loadData);
+  </script>
+</body>
+</html>
