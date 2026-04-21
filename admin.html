@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maison Doucette — Admin</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+
+<style>
+body {
+  margin:0;
+  font-family:Arial;
+  display:flex;
+  height:100vh;
+}
+
+.sidebar {
+  width:220px;
+  background:#2c2c2c;
+  color:white;
+  padding:20px;
+}
+
+.sidebar button {
+  width:100%;
+  margin-bottom:10px;
+  padding:10px;
+  background:#444;
+  border:none;
+  color:white;
+  cursor:pointer;
+}
+
+.main {
+  flex:1;
+  padding:20px;
+  overflow:auto;
+}
+
+.hidden { display:none; }
+
+input, textarea {
+  width:100%;
+  margin-bottom:10px;
+  padding:8px;
+}
+
+button.action {
+  padding:10px;
+  margin-top:10px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+  <h3>Admin</h3>
+  <button onclick="show('products')">Produse</button>
+  <button onclick="show('details')">Details</button>
+  <button onclick="show('customizer')">Customizer</button>
+  <button onclick="show('orders')">Comenzi</button>
+  <button onclick="logout()">Logout</button>
+</div>
+
+<div class="main">
+
+<!-- LOGIN -->
+<div id="login">
+  <h2>Login</h2>
+  <input id="email" placeholder="email">
+  <input id="password" type="password" placeholder="parola">
+  <button class="action" onclick="login()">Login</button>
+</div>
+
+<!-- PRODUSE -->
+<div id="products" class="hidden">
+  <h2>Produse</h2>
+
+  <input id="p_title" placeholder="Titlu">
+  <input id="p_slug" placeholder="Slug">
+  <input id="p_price" placeholder="Pret">
+  <textarea id="p_desc" placeholder="Descriere"></textarea>
+
+  <button class="action" onclick="addProduct()">Adauga produs</button>
+
+  <hr>
+  <div id="productList"></div>
+</div>
+
+<!-- DETAILS -->
+<div id="details" class="hidden">
+  <h2>Details Page</h2>
+
+  <select id="detailsProduct"></select>
+
+  <textarea id="d_p1" placeholder="Paragraph 1"></textarea>
+  <textarea id="d_p2" placeholder="Paragraph 2"></textarea>
+
+  <button class="action" onclick="saveDetails()">Salveaza</button>
+</div>
+
+<!-- CUSTOMIZER -->
+<div id="customizer" class="hidden">
+  <h2>Customizer</h2>
+
+  <select id="customProduct"></select>
+
+  <textarea id="customJson" style="height:300px;"></textarea>
+
+  <button class="action" onclick="saveCustomizer()">Salveaza Config</button>
+</div>
+
+<!-- ORDERS -->
+<div id="orders" class="hidden">
+  <h2>Comenzi</h2>
+  <div id="ordersList"></div>
+</div>
+
+</div>
+
+<script>
+const db = window.supabase.createClient(
+  window.SUPABASE_URL,
+  window.SUPABASE_ANON_KEY
+);
+
+function show(section) {
+  document.querySelectorAll('.main > div').forEach(el => el.classList.add('hidden'));
+  document.getElementById(section).classList.remove('hidden');
+}
+
+async function login() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  const { error } = await db.auth.signInWithPassword({ email, password });
+
+  if(error) return alert(error.message);
+
+  document.getElementById('login').classList.add('hidden');
+  show('products');
+
+  loadProducts();
+}
+
+async function logout() {
+  await db.auth.signOut();
+  location.reload();
+}
+
+/* =========================
+   PRODUCTS
+========================= */
+
+async function addProduct() {
+  const title = p_title.value;
+  const slug = p_slug.value;
+  const price = p_price.value;
+  const desc = p_desc.value;
+
+  await db.from('products').insert({
+    title,
+    slug,
+    short_price_text: price,
+    short_description: desc
+  });
+
+  loadProducts();
+}
+
+async function loadProducts() {
+  const { data } = await db.from('products').select('*');
+
+  productList.innerHTML = data.map(p => `
+    <div>
+      <b>${p.title}</b>
+    </div>
+  `).join('');
+
+  // populate selects
+  detailsProduct.innerHTML = data.map(p => `<option value="${p.id}">${p.title}</option>`).join('');
+  customProduct.innerHTML = detailsProduct.innerHTML;
+}
+
+/* =========================
+   DETAILS
+========================= */
+
+async function saveDetails() {
+  const product_id = detailsProduct.value;
+
+  await db.from('product_details')
+  .update({
+    paragraph_1: d_p1.value,
+    paragraph_2: d_p2.value
+  })
+  .eq('product_id', product_id);
+
+  alert("Saved");
+}
+
+/* =========================
+   CUSTOMIZER
+========================= */
+
+async function saveCustomizer() {
+  const product_id = customProduct.value;
+
+  let config;
+  try {
+    config = JSON.parse(customJson.value);
+  } catch {
+    return alert("JSON invalid");
+  }
+
+  await db.from('product_customizers')
+  .update({ config })
+  .eq('product_id', product_id);
+
+  alert("Saved");
+}
+
+/* =========================
+   ORDERS
+========================= */
+
+async function loadOrders() {
+  const { data } = await db.from('orders').select('*');
+
+  ordersList.innerHTML = data.map(o => `
+    <div>
+      ${o.customer_name} - ${o.total_amount}
+    </div>
+  `).join('');
+}
+
+</script>
+
+</body>
+</html>
