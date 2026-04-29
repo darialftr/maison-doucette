@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Editor</title>
+
+<style>
+.preview{
+  width:400px;
+  height:400px;
+  background:#eee;
+  position:relative;
+}
+
+.layer{
+  position:absolute;
+  cursor:move;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Editor poziționare</h2>
+
+<div class="preview" id="preview">
+  <img src="Bunny_Colors/bunny-cream.png" style="width:180%;left:50%;transform:translateX(-50%);bottom:-40px;">
+  <img src="Accessories/heart-red.png" id="layer" class="layer" style="left:50%;top:60%;width:200px;">
+</div>
+
+<p>Mută imaginea și vezi poziția</p>
+
+<pre id="output"></pre>
+
+<script>
+const layer = document.getElementById("layer");
+const output = document.getElementById("output");
+
+let dragging = false;
+
+layer.onmousedown = ()=> dragging = true;
+window.onmouseup = ()=> dragging = false;
+
+window.onmousemove = (e)=>{
+  if(!dragging) return;
+
+  layer.style.left = e.clientX - 100 + "px";
+  layer.style.top = e.clientY - 100 + "px";
+
+  output.innerText = `
+left: "${layer.style.left}",
+top: "${layer.style.top}"
+  `;
+};
+</script>
+
+</body>
+</html>
