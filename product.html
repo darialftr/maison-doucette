@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<title>Product</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{font-family:sans-serif;background:#f7f1eb;margin:0}
+
+.preview{
+  position:relative;
+  width:100%;
+  height:400px;
+  background:#eee;
+  overflow:hidden;
+}
+
+.preview img{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+}
+
+.layer{
+  position:absolute;
+}
+
+.option{
+  border:1px solid #ccc;
+  padding:10px;
+  cursor:pointer;
+  margin:5px;
+}
+.option.active{border:2px solid black}
+</style>
+</head>
+
+<body>
+
+<div class="preview" id="preview"></div>
+
+<h3>Bază</h3>
+<div id="baseOptions"></div>
+
+<h3>Opțiuni</h3>
+<div id="options"></div>
+
+<button onclick="addToCart()">Adaugă în coș</button>
+
+<script src="products.js"></script>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const slug = params.get("slug") || "bunny";
+
+const product = PRODUCTS[slug];
+
+let selectedBase = product.bases[0];
+let selectedOptions = [];
+
+function renderBaseOptions(){
+  const el = document.getElementById("baseOptions");
+  el.innerHTML = "";
+
+  product.bases.forEach(base=>{
+    const div = document.createElement("div");
+    div.className = "option";
+    div.innerText = base.name;
+
+    div.onclick = ()=>{
+      selectedBase = base;
+      renderPreview();
+    };
+
+    el.appendChild(div);
+  });
+}
+
+function renderOptions(){
+  const el = document.getElementById("options");
+  el.innerHTML = "";
+
+  product.options.forEach(opt=>{
+    opt.items.forEach(item=>{
+      const div = document.createElement("div");
+      div.className = "option";
+      div.innerText = item.name;
+
+      div.onclick = ()=>{
+        selectedOptions = [item];
+        renderPreview();
+      };
+
+      el.appendChild(div);
+    });
+  });
+}
+
+function renderPreview(){
+  const preview = document.getElementById("preview");
+  preview.innerHTML = "";
+
+  // BASE
+  const baseImg = document.createElement("img");
+  baseImg.src = selectedBase.src;
+
+  Object.assign(baseImg.style, selectedBase.style);
+
+  preview.appendChild(baseImg);
+
+  // LAYERS
+  selectedOptions.forEach(opt=>{
+    opt.layers.forEach(layer=>{
+      const img = document.createElement("img");
+      img.src = layer.src;
+      img.className = "layer";
+
+      Object.assign(img.style, layer.style);
+
+      preview.appendChild(img);
+    });
+  });
+}
+
+function addToCart(){
+  const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+  cart.push({
+    name: product.name,
+    base: selectedBase.name,
+    options: selectedOptions.map(o=>o.name),
+    price: product.basePrice,
+    quantity: 1
+  });
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+
+  alert("Adăugat în coș");
+}
+
+renderBaseOptions();
+renderOptions();
+renderPreview();
+</script>
+
+</body>
+</html>
