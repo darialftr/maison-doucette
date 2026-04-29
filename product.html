@@ -2,18 +2,82 @@
 <html lang="ro">
 <head>
 <meta charset="UTF-8">
-<title>Product</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Maison Doucette – Atelier</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;700&family=Manrope:wght@300;400;600&display=swap" rel="stylesheet">
+
 <style>
-body{font-family:sans-serif;background:#f7f1eb;margin:0}
+:root{
+  --bg:#f7f1eb;
+  --panel:#fffaf6;
+  --brown:#6a5145;
+  --gold:#d2b08d;
+}
+
+body{
+  margin:0;
+  font-family:Manrope;
+  background:var(--bg);
+  color:var(--brown);
+}
+
+/* TOP BAR */
+.top-bar{
+  position:sticky;
+  top:0;
+  z-index:2000;
+  background:linear-gradient(135deg,#b88e67,#d2b08d);
+  color:white;
+  text-align:center;
+  padding:10px;
+  font-size:13px;
+}
+
+/* HEADER */
+.header{
+  position:sticky;
+  top:40px;
+  background:#fffaf6cc;
+  backdrop-filter:blur(10px);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 18px;
+  border-bottom:1px solid #eee;
+}
+
+.menu-btn{
+  font-size:22px;
+  cursor:pointer;
+}
+
+/* LAYOUT */
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+/* PREVIEW */
+.preview-card{
+  background:var(--panel);
+  border-radius:25px;
+  padding:15px;
+  position:sticky;
+  top:120px;
+}
 
 .preview{
   position:relative;
-  width:100%;
-  height:400px;
-  background:#eee;
+  height:420px;
+  border-radius:20px;
   overflow:hidden;
+  background:linear-gradient(#f5f3f1,#ebe8e3);
 }
 
 .preview img{
@@ -22,55 +86,117 @@ body{font-family:sans-serif;background:#f7f1eb;margin:0}
   transform:translateX(-50%);
 }
 
-.layer{
-  position:absolute;
+/* OPTIONS */
+.section{
+  background:var(--panel);
+  border-radius:25px;
+  padding:15px;
+}
+
+.section h2{
+  font-family:"Cormorant Garamond";
+  margin:0 0 10px;
 }
 
 .option{
-  border:1px solid #ccc;
-  padding:10px;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid #ddd;
+  margin-bottom:8px;
   cursor:pointer;
-  margin:5px;
 }
-.option.active{border:2px solid black}
+
+.option.active{
+  border:2px solid var(--gold);
+}
+
+/* BUTTON */
+.btn{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:20px;
+  background:linear-gradient(135deg,#b88e67,#d2b08d);
+  color:white;
+  font-weight:600;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+/* MOBILE */
+@media(max-width:800px){
+  .container{
+    grid-template-columns:1fr;
+  }
+
+  .preview-card{
+    position:sticky;
+    top:100px;
+    z-index:1000;
+  }
+}
 </style>
 </head>
 
 <body>
 
-<div class="preview" id="preview"></div>
+<div class="top-bar">NOU • Maison Mystery Experience</div>
 
-<h3>Bază</h3>
-<div id="baseOptions"></div>
+<div class="header">
+  <div class="menu-btn">☰</div>
+  <div>Maison Doucette</div>
+  <div>🛒</div>
+</div>
 
-<h3>Opțiuni</h3>
-<div id="options"></div>
+<div class="container">
 
-<button onclick="addToCart()">Adaugă în coș</button>
+  <!-- PREVIEW -->
+  <div class="preview-card">
+    <div class="preview" id="preview"></div>
+  </div>
+
+  <!-- OPTIONS -->
+  <div>
+
+    <div class="section">
+      <h2>Culoare corp</h2>
+      <div id="baseOptions"></div>
+    </div>
+
+    <div class="section">
+      <h2>Accesorii</h2>
+      <div id="options"></div>
+    </div>
+
+    <button class="btn" onclick="addToCart()">Adaugă în coș</button>
+
+  </div>
+
+</div>
 
 <script src="products.js"></script>
 
 <script>
-const params = new URLSearchParams(window.location.search);
-const slug = params.get("slug") || "bunny";
-
+const slug = new URLSearchParams(location.search).get("slug") || "bunny";
 const product = PRODUCTS[slug];
 
 let selectedBase = product.bases[0];
-let selectedOptions = [];
+let selectedOption = null;
 
-function renderBaseOptions(){
+function renderBase(){
   const el = document.getElementById("baseOptions");
   el.innerHTML = "";
 
   product.bases.forEach(base=>{
     const div = document.createElement("div");
-    div.className = "option";
+    div.className="option";
     div.innerText = base.name;
+
+    if(base === selectedBase) div.classList.add("active");
 
     div.onclick = ()=>{
       selectedBase = base;
-      renderPreview();
+      render();
     };
 
     el.appendChild(div);
@@ -81,19 +207,19 @@ function renderOptions(){
   const el = document.getElementById("options");
   el.innerHTML = "";
 
-  product.options.forEach(opt=>{
-    opt.items.forEach(item=>{
-      const div = document.createElement("div");
-      div.className = "option";
-      div.innerText = item.name;
+  product.options[0].items.forEach(opt=>{
+    const div = document.createElement("div");
+    div.className="option";
+    div.innerText = opt.name;
 
-      div.onclick = ()=>{
-        selectedOptions = [item];
-        renderPreview();
-      };
+    if(opt === selectedOption) div.classList.add("active");
 
-      el.appendChild(div);
-    });
+    div.onclick = ()=>{
+      selectedOption = opt;
+      render();
+    };
+
+    el.appendChild(div);
   });
 }
 
@@ -104,23 +230,24 @@ function renderPreview(){
   // BASE
   const baseImg = document.createElement("img");
   baseImg.src = selectedBase.src;
-
   Object.assign(baseImg.style, selectedBase.style);
-
   preview.appendChild(baseImg);
 
   // LAYERS
-  selectedOptions.forEach(opt=>{
-    opt.layers.forEach(layer=>{
+  if(selectedOption){
+    selectedOption.layers.forEach(layer=>{
       const img = document.createElement("img");
       img.src = layer.src;
-      img.className = "layer";
-
       Object.assign(img.style, layer.style);
-
       preview.appendChild(img);
     });
-  });
+  }
+}
+
+function render(){
+  renderBase();
+  renderOptions();
+  renderPreview();
 }
 
 function addToCart(){
@@ -129,19 +256,15 @@ function addToCart(){
   cart.push({
     name: product.name,
     base: selectedBase.name,
-    options: selectedOptions.map(o=>o.name),
-    price: product.basePrice,
-    quantity: 1
+    option: selectedOption?.name || "Fără",
+    price: product.basePrice
   });
 
   localStorage.setItem("cart", JSON.stringify(cart));
-
   alert("Adăugat în coș");
 }
 
-renderBaseOptions();
-renderOptions();
-renderPreview();
+render();
 </script>
 
 </body>
