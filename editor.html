@@ -1,57 +1,164 @@
 <!DOCTYPE html>
-<html>
+<html lang="ro">
 <head>
 <meta charset="UTF-8">
-<title>Editor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Editor Maison</title>
 
 <style>
+body{
+  font-family:sans-serif;
+  background:#f7f1eb;
+  margin:0;
+  padding:20px;
+}
+
+.editor{
+  display:grid;
+  grid-template-columns:1fr 300px;
+  gap:20px;
+}
+
 .preview{
-  width:400px;
-  height:400px;
-  background:#eee;
   position:relative;
+  height:500px;
+  background:#eee;
+  border-radius:20px;
+  overflow:hidden;
 }
 
 .layer{
   position:absolute;
   cursor:move;
 }
+
+.resize-handle{
+  position:absolute;
+  width:12px;
+  height:12px;
+  background:black;
+  bottom:0;
+  right:0;
+  cursor:nwse-resize;
+}
+
+.panel{
+  background:white;
+  padding:15px;
+  border-radius:20px;
+}
+
+textarea{
+  width:100%;
+  height:200px;
+}
 </style>
 </head>
 
 <body>
 
-<h2>Editor poziționare</h2>
+<h2>Editor produs</h2>
 
-<div class="preview" id="preview">
-  <img src="Bunny_Colors/bunny-cream.png" style="width:180%;left:50%;transform:translateX(-50%);bottom:-40px;">
-  <img src="Accessories/heart-red.png" id="layer" class="layer" style="left:50%;top:60%;width:200px;">
+<div class="editor">
+
+  <div class="preview" id="preview">
+    <!-- BASE -->
+    <img src="Bunny_Colors/bunny-cream.png" 
+         style="position:absolute;left:50%;transform:translateX(-50%);bottom:-40px;width:180%;">
+  </div>
+
+  <div class="panel">
+    <button onclick="addLayer()">+ Adaugă layer</button>
+    <button onclick="generateJSON()">Generează cod</button>
+
+    <h3>Config</h3>
+    <textarea id="output"></textarea>
+  </div>
+
 </div>
 
-<p>Mută imaginea și vezi poziția</p>
-
-<pre id="output"></pre>
-
 <script>
-const layer = document.getElementById("layer");
+const preview = document.getElementById("preview");
 const output = document.getElementById("output");
 
-let dragging = false;
+let layers = [];
 
-layer.onmousedown = ()=> dragging = true;
-window.onmouseup = ()=> dragging = false;
+function addLayer(){
+  const img = document.createElement("img");
+  img.src = "Accessories/heart-red.png";
+  img.className = "layer";
+  img.style.left = "50%";
+  img.style.top = "60%";
+  img.style.width = "200px";
+  img.style.transform = "translate(-50%,-50%)";
 
-window.onmousemove = (e)=>{
-  if(!dragging) return;
+  const handle = document.createElement("div");
+  handle.className = "resize-handle";
+  img.appendChild(handle);
 
-  layer.style.left = e.clientX - 100 + "px";
-  layer.style.top = e.clientY - 100 + "px";
+  preview.appendChild(img);
 
-  output.innerText = `
-left: "${layer.style.left}",
-top: "${layer.style.top}"
-  `;
-};
+  makeDraggable(img);
+  makeResizable(img, handle);
+
+  layers.push(img);
+}
+
+function makeDraggable(el){
+  let isDown = false;
+
+  el.onmousedown = (e)=>{
+    if(e.target.classList.contains("resize-handle")) return;
+    isDown = true;
+  };
+
+  window.onmouseup = ()=> isDown = false;
+
+  window.onmousemove = (e)=>{
+    if(!isDown) return;
+
+    const rect = preview.getBoundingClientRect();
+
+    let x = ((e.clientX - rect.left)/rect.width)*100;
+    let y = ((e.clientY - rect.top)/rect.height)*100;
+
+    el.style.left = x + "%";
+    el.style.top = y + "%";
+  };
+}
+
+function makeResizable(el, handle){
+  let resizing = false;
+
+  handle.onmousedown = (e)=>{
+    e.stopPropagation();
+    resizing = true;
+  };
+
+  window.addEventListener("mouseup", ()=> resizing=false);
+
+  window.addEventListener("mousemove", (e)=>{
+    if(!resizing) return;
+
+    let size = e.clientX - el.getBoundingClientRect().left;
+    el.style.width = size + "px";
+  });
+}
+
+function generateJSON(){
+  const data = layers.map(el=>({
+    src: el.src.split("/").pop(),
+    style:{
+      left: el.style.left,
+      top: el.style.top,
+      width: el.style.width,
+      transform: "translate(-50%,-50%)"
+    }
+  }));
+
+  output.value = JSON.stringify(data, null, 2);
+}
 </script>
 
 </body>
