@@ -3,27 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Maison Doucette — Admin</title>
+
   <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg:#f7f1eb;
-      --bg2:#efe4d8;
-      --panel:#fffaf5;
-      --white:#fffdf9;
-      --line:rgba(101,79,67,.13);
-      --brown:#654f43;
-      --brown-soft:#866f61;
-      --gold:#d2ad73;
-      --gold-deep:#ae7f43;
-      --danger:#9b3f3f;
-      --success:#4f7a57;
-      --shadow:0 18px 45px rgba(101,79,67,.11);
-      --shadow2:0 28px 70px rgba(101,79,67,.16);
-      --radius:28px;
+      --bg:#f6efe8;
+      --cream:#fffaf4;
+      --card:#fffdf9;
+      --brown:#5f493d;
+      --brown-2:#7c6355;
+      --dark:#342820;
+      --dark-2:#45352b;
+      --muted:#9b897c;
+      --line:rgba(95,73,61,.12);
+      --gold:#d8b47b;
+      --gold-2:#b8844f;
+      --green:#4f7a57;
+      --red:#9b3f3f;
+      --shadow:0 18px 45px rgba(52,40,32,.10);
+      --shadow-strong:0 28px 80px rgba(52,40,32,.18);
+      --radius:24px;
     }
 
     *{box-sizing:border-box}
@@ -33,113 +35,126 @@
       font-family:'Manrope',sans-serif;
       color:var(--brown);
       background:
-        radial-gradient(circle at top left, rgba(255,255,255,.95), transparent 26%),
-        radial-gradient(circle at bottom right, rgba(210,173,115,.12), transparent 30%),
-        linear-gradient(180deg,var(--bg),var(--bg2));
+        radial-gradient(circle at top left, rgba(255,255,255,.9), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(216,180,123,.16), transparent 32%),
+        linear-gradient(135deg,#f8f1ea,#eee0d1);
       min-height:100vh;
     }
 
     h1,h2,h3,.brand{
       font-family:'Cormorant Garamond',serif;
-      letter-spacing:-.02em;
+      letter-spacing:-.025em;
     }
 
-    button,input,textarea,select{
-      font:inherit;
-    }
-
-    img{max-width:100%;display:block}
-
+    button,input,textarea,select{font:inherit}
+    img{display:block;max-width:100%}
+    a{text-decoration:none;color:inherit}
     .hidden{display:none!important}
 
     .auth-screen{
       min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:18px;
+      display:grid;
+      place-items:center;
+      padding:22px;
     }
 
     .auth-card{
-      width:min(500px,100%);
-      background:rgba(255,250,245,.94);
-      border:1px solid var(--line);
-      border-radius:32px;
-      box-shadow:var(--shadow2);
-      padding:28px;
+      width:min(480px,100%);
+      border-radius:34px;
+      background:rgba(255,250,244,.92);
+      border:1px solid rgba(255,255,255,.75);
+      box-shadow:var(--shadow-strong);
+      padding:30px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .auth-card::before{
+      content:"";
+      position:absolute;
+      inset:-80px -80px auto auto;
+      width:220px;
+      height:220px;
+      border-radius:50%;
+      background:rgba(216,180,123,.20);
+      filter:blur(4px);
     }
 
     .auth-logo{
       width:76px;
       height:76px;
-      border-radius:50%;
       object-fit:contain;
+      border-radius:50%;
       background:#fff;
       padding:6px;
       box-shadow:var(--shadow);
-      margin-bottom:16px;
+      margin-bottom:18px;
+      position:relative;
     }
 
     .auth-card h1{
       margin:0 0 8px;
-      font-size:3.3rem;
+      font-size:3.4rem;
       line-height:.9;
+      color:var(--dark);
+      position:relative;
     }
 
     .auth-card p{
       margin:0 0 22px;
-      color:var(--brown-soft);
+      color:var(--brown-2);
       line-height:1.7;
+      position:relative;
     }
 
     .app{
       display:grid;
-      grid-template-columns:280px minmax(0,1fr);
+      grid-template-columns:290px minmax(0,1fr);
       min-height:100vh;
     }
 
     .sidebar{
+      background:linear-gradient(180deg,var(--dark),var(--dark-2));
+      color:#fffaf4;
+      padding:18px;
       position:sticky;
       top:0;
       height:100vh;
-      padding:18px;
-      background:rgba(255,250,245,.72);
-      backdrop-filter:blur(16px);
-      border-right:1px solid var(--line);
       overflow:auto;
+      box-shadow:18px 0 50px rgba(52,40,32,.16);
+      z-index:10;
     }
 
     .side-brand{
-      background:rgba(255,255,255,.72);
-      border:1px solid var(--line);
-      border-radius:26px;
-      padding:16px;
-      box-shadow:var(--shadow);
-      margin-bottom:16px;
+      padding:18px;
+      border-radius:28px;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.10);
+      margin-bottom:18px;
     }
 
     .side-brand img{
       width:64px;
       height:64px;
-      border-radius:50%;
       object-fit:contain;
+      border-radius:50%;
       background:#fff;
       padding:5px;
-      margin-bottom:10px;
+      margin-bottom:12px;
     }
 
     .brand{
       font-size:1.85rem;
+      line-height:.92;
       font-weight:700;
-      line-height:.95;
     }
 
-    .side-note{
-      margin-top:6px;
-      font-size:.78rem;
-      color:var(--brown-soft);
+    .side-small{
+      margin-top:8px;
+      color:rgba(255,250,244,.62);
+      font-size:.72rem;
       text-transform:uppercase;
-      letter-spacing:.14em;
+      letter-spacing:.16em;
     }
 
     .nav-tabs{
@@ -149,122 +164,153 @@
 
     .tab-btn{
       width:100%;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.68);
-      color:var(--brown);
-      border-radius:999px;
+      min-height:46px;
+      border:none;
+      border-radius:16px;
+      background:transparent;
+      color:rgba(255,250,244,.76);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
       padding:12px 14px;
       cursor:pointer;
+      transition:.22s ease;
       text-align:left;
-      transition:.2s ease;
+    }
+
+    .tab-btn span{
+      font-weight:700;
+      font-size:.92rem;
+    }
+
+    .tab-btn small{
+      opacity:.62;
+      font-size:.72rem;
     }
 
     .tab-btn:hover,
     .tab-btn.active{
-      background:linear-gradient(135deg,var(--gold-deep),var(--gold));
-      color:white;
-      border-color:transparent;
-      box-shadow:0 14px 28px rgba(174,127,67,.18);
+      background:linear-gradient(135deg,rgba(216,180,123,.28),rgba(184,132,79,.22));
+      color:#fff;
       transform:translateY(-1px);
     }
 
     .logout-btn{
-      margin-top:14px;
       width:100%;
-      border:1px solid rgba(155,63,63,.22);
-      background:#fff5f5;
-      color:var(--danger);
-      border-radius:999px;
-      padding:12px 14px;
+      margin-top:18px;
+      min-height:46px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.06);
+      color:#fff;
       cursor:pointer;
     }
 
     .main{
-      padding:20px;
-      width:min(1480px,100%);
+      padding:22px;
+      width:100%;
+      max-width:1520px;
     }
 
-    .topline{
+    .topbar{
       display:flex;
       justify-content:space-between;
-      align-items:flex-start;
       gap:16px;
+      align-items:flex-start;
       margin-bottom:18px;
     }
 
-    .topline h1{
+    .topbar h1{
       margin:0;
-      font-size:clamp(2.6rem,5vw,4.4rem);
-      line-height:.9;
+      font-size:clamp(2.8rem,5vw,4.7rem);
+      line-height:.88;
+      color:var(--dark);
     }
 
-    .topline p{
+    .topbar p{
       margin:8px 0 0;
-      color:var(--brown-soft);
+      color:var(--brown-2);
       line-height:1.7;
     }
 
-    .pill{
+    .status-pill{
       display:inline-flex;
       align-items:center;
-      justify-content:center;
-      border-radius:999px;
-      padding:9px 13px;
-      background:#fff;
-      border:1px solid var(--line);
-      color:var(--brown-soft);
-      font-size:.78rem;
-      text-transform:uppercase;
-      letter-spacing:.1em;
+      gap:8px;
       white-space:nowrap;
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,253,249,.82);
+      border:1px solid var(--line);
+      color:var(--brown-2);
+      box-shadow:var(--shadow);
+      font-size:.84rem;
+      font-weight:700;
     }
 
-    .grid-4{
+    .status-dot{
+      width:9px;
+      height:9px;
+      border-radius:50%;
+      background:var(--green);
+    }
+
+    .stats{
       display:grid;
       grid-template-columns:repeat(4,minmax(0,1fr));
       gap:14px;
       margin-bottom:18px;
     }
 
-    .stat{
-      background:rgba(255,250,245,.9);
-      border:1px solid var(--line);
-      border-radius:24px;
-      padding:18px;
+    .stat-card,.panel{
+      background:rgba(255,253,249,.86);
+      border:1px solid rgba(255,255,255,.75);
+      border-radius:var(--radius);
       box-shadow:var(--shadow);
     }
 
-    .stat .num{
+    .stat-card{
+      padding:18px;
+    }
+
+    .stat-number{
       font-family:'Cormorant Garamond',serif;
-      font-size:2.7rem;
-      line-height:.9;
+      font-size:2.8rem;
+      line-height:.85;
+      color:var(--dark);
       margin-bottom:8px;
     }
 
-    .stat .label{
-      color:var(--brown-soft);
-      font-size:.9rem;
+    .stat-label{
+      color:var(--brown-2);
+      font-size:.88rem;
+      line-height:1.45;
     }
 
     .panel{
-      background:rgba(255,250,245,.92);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:18px;
+      padding:20px;
       margin-bottom:18px;
     }
 
+    .panel-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:16px;
+    }
+
     .panel h2{
-      margin:0 0 12px;
+      margin:0;
       font-size:2.25rem;
       line-height:.9;
+      color:var(--dark);
     }
 
     .panel p{
-      color:var(--brown-soft);
+      margin:8px 0 0;
+      color:var(--brown-2);
       line-height:1.7;
-      margin:0 0 14px;
       font-size:.94rem;
     }
 
@@ -279,11 +325,11 @@
     label{
       display:grid;
       gap:7px;
-      color:var(--brown-soft);
-      font-size:.78rem;
+      color:var(--muted);
+      font-size:.72rem;
       text-transform:uppercase;
-      letter-spacing:.08em;
-      font-weight:700;
+      letter-spacing:.11em;
+      font-weight:800;
     }
 
     input,textarea,select{
@@ -291,20 +337,20 @@
       border:1px solid var(--line);
       background:#fff;
       color:var(--brown);
-      border-radius:15px;
+      border-radius:14px;
       padding:12px 13px;
       outline:none;
     }
 
     textarea{
-      min-height:94px;
+      min-height:96px;
       resize:vertical;
-      line-height:1.6;
+      line-height:1.65;
     }
 
     input:focus,textarea:focus,select:focus{
-      border-color:var(--gold-deep);
-      box-shadow:0 0 0 4px rgba(174,127,67,.1);
+      border-color:rgba(184,132,79,.55);
+      box-shadow:0 0 0 4px rgba(216,180,123,.14);
     }
 
     .actions{
@@ -315,21 +361,21 @@
     }
 
     .btn{
-      border:none;
-      border-radius:999px;
-      padding:12px 18px;
-      min-height:46px;
+      min-height:44px;
+      padding:11px 16px;
+      border-radius:14px;
       cursor:pointer;
-      font-weight:700;
+      border:none;
+      font-weight:800;
       transition:.2s ease;
     }
 
     .btn:hover{transform:translateY(-1px)}
 
     .btn-primary{
-      background:linear-gradient(135deg,var(--gold-deep),var(--gold));
       color:#fff;
-      box-shadow:0 14px 28px rgba(174,127,67,.18);
+      background:linear-gradient(135deg,var(--gold-2),var(--gold));
+      box-shadow:0 14px 26px rgba(184,132,79,.18);
     }
 
     .btn-secondary{
@@ -340,26 +386,26 @@
 
     .btn-danger{
       background:#fff5f5;
-      border:1px solid rgba(155,63,63,.2);
-      color:var(--danger);
+      border:1px solid rgba(155,63,63,.20);
+      color:var(--red);
     }
 
     .btn-success{
-      background:#f4fbf5;
-      border:1px solid rgba(79,122,87,.2);
-      color:var(--success);
+      background:#f3fbf5;
+      border:1px solid rgba(79,122,87,.20);
+      color:var(--green);
     }
 
     .message{
       margin-top:12px;
+      color:var(--brown-2);
       font-size:.9rem;
       line-height:1.6;
-      color:var(--brown-soft);
       white-space:pre-wrap;
     }
 
-    .message.error{color:var(--danger)}
-    .message.success{color:var(--success)}
+    .message.error{color:var(--red)}
+    .message.success{color:var(--green)}
 
     .list{
       display:grid;
@@ -367,128 +413,139 @@
     }
 
     .item-card{
-      background:rgba(255,255,255,.74);
-      border:1px solid var(--line);
-      border-radius:22px;
-      padding:14px;
       display:grid;
-      grid-template-columns:90px 1fr auto;
+      grid-template-columns:84px 1fr auto;
       gap:14px;
       align-items:start;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:12px;
     }
 
-    .item-card img{
-      width:90px;
-      height:90px;
+    .item-img{
+      width:84px;
+      height:84px;
       object-fit:cover;
       border-radius:16px;
       background:#efe4d8;
       border:1px solid var(--line);
     }
 
-    .item-card h3{
+    .item-title{
       margin:0 0 6px;
-      font-size:1.6rem;
-      line-height:.95;
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.55rem;
+      line-height:.92;
+      color:var(--dark);
     }
 
     .meta{
-      color:var(--brown-soft);
-      font-size:.88rem;
+      color:var(--brown-2);
+      font-size:.86rem;
       line-height:1.6;
       word-break:break-word;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:max-content;
+      padding:6px 9px;
+      border-radius:999px;
+      font-size:.7rem;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      margin-top:6px;
+    }
+
+    .badge.active{
+      background:#f2fbf4;
+      color:var(--green);
+      border:1px solid rgba(79,122,87,.18);
+    }
+
+    .badge.inactive{
+      background:#fff5f5;
+      color:var(--red);
+      border:1px solid rgba(155,63,63,.18);
     }
 
     .mini-actions{
       display:grid;
       gap:8px;
-      min-width:160px;
+      min-width:150px;
     }
 
     .mini-btn{
+      min-height:36px;
+      padding:8px 11px;
+      border-radius:12px;
       border:1px solid var(--line);
       background:#fff;
       color:var(--brown);
-      border-radius:999px;
-      min-height:38px;
-      padding:8px 12px;
       cursor:pointer;
+      font-size:.84rem;
+      font-weight:800;
     }
 
     .mini-btn.danger{
-      color:var(--danger);
       background:#fff5f5;
-      border-color:rgba(155,63,63,.2);
+      color:var(--red);
+      border-color:rgba(155,63,63,.20);
     }
 
     .mini-btn.success{
-      color:var(--success);
-      background:#f4fbf5;
-      border-color:rgba(79,122,87,.2);
+      background:#f3fbf5;
+      color:var(--green);
+      border-color:rgba(79,122,87,.20);
     }
 
-    .editor-layout{
-      display:grid;
-      grid-template-columns:420px minmax(0,1fr);
-      gap:16px;
-      align-items:start;
-    }
-
-    .sticky-panel{
-      position:sticky;
-      top:20px;
-      max-height:calc(100vh - 40px);
-      overflow:auto;
-    }
-
-    .thumb-row{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:10px;
-      margin-top:10px;
-    }
-
-    .thumb{
-      aspect-ratio:4/5;
-      border-radius:16px;
-      background:#efe4d8;
-      border:1px solid var(--line);
-      overflow:hidden;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:var(--brown-soft);
-      font-size:.78rem;
-      text-align:center;
-    }
-
-    .thumb img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-    }
-
-    .preview-frame{
-      width:100%;
-      min-height:78vh;
-      border:none;
-      border-radius:22px;
-      background:#fff;
-      box-shadow:var(--shadow);
-    }
-
-    .customizer-grid{
+    .two-col{
       display:grid;
       grid-template-columns:430px minmax(0,1fr);
       gap:16px;
       align-items:start;
     }
 
+    .sticky-panel{
+      position:sticky;
+      top:22px;
+      max-height:calc(100vh - 44px);
+      overflow:auto;
+    }
+
+    .preview-frame{
+      width:100%;
+      min-height:76vh;
+      border:0;
+      border-radius:22px;
+      background:#fff;
+      box-shadow:var(--shadow);
+    }
+
+    .compact-card{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fff;
+      padding:12px;
+      margin-bottom:10px;
+    }
+
+    .compact-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+
     .preview-stage{
       position:relative;
       width:100%;
+      min-height:470px;
       aspect-ratio:.92/1;
-      min-height:460px;
       border-radius:24px;
       overflow:hidden;
       background:linear-gradient(180deg,#f5f3f1,#ebe8e3);
@@ -500,20 +557,13 @@
     .preview-layer{
       position:absolute;
       max-width:none;
-      user-select:none;
       cursor:grab;
+      user-select:none;
       transform-origin:center center;
       filter:drop-shadow(0 18px 26px rgba(0,0,0,.12));
     }
 
     .preview-layer:active{cursor:grabbing}
-
-    .preview-help{
-      color:var(--brown-soft);
-      font-size:.86rem;
-      line-height:1.6;
-      margin-top:10px;
-    }
 
     .mini-grid{
       display:grid;
@@ -521,48 +571,27 @@
       gap:10px;
     }
 
-    .variant-card{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.76);
-      border-radius:18px;
-      padding:12px;
-      margin-bottom:12px;
-    }
-
-    .variant-card h3{
-      margin:0 0 10px;
-      font-size:1.55rem;
-    }
-
-    .variant-header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      margin-bottom:10px;
-    }
-
     .swatch{
       width:28px;
       height:28px;
       border-radius:50%;
-      border:1px solid rgba(0,0,0,.12);
-      box-shadow:0 0 0 3px rgba(255,255,255,.8);
+      border:1px solid rgba(0,0,0,.10);
+      box-shadow:0 0 0 3px rgba(255,255,255,.85);
+      flex:0 0 auto;
     }
 
     .json-box{
-      font-family:ui-monospace, SFMono-Regular, Menlo, monospace;
       min-height:180px;
+      font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
       font-size:.82rem;
     }
 
     .order-card{
-      background:rgba(255,255,255,.74);
+      background:#fff;
       border:1px solid var(--line);
       border-radius:22px;
       padding:16px;
-      display:grid;
-      gap:10px;
+      box-shadow:var(--shadow);
     }
 
     .order-head{
@@ -570,28 +599,31 @@
       justify-content:space-between;
       gap:12px;
       flex-wrap:wrap;
+      margin-bottom:10px;
     }
 
     .order-head h3{
       margin:0;
+      color:var(--dark);
       font-size:1.8rem;
+      line-height:.95;
     }
 
     .order-items{
       display:grid;
       gap:8px;
+      padding-top:12px;
       border-top:1px solid var(--line);
-      padding-top:10px;
     }
 
     .order-item{
-      background:#fff;
       border:1px solid var(--line);
       border-radius:16px;
       padding:10px;
-      color:var(--brown-soft);
+      color:var(--brown-2);
       line-height:1.6;
       font-size:.88rem;
+      background:var(--card);
     }
 
     @media(max-width:1100px){
@@ -599,23 +631,37 @@
       .sidebar{
         position:relative;
         height:auto;
-        border-right:none;
-        border-bottom:1px solid var(--line);
       }
-      .nav-tabs{grid-template-columns:repeat(2,1fr)}
-      .editor-layout,.customizer-grid{grid-template-columns:1fr}
-      .sticky-panel{position:relative;top:auto;max-height:none}
-      .grid-4{grid-template-columns:repeat(2,1fr)}
+      .nav-tabs{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+      .two-col{grid-template-columns:1fr}
+      .sticky-panel{
+        position:relative;
+        top:auto;
+        max-height:none;
+      }
+      .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
 
     @media(max-width:760px){
       .main{padding:12px}
+      .topbar{flex-direction:column}
+      .stats{grid-template-columns:1fr}
       .form-grid,.mini-grid{grid-template-columns:1fr}
-      .grid-4{grid-template-columns:1fr}
       .nav-tabs{grid-template-columns:1fr}
-      .item-card{grid-template-columns:70px 1fr}
-      .item-card img{width:70px;height:70px}
-      .mini-actions{grid-column:1/-1}
+      .item-card{
+        grid-template-columns:70px 1fr;
+      }
+      .item-img{
+        width:70px;
+        height:70px;
+      }
+      .mini-actions{
+        grid-column:1/-1;
+        grid-template-columns:1fr 1fr;
+        min-width:0;
+      }
       .actions{flex-direction:column}
       .btn{width:100%}
     }
@@ -627,7 +673,7 @@
     <div class="auth-card">
       <img src="images/logo.jpg" class="auth-logo" alt="Maison Doucette">
       <h1>Admin Maison</h1>
-      <p>Intră cu emailul și parola din Supabase ca să administrezi produsele, paginile, customizerele și comenzile.</p>
+      <p>Panoul privat pentru produse, pagini de detalii, customizere și comenzi.</p>
 
       <form id="loginForm">
         <div class="form-grid">
@@ -656,97 +702,75 @@
       <div class="side-brand">
         <img src="images/logo.jpg" alt="Maison Doucette">
         <div class="brand">Maison Doucette</div>
-        <div class="side-note">admin dashboard</div>
+        <div class="side-small">private admin</div>
       </div>
 
       <div class="nav-tabs">
-        <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
-        <button class="tab-btn" data-tab="products">Produse</button>
-        <button class="tab-btn" data-tab="details">Pagini detalii</button>
-        <button class="tab-btn" data-tab="customizers">Customizere</button>
-        <button class="tab-btn" data-tab="orders">Comenzi</button>
+        <button class="tab-btn active" data-tab="dashboard"><span>Dashboard</span><small>01</small></button>
+        <button class="tab-btn" data-tab="products"><span>Produse</span><small>02</small></button>
+        <button class="tab-btn" data-tab="details"><span>Detalii</span><small>03</small></button>
+        <button class="tab-btn" data-tab="customizers"><span>Customizere</span><small>04</small></button>
+        <button class="tab-btn" data-tab="orders"><span>Comenzi</span><small>05</small></button>
       </div>
 
       <button class="logout-btn" id="logoutBtn" type="button">Logout</button>
     </aside>
 
     <main class="main">
-      <div class="topline">
+      <div class="topbar">
         <div>
           <h1 id="pageTitle">Dashboard</h1>
           <p id="pageSubtitle">Tot ce ține de administrarea Maison Doucette într-un singur loc.</p>
         </div>
-        <div class="pill" id="sessionPill">conectat</div>
+        <div class="status-pill"><span class="status-dot"></span> Conectat</div>
       </div>
 
       <section id="tab-dashboard" class="tab-panel">
-        <div class="grid-4">
-          <div class="stat">
-            <div class="num" id="statProducts">0</div>
-            <div class="label">Produse în homepage</div>
-          </div>
-          <div class="stat">
-            <div class="num" id="statDetails">0</div>
-            <div class="label">Pagini detalii</div>
-          </div>
-          <div class="stat">
-            <div class="num" id="statCustomizers">0</div>
-            <div class="label">Customizere</div>
-          </div>
-          <div class="stat">
-            <div class="num" id="statOrders">0</div>
-            <div class="label">Comenzi</div>
-          </div>
+        <div class="stats">
+          <div class="stat-card"><div class="stat-number" id="statProducts">0</div><div class="stat-label">Produse în homepage</div></div>
+          <div class="stat-card"><div class="stat-number" id="statDetails">0</div><div class="stat-label">Pagini de detalii</div></div>
+          <div class="stat-card"><div class="stat-number" id="statCustomizers">0</div><div class="stat-label">Customizere</div></div>
+          <div class="stat-card"><div class="stat-number" id="statOrders">0</div><div class="stat-label">Comenzi</div></div>
         </div>
 
         <div class="panel">
-          <h2>Ce faci de aici</h2>
-          <p>Produse = cardurile din homepage. Pagini detalii = conținutul pentru `product-details.html`. Customizere = paginile dinamice de personalizare pentru `customizer.html`. Comenzi = comenzile salvate în Supabase.</p>
+          <div class="panel-head">
+            <div>
+              <h2>Control center</h2>
+              <p>Alege ce vrei să modifici: carduri de produse, pagini de detalii, personalizatoare sau comenzi.</p>
+            </div>
+          </div>
+
           <div class="actions">
-            <button class="btn btn-primary" data-jump="products">Gestionează produse</button>
-            <button class="btn btn-secondary" data-jump="details">Editează detalii</button>
-            <button class="btn btn-secondary" data-jump="customizers">Editează customizere</button>
-            <button class="btn btn-secondary" data-jump="orders">Vezi comenzi</button>
+            <button class="btn btn-primary" data-jump="products">Produse</button>
+            <button class="btn btn-secondary" data-jump="details">Pagini detalii</button>
+            <button class="btn btn-secondary" data-jump="customizers">Customizere</button>
+            <button class="btn btn-secondary" data-jump="orders">Comenzi</button>
           </div>
         </div>
       </section>
 
       <section id="tab-products" class="tab-panel hidden">
         <div class="panel">
-          <h2>Adaugă produs în homepage</h2>
-          <p>Acestea sunt cardurile de produs din secțiunea de colecție.</p>
+          <div class="panel-head">
+            <div>
+              <h2>Produse homepage</h2>
+              <p>Acestea sunt cardurile care apar în colecția de pe site.</p>
+            </div>
+          </div>
 
           <form id="productForm">
             <div class="form-grid">
-              <label>
-                Nume produs
-                <input id="productName" required placeholder="Ex: Iepuraș">
-              </label>
-
-              <label>
-                Text / preț
-                <input id="productText" required placeholder="Ex: De la 45 RON">
-              </label>
-
-              <label class="full">
-                Descriere scurtă
-                <textarea id="productDescription" required></textarea>
-              </label>
-
-              <label class="full">
-                Link pagină
-                <input id="productLink" required placeholder="Ex: product-details.html?slug=iepuras">
-              </label>
-
-              <label class="full">
-                Imagine
-                <input id="productImageFile" type="file" accept="image/*">
-              </label>
+              <label>Nume produs <input id="productName" required placeholder="Ex: Iepuraș"></label>
+              <label>Text / preț <input id="productText" required placeholder="Ex: De la 45 RON"></label>
+              <label class="full">Descriere <textarea id="productDescription" required></textarea></label>
+              <label class="full">Link <input id="productLink" required placeholder="Ex: product-details.html?slug=iepuras"></label>
+              <label class="full">Imagine <input id="productImageFile" type="file" accept="image/*"></label>
             </div>
 
             <div class="actions">
               <button class="btn btn-primary" type="submit">Salvează produs</button>
-              <button class="btn btn-secondary" type="button" id="reloadProductsBtn">Reîncarcă lista</button>
+              <button class="btn btn-secondary" type="button" id="reloadProductsBtn">Reîncarcă</button>
             </div>
           </form>
 
@@ -754,111 +778,57 @@
         </div>
 
         <div class="panel">
-          <h2>Produse existente</h2>
+          <div class="panel-head"><h2>Lista produselor</h2></div>
           <div id="productsList" class="list"></div>
         </div>
       </section>
 
       <section id="tab-details" class="tab-panel hidden">
-        <div class="editor-layout">
+        <div class="two-col">
           <aside class="panel sticky-panel">
-            <h2>Editor pagină detalii</h2>
-            <p>Salvează conținutul pentru `product-details.html?slug=...`.</p>
+            <div class="panel-head">
+              <div>
+                <h2>Pagini detalii</h2>
+                <p>Editezi conținutul pentru `product-details.html?slug=...`.</p>
+              </div>
+            </div>
 
             <div class="actions">
-              <button class="btn btn-primary" id="newDetailBtn" type="button">Produs nou</button>
+              <button class="btn btn-primary" id="newDetailBtn" type="button">Nou</button>
               <button class="btn btn-secondary" id="saveDetailBtn" type="button">Salvează</button>
               <button class="btn btn-secondary" id="reloadDetailsBtn" type="button">Reîncarcă</button>
             </div>
 
             <div id="detailsMessage" class="message"></div>
 
-            <h3>Produse existente</h3>
+            <h3>Existente</h3>
             <div id="detailsList" class="list"></div>
 
             <div class="form-grid" style="margin-top:16px;">
-              <label>
-                Titlu
-                <input id="detailTitle">
-              </label>
-
-              <label>
-                Slug
-                <input id="detailSlug">
-              </label>
-
-              <label>
-                Preț de bază
-                <input id="detailBasePrice" type="number" min="0" step="1">
-              </label>
-
-              <label>
-                Activ
-                <select id="detailActive">
-                  <option value="true">Da</option>
-                  <option value="false">Nu</option>
-                </select>
-              </label>
-
-              <label class="full">
-                Paragraf 1
-                <textarea id="detailP1"></textarea>
-              </label>
-
-              <label class="full">
-                Paragraf 2
-                <textarea id="detailP2"></textarea>
-              </label>
-
-              <label class="full">
-                Detail 1
-                <textarea id="detailD1"></textarea>
-              </label>
-
-              <label class="full">
-                Detail 2
-                <textarea id="detailD2"></textarea>
-              </label>
-
-              <label class="full">
-                Detail 3
-                <textarea id="detailD3"></textarea>
-              </label>
-
-              <label>
-                Text buton
-                <input id="detailButtonText" placeholder="Personalizează">
-              </label>
-
-              <label>
-                Link customizare
-                <input id="detailButtonUrl" placeholder="customizer.html?slug=iepuras">
-              </label>
-
-              <label>
-                Imagine 1 URL
-                <input id="detailImage1">
-              </label>
-
-              <label>
-                Imagine 2 URL
-                <input id="detailImage2">
-              </label>
-
-              <label class="full">
-                Imagine 3 URL
-                <input id="detailImage3">
-              </label>
+              <label>Titlu <input id="detailTitle"></label>
+              <label>Slug <input id="detailSlug"></label>
+              <label>Preț de bază <input id="detailBasePrice" type="number" min="0" step="1"></label>
+              <label>Activ <select id="detailActive"><option value="true">Da</option><option value="false">Nu</option></select></label>
+              <label class="full">Paragraf 1 <textarea id="detailP1"></textarea></label>
+              <label class="full">Paragraf 2 <textarea id="detailP2"></textarea></label>
+              <label class="full">Detail 1 <textarea id="detailD1"></textarea></label>
+              <label class="full">Detail 2 <textarea id="detailD2"></textarea></label>
+              <label class="full">Detail 3 <textarea id="detailD3"></textarea></label>
+              <label>Text buton <input id="detailButtonText" placeholder="Personalizează"></label>
+              <label>Link customizare <input id="detailButtonUrl" placeholder="customizer.html?slug=iepuras"></label>
+              <label>Imagine 1 URL <input id="detailImage1"></label>
+              <label>Imagine 2 URL <input id="detailImage2"></label>
+              <label class="full">Imagine 3 URL <input id="detailImage3"></label>
             </div>
-
-            <div class="thumb-row" id="detailThumbs"></div>
           </aside>
 
           <main class="panel">
-            <h2>Preview detalii</h2>
-            <p>Preview-ul se deschide în iframe pe baza slugului.</p>
-            <div class="actions">
-              <a class="btn btn-primary" id="openDetailPreview" target="_blank" href="#">Deschide pagina</a>
+            <div class="panel-head">
+              <div>
+                <h2>Preview</h2>
+                <p>Se încarcă pagina publică de detalii pe baza slugului.</p>
+              </div>
+              <a class="btn btn-primary" id="openDetailPreview" target="_blank" href="#">Deschide</a>
             </div>
             <iframe id="detailPreviewFrame" class="preview-frame"></iframe>
           </main>
@@ -866,77 +836,43 @@
       </section>
 
       <section id="tab-customizers" class="tab-panel hidden">
-        <div class="customizer-grid">
+        <div class="two-col">
           <aside class="panel sticky-panel">
-            <h2>Editor customizer</h2>
-            <p>Configurezi pagina `customizer.html?slug=...`. Ai drag & drop real pe preview.</p>
+            <div class="panel-head">
+              <div>
+                <h2>Customizer editor</h2>
+                <p>Variantă premium cu poziții editabile și JSON.</p>
+              </div>
+            </div>
 
             <div class="actions">
-              <button class="btn btn-primary" id="newCustomizerBtn" type="button">Customizer nou</button>
+              <button class="btn btn-primary" id="newCustomizerBtn" type="button">Nou</button>
               <button class="btn btn-secondary" id="saveCustomizerBtn" type="button">Salvează</button>
               <button class="btn btn-secondary" id="reloadCustomizersBtn" type="button">Reîncarcă</button>
             </div>
 
             <div id="customizerMessage" class="message"></div>
 
-            <h3>Customizere existente</h3>
+            <h3>Existente</h3>
             <div id="customizersList" class="list"></div>
 
             <div class="form-grid" style="margin-top:16px;">
-              <label>
-                Titlu produs
-                <input id="custTitle">
-              </label>
-
-              <label>
-                Slug
-                <input id="custSlug">
-              </label>
-
-              <label>
-                Preț de bază
-                <input id="custBasePrice" type="number" min="0" step="1">
-              </label>
-
-              <label>
-                Activ
-                <select id="custActive">
-                  <option value="true">Da</option>
-                  <option value="false">Nu</option>
-                </select>
-              </label>
-
-              <label class="full">
-                Titlu preview
-                <input id="custPreviewTitle" placeholder="Iepurașul tău">
-              </label>
-
-              <label class="full">
-                Subtitlu preview
-                <input id="custPreviewSubtitle" placeholder="Creează produsul un detaliu după altul.">
-              </label>
+              <label>Titlu <input id="custTitle"></label>
+              <label>Slug <input id="custSlug"></label>
+              <label>Preț bază <input id="custBasePrice" type="number" min="0" step="1"></label>
+              <label>Activ <select id="custActive"><option value="true">Da</option><option value="false">Nu</option></select></label>
+              <label class="full">Titlu preview <input id="custPreviewTitle" placeholder="Iepurașul tău"></label>
+              <label class="full">Subtitlu preview <input id="custPreviewSubtitle"></label>
             </div>
 
-            <h3>Variantă selectată</h3>
+            <h3>Layer selectat</h3>
             <p id="selectedLayerLabel">Nicio imagine selectată.</p>
 
             <div class="mini-grid">
-              <label>
-                X %
-                <input id="layerX" type="number" step="1">
-              </label>
-              <label>
-                Y %
-                <input id="layerY" type="number" step="1">
-              </label>
-              <label>
-                Width px
-                <input id="layerW" type="number" step="1">
-              </label>
-              <label>
-                Rotate
-                <input id="layerR" type="number" step="1">
-              </label>
+              <label>X % <input id="layerX" type="number" step="1"></label>
+              <label>Y % <input id="layerY" type="number" step="1"></label>
+              <label>Width px <input id="layerW" type="number" step="1"></label>
+              <label>Rotate <input id="layerR" type="number" step="1"></label>
             </div>
 
             <div class="actions">
@@ -946,40 +882,47 @@
 
           <main>
             <div class="panel">
-              <h2>Preview drag & drop</h2>
-              <p>Click pe imagine, apoi trage cu mouse-ul. Poți schimba și dimensiunea/rotația din câmpuri.</p>
+              <div class="panel-head">
+                <div>
+                  <h2>Preview drag & drop</h2>
+                  <p>Selectează o imagine din variante, apoi mut-o în preview.</p>
+                </div>
+              </div>
               <div class="preview-stage" id="custPreviewStage"></div>
-              <div class="preview-help">Sfat: întâi selectează o variantă din listele de mai jos, apoi o poți muta în preview.</div>
             </div>
 
             <div class="panel">
-              <h2>Baze / culori principale</h2>
-              <p>Maxim recomandat: 8 variante de bază.</p>
-
-              <div class="actions">
+              <div class="panel-head">
+                <div>
+                  <h2>Baze / culori</h2>
+                  <p>Maxim recomandat: 8 variante.</p>
+                </div>
                 <button class="btn btn-primary" id="addBaseVariantBtn" type="button">Adaugă bază</button>
               </div>
-
               <div id="baseVariantsList"></div>
             </div>
 
             <div class="panel">
-              <h2>Opțiuni / accesorii</h2>
-              <p>Maxim recomandat: 6 opțiuni, iar fiecare opțiune poate avea 7-8 variante.</p>
-
-              <div class="actions">
+              <div class="panel-head">
+                <div>
+                  <h2>Opțiuni / accesorii</h2>
+                  <p>Maxim recomandat: 6 opțiuni, fiecare cu variante proprii.</p>
+                </div>
                 <button class="btn btn-primary" id="addOptionBtn" type="button">Adaugă opțiune</button>
               </div>
-
               <div id="optionsList"></div>
             </div>
 
             <div class="panel">
-              <h2>JSON avansat</h2>
-              <p>Îl poți folosi pentru verificare sau editare rapidă.</p>
+              <div class="panel-head">
+                <div>
+                  <h2>JSON avansat</h2>
+                  <p>Pentru editări rapide sau verificare.</p>
+                </div>
+              </div>
               <textarea id="customizerJson" class="json-box"></textarea>
               <div class="actions">
-                <button class="btn btn-secondary" id="loadJsonBtn" type="button">Încarcă JSON în editor</button>
+                <button class="btn btn-secondary" id="loadJsonBtn" type="button">Încarcă JSON</button>
               </div>
             </div>
           </main>
@@ -988,13 +931,13 @@
 
       <section id="tab-orders" class="tab-panel hidden">
         <div class="panel">
-          <h2>Comenzi</h2>
-          <p>Aici apar comenzile salvate în tabela `orders`.</p>
-
-          <div class="actions">
-            <button class="btn btn-secondary" id="reloadOrdersBtn" type="button">Reîncarcă comenzile</button>
+          <div class="panel-head">
+            <div>
+              <h2>Comenzi</h2>
+              <p>Comenzile salvate în tabela `orders`.</p>
+            </div>
+            <button class="btn btn-secondary" id="reloadOrdersBtn" type="button">Reîncarcă</button>
           </div>
-
           <div id="ordersMessage" class="message"></div>
         </div>
 
@@ -1007,10 +950,10 @@
   <script src="supabase-config.js"></script>
 
   <script>
-   const db = window.supabase.createClient({
-  supabaseUrl: window.SUPABASE_URL,
-  supabaseKey: window.SUPABASE_ANON_KEY
-});
+    const db = window.supabase.createClient(
+      window.SUPABASE_URL,
+      window.SUPABASE_ANON_KEY
+    );
 
     const PRODUCTS_BUCKET = 'products';
 
@@ -1026,16 +969,16 @@
     const loginBtn = document.getElementById('loginBtn');
     const authMessage = document.getElementById('authMessage');
     const logoutBtn = document.getElementById('logoutBtn');
-
     const pageTitle = document.getElementById('pageTitle');
     const pageSubtitle = document.getElementById('pageSubtitle');
 
-    function msg(el, text, type='') {
+    function showMessage(el, text, type = '') {
+      if (!el) return;
       el.textContent = text || '';
       el.className = `message ${type}`;
     }
 
-    function escapeHtml(value='') {
+    function escapeHtml(value = '') {
       return String(value)
         .replaceAll('&','&amp;')
         .replaceAll('<','&lt;')
@@ -1044,15 +987,19 @@
         .replaceAll("'","&#039;");
     }
 
-    function slugify(value) {
+    function normalizeRomanian(value) {
       return String(value || '')
+        .replace(/[ăâĂÂ]/g,'a')
+        .replace(/[îÎ]/g,'i')
+        .replace(/[șşȘŞ]/g,'s')
+        .replace(/[țţȚŢ]/g,'t');
+    }
+
+    function slugify(value) {
+      return normalizeRomanian(value)
         .toLowerCase()
         .normalize('NFD')
         .replace(/[\\u0300-\\u036f]/g,'')
-        .replace(/[ăâ]/g,'a')
-        .replace(/[î]/g,'i')
-        .replace(/[șş]/g,'s')
-        .replace(/[țţ]/g,'t')
         .replace(/[^a-z0-9]+/g,'-')
         .replace(/^-+|-+$/g,'');
     }
@@ -1080,7 +1027,7 @@
         panel.classList.toggle('hidden', panel.id !== `tab-${tab}`);
       });
 
-      const titles = {
+      const data = {
         dashboard:['Dashboard','Tot ce ține de administrarea Maison Doucette într-un singur loc.'],
         products:['Produse','Administrează cardurile de produse din homepage.'],
         details:['Pagini detalii','Editează paginile dinamice de detalii pentru produse.'],
@@ -1088,8 +1035,8 @@
         orders:['Comenzi','Vezi comenzile și datele clienților.']
       };
 
-      pageTitle.textContent = titles[tab][0];
-      pageSubtitle.textContent = titles[tab][1];
+      pageTitle.textContent = data[tab][0];
+      pageSubtitle.textContent = data[tab][1];
 
       if (tab === 'dashboard') loadStats();
       if (tab === 'products') loadProducts();
@@ -1106,26 +1053,28 @@
       btn.addEventListener('click', () => switchTab(btn.dataset.jump));
     });
 
-    loginForm.addEventListener('submit', async e => {
-      e.preventDefault();
+    loginForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
       loginBtn.disabled = true;
-      msg(authMessage, 'Se verifică datele...', '');
+      showMessage(authMessage, 'Se verifică datele...');
 
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
 
-      const { data, error } = await db.auth.signInWithPassword({ email, password });
+      try {
+        const { data, error } = await db.auth.signInWithPassword({ email, password });
 
-      if (error) {
-        msg(authMessage, error.message, 'error');
+        if (error) throw error;
+        if (!data.session) throw new Error('Nu s-a putut crea sesiunea.');
+
+        showMessage(authMessage, 'Autentificare reușită.', 'success');
+        showAdmin();
+        await loadInitialData();
+      } catch (error) {
+        showMessage(authMessage, error.message || 'Autentificarea a eșuat.', 'error');
+      } finally {
         loginBtn.disabled = false;
-        return;
       }
-
-      msg(authMessage, 'Autentificare reușită.', 'success');
-      showAdmin();
-      await loadAllInitial();
-      loginBtn.disabled = false;
     });
 
     logoutBtn.addEventListener('click', async () => {
@@ -1134,16 +1083,18 @@
     });
 
     async function boot() {
-      const { data } = await db.auth.getSession();
-      if (data?.session) {
-        showAdmin();
-        await loadAllInitial();
-      } else {
+      const { data, error } = await db.auth.getSession();
+
+      if (error || !data.session) {
         showAuth();
+        return;
       }
+
+      showAdmin();
+      await loadInitialData();
     }
 
-    async function loadAllInitial() {
+    async function loadInitialData() {
       await loadStats();
       await loadProducts();
       await loadDetails();
@@ -1178,22 +1129,28 @@
     }
 
     async function getNextSortOrder() {
-      const { data } = await db.from('products').select('sort_order').order('sort_order', { ascending:false }).limit(1);
-      if (!data?.length) return 0;
+      const { data, error } = await db
+        .from('products')
+        .select('sort_order')
+        .order('sort_order', { ascending:false })
+        .limit(1);
+
+      if (error || !data || !data.length) return 0;
       return Number(data[0].sort_order || 0) + 1;
     }
 
-    document.getElementById('productForm').addEventListener('submit', async e => {
-      e.preventDefault();
-      const productsMessage = document.getElementById('productsMessage');
-      msg(productsMessage, 'Se salvează produsul...');
+    document.getElementById('productForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const message = document.getElementById('productsMessage');
+      showMessage(message, 'Se salvează produsul...');
 
       try {
         const name = document.getElementById('productName').value.trim();
         const text = document.getElementById('productText').value.trim();
         const description = document.getElementById('productDescription').value.trim();
         const link = document.getElementById('productLink').value.trim();
-        const file = document.getElementById('productImageFile').files?.[0];
+        const file = document.getElementById('productImageFile').files?.[0] || null;
 
         const image = await uploadProductImage(file, name);
         const sort_order = await getNextSortOrder();
@@ -1210,12 +1167,12 @@
 
         if (error) throw error;
 
-        e.target.reset();
-        msg(productsMessage, 'Produs salvat.', 'success');
+        event.target.reset();
+        showMessage(message, 'Produsul a fost salvat.', 'success');
         await loadProducts();
         await loadStats();
-      } catch (err) {
-        msg(productsMessage, err.message, 'error');
+      } catch (error) {
+        showMessage(message, error.message || 'Nu am putut salva produsul.', 'error');
       }
     });
 
@@ -1223,7 +1180,7 @@
 
     async function loadProducts() {
       const list = document.getElementById('productsList');
-      list.innerHTML = 'Se încarcă...';
+      list.innerHTML = '<div class="meta">Se încarcă...</div>';
 
       const { data, error } = await db
         .from('products')
@@ -1232,29 +1189,31 @@
         .order('created_at', { ascending:true });
 
       if (error) {
-        list.innerHTML = 'Nu am putut încărca produsele.';
+        list.innerHTML = '<div class="meta">Nu am putut încărca produsele.</div>';
         return;
       }
 
-      if (!data?.length) {
+      if (!data || !data.length) {
         list.innerHTML = '<div class="meta">Nu există produse.</div>';
         return;
       }
 
       list.innerHTML = data.map(product => `
         <div class="item-card">
-          <img src="${escapeHtml(product.image || '')}" alt="">
+          <img class="item-img" src="${escapeHtml(product.image || 'images/placeholder-product.jpg')}" alt="">
           <div>
-            <h3>${escapeHtml(product.name || 'Produs')}</h3>
+            <h3 class="item-title">${escapeHtml(product.name || 'Produs')}</h3>
             <div class="meta">
               <strong>${escapeHtml(product.text || '')}</strong><br>
               ${escapeHtml(product.description || '')}<br>
-              Link: ${escapeHtml(product.link || '')}<br>
+              ${escapeHtml(product.link || '')}
+            </div>
+            <div class="badge ${product.is_visible === false ? 'inactive' : 'active'}">
               ${product.is_visible === false ? 'Ascuns' : 'Vizibil'}
             </div>
           </div>
           <div class="mini-actions">
-            <button class="mini-btn" onclick="toggleProduct('${product.id}', ${product.is_visible === false ? 'true' : 'false'})">
+            <button class="mini-btn ${product.is_visible === false ? 'success' : ''}" onclick="toggleProduct('${product.id}', ${product.is_visible === false ? 'true' : 'false'})">
               ${product.is_visible === false ? 'Afișează' : 'Ascunde'}
             </button>
             <button class="mini-btn danger" onclick="deleteProduct('${product.id}')">Șterge</button>
@@ -1295,34 +1254,29 @@
       is_active: document.getElementById('detailActive')
     };
 
-    detailInputs.title.addEventListener('input', () => {
-      if (!detailInputs.slug.value.trim()) detailInputs.slug.value = slugify(detailInputs.title.value);
-      updateDetailPreview();
-    });
-
-    Object.values(detailInputs).forEach(input => {
-      input.addEventListener('input', updateDetailPreview);
-      input.addEventListener('change', updateDetailPreview);
-    });
-
-    document.getElementById('newDetailBtn').addEventListener('click', resetDetailForm);
-    document.getElementById('saveDetailBtn').addEventListener('click', saveDetail);
-    document.getElementById('reloadDetailsBtn').addEventListener('click', loadDetails);
-
     function resetDetailForm() {
       currentDetailId = null;
-      Object.values(detailInputs).forEach(input => input.value = '');
+
+      Object.values(detailInputs).forEach(input => {
+        input.value = '';
+      });
+
       detailInputs.is_active.value = 'true';
       updateDetailPreview();
-      msg(document.getElementById('detailsMessage'), 'Produs nou pregătit.');
+      showMessage(document.getElementById('detailsMessage'), 'Pagină nouă pregătită.');
     }
 
     function fillDetailForm(product) {
       currentDetailId = product.id;
+
       Object.keys(detailInputs).forEach(key => {
-        if (key === 'is_active') detailInputs[key].value = String(product[key] ?? true);
-        else detailInputs[key].value = product[key] ?? '';
+        if (key === 'is_active') {
+          detailInputs[key].value = String(product[key] ?? true);
+        } else {
+          detailInputs[key].value = product[key] ?? '';
+        }
       });
+
       updateDetailPreview();
     }
 
@@ -1345,6 +1299,22 @@
       };
     }
 
+    detailInputs.title.addEventListener('input', () => {
+      if (!detailInputs.slug.value.trim()) {
+        detailInputs.slug.value = slugify(detailInputs.title.value);
+      }
+      updateDetailPreview();
+    });
+
+    Object.values(detailInputs).forEach(input => {
+      input.addEventListener('input', updateDetailPreview);
+      input.addEventListener('change', updateDetailPreview);
+    });
+
+    document.getElementById('newDetailBtn').addEventListener('click', resetDetailForm);
+    document.getElementById('saveDetailBtn').addEventListener('click', saveDetail);
+    document.getElementById('reloadDetailsBtn').addEventListener('click', loadDetails);
+
     async function loadDetails() {
       const list = document.getElementById('detailsList');
       list.innerHTML = '<div class="meta">Se încarcă...</div>';
@@ -1359,17 +1329,18 @@
         return;
       }
 
-      if (!data?.length) {
-        list.innerHTML = '<div class="meta">Nu există pagini de detalii.</div>';
+      if (!data || !data.length) {
+        list.innerHTML = '<div class="meta">Nu există pagini.</div>';
         return;
       }
 
       list.innerHTML = data.map(product => `
-        <div class="variant-card">
-          <div class="variant-header">
+        <div class="compact-card">
+          <div class="compact-head">
             <div>
               <strong>${escapeHtml(product.title || '(fără titlu)')}</strong>
-              <div class="meta">/${escapeHtml(product.slug || '')} ${product.is_active ? '• activ' : '• inactiv'}</div>
+              <div class="meta">/${escapeHtml(product.slug || '')}</div>
+              <div class="badge ${product.is_active ? 'active' : 'inactive'}">${product.is_active ? 'Activ' : 'Inactiv'}</div>
             </div>
             <button class="mini-btn" onclick="openDetail('${product.id}')">Editează</button>
           </div>
@@ -1378,36 +1349,51 @@
     }
 
     async function openDetail(id) {
-      const { data, error } = await db.from('atelier_products').select('*').eq('id', id).single();
-      if (error) return;
+      const { data, error } = await db
+        .from('atelier_products')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error || !data) return;
       fillDetailForm(data);
     }
 
     async function saveDetail() {
-      const detailsMessage = document.getElementById('detailsMessage');
-      msg(detailsMessage, 'Se salvează...');
+      const message = document.getElementById('detailsMessage');
+      showMessage(message, 'Se salvează...');
 
       const payload = getDetailPayload();
 
       if (!payload.title || !payload.slug) {
-        msg(detailsMessage, 'Titlul și slug-ul sunt obligatorii.', 'error');
+        showMessage(message, 'Titlul și slug-ul sunt obligatorii.', 'error');
         return;
       }
 
       let response;
+
       if (currentDetailId) {
-        response = await db.from('atelier_products').update(payload).eq('id', currentDetailId).select().single();
+        response = await db
+          .from('atelier_products')
+          .update(payload)
+          .eq('id', currentDetailId)
+          .select()
+          .single();
       } else {
-        response = await db.from('atelier_products').insert(payload).select().single();
+        response = await db
+          .from('atelier_products')
+          .insert(payload)
+          .select()
+          .single();
       }
 
       if (response.error) {
-        msg(detailsMessage, response.error.message, 'error');
+        showMessage(message, response.error.message, 'error');
         return;
       }
 
       currentDetailId = response.data.id;
-      msg(detailsMessage, 'Pagina de detalii a fost salvată.', 'success');
+      showMessage(message, 'Pagina a fost salvată.', 'success');
       await loadDetails();
       await loadStats();
       updateDetailPreview();
@@ -1415,16 +1401,10 @@
 
     function updateDetailPreview() {
       const payload = getDetailPayload();
-      const thumbs = document.getElementById('detailThumbs');
+      const url = payload.slug ? `product-details.html?slug=${encodeURIComponent(payload.slug)}` : 'about:blank';
 
-      thumbs.innerHTML = [payload.image_1,payload.image_2,payload.image_3].map((src,i) => `
-        <div class="thumb">${src ? `<img src="${escapeHtml(src)}">` : `Imagine ${i+1}`}</div>
-      `).join('');
-
-      const url = payload.slug ? `product-details.html?slug=${encodeURIComponent(payload.slug)}` : '#';
-
-      document.getElementById('openDetailPreview').href = url;
-      document.getElementById('detailPreviewFrame').src = url === '#' ? 'about:blank' : url;
+      document.getElementById('openDetailPreview').href = payload.slug ? url : '#';
+      document.getElementById('detailPreviewFrame').src = url;
     }
 
     window.openDetail = openDetail;
@@ -1438,26 +1418,8 @@
       previewSubtitle: document.getElementById('custPreviewSubtitle')
     };
 
-    custInputs.title.addEventListener('input', () => {
-      if (!custInputs.slug.value.trim()) custInputs.slug.value = slugify(custInputs.title.value);
-      syncCustomizerJson();
-    });
-
-    Object.values(custInputs).forEach(input => {
-      input.addEventListener('input', syncCustomizerJson);
-      input.addEventListener('change', syncCustomizerJson);
-    });
-
-    document.getElementById('newCustomizerBtn').addEventListener('click', resetCustomizer);
-    document.getElementById('saveCustomizerBtn').addEventListener('click', saveCustomizer);
-    document.getElementById('reloadCustomizersBtn').addEventListener('click', loadCustomizers);
-    document.getElementById('addBaseVariantBtn').addEventListener('click', addBaseVariant);
-    document.getElementById('addOptionBtn').addEventListener('click', addOption);
-    document.getElementById('loadJsonBtn').addEventListener('click', loadJsonToEditor);
-    document.getElementById('applyLayerBtn').addEventListener('click', applyLayerFields);
-
     function defaultStyle(zIndex) {
-      return { x:50, y:55, width:420, rotate:0, zIndex };
+      return { x:50, y:55, width:420, rotate:0, zIndex:zIndex };
     }
 
     function resetCustomizer() {
@@ -1477,10 +1439,10 @@
       custInputs.is_active.value = 'true';
       custInputs.previewTitle.value = '';
       custInputs.previewSubtitle.value = '';
-
       selectedLayer = null;
+
       renderCustomizerEditor();
-      msg(document.getElementById('customizerMessage'), 'Customizer nou pregătit.');
+      showMessage(document.getElementById('customizerMessage'), 'Customizer nou pregătit.');
     }
 
     function fillCustomizer(row) {
@@ -1513,6 +1475,26 @@
       };
     }
 
+    custInputs.title.addEventListener('input', () => {
+      if (!custInputs.slug.value.trim()) {
+        custInputs.slug.value = slugify(custInputs.title.value);
+      }
+      syncCustomizerJson();
+    });
+
+    Object.values(custInputs).forEach(input => {
+      input.addEventListener('input', syncCustomizerJson);
+      input.addEventListener('change', syncCustomizerJson);
+    });
+
+    document.getElementById('newCustomizerBtn').addEventListener('click', resetCustomizer);
+    document.getElementById('saveCustomizerBtn').addEventListener('click', saveCustomizer);
+    document.getElementById('reloadCustomizersBtn').addEventListener('click', loadCustomizers);
+    document.getElementById('addBaseVariantBtn').addEventListener('click', addBaseVariant);
+    document.getElementById('addOptionBtn').addEventListener('click', addOption);
+    document.getElementById('applyLayerBtn').addEventListener('click', applyLayerFields);
+    document.getElementById('loadJsonBtn').addEventListener('click', loadJsonToEditor);
+
     async function loadCustomizers() {
       const list = document.getElementById('customizersList');
       list.innerHTML = '<div class="meta">Se încarcă...</div>';
@@ -1527,17 +1509,18 @@
         return;
       }
 
-      if (!data?.length) {
+      if (!data || !data.length) {
         list.innerHTML = '<div class="meta">Nu există customizere.</div>';
         return;
       }
 
       list.innerHTML = data.map(row => `
-        <div class="variant-card">
-          <div class="variant-header">
+        <div class="compact-card">
+          <div class="compact-head">
             <div>
               <strong>${escapeHtml(row.title || '(fără titlu)')}</strong>
-              <div class="meta">/${escapeHtml(row.slug || '')} ${row.is_active ? '• activ' : '• inactiv'}</div>
+              <div class="meta">/${escapeHtml(row.slug || '')}</div>
+              <div class="badge ${row.is_active ? 'active' : 'inactive'}">${row.is_active ? 'Activ' : 'Inactiv'}</div>
             </div>
             <button class="mini-btn" onclick="openCustomizer('${row.id}')">Editează</button>
           </div>
@@ -1546,39 +1529,53 @@
     }
 
     async function openCustomizer(id) {
-      const { data, error } = await db.from('customizers').select('*').eq('id', id).single();
-      if (error) return;
+      const { data, error } = await db
+        .from('customizers')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error || !data) return;
       fillCustomizer(data);
     }
 
     async function saveCustomizer() {
-      const customizerMessage = document.getElementById('customizerMessage');
-      msg(customizerMessage, 'Se salvează...');
+      const message = document.getElementById('customizerMessage');
+      showMessage(message, 'Se salvează...');
 
       const payload = getCustomizerPayload();
 
       if (!payload.title || !payload.slug) {
-        msg(customizerMessage, 'Titlul și slug-ul sunt obligatorii.', 'error');
+        showMessage(message, 'Titlul și slug-ul sunt obligatorii.', 'error');
         return;
       }
 
       let response;
+
       if (currentCustomizerId) {
-        response = await db.from('customizers').update(payload).eq('id', currentCustomizerId).select().single();
+        response = await db
+          .from('customizers')
+          .update(payload)
+          .eq('id', currentCustomizerId)
+          .select()
+          .single();
       } else {
-        response = await db.from('customizers').insert(payload).select().single();
+        response = await db
+          .from('customizers')
+          .insert(payload)
+          .select()
+          .single();
       }
 
       if (response.error) {
-        msg(customizerMessage, response.error.message, 'error');
+        showMessage(message, response.error.message, 'error');
         return;
       }
 
       currentCustomizerId = response.data.id;
-      msg(customizerMessage, 'Customizer salvat.', 'success');
+      showMessage(message, 'Customizer salvat.', 'success');
       await loadCustomizers();
       await loadStats();
-      renderCustomizerEditor();
     }
 
     function addBaseVariant() {
@@ -1641,9 +1638,7 @@
       const item = currentConfig.baseVariants[index];
       if (!item) return;
 
-      if (field === 'price') item[field] = Number(value || 0);
-      else item[field] = value;
-
+      item[field] = field === 'price' ? Number(value || 0) : value;
       renderPreviewOnly();
       syncCustomizerJson();
     }
@@ -1652,10 +1647,7 @@
       const item = currentConfig.options[index];
       if (!item) return;
 
-      if (field === 'price') item[field] = Number(value || 0);
-      else item[field] = value;
-
-      renderPreviewOnly();
+      item[field] = field === 'price' ? Number(value || 0) : value;
       syncCustomizerJson();
     }
 
@@ -1668,7 +1660,7 @@
       syncCustomizerJson();
     }
 
-    function getLayerBySelected() {
+    function getSelectedLayerObject() {
       if (!selectedLayer) return null;
 
       if (selectedLayer.type === 'base') {
@@ -1684,13 +1676,12 @@
 
     function selectLayer(data) {
       selectedLayer = data;
-
-      const layer = getLayerBySelected();
+      const layer = getSelectedLayerObject();
       if (!layer) return;
 
       document.getElementById('selectedLayerLabel').textContent = layer.name || 'Imagine selectată';
       document.getElementById('layerX').value = layer.style?.x ?? 50;
-      document.getElementById('layerY').value = layer.style?.y ?? 50;
+      document.getElementById('layerY').value = layer.style?.y ?? 55;
       document.getElementById('layerW').value = layer.style?.width ?? 420;
       document.getElementById('layerR').value = layer.style?.rotate ?? 0;
 
@@ -1698,12 +1689,12 @@
     }
 
     function applyLayerFields() {
-      const layer = getLayerBySelected();
+      const layer = getSelectedLayerObject();
       if (!layer) return;
 
       layer.style = layer.style || {};
       layer.style.x = Number(document.getElementById('layerX').value || 50);
-      layer.style.y = Number(document.getElementById('layerY').value || 50);
+      layer.style.y = Number(document.getElementById('layerY').value || 55);
       layer.style.width = Number(document.getElementById('layerW').value || 420);
       layer.style.rotate = Number(document.getElementById('layerR').value || 0);
       layer.style.zIndex = layer.style.zIndex ?? 5;
@@ -1713,7 +1704,7 @@
 
     function styleToCss(style = {}) {
       const x = Number(style.x ?? 50);
-      const y = Number(style.y ?? 50);
+      const y = Number(style.y ?? 55);
       const width = Number(style.width ?? 420);
       const rotate = Number(style.rotate ?? 0);
       const zIndex = Number(style.zIndex ?? 5);
@@ -1731,31 +1722,17 @@
       const stage = document.getElementById('custPreviewStage');
       if (!currentConfig || !stage) return;
 
-      const selectedBase = currentConfig.baseVariants[0];
-      let selectedVariant = null;
+      const base = selectedLayer?.type === 'base'
+        ? getSelectedLayerObject()
+        : currentConfig.baseVariants[0];
 
-      if (selectedLayer?.type === 'base') {
-        selectedVariant = null;
-      } else if (selectedLayer?.type === 'option') {
-        selectedVariant = getLayerBySelected();
-      } else {
-        selectedVariant = currentConfig.options?.[0]?.variants?.[0] || null;
-      }
+      const optionVariant = selectedLayer?.type === 'option'
+        ? getSelectedLayerObject()
+        : currentConfig.options?.[0]?.variants?.[0];
 
       stage.innerHTML = `
-        ${selectedBase?.src ? `
-          <img class="preview-layer"
-               data-layer-kind="base"
-               src="${escapeHtml(selectedBase.src)}"
-               style="${styleToCss(selectedBase.style)}">
-        ` : ''}
-
-        ${selectedVariant?.src ? `
-          <img class="preview-layer"
-               data-layer-kind="option"
-               src="${escapeHtml(selectedVariant.src)}"
-               style="${styleToCss(selectedVariant.style)}">
-        ` : ''}
+        ${base?.src ? `<img class="preview-layer" src="${escapeHtml(base.src)}" style="${styleToCss(base.style)}">` : ''}
+        ${optionVariant?.src ? `<img class="preview-layer" src="${escapeHtml(optionVariant.src)}" style="${styleToCss(optionVariant.style)}">` : ''}
       `;
 
       stage.querySelectorAll('.preview-layer').forEach(img => {
@@ -1765,28 +1742,25 @@
       syncCustomizerJson();
     }
 
-    function startDrag(e) {
-      const layer = getLayerBySelected();
+    function startDrag(event) {
+      const layer = getSelectedLayerObject();
       if (!layer) return;
 
       const stage = document.getElementById('custPreviewStage');
       const rect = stage.getBoundingClientRect();
 
-      dragState = {
-        layer,
-        rect
-      };
+      dragState = { layer, rect };
 
-      e.target.setPointerCapture(e.pointerId);
+      event.target.setPointerCapture(event.pointerId);
       document.addEventListener('pointermove', onDrag);
       document.addEventListener('pointerup', stopDrag);
     }
 
-    function onDrag(e) {
+    function onDrag(event) {
       if (!dragState) return;
 
-      const x = ((e.clientX - dragState.rect.left) / dragState.rect.width) * 100;
-      const y = ((e.clientY - dragState.rect.top) / dragState.rect.height) * 100;
+      const x = ((event.clientX - dragState.rect.left) / dragState.rect.width) * 100;
+      const y = ((event.clientY - dragState.rect.top) / dragState.rect.height) * 100;
 
       dragState.layer.style = dragState.layer.style || {};
       dragState.layer.style.x = Math.max(0, Math.min(100, x));
@@ -1811,8 +1785,8 @@
       const optionsList = document.getElementById('optionsList');
 
       baseList.innerHTML = currentConfig.baseVariants.map((item,index) => `
-        <div class="variant-card">
-          <div class="variant-header">
+        <div class="compact-card">
+          <div class="compact-head">
             <div style="display:flex;align-items:center;gap:10px;">
               <div class="swatch" style="background:${escapeHtml(item.hex || '#f4efe7')}"></div>
               <strong>Bază ${index + 1}</strong>
@@ -1823,57 +1797,34 @@
             </div>
           </div>
 
-          <div class="form-grid">
-            <label>
-              Nume
-              <input value="${escapeHtml(item.name || '')}" oninput="updateBaseField(${index}, 'name', this.value)">
-            </label>
-            <label>
-              Culoare HEX
-              <input value="${escapeHtml(item.hex || '')}" oninput="updateBaseField(${index}, 'hex', this.value)">
-            </label>
-            <label>
-              Preț extra
-              <input type="number" value="${Number(item.price || 0)}" oninput="updateBaseField(${index}, 'price', this.value)">
-            </label>
-            <label>
-              URL imagine
-              <input value="${escapeHtml(item.src || '')}" oninput="updateBaseField(${index}, 'src', this.value)">
-            </label>
+          <div class="form-grid" style="margin-top:10px;">
+            <label>Nume <input value="${escapeHtml(item.name || '')}" oninput="updateBaseField(${index}, 'name', this.value)"></label>
+            <label>HEX <input value="${escapeHtml(item.hex || '')}" oninput="updateBaseField(${index}, 'hex', this.value)"></label>
+            <label>Preț extra <input type="number" value="${Number(item.price || 0)}" oninput="updateBaseField(${index}, 'price', this.value)"></label>
+            <label>URL imagine <input value="${escapeHtml(item.src || '')}" oninput="updateBaseField(${index}, 'src', this.value)"></label>
           </div>
         </div>
       `).join('');
 
-      optionsList.innerHTML = currentConfig.options.map((opt,optionIndex) => `
-        <div class="variant-card">
-          <div class="variant-header">
+      optionsList.innerHTML = currentConfig.options.map((option, optionIndex) => `
+        <div class="compact-card">
+          <div class="compact-head">
             <strong>Opțiune ${optionIndex + 1}</strong>
             <div>
-              <button class="mini-btn success" onclick="addOptionVariant(${optionIndex})">Adaugă variantă</button>
-              <button class="mini-btn danger" onclick="removeOption(${optionIndex})">Șterge opțiunea</button>
+              <button class="mini-btn success" onclick="addOptionVariant(${optionIndex})">Variantă</button>
+              <button class="mini-btn danger" onclick="removeOption(${optionIndex})">Șterge</button>
             </div>
           </div>
 
-          <div class="form-grid">
-            <label>
-              Nume opțiune
-              <input value="${escapeHtml(opt.name || '')}" oninput="updateOptionField(${optionIndex}, 'name', this.value)">
-            </label>
-            <label>
-              Preț extra
-              <input type="number" value="${Number(opt.price || 0)}" oninput="updateOptionField(${optionIndex}, 'price', this.value)">
-            </label>
-            <label class="full">
-              Thumbnail URL
-              <input value="${escapeHtml(opt.thumbnail || '')}" oninput="updateOptionField(${optionIndex}, 'thumbnail', this.value)">
-            </label>
+          <div class="form-grid" style="margin-top:10px;">
+            <label>Nume opțiune <input value="${escapeHtml(option.name || '')}" oninput="updateOptionField(${optionIndex}, 'name', this.value)"></label>
+            <label>Preț extra <input type="number" value="${Number(option.price || 0)}" oninput="updateOptionField(${optionIndex}, 'price', this.value)"></label>
+            <label class="full">Thumbnail URL <input value="${escapeHtml(option.thumbnail || '')}" oninput="updateOptionField(${optionIndex}, 'thumbnail', this.value)"></label>
           </div>
 
-          <h3>Variante</h3>
-
-          ${(opt.variants || []).map((variant,variantIndex) => `
-            <div class="variant-card">
-              <div class="variant-header">
+          ${(option.variants || []).map((variant, variantIndex) => `
+            <div class="compact-card" style="margin-top:10px;">
+              <div class="compact-head">
                 <div style="display:flex;align-items:center;gap:10px;">
                   <div class="swatch" style="background:${escapeHtml(variant.hex || '#d44848')}"></div>
                   <strong>Variantă ${variantIndex + 1}</strong>
@@ -1884,19 +1835,10 @@
                 </div>
               </div>
 
-              <div class="form-grid">
-                <label>
-                  Nume variantă
-                  <input value="${escapeHtml(variant.name || '')}" oninput="updateOptionVariantField(${optionIndex}, ${variantIndex}, 'name', this.value)">
-                </label>
-                <label>
-                  Culoare HEX
-                  <input value="${escapeHtml(variant.hex || '')}" oninput="updateOptionVariantField(${optionIndex}, ${variantIndex}, 'hex', this.value)">
-                </label>
-                <label class="full">
-                  URL imagine
-                  <input value="${escapeHtml(variant.src || '')}" oninput="updateOptionVariantField(${optionIndex}, ${variantIndex}, 'src', this.value)">
-                </label>
+              <div class="form-grid" style="margin-top:10px;">
+                <label>Nume <input value="${escapeHtml(variant.name || '')}" oninput="updateOptionVariantField(${optionIndex}, ${variantIndex}, 'name', this.value)"></label>
+                <label>HEX <input value="${escapeHtml(variant.hex || '')}" oninput="updateOptionVariantField(${optionIndex}, ${variantIndex}, 'hex', this.value)"></label>
+                <label class="full">URL imagine <input value="${escapeHtml(variant.src || '')}" oninput="updateOptionVariantField(${optionIndex}, ${variantIndex}, 'src', this.value)"></label>
               </div>
             </div>
           `).join('')}
@@ -1913,14 +1855,17 @@
     }
 
     function loadJsonToEditor() {
+      const message = document.getElementById('customizerMessage');
+
       try {
         currentConfig = JSON.parse(document.getElementById('customizerJson').value);
         currentConfig.baseVariants = Array.isArray(currentConfig.baseVariants) ? currentConfig.baseVariants : [];
         currentConfig.options = Array.isArray(currentConfig.options) ? currentConfig.options : [];
+        selectedLayer = null;
         renderCustomizerEditor();
-        msg(document.getElementById('customizerMessage'), 'JSON încărcat în editor.', 'success');
-      } catch (err) {
-        msg(document.getElementById('customizerMessage'), 'JSON invalid: ' + err.message, 'error');
+        showMessage(message, 'JSON încărcat.', 'success');
+      } catch (error) {
+        showMessage(message, 'JSON invalid: ' + error.message, 'error');
       }
     }
 
@@ -1938,9 +1883,9 @@
 
     async function loadOrders() {
       const list = document.getElementById('ordersList');
-      const ordersMessage = document.getElementById('ordersMessage');
+      const message = document.getElementById('ordersMessage');
 
-      list.innerHTML = '<div class="panel">Se încarcă comenzile...</div>';
+      list.innerHTML = '<div class="panel">Se încarcă...</div>';
 
       const { data, error } = await db
         .from('orders')
@@ -1949,13 +1894,13 @@
 
       if (error) {
         list.innerHTML = '';
-        msg(ordersMessage, error.message, 'error');
+        showMessage(message, error.message, 'error');
         return;
       }
 
-      msg(ordersMessage, '');
+      showMessage(message, '');
 
-      if (!data?.length) {
+      if (!data || !data.length) {
         list.innerHTML = '<div class="panel">Nu există comenzi încă.</div>';
         return;
       }
@@ -1968,33 +1913,29 @@
               <div class="meta">
                 ${escapeHtml(order.customer_email || '')}<br>
                 ${escapeHtml(order.customer_phone || '')}<br>
-                ${escapeHtml(order.customer_address || '')}, ${escapeHtml(order.customer_city || '')}
+                ${escapeHtml(order.customer_address || '')} ${escapeHtml(order.customer_city || '')}
               </div>
             </div>
-
             <div>
-              <div class="pill">${escapeHtml(order.status || 'noua')}</div>
-              <div class="meta" style="margin-top:8px;">${new Date(order.created_at).toLocaleString('ro-RO')}</div>
+              <div class="badge active">${escapeHtml(order.status || 'noua')}</div>
+              <div class="meta">${order.created_at ? new Date(order.created_at).toLocaleString('ro-RO') : ''}</div>
               <strong>${formatPrice(order.total || 0)}</strong>
             </div>
           </div>
-
-          ${order.customer_notes ? `<div class="helper-box"><strong>Note:</strong> ${escapeHtml(order.customer_notes)}</div>` : ''}
 
           <div class="order-items">
             ${(order.items || []).map(item => `
               <div class="order-item">
                 <strong>${escapeHtml(item.name || 'Produs')}</strong><br>
                 Cantitate: ${Number(item.quantity || 1)}<br>
-                Preț: ${formatPrice(item.price || 0)}<br>
-                ${item.details ? Object.entries(item.details).map(([k,v]) => `${escapeHtml(k)}: ${escapeHtml(v)}`).join('<br>') : ''}
+                Preț: ${formatPrice(item.price || 0)}
               </div>
             `).join('')}
           </div>
 
           <div class="actions">
-            <button class="btn btn-success" onclick="updateOrderStatus('${order.id}', 'procesata')">Marchează procesată</button>
-            <button class="btn btn-secondary" onclick="updateOrderStatus('${order.id}', 'trimisa')">Marchează trimisă</button>
+            <button class="btn btn-success" onclick="updateOrderStatus('${order.id}', 'procesata')">Procesată</button>
+            <button class="btn btn-secondary" onclick="updateOrderStatus('${order.id}', 'trimisa')">Trimisă</button>
             <button class="btn btn-danger" onclick="deleteOrder('${order.id}')">Șterge</button>
           </div>
         </div>
