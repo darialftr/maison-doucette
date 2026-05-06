@@ -1,244 +1,2024 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Maison Doucette — Admin</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js"></script>
+  <title>Maison Doucette — Admin</title>
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<style>
-body {
-  margin:0;
-  font-family:Arial;
-  display:flex;
-  height:100vh;
-}
+  <style>
+    :root{
+      --bg:#f7f1eb;
+      --bg2:#efe4d8;
+      --panel:#fffaf5;
+      --white:#fffdf9;
+      --line:rgba(101,79,67,.13);
+      --brown:#654f43;
+      --brown-soft:#866f61;
+      --gold:#d2ad73;
+      --gold-deep:#ae7f43;
+      --danger:#9b3f3f;
+      --success:#4f7a57;
+      --shadow:0 18px 45px rgba(101,79,67,.11);
+      --shadow2:0 28px 70px rgba(101,79,67,.16);
+      --radius:28px;
+    }
 
-.sidebar {
-  width:220px;
-  background:#2c2c2c;
-  color:white;
-  padding:20px;
-}
+    *{box-sizing:border-box}
 
-.sidebar button {
-  width:100%;
-  margin-bottom:10px;
-  padding:10px;
-  background:#444;
-  border:none;
-  color:white;
-  cursor:pointer;
-}
+    body{
+      margin:0;
+      font-family:'Manrope',sans-serif;
+      color:var(--brown);
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,.95), transparent 26%),
+        radial-gradient(circle at bottom right, rgba(210,173,115,.12), transparent 30%),
+        linear-gradient(180deg,var(--bg),var(--bg2));
+      min-height:100vh;
+    }
 
-.main {
-  flex:1;
-  padding:20px;
-  overflow:auto;
-}
+    h1,h2,h3,.brand{
+      font-family:'Cormorant Garamond',serif;
+      letter-spacing:-.02em;
+    }
 
-.hidden { display:none; }
+    button,input,textarea,select{
+      font:inherit;
+    }
 
-input, textarea {
-  width:100%;
-  margin-bottom:10px;
-  padding:8px;
-}
+    img{max-width:100%;display:block}
 
-button.action {
-  padding:10px;
-  margin-top:10px;
-  cursor:pointer;
-}
-</style>
+    .hidden{display:none!important}
+
+    .auth-screen{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+
+    .auth-card{
+      width:min(500px,100%);
+      background:rgba(255,250,245,.94);
+      border:1px solid var(--line);
+      border-radius:32px;
+      box-shadow:var(--shadow2);
+      padding:28px;
+    }
+
+    .auth-logo{
+      width:76px;
+      height:76px;
+      border-radius:50%;
+      object-fit:contain;
+      background:#fff;
+      padding:6px;
+      box-shadow:var(--shadow);
+      margin-bottom:16px;
+    }
+
+    .auth-card h1{
+      margin:0 0 8px;
+      font-size:3.3rem;
+      line-height:.9;
+    }
+
+    .auth-card p{
+      margin:0 0 22px;
+      color:var(--brown-soft);
+      line-height:1.7;
+    }
+
+    .app{
+      display:grid;
+      grid-template-columns:280px minmax(0,1fr);
+      min-height:100vh;
+    }
+
+    .sidebar{
+      position:sticky;
+      top:0;
+      height:100vh;
+      padding:18px;
+      background:rgba(255,250,245,.72);
+      backdrop-filter:blur(16px);
+      border-right:1px solid var(--line);
+      overflow:auto;
+    }
+
+    .side-brand{
+      background:rgba(255,255,255,.72);
+      border:1px solid var(--line);
+      border-radius:26px;
+      padding:16px;
+      box-shadow:var(--shadow);
+      margin-bottom:16px;
+    }
+
+    .side-brand img{
+      width:64px;
+      height:64px;
+      border-radius:50%;
+      object-fit:contain;
+      background:#fff;
+      padding:5px;
+      margin-bottom:10px;
+    }
+
+    .brand{
+      font-size:1.85rem;
+      font-weight:700;
+      line-height:.95;
+    }
+
+    .side-note{
+      margin-top:6px;
+      font-size:.78rem;
+      color:var(--brown-soft);
+      text-transform:uppercase;
+      letter-spacing:.14em;
+    }
+
+    .nav-tabs{
+      display:grid;
+      gap:8px;
+    }
+
+    .tab-btn{
+      width:100%;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.68);
+      color:var(--brown);
+      border-radius:999px;
+      padding:12px 14px;
+      cursor:pointer;
+      text-align:left;
+      transition:.2s ease;
+    }
+
+    .tab-btn:hover,
+    .tab-btn.active{
+      background:linear-gradient(135deg,var(--gold-deep),var(--gold));
+      color:white;
+      border-color:transparent;
+      box-shadow:0 14px 28px rgba(174,127,67,.18);
+      transform:translateY(-1px);
+    }
+
+    .logout-btn{
+      margin-top:14px;
+      width:100%;
+      border:1px solid rgba(155,63,63,.22);
+      background:#fff5f5;
+      color:var(--danger);
+      border-radius:999px;
+      padding:12px 14px;
+      cursor:pointer;
+    }
+
+    .main{
+      padding:20px;
+      width:min(1480px,100%);
+    }
+
+    .topline{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:16px;
+      margin-bottom:18px;
+    }
+
+    .topline h1{
+      margin:0;
+      font-size:clamp(2.6rem,5vw,4.4rem);
+      line-height:.9;
+    }
+
+    .topline p{
+      margin:8px 0 0;
+      color:var(--brown-soft);
+      line-height:1.7;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:999px;
+      padding:9px 13px;
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--brown-soft);
+      font-size:.78rem;
+      text-transform:uppercase;
+      letter-spacing:.1em;
+      white-space:nowrap;
+    }
+
+    .grid-4{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:14px;
+      margin-bottom:18px;
+    }
+
+    .stat{
+      background:rgba(255,250,245,.9);
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+
+    .stat .num{
+      font-family:'Cormorant Garamond',serif;
+      font-size:2.7rem;
+      line-height:.9;
+      margin-bottom:8px;
+    }
+
+    .stat .label{
+      color:var(--brown-soft);
+      font-size:.9rem;
+    }
+
+    .panel{
+      background:rgba(255,250,245,.92);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+      margin-bottom:18px;
+    }
+
+    .panel h2{
+      margin:0 0 12px;
+      font-size:2.25rem;
+      line-height:.9;
+    }
+
+    .panel p{
+      color:var(--brown-soft);
+      line-height:1.7;
+      margin:0 0 14px;
+      font-size:.94rem;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+
+    .full{grid-column:1/-1}
+
+    label{
+      display:grid;
+      gap:7px;
+      color:var(--brown-soft);
+      font-size:.78rem;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-weight:700;
+    }
+
+    input,textarea,select{
+      width:100%;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--brown);
+      border-radius:15px;
+      padding:12px 13px;
+      outline:none;
+    }
+
+    textarea{
+      min-height:94px;
+      resize:vertical;
+      line-height:1.6;
+    }
+
+    input:focus,textarea:focus,select:focus{
+      border-color:var(--gold-deep);
+      box-shadow:0 0 0 4px rgba(174,127,67,.1);
+    }
+
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+
+    .btn{
+      border:none;
+      border-radius:999px;
+      padding:12px 18px;
+      min-height:46px;
+      cursor:pointer;
+      font-weight:700;
+      transition:.2s ease;
+    }
+
+    .btn:hover{transform:translateY(-1px)}
+
+    .btn-primary{
+      background:linear-gradient(135deg,var(--gold-deep),var(--gold));
+      color:#fff;
+      box-shadow:0 14px 28px rgba(174,127,67,.18);
+    }
+
+    .btn-secondary{
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--brown);
+    }
+
+    .btn-danger{
+      background:#fff5f5;
+      border:1px solid rgba(155,63,63,.2);
+      color:var(--danger);
+    }
+
+    .btn-success{
+      background:#f4fbf5;
+      border:1px solid rgba(79,122,87,.2);
+      color:var(--success);
+    }
+
+    .message{
+      margin-top:12px;
+      font-size:.9rem;
+      line-height:1.6;
+      color:var(--brown-soft);
+      white-space:pre-wrap;
+    }
+
+    .message.error{color:var(--danger)}
+    .message.success{color:var(--success)}
+
+    .list{
+      display:grid;
+      gap:12px;
+    }
+
+    .item-card{
+      background:rgba(255,255,255,.74);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:14px;
+      display:grid;
+      grid-template-columns:90px 1fr auto;
+      gap:14px;
+      align-items:start;
+    }
+
+    .item-card img{
+      width:90px;
+      height:90px;
+      object-fit:cover;
+      border-radius:16px;
+      background:#efe4d8;
+      border:1px solid var(--line);
+    }
+
+    .item-card h3{
+      margin:0 0 6px;
+      font-size:1.6rem;
+      line-height:.95;
+    }
+
+    .meta{
+      color:var(--brown-soft);
+      font-size:.88rem;
+      line-height:1.6;
+      word-break:break-word;
+    }
+
+    .mini-actions{
+      display:grid;
+      gap:8px;
+      min-width:160px;
+    }
+
+    .mini-btn{
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--brown);
+      border-radius:999px;
+      min-height:38px;
+      padding:8px 12px;
+      cursor:pointer;
+    }
+
+    .mini-btn.danger{
+      color:var(--danger);
+      background:#fff5f5;
+      border-color:rgba(155,63,63,.2);
+    }
+
+    .mini-btn.success{
+      color:var(--success);
+      background:#f4fbf5;
+      border-color:rgba(79,122,87,.2);
+    }
+
+    .editor-layout{
+      display:grid;
+      grid-template-columns:420px minmax(0,1fr);
+      gap:16px;
+      align-items:start;
+    }
+
+    .sticky-panel{
+      position:sticky;
+      top:20px;
+      max-height:calc(100vh - 40px);
+      overflow:auto;
+    }
+
+    .thumb-row{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .thumb{
+      aspect-ratio:4/5;
+      border-radius:16px;
+      background:#efe4d8;
+      border:1px solid var(--line);
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--brown-soft);
+      font-size:.78rem;
+      text-align:center;
+    }
+
+    .thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .preview-frame{
+      width:100%;
+      min-height:78vh;
+      border:none;
+      border-radius:22px;
+      background:#fff;
+      box-shadow:var(--shadow);
+    }
+
+    .customizer-grid{
+      display:grid;
+      grid-template-columns:430px minmax(0,1fr);
+      gap:16px;
+      align-items:start;
+    }
+
+    .preview-stage{
+      position:relative;
+      width:100%;
+      aspect-ratio:.92/1;
+      min-height:460px;
+      border-radius:24px;
+      overflow:hidden;
+      background:linear-gradient(180deg,#f5f3f1,#ebe8e3);
+      border:1px solid rgba(185,177,170,.52);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.75);
+      touch-action:none;
+    }
+
+    .preview-layer{
+      position:absolute;
+      max-width:none;
+      user-select:none;
+      cursor:grab;
+      transform-origin:center center;
+      filter:drop-shadow(0 18px 26px rgba(0,0,0,.12));
+    }
+
+    .preview-layer:active{cursor:grabbing}
+
+    .preview-help{
+      color:var(--brown-soft);
+      font-size:.86rem;
+      line-height:1.6;
+      margin-top:10px;
+    }
+
+    .mini-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+    }
+
+    .variant-card{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.76);
+      border-radius:18px;
+      padding:12px;
+      margin-bottom:12px;
+    }
+
+    .variant-card h3{
+      margin:0 0 10px;
+      font-size:1.55rem;
+    }
+
+    .variant-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .swatch{
+      width:28px;
+      height:28px;
+      border-radius:50%;
+      border:1px solid rgba(0,0,0,.12);
+      box-shadow:0 0 0 3px rgba(255,255,255,.8);
+    }
+
+    .json-box{
+      font-family:ui-monospace, SFMono-Regular, Menlo, monospace;
+      min-height:180px;
+      font-size:.82rem;
+    }
+
+    .order-card{
+      background:rgba(255,255,255,.74);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:16px;
+      display:grid;
+      gap:10px;
+    }
+
+    .order-head{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .order-head h3{
+      margin:0;
+      font-size:1.8rem;
+    }
+
+    .order-items{
+      display:grid;
+      gap:8px;
+      border-top:1px solid var(--line);
+      padding-top:10px;
+    }
+
+    .order-item{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:10px;
+      color:var(--brown-soft);
+      line-height:1.6;
+      font-size:.88rem;
+    }
+
+    @media(max-width:1100px){
+      .app{grid-template-columns:1fr}
+      .sidebar{
+        position:relative;
+        height:auto;
+        border-right:none;
+        border-bottom:1px solid var(--line);
+      }
+      .nav-tabs{grid-template-columns:repeat(2,1fr)}
+      .editor-layout,.customizer-grid{grid-template-columns:1fr}
+      .sticky-panel{position:relative;top:auto;max-height:none}
+      .grid-4{grid-template-columns:repeat(2,1fr)}
+    }
+
+    @media(max-width:760px){
+      .main{padding:12px}
+      .form-grid,.mini-grid{grid-template-columns:1fr}
+      .grid-4{grid-template-columns:1fr}
+      .nav-tabs{grid-template-columns:1fr}
+      .item-card{grid-template-columns:70px 1fr}
+      .item-card img{width:70px;height:70px}
+      .mini-actions{grid-column:1/-1}
+      .actions{flex-direction:column}
+      .btn{width:100%}
+    }
+  </style>
 </head>
 
 <body>
+  <section id="authScreen" class="auth-screen">
+    <div class="auth-card">
+      <img src="images/logo.jpg" class="auth-logo" alt="Maison Doucette">
+      <h1>Admin Maison</h1>
+      <p>Intră cu emailul și parola din Supabase ca să administrezi produsele, paginile, customizerele și comenzile.</p>
 
-<div class="sidebar">
-  <h3>Admin</h3>
-  <button onclick="show('products')">Produse</button>
-  <button onclick="show('details')">Details</button>
-  <button onclick="show('customizer')">Customizer</button>
-  <button onclick="show('orders')">Comenzi</button>
-  <button onclick="logout()">Logout</button>
-</div>
+      <form id="loginForm">
+        <div class="form-grid">
+          <label>
+            Email
+            <input id="loginEmail" type="email" required autocomplete="email">
+          </label>
 
-<div class="main">
+          <label>
+            Parolă
+            <input id="loginPassword" type="password" required autocomplete="current-password">
+          </label>
+        </div>
 
-<!-- LOGIN -->
-<div id="login">
-  <h2>Login</h2>
-  <input id="email" placeholder="email">
-  <input id="password" type="password" placeholder="parola">
-  <button class="action" onclick="login()">Login</button>
-</div>
+        <div class="actions">
+          <button class="btn btn-primary" id="loginBtn" type="submit">Intră în admin</button>
+        </div>
+      </form>
 
-<!-- PRODUSE -->
-<div id="products" class="hidden">
-  <h2>Produse</h2>
-
-  <input id="p_title" placeholder="Titlu">
-  <input id="p_slug" placeholder="Slug">
-  <input id="p_price" placeholder="Pret">
-  <textarea id="p_desc" placeholder="Descriere"></textarea>
-
-  <button class="action" onclick="addProduct()">Adauga produs</button>
-
-  <hr>
-  <div id="productList"></div>
-</div>
-
-<!-- DETAILS -->
-<div id="details" class="hidden">
-  <h2>Details Page</h2>
-
-  <select id="detailsProduct"></select>
-
-  <textarea id="d_p1" placeholder="Paragraph 1"></textarea>
-  <textarea id="d_p2" placeholder="Paragraph 2"></textarea>
-
-  <button class="action" onclick="saveDetails()">Salveaza</button>
-</div>
-
-<!-- CUSTOMIZER -->
-<div id="customizer" class="hidden">
-  <h2>Customizer</h2>
-
-  <select id="customProduct"></select>
-
-  <textarea id="customJson" style="height:300px;"></textarea>
-
-  <button class="action" onclick="saveCustomizer()">Salveaza Config</button>
-</div>
-
-<!-- ORDERS -->
-<div id="orders" class="hidden">
-  <h2>Comenzi</h2>
-  <div id="ordersList"></div>
-</div>
-
-</div>
-
-<script>
-const db = window.supabase.createClient(
-  window.SUPABASE_URL,
-  window.SUPABASE_ANON_KEY
-);
-
-function show(section) {
-  document.querySelectorAll('.main > div').forEach(el => el.classList.add('hidden'));
-  document.getElementById(section).classList.remove('hidden');
-}
-
-async function login() {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-
-  const { error } = await db.auth.signInWithPassword({ email, password });
-
-  if(error) return alert(error.message);
-
-  document.getElementById('login').classList.add('hidden');
-  show('products');
-
-  loadProducts();
-}
-
-async function logout() {
-  await db.auth.signOut();
-  location.reload();
-}
-
-/* =========================
-   PRODUCTS
-========================= */
-
-async function addProduct() {
-  const title = p_title.value;
-  const slug = p_slug.value;
-  const price = p_price.value;
-  const desc = p_desc.value;
-
-  await db.from('products').insert({
-    title,
-    slug,
-    short_price_text: price,
-    short_description: desc
-  });
-
-  loadProducts();
-}
-
-async function loadProducts() {
-  const { data } = await db.from('products').select('*');
-
-  productList.innerHTML = data.map(p => `
-    <div>
-      <b>${p.title}</b>
+      <div id="authMessage" class="message">Autentifică-te pentru a continua.</div>
     </div>
-  `).join('');
+  </section>
 
-  // populate selects
-  detailsProduct.innerHTML = data.map(p => `<option value="${p.id}">${p.title}</option>`).join('');
-  customProduct.innerHTML = detailsProduct.innerHTML;
-}
+  <section id="adminApp" class="app hidden">
+    <aside class="sidebar">
+      <div class="side-brand">
+        <img src="images/logo.jpg" alt="Maison Doucette">
+        <div class="brand">Maison Doucette</div>
+        <div class="side-note">admin dashboard</div>
+      </div>
 
-/* =========================
-   DETAILS
-========================= */
+      <div class="nav-tabs">
+        <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+        <button class="tab-btn" data-tab="products">Produse</button>
+        <button class="tab-btn" data-tab="details">Pagini detalii</button>
+        <button class="tab-btn" data-tab="customizers">Customizere</button>
+        <button class="tab-btn" data-tab="orders">Comenzi</button>
+      </div>
 
-async function saveDetails() {
-  const product_id = detailsProduct.value;
+      <button class="logout-btn" id="logoutBtn" type="button">Logout</button>
+    </aside>
 
-  await db.from('product_details')
-  .update({
-    paragraph_1: d_p1.value,
-    paragraph_2: d_p2.value
-  })
-  .eq('product_id', product_id);
+    <main class="main">
+      <div class="topline">
+        <div>
+          <h1 id="pageTitle">Dashboard</h1>
+          <p id="pageSubtitle">Tot ce ține de administrarea Maison Doucette într-un singur loc.</p>
+        </div>
+        <div class="pill" id="sessionPill">conectat</div>
+      </div>
 
-  alert("Saved");
-}
+      <section id="tab-dashboard" class="tab-panel">
+        <div class="grid-4">
+          <div class="stat">
+            <div class="num" id="statProducts">0</div>
+            <div class="label">Produse în homepage</div>
+          </div>
+          <div class="stat">
+            <div class="num" id="statDetails">0</div>
+            <div class="label">Pagini detalii</div>
+          </div>
+          <div class="stat">
+            <div class="num" id="statCustomizers">0</div>
+            <div class="label">Customizere</div>
+          </div>
+          <div class="stat">
+            <div class="num" id="statOrders">0</div>
+            <div class="label">Comenzi</div>
+          </div>
+        </div>
 
-/* =========================
-   CUSTOMIZER
-========================= */
+        <div class="panel">
+          <h2>Ce faci de aici</h2>
+          <p>Produse = cardurile din homepage. Pagini detalii = conținutul pentru `product-details.html`. Customizere = paginile dinamice de personalizare pentru `customizer.html`. Comenzi = comenzile salvate în Supabase.</p>
+          <div class="actions">
+            <button class="btn btn-primary" data-jump="products">Gestionează produse</button>
+            <button class="btn btn-secondary" data-jump="details">Editează detalii</button>
+            <button class="btn btn-secondary" data-jump="customizers">Editează customizere</button>
+            <button class="btn btn-secondary" data-jump="orders">Vezi comenzi</button>
+          </div>
+        </div>
+      </section>
 
-async function saveCustomizer() {
-  const product_id = customProduct.value;
+      <section id="tab-products" class="tab-panel hidden">
+        <div class="panel">
+          <h2>Adaugă produs în homepage</h2>
+          <p>Acestea sunt cardurile de produs din secțiunea de colecție.</p>
 
-  let config;
-  try {
-    config = JSON.parse(customJson.value);
-  } catch {
-    return alert("JSON invalid");
-  }
+          <form id="productForm">
+            <div class="form-grid">
+              <label>
+                Nume produs
+                <input id="productName" required placeholder="Ex: Iepuraș">
+              </label>
 
-  await db.from('product_customizers')
-  .update({ config })
-  .eq('product_id', product_id);
+              <label>
+                Text / preț
+                <input id="productText" required placeholder="Ex: De la 45 RON">
+              </label>
 
-  alert("Saved");
-}
+              <label class="full">
+                Descriere scurtă
+                <textarea id="productDescription" required></textarea>
+              </label>
 
-/* =========================
-   ORDERS
-========================= */
+              <label class="full">
+                Link pagină
+                <input id="productLink" required placeholder="Ex: product-details.html?slug=iepuras">
+              </label>
 
-async function loadOrders() {
-  const { data } = await db.from('orders').select('*');
+              <label class="full">
+                Imagine
+                <input id="productImageFile" type="file" accept="image/*">
+              </label>
+            </div>
 
-  ordersList.innerHTML = data.map(o => `
-    <div>
-      ${o.customer_name} - ${o.total_amount}
-    </div>
-  `).join('');
-}
+            <div class="actions">
+              <button class="btn btn-primary" type="submit">Salvează produs</button>
+              <button class="btn btn-secondary" type="button" id="reloadProductsBtn">Reîncarcă lista</button>
+            </div>
+          </form>
 
-</script>
+          <div id="productsMessage" class="message"></div>
+        </div>
 
+        <div class="panel">
+          <h2>Produse existente</h2>
+          <div id="productsList" class="list"></div>
+        </div>
+      </section>
+
+      <section id="tab-details" class="tab-panel hidden">
+        <div class="editor-layout">
+          <aside class="panel sticky-panel">
+            <h2>Editor pagină detalii</h2>
+            <p>Salvează conținutul pentru `product-details.html?slug=...`.</p>
+
+            <div class="actions">
+              <button class="btn btn-primary" id="newDetailBtn" type="button">Produs nou</button>
+              <button class="btn btn-secondary" id="saveDetailBtn" type="button">Salvează</button>
+              <button class="btn btn-secondary" id="reloadDetailsBtn" type="button">Reîncarcă</button>
+            </div>
+
+            <div id="detailsMessage" class="message"></div>
+
+            <h3>Produse existente</h3>
+            <div id="detailsList" class="list"></div>
+
+            <div class="form-grid" style="margin-top:16px;">
+              <label>
+                Titlu
+                <input id="detailTitle">
+              </label>
+
+              <label>
+                Slug
+                <input id="detailSlug">
+              </label>
+
+              <label>
+                Preț de bază
+                <input id="detailBasePrice" type="number" min="0" step="1">
+              </label>
+
+              <label>
+                Activ
+                <select id="detailActive">
+                  <option value="true">Da</option>
+                  <option value="false">Nu</option>
+                </select>
+              </label>
+
+              <label class="full">
+                Paragraf 1
+                <textarea id="detailP1"></textarea>
+              </label>
+
+              <label class="full">
+                Paragraf 2
+                <textarea id="detailP2"></textarea>
+              </label>
+
+              <label class="full">
+                Detail 1
+                <textarea id="detailD1"></textarea>
+              </label>
+
+              <label class="full">
+                Detail 2
+                <textarea id="detailD2"></textarea>
+              </label>
+
+              <label class="full">
+                Detail 3
+                <textarea id="detailD3"></textarea>
+              </label>
+
+              <label>
+                Text buton
+                <input id="detailButtonText" placeholder="Personalizează">
+              </label>
+
+              <label>
+                Link customizare
+                <input id="detailButtonUrl" placeholder="customizer.html?slug=iepuras">
+              </label>
+
+              <label>
+                Imagine 1 URL
+                <input id="detailImage1">
+              </label>
+
+              <label>
+                Imagine 2 URL
+                <input id="detailImage2">
+              </label>
+
+              <label class="full">
+                Imagine 3 URL
+                <input id="detailImage3">
+              </label>
+            </div>
+
+            <div class="thumb-row" id="detailThumbs"></div>
+          </aside>
+
+          <main class="panel">
+            <h2>Preview detalii</h2>
+            <p>Preview-ul se deschide în iframe pe baza slugului.</p>
+            <div class="actions">
+              <a class="btn btn-primary" id="openDetailPreview" target="_blank" href="#">Deschide pagina</a>
+            </div>
+            <iframe id="detailPreviewFrame" class="preview-frame"></iframe>
+          </main>
+        </div>
+      </section>
+
+      <section id="tab-customizers" class="tab-panel hidden">
+        <div class="customizer-grid">
+          <aside class="panel sticky-panel">
+            <h2>Editor customizer</h2>
+            <p>Configurezi pagina `customizer.html?slug=...`. Ai drag & drop real pe preview.</p>
+
+            <div class="actions">
+              <button class="btn btn-primary" id="newCustomizerBtn" type="button">Customizer nou</button>
+              <button class="btn btn-secondary" id="saveCustomizerBtn" type="button">Salvează</button>
+              <button class="btn btn-secondary" id="reloadCustomizersBtn" type="button">Reîncarcă</button>
+            </div>
+
+            <div id="customizerMessage" class="message"></div>
+
+            <h3>Customizere existente</h3>
+            <div id="customizersList" class="list"></div>
+
+            <div class="form-grid" style="margin-top:16px;">
+              <label>
+                Titlu produs
+                <input id="custTitle">
+              </label>
+
+              <label>
+                Slug
+                <input id="custSlug">
+              </label>
+
+              <label>
+                Preț de bază
+                <input id="custBasePrice" type="number" min="0" step="1">
+              </label>
+
+              <label>
+                Activ
+                <select id="custActive">
+                  <option value="true">Da</option>
+                  <option value="false">Nu</option>
+                </select>
+              </label>
+
+              <label class="full">
+                Titlu preview
+                <input id="custPreviewTitle" placeholder="Iepurașul tău">
+              </label>
+
+              <label class="full">
+                Subtitlu preview
+                <input id="custPreviewSubtitle" placeholder="Creează produsul un detaliu după altul.">
+              </label>
+            </div>
+
+            <h3>Variantă selectată</h3>
+            <p id="selectedLayerLabel">Nicio imagine selectată.</p>
+
+            <div class="mini-grid">
+              <label>
+                X %
+                <input id="layerX" type="number" step="1">
+              </label>
+              <label>
+                Y %
+                <input id="layerY" type="number" step="1">
+              </label>
+              <label>
+                Width px
+                <input id="layerW" type="number" step="1">
+              </label>
+              <label>
+                Rotate
+                <input id="layerR" type="number" step="1">
+              </label>
+            </div>
+
+            <div class="actions">
+              <button class="btn btn-secondary" id="applyLayerBtn" type="button">Aplică poziția</button>
+            </div>
+          </aside>
+
+          <main>
+            <div class="panel">
+              <h2>Preview drag & drop</h2>
+              <p>Click pe imagine, apoi trage cu mouse-ul. Poți schimba și dimensiunea/rotația din câmpuri.</p>
+              <div class="preview-stage" id="custPreviewStage"></div>
+              <div class="preview-help">Sfat: întâi selectează o variantă din listele de mai jos, apoi o poți muta în preview.</div>
+            </div>
+
+            <div class="panel">
+              <h2>Baze / culori principale</h2>
+              <p>Maxim recomandat: 8 variante de bază.</p>
+
+              <div class="actions">
+                <button class="btn btn-primary" id="addBaseVariantBtn" type="button">Adaugă bază</button>
+              </div>
+
+              <div id="baseVariantsList"></div>
+            </div>
+
+            <div class="panel">
+              <h2>Opțiuni / accesorii</h2>
+              <p>Maxim recomandat: 6 opțiuni, iar fiecare opțiune poate avea 7-8 variante.</p>
+
+              <div class="actions">
+                <button class="btn btn-primary" id="addOptionBtn" type="button">Adaugă opțiune</button>
+              </div>
+
+              <div id="optionsList"></div>
+            </div>
+
+            <div class="panel">
+              <h2>JSON avansat</h2>
+              <p>Îl poți folosi pentru verificare sau editare rapidă.</p>
+              <textarea id="customizerJson" class="json-box"></textarea>
+              <div class="actions">
+                <button class="btn btn-secondary" id="loadJsonBtn" type="button">Încarcă JSON în editor</button>
+              </div>
+            </div>
+          </main>
+        </div>
+      </section>
+
+      <section id="tab-orders" class="tab-panel hidden">
+        <div class="panel">
+          <h2>Comenzi</h2>
+          <p>Aici apar comenzile salvate în tabela `orders`.</p>
+
+          <div class="actions">
+            <button class="btn btn-secondary" id="reloadOrdersBtn" type="button">Reîncarcă comenzile</button>
+          </div>
+
+          <div id="ordersMessage" class="message"></div>
+        </div>
+
+        <div id="ordersList" class="list"></div>
+      </section>
+    </main>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+
+  <script>
+    const db = window.supabase.createClient(
+      window.SUPABASE_URL,
+      window.SUPABASE_ANON_KEY
+    );
+
+    const PRODUCTS_BUCKET = 'products';
+
+    let currentDetailId = null;
+    let currentCustomizerId = null;
+    let currentConfig = null;
+    let selectedLayer = null;
+    let dragState = null;
+
+    const authScreen = document.getElementById('authScreen');
+    const adminApp = document.getElementById('adminApp');
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const authMessage = document.getElementById('authMessage');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    const pageTitle = document.getElementById('pageTitle');
+    const pageSubtitle = document.getElementById('pageSubtitle');
+
+    function msg(el, text, type='') {
+      el.textContent = text || '';
+      el.className = `message ${type}`;
+    }
+
+    function escapeHtml(value='') {
+      return String(value)
+        .replaceAll('&','&amp;')
+        .replaceAll('<','&lt;')
+        .replaceAll('>','&gt;')
+        .replaceAll('"','&quot;')
+        .replaceAll("'","&#039;");
+    }
+
+    function slugify(value) {
+      return String(value || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\\u0300-\\u036f]/g,'')
+        .replace(/[ăâ]/g,'a')
+        .replace(/[î]/g,'i')
+        .replace(/[șş]/g,'s')
+        .replace(/[țţ]/g,'t')
+        .replace(/[^a-z0-9]+/g,'-')
+        .replace(/^-+|-+$/g,'');
+    }
+
+    function formatPrice(value) {
+      return `${Number(value || 0).toFixed(0)} RON`;
+    }
+
+    function showAuth() {
+      authScreen.classList.remove('hidden');
+      adminApp.classList.add('hidden');
+    }
+
+    function showAdmin() {
+      authScreen.classList.add('hidden');
+      adminApp.classList.remove('hidden');
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tab);
+      });
+
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.toggle('hidden', panel.id !== `tab-${tab}`);
+      });
+
+      const titles = {
+        dashboard:['Dashboard','Tot ce ține de administrarea Maison Doucette într-un singur loc.'],
+        products:['Produse','Administrează cardurile de produse din homepage.'],
+        details:['Pagini detalii','Editează paginile dinamice de detalii pentru produse.'],
+        customizers:['Customizere','Creează și editează paginile de personalizare.'],
+        orders:['Comenzi','Vezi comenzile și datele clienților.']
+      };
+
+      pageTitle.textContent = titles[tab][0];
+      pageSubtitle.textContent = titles[tab][1];
+
+      if (tab === 'dashboard') loadStats();
+      if (tab === 'products') loadProducts();
+      if (tab === 'details') loadDetails();
+      if (tab === 'customizers') loadCustomizers();
+      if (tab === 'orders') loadOrders();
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+    });
+
+    document.querySelectorAll('[data-jump]').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.jump));
+    });
+
+    loginForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      loginBtn.disabled = true;
+      msg(authMessage, 'Se verifică datele...', '');
+
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      const { data, error } = await db.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        msg(authMessage, error.message, 'error');
+        loginBtn.disabled = false;
+        return;
+      }
+
+      msg(authMessage, 'Autentificare reușită.', 'success');
+      showAdmin();
+      await loadAllInitial();
+      loginBtn.disabled = false;
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+      await db.auth.signOut();
+      showAuth();
+    });
+
+    async function boot() {
+      const { data } = await db.auth.getSession();
+      if (data?.session) {
+        showAdmin();
+        await loadAllInitial();
+      } else {
+        showAuth();
+      }
+    }
+
+    async function loadAllInitial() {
+      await loadStats();
+      await loadProducts();
+      await loadDetails();
+      await loadCustomizers();
+      await loadOrders();
+    }
+
+    async function countTable(table) {
+      const { count, error } = await db.from(table).select('*', { count:'exact', head:true });
+      if (error) return 0;
+      return count || 0;
+    }
+
+    async function loadStats() {
+      document.getElementById('statProducts').textContent = await countTable('products');
+      document.getElementById('statDetails').textContent = await countTable('atelier_products');
+      document.getElementById('statCustomizers').textContent = await countTable('customizers');
+      document.getElementById('statOrders').textContent = await countTable('orders');
+    }
+
+    async function uploadProductImage(file, name) {
+      if (!file) return '';
+
+      const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+      const path = `${Date.now()}-${slugify(name || 'product')}.${ext}`;
+
+      const { error } = await db.storage.from(PRODUCTS_BUCKET).upload(path, file, { upsert:false });
+      if (error) throw error;
+
+      const { data } = db.storage.from(PRODUCTS_BUCKET).getPublicUrl(path);
+      return data.publicUrl;
+    }
+
+    async function getNextSortOrder() {
+      const { data } = await db.from('products').select('sort_order').order('sort_order', { ascending:false }).limit(1);
+      if (!data?.length) return 0;
+      return Number(data[0].sort_order || 0) + 1;
+    }
+
+    document.getElementById('productForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const productsMessage = document.getElementById('productsMessage');
+      msg(productsMessage, 'Se salvează produsul...');
+
+      try {
+        const name = document.getElementById('productName').value.trim();
+        const text = document.getElementById('productText').value.trim();
+        const description = document.getElementById('productDescription').value.trim();
+        const link = document.getElementById('productLink').value.trim();
+        const file = document.getElementById('productImageFile').files?.[0];
+
+        const image = await uploadProductImage(file, name);
+        const sort_order = await getNextSortOrder();
+
+        const { error } = await db.from('products').insert({
+          name,
+          text,
+          description,
+          link,
+          image,
+          is_visible:true,
+          sort_order
+        });
+
+        if (error) throw error;
+
+        e.target.reset();
+        msg(productsMessage, 'Produs salvat.', 'success');
+        await loadProducts();
+        await loadStats();
+      } catch (err) {
+        msg(productsMessage, err.message, 'error');
+      }
+    });
+
+    document.getElementById('reloadProductsBtn').addEventListener('click', loadProducts);
+
+    async function loadProducts() {
+      const list = document.getElementById('productsList');
+      list.innerHTML = 'Se încarcă...';
+
+      const { data, error } = await db
+        .from('products')
+        .select('*')
+        .order('sort_order', { ascending:true })
+        .order('created_at', { ascending:true });
+
+      if (error) {
+        list.innerHTML = 'Nu am putut încărca produsele.';
+        return;
+      }
+
+      if (!data?.length) {
+        list.innerHTML = '<div class="meta">Nu există produse.</div>';
+        return;
+      }
+
+      list.innerHTML = data.map(product => `
+        <div class="item-card">
+          <img src="${escapeHtml(product.image || '')}" alt="">
+          <div>
+            <h3>${escapeHtml(product.name || 'Produs')}</h3>
+            <div class="meta">
+              <strong>${escapeHtml(product.text || '')}</strong><br>
+              ${escapeHtml(product.description || '')}<br>
+              Link: ${escapeHtml(product.link || '')}<br>
+              ${product.is_visible === false ? 'Ascuns' : 'Vizibil'}
+            </div>
+          </div>
+          <div class="mini-actions">
+            <button class="mini-btn" onclick="toggleProduct('${product.id}', ${product.is_visible === false ? 'true' : 'false'})">
+              ${product.is_visible === false ? 'Afișează' : 'Ascunde'}
+            </button>
+            <button class="mini-btn danger" onclick="deleteProduct('${product.id}')">Șterge</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function toggleProduct(id, visible) {
+      await db.from('products').update({ is_visible: visible }).eq('id', id);
+      await loadProducts();
+    }
+
+    async function deleteProduct(id) {
+      if (!confirm('Sigur ștergi produsul?')) return;
+      await db.from('products').delete().eq('id', id);
+      await loadProducts();
+      await loadStats();
+    }
+
+    window.toggleProduct = toggleProduct;
+    window.deleteProduct = deleteProduct;
+
+    const detailInputs = {
+      title: document.getElementById('detailTitle'),
+      slug: document.getElementById('detailSlug'),
+      base_price: document.getElementById('detailBasePrice'),
+      short_paragraph_1: document.getElementById('detailP1'),
+      short_paragraph_2: document.getElementById('detailP2'),
+      detail_1: document.getElementById('detailD1'),
+      detail_2: document.getElementById('detailD2'),
+      detail_3: document.getElementById('detailD3'),
+      customize_button_text: document.getElementById('detailButtonText'),
+      customize_url: document.getElementById('detailButtonUrl'),
+      image_1: document.getElementById('detailImage1'),
+      image_2: document.getElementById('detailImage2'),
+      image_3: document.getElementById('detailImage3'),
+      is_active: document.getElementById('detailActive')
+    };
+
+    detailInputs.title.addEventListener('input', () => {
+      if (!detailInputs.slug.value.trim()) detailInputs.slug.value = slugify(detailInputs.title.value);
+      updateDetailPreview();
+    });
+
+    Object.values(detailInputs).forEach(input => {
+      input.addEventListener('input', updateDetailPreview);
+      input.addEventListener('change', updateDetailPreview);
+    });
+
+    document.getElementById('newDetailBtn').addEventListener('click', resetDetailForm);
+    document.getElementById('saveDetailBtn').addEventListener('click', saveDetail);
+    document.getElementById('reloadDetailsBtn').addEventListener('click', loadDetails);
+
+    function resetDetailForm() {
+      currentDetailId = null;
+      Object.values(detailInputs).forEach(input => input.value = '');
+      detailInputs.is_active.value = 'true';
+      updateDetailPreview();
+      msg(document.getElementById('detailsMessage'), 'Produs nou pregătit.');
+    }
+
+    function fillDetailForm(product) {
+      currentDetailId = product.id;
+      Object.keys(detailInputs).forEach(key => {
+        if (key === 'is_active') detailInputs[key].value = String(product[key] ?? true);
+        else detailInputs[key].value = product[key] ?? '';
+      });
+      updateDetailPreview();
+    }
+
+    function getDetailPayload() {
+      return {
+        title: detailInputs.title.value.trim(),
+        slug: slugify(detailInputs.slug.value.trim() || detailInputs.title.value.trim()),
+        base_price: Number(detailInputs.base_price.value || 0),
+        short_paragraph_1: detailInputs.short_paragraph_1.value.trim(),
+        short_paragraph_2: detailInputs.short_paragraph_2.value.trim(),
+        detail_1: detailInputs.detail_1.value.trim(),
+        detail_2: detailInputs.detail_2.value.trim(),
+        detail_3: detailInputs.detail_3.value.trim(),
+        customize_button_text: detailInputs.customize_button_text.value.trim(),
+        customize_url: detailInputs.customize_url.value.trim(),
+        image_1: detailInputs.image_1.value.trim(),
+        image_2: detailInputs.image_2.value.trim(),
+        image_3: detailInputs.image_3.value.trim(),
+        is_active: detailInputs.is_active.value === 'true'
+      };
+    }
+
+    async function loadDetails() {
+      const list = document.getElementById('detailsList');
+      list.innerHTML = '<div class="meta">Se încarcă...</div>';
+
+      const { data, error } = await db
+        .from('atelier_products')
+        .select('*')
+        .order('updated_at', { ascending:false });
+
+      if (error) {
+        list.innerHTML = '<div class="meta">Nu am putut încărca paginile.</div>';
+        return;
+      }
+
+      if (!data?.length) {
+        list.innerHTML = '<div class="meta">Nu există pagini de detalii.</div>';
+        return;
+      }
+
+      list.innerHTML = data.map(product => `
+        <div class="variant-card">
+          <div class="variant-header">
+            <div>
+              <strong>${escapeHtml(product.title || '(fără titlu)')}</strong>
+              <div class="meta">/${escapeHtml(product.slug || '')} ${product.is_active ? '• activ' : '• inactiv'}</div>
+            </div>
+            <button class="mini-btn" onclick="openDetail('${product.id}')">Editează</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function openDetail(id) {
+      const { data, error } = await db.from('atelier_products').select('*').eq('id', id).single();
+      if (error) return;
+      fillDetailForm(data);
+    }
+
+    async function saveDetail() {
+      const detailsMessage = document.getElementById('detailsMessage');
+      msg(detailsMessage, 'Se salvează...');
+
+      const payload = getDetailPayload();
+
+      if (!payload.title || !payload.slug) {
+        msg(detailsMessage, 'Titlul și slug-ul sunt obligatorii.', 'error');
+        return;
+      }
+
+      let response;
+      if (currentDetailId) {
+        response = await db.from('atelier_products').update(payload).eq('id', currentDetailId).select().single();
+      } else {
+        response = await db.from('atelier_products').insert(payload).select().single();
+      }
+
+      if (response.error) {
+        msg(detailsMessage, response.error.message, 'error');
+        return;
+      }
+
+      currentDetailId = response.data.id;
+      msg(detailsMessage, 'Pagina de detalii a fost salvată.', 'success');
+      await loadDetails();
+      await loadStats();
+      updateDetailPreview();
+    }
+
+    function updateDetailPreview() {
+      const payload = getDetailPayload();
+      const thumbs = document.getElementById('detailThumbs');
+
+      thumbs.innerHTML = [payload.image_1,payload.image_2,payload.image_3].map((src,i) => `
+        <div class="thumb">${src ? `<img src="${escapeHtml(src)}">` : `Imagine ${i+1}`}</div>
+      `).join('');
+
+      const url = payload.slug ? `product-details.html?slug=${encodeURIComponent(payload.slug)}` : '#';
+
+      document.getElementById('openDetailPreview').href = url;
+      document.getElementById('detailPreviewFrame').src = url === '#' ? 'about:blank' : url;
+    }
+
+    window.openDetail = openDetail;
+
+    const custInputs = {
+      title: document.getElementById('custTitle'),
+      slug: document.getElementById('custSlug'),
+      base_price: document.getElementById('custBasePrice'),
+      is_active: document.getElementById('custActive'),
+      previewTitle: document.getElementById('custPreviewTitle'),
+      previewSubtitle: document.getElementById('custPreviewSubtitle')
+    };
+
+    custInputs.title.addEventListener('input', () => {
+      if (!custInputs.slug.value.trim()) custInputs.slug.value = slugify(custInputs.title.value);
+      syncCustomizerJson();
+    });
+
+    Object.values(custInputs).forEach(input => {
+      input.addEventListener('input', syncCustomizerJson);
+      input.addEventListener('change', syncCustomizerJson);
+    });
+
+    document.getElementById('newCustomizerBtn').addEventListener('click', resetCustomizer);
+    document.getElementById('saveCustomizerBtn').addEventListener('click', saveCustomizer);
+    document.getElementById('reloadCustomizersBtn').addEventListener('click', loadCustomizers);
+    document.getElementById('addBaseVariantBtn').addEventListener('click', addBaseVariant);
+    document.getElementById('addOptionBtn').addEventListener('click', addOption);
+    document.getElementById('loadJsonBtn').addEventListener('click', loadJsonToEditor);
+    document.getElementById('applyLayerBtn').addEventListener('click', applyLayerFields);
+
+    function defaultStyle(zIndex) {
+      return { x:50, y:55, width:420, rotate:0, zIndex };
+    }
+
+    function resetCustomizer() {
+      currentCustomizerId = null;
+      currentConfig = {
+        previewTitle:'',
+        previewSubtitle:'',
+        detailNote:'Fiecare piesă este handmade, special pentru tine.',
+        addButtonText:'Adaugă în coș',
+        baseVariants:[],
+        options:[]
+      };
+
+      custInputs.title.value = '';
+      custInputs.slug.value = '';
+      custInputs.base_price.value = '0';
+      custInputs.is_active.value = 'true';
+      custInputs.previewTitle.value = '';
+      custInputs.previewSubtitle.value = '';
+
+      selectedLayer = null;
+      renderCustomizerEditor();
+      msg(document.getElementById('customizerMessage'), 'Customizer nou pregătit.');
+    }
+
+    function fillCustomizer(row) {
+      currentCustomizerId = row.id;
+      currentConfig = row.config || {};
+      currentConfig.baseVariants = Array.isArray(currentConfig.baseVariants) ? currentConfig.baseVariants : [];
+      currentConfig.options = Array.isArray(currentConfig.options) ? currentConfig.options : [];
+
+      custInputs.title.value = row.title || '';
+      custInputs.slug.value = row.slug || '';
+      custInputs.base_price.value = row.base_price ?? 0;
+      custInputs.is_active.value = String(row.is_active ?? true);
+      custInputs.previewTitle.value = currentConfig.previewTitle || '';
+      custInputs.previewSubtitle.value = currentConfig.previewSubtitle || '';
+
+      selectedLayer = null;
+      renderCustomizerEditor();
+    }
+
+    function getCustomizerPayload() {
+      currentConfig.previewTitle = custInputs.previewTitle.value.trim();
+      currentConfig.previewSubtitle = custInputs.previewSubtitle.value.trim();
+
+      return {
+        title: custInputs.title.value.trim(),
+        slug: slugify(custInputs.slug.value.trim() || custInputs.title.value.trim()),
+        base_price: Number(custInputs.base_price.value || 0),
+        is_active: custInputs.is_active.value === 'true',
+        config: currentConfig
+      };
+    }
+
+    async function loadCustomizers() {
+      const list = document.getElementById('customizersList');
+      list.innerHTML = '<div class="meta">Se încarcă...</div>';
+
+      const { data, error } = await db
+        .from('customizers')
+        .select('*')
+        .order('updated_at', { ascending:false });
+
+      if (error) {
+        list.innerHTML = '<div class="meta">Nu am putut încărca customizerele.</div>';
+        return;
+      }
+
+      if (!data?.length) {
+        list.innerHTML = '<div class="meta">Nu există customizere.</div>';
+        return;
+      }
+
+      list.innerHTML = data.map(row => `
+        <div class="variant-card">
+          <div class="variant-header">
+            <div>
+              <strong>${escapeHtml(row.title || '(fără titlu)')}</strong>
+              <div class="meta">/${escapeHtml(row.slug || '')} ${row.is_active ? '• activ' : '• inactiv'}</div>
+            </div>
+            <button class="mini-btn" onclick="openCustomizer('${row.id}')">Editează</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function openCustomizer(id) {
+      const { data, error } = await db.from('customizers').select('*').eq('id', id).single();
+      if (error) return;
+      fillCustomizer(data);
+    }
+
+    async function saveCustomizer() {
+      const customizerMessage = document.getElementById('customizerMessage');
+      msg(customizerMessage, 'Se salvează...');
+
+      const payload = getCustomizerPayload();
+
+      if (!payload.title || !payload.slug) {
+        msg(customizerMessage, 'Titlul și slug-ul sunt obligatorii.', 'error');
+        return;
+      }
+
+      let response;
+      if (currentCustomizerId) {
+        response = await db.from('customizers').update(payload).eq('id', currentCustomizerId).select().single();
+      } else {
+        response = await db.from('customizers').insert(payload).select().single();
+      }
+
+      if (response.error) {
+        msg(customizerMessage, response.error.message, 'error');
+        return;
+      }
+
+      currentCustomizerId = response.data.id;
+      msg(customizerMessage, 'Customizer salvat.', 'success');
+      await loadCustomizers();
+      await loadStats();
+      renderCustomizerEditor();
+    }
+
+    function addBaseVariant() {
+      if (!currentConfig) resetCustomizer();
+
+      currentConfig.baseVariants.push({
+        name:'Variantă nouă',
+        hex:'#f4efe7',
+        src:'',
+        price:0,
+        style: defaultStyle(4)
+      });
+
+      renderCustomizerEditor();
+    }
+
+    function addOption() {
+      if (!currentConfig) resetCustomizer();
+
+      currentConfig.options.push({
+        name:'Opțiune nouă',
+        price:0,
+        thumbnail:'',
+        variants:[]
+      });
+
+      renderCustomizerEditor();
+    }
+
+    function addOptionVariant(optionIndex) {
+      currentConfig.options[optionIndex].variants.push({
+        name:'Variantă opțiune',
+        hex:'#d44848',
+        src:'',
+        style: defaultStyle(7)
+      });
+
+      renderCustomizerEditor();
+    }
+
+    function removeBaseVariant(index) {
+      currentConfig.baseVariants.splice(index,1);
+      selectedLayer = null;
+      renderCustomizerEditor();
+    }
+
+    function removeOption(index) {
+      currentConfig.options.splice(index,1);
+      selectedLayer = null;
+      renderCustomizerEditor();
+    }
+
+    function removeOptionVariant(optionIndex, variantIndex) {
+      currentConfig.options[optionIndex].variants.splice(variantIndex,1);
+      selectedLayer = null;
+      renderCustomizerEditor();
+    }
+
+    function updateBaseField(index, field, value) {
+      const item = currentConfig.baseVariants[index];
+      if (!item) return;
+
+      if (field === 'price') item[field] = Number(value || 0);
+      else item[field] = value;
+
+      renderPreviewOnly();
+      syncCustomizerJson();
+    }
+
+    function updateOptionField(index, field, value) {
+      const item = currentConfig.options[index];
+      if (!item) return;
+
+      if (field === 'price') item[field] = Number(value || 0);
+      else item[field] = value;
+
+      renderPreviewOnly();
+      syncCustomizerJson();
+    }
+
+    function updateOptionVariantField(optionIndex, variantIndex, field, value) {
+      const item = currentConfig.options[optionIndex]?.variants?.[variantIndex];
+      if (!item) return;
+
+      item[field] = value;
+      renderPreviewOnly();
+      syncCustomizerJson();
+    }
+
+    function getLayerBySelected() {
+      if (!selectedLayer) return null;
+
+      if (selectedLayer.type === 'base') {
+        return currentConfig.baseVariants[selectedLayer.index];
+      }
+
+      if (selectedLayer.type === 'option') {
+        return currentConfig.options[selectedLayer.optionIndex]?.variants?.[selectedLayer.variantIndex];
+      }
+
+      return null;
+    }
+
+    function selectLayer(data) {
+      selectedLayer = data;
+
+      const layer = getLayerBySelected();
+      if (!layer) return;
+
+      document.getElementById('selectedLayerLabel').textContent = layer.name || 'Imagine selectată';
+      document.getElementById('layerX').value = layer.style?.x ?? 50;
+      document.getElementById('layerY').value = layer.style?.y ?? 50;
+      document.getElementById('layerW').value = layer.style?.width ?? 420;
+      document.getElementById('layerR').value = layer.style?.rotate ?? 0;
+
+      renderPreviewOnly();
+    }
+
+    function applyLayerFields() {
+      const layer = getLayerBySelected();
+      if (!layer) return;
+
+      layer.style = layer.style || {};
+      layer.style.x = Number(document.getElementById('layerX').value || 50);
+      layer.style.y = Number(document.getElementById('layerY').value || 50);
+      layer.style.width = Number(document.getElementById('layerW').value || 420);
+      layer.style.rotate = Number(document.getElementById('layerR').value || 0);
+      layer.style.zIndex = layer.style.zIndex ?? 5;
+
+      renderCustomizerEditor();
+    }
+
+    function styleToCss(style = {}) {
+      const x = Number(style.x ?? 50);
+      const y = Number(style.y ?? 50);
+      const width = Number(style.width ?? 420);
+      const rotate = Number(style.rotate ?? 0);
+      const zIndex = Number(style.zIndex ?? 5);
+
+      return `
+        left:${x}%;
+        top:${y}%;
+        width:${width}px;
+        z-index:${zIndex};
+        transform:translate(-50%,-50%) rotate(${rotate}deg);
+      `;
+    }
+
+    function renderPreviewOnly() {
+      const stage = document.getElementById('custPreviewStage');
+      if (!currentConfig || !stage) return;
+
+      const selectedBase = currentConfig.baseVariants[0];
+      let selectedVariant = null;
+
+      if (selectedLayer?.type === 'base') {
+        selectedVariant = null;
+      } else if (selectedLayer?.type === 'option') {
+        selectedVariant = getLayerBySelected();
+      } else {
+        selectedVariant = currentConfig.options?.[0]?.variants?.[0] || null;
+      }
+
+      stage.innerHTML = `
+        ${selectedBase?.src ? `
+          <img class="preview-layer"
+               data-layer-kind="base"
+               src="${escapeHtml(selectedBase.src)}"
+               style="${styleToCss(selectedBase.style)}">
+        ` : ''}
+
+        ${selectedVariant?.src ? `
+          <img class="preview-layer"
+               data-layer-kind="option"
+               src="${escapeHtml(selectedVariant.src)}"
+               style="${styleToCss(selectedVariant.style)}">
+        ` : ''}
+      `;
+
+      stage.querySelectorAll('.preview-layer').forEach(img => {
+        img.addEventListener('pointerdown', startDrag);
+      });
+
+      syncCustomizerJson();
+    }
+
+    function startDrag(e) {
+      const layer = getLayerBySelected();
+      if (!layer) return;
+
+      const stage = document.getElementById('custPreviewStage');
+      const rect = stage.getBoundingClientRect();
+
+      dragState = {
+        layer,
+        rect
+      };
+
+      e.target.setPointerCapture(e.pointerId);
+      document.addEventListener('pointermove', onDrag);
+      document.addEventListener('pointerup', stopDrag);
+    }
+
+    function onDrag(e) {
+      if (!dragState) return;
+
+      const x = ((e.clientX - dragState.rect.left) / dragState.rect.width) * 100;
+      const y = ((e.clientY - dragState.rect.top) / dragState.rect.height) * 100;
+
+      dragState.layer.style = dragState.layer.style || {};
+      dragState.layer.style.x = Math.max(0, Math.min(100, x));
+      dragState.layer.style.y = Math.max(0, Math.min(100, y));
+
+      document.getElementById('layerX').value = Math.round(dragState.layer.style.x);
+      document.getElementById('layerY').value = Math.round(dragState.layer.style.y);
+
+      renderPreviewOnly();
+    }
+
+    function stopDrag() {
+      dragState = null;
+      document.removeEventListener('pointermove', onDrag);
+      document.removeEventListener('pointerup', stopDrag);
+    }
+
+    function renderCustomizerEditor() {
+      if (!currentConfig) resetCustomizer();
+
+      const baseList = document.getElementById('baseVariantsList');
+      const optionsList = document.getElementById('optionsList');
+
+      baseList.innerHTML = currentConfig.baseVariants.map((item,index) => `
+        <div class="variant-card">
+          <div class="variant-header">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="swatch" style="background:${escapeHtml(item.hex || '#f4efe7')}"></div>
+              <strong>Bază ${index + 1}</strong>
+            </div>
+            <div>
+              <button class="mini-btn" onclick="selectLayer({type:'base', index:${index}})">Selectează</button>
+              <button class="mini-btn danger" onclick="removeBaseVariant(${index})">Șterge</button>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <label>
+              Nume
+              <input value="${escapeHtml(item.name || '')}" oninput="updateBaseField(${index}, 'name', this.value)">
+            </label>
+            <label>
+              Culoare HEX
+              <input value="${escapeHtml(item.hex || '')}" oninput="updateBaseField(${index}, 'hex', this.value)">
+            </label>
+            <label>
+              Preț extra
+              <input type="number" value="${Number(item.price || 0)}" oninput="updateBaseField(${index}, 'price', this.value)">
+            </label>
+            <label>
+              URL imagine
+              <input value="${escapeHtml(item.src || '')}" oninput="updateBaseField(${index}, 'src', this.value)">
+            </label>
+          </div>
+        </div>
+      `).join('');
+
+      optionsList.innerHTML = currentConfig.options.map((opt,optionIndex) => `
+        <div class="variant-card">
+          <div class="variant-header">
+            <strong>Opțiune ${optionIndex + 1}</strong>
+            <div>
+              <button class="mini-btn success" onclick="addOptionVariant(${optionIndex})">Adaugă variantă</button>
+              <button class="mini-btn danger" onclick="removeOption(${optionIndex})">Șterge opțiunea</button>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <label>
+              Nume opțiune
+              <input value="${escapeHtml(opt.name || '')}" oninput="updateOptionField(${optionIndex}, 'name', this.value)">
+            </label>
+            <label>
+              Preț extra
+              <input type="number" value="${Number(opt.price || 0)}" oninput="updateOptionField(${optionIndex}, 'price', this.value)">
+            </label>
+            <label class="full">
+              Thumbnail URL
+              <input value="${escapeHtml(opt.thumbnail || '')}" oninput="updateOptionField(${optionIndex}, 'thumbnail', this.value)">
+            </label>
+          </div>
+
+          <h3>Variante</h3>
+
+          ${(opt.variants || []).map((variant,variantIndex) => `
+            <div class="variant-card">
+              <div class="variant-header">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div class="swatch" style="background:${escapeHtml(variant.hex || '#d44848')}"></div>
+                  <strong>Variantă ${variantIndex + 1}</strong>
+                </div>
+                <div>
+                  <button class="mini-btn" onclick="selectLayer({type:'option', optionIndex:${optionIndex}, variantIndex:${variantIndex}})">Selectează</button>
+                  <button class="mini-btn danger" onclick="removeOptionVariant(${optionIndex}, ${variantIndex})">Șterge</button>
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <label>
+                  Nume variantă
+                  <input value="${escapeHtml(variant.name || '')}" oninput="updateOptionVariantField(${optionIndex}, ${variantIndex}, 'name', this.value)">
+                </label>
+                <label>
+                  Culoare HEX
+                  <input value="${escapeHtml(variant.hex || '')}" oninput="updateOptionVariantField(${optionIndex}, ${variantIndex}, 'hex', this.value)">
+                </label>
+                <label class="full">
+                  URL imagine
+                  <input value="${escapeHtml(variant.src || '')}" oninput="updateOptionVariantField(${optionIndex}, ${variantIndex}, 'src', this.value)">
+                </label>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+
+      renderPreviewOnly();
+      syncCustomizerJson();
+    }
+
+    function syncCustomizerJson() {
+      if (!currentConfig) return;
+      document.getElementById('customizerJson').value = JSON.stringify(currentConfig, null, 2);
+    }
+
+    function loadJsonToEditor() {
+      try {
+        currentConfig = JSON.parse(document.getElementById('customizerJson').value);
+        currentConfig.baseVariants = Array.isArray(currentConfig.baseVariants) ? currentConfig.baseVariants : [];
+        currentConfig.options = Array.isArray(currentConfig.options) ? currentConfig.options : [];
+        renderCustomizerEditor();
+        msg(document.getElementById('customizerMessage'), 'JSON încărcat în editor.', 'success');
+      } catch (err) {
+        msg(document.getElementById('customizerMessage'), 'JSON invalid: ' + err.message, 'error');
+      }
+    }
+
+    window.openCustomizer = openCustomizer;
+    window.selectLayer = selectLayer;
+    window.addOptionVariant = addOptionVariant;
+    window.removeBaseVariant = removeBaseVariant;
+    window.removeOption = removeOption;
+    window.removeOptionVariant = removeOptionVariant;
+    window.updateBaseField = updateBaseField;
+    window.updateOptionField = updateOptionField;
+    window.updateOptionVariantField = updateOptionVariantField;
+
+    document.getElementById('reloadOrdersBtn').addEventListener('click', loadOrders);
+
+    async function loadOrders() {
+      const list = document.getElementById('ordersList');
+      const ordersMessage = document.getElementById('ordersMessage');
+
+      list.innerHTML = '<div class="panel">Se încarcă comenzile...</div>';
+
+      const { data, error } = await db
+        .from('orders')
+        .select('*')
+        .order('created_at', { ascending:false });
+
+      if (error) {
+        list.innerHTML = '';
+        msg(ordersMessage, error.message, 'error');
+        return;
+      }
+
+      msg(ordersMessage, '');
+
+      if (!data?.length) {
+        list.innerHTML = '<div class="panel">Nu există comenzi încă.</div>';
+        return;
+      }
+
+      list.innerHTML = data.map(order => `
+        <div class="order-card">
+          <div class="order-head">
+            <div>
+              <h3>${escapeHtml(order.customer_name || 'Client fără nume')}</h3>
+              <div class="meta">
+                ${escapeHtml(order.customer_email || '')}<br>
+                ${escapeHtml(order.customer_phone || '')}<br>
+                ${escapeHtml(order.customer_address || '')}, ${escapeHtml(order.customer_city || '')}
+              </div>
+            </div>
+
+            <div>
+              <div class="pill">${escapeHtml(order.status || 'noua')}</div>
+              <div class="meta" style="margin-top:8px;">${new Date(order.created_at).toLocaleString('ro-RO')}</div>
+              <strong>${formatPrice(order.total || 0)}</strong>
+            </div>
+          </div>
+
+          ${order.customer_notes ? `<div class="helper-box"><strong>Note:</strong> ${escapeHtml(order.customer_notes)}</div>` : ''}
+
+          <div class="order-items">
+            ${(order.items || []).map(item => `
+              <div class="order-item">
+                <strong>${escapeHtml(item.name || 'Produs')}</strong><br>
+                Cantitate: ${Number(item.quantity || 1)}<br>
+                Preț: ${formatPrice(item.price || 0)}<br>
+                ${item.details ? Object.entries(item.details).map(([k,v]) => `${escapeHtml(k)}: ${escapeHtml(v)}`).join('<br>') : ''}
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-success" onclick="updateOrderStatus('${order.id}', 'procesata')">Marchează procesată</button>
+            <button class="btn btn-secondary" onclick="updateOrderStatus('${order.id}', 'trimisa')">Marchează trimisă</button>
+            <button class="btn btn-danger" onclick="deleteOrder('${order.id}')">Șterge</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function updateOrderStatus(id, status) {
+      await db.from('orders').update({ status }).eq('id', id);
+      await loadOrders();
+    }
+
+    async function deleteOrder(id) {
+      if (!confirm('Sigur ștergi comanda?')) return;
+      await db.from('orders').delete().eq('id', id);
+      await loadOrders();
+      await loadStats();
+    }
+
+    window.updateOrderStatus = updateOrderStatus;
+    window.deleteOrder = deleteOrder;
+
+    resetDetailForm();
+    resetCustomizer();
+    boot();
+  </script>
 </body>
 </html>
