@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maison Doucette — Customizer Admin</title>
+
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#f7f1eb;
+      --bg2:#efe4d8;
+      --panel:#fffaf5;
+      --white:#fff;
+      --line:rgba(101,79,67,0.13);
+      --gold:#d2ad73;
+      --gold-deep:#ae7f43;
+      --brown:#654f43;
+      --brown-soft:#866f61;
+      --muted:#a9978b;
+      --danger:#9b5248;
+      --success:#5f7d5b;
+      --shadow:0 18px 45px rgba(101,79,67,0.10);
+      --shadow-strong:0 28px 70px rgba(101,79,67,0.16);
+      --radius-xl:30px;
+      --radius-lg:22px;
+      --radius-md:16px;
+      --ease:cubic-bezier(.22,.61,.36,1);
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:'Manrope',sans-serif;
+      color:var(--brown);
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.9), transparent 28%),
+        linear-gradient(180deg,var(--bg),var(--bg2));
+      min-height:100vh;
+    }
+
+    h1,h2,h3,.serif{
+      font-family:'Cormorant Garamond',serif;
+      letter-spacing:-0.02em;
+    }
+
+    .hidden{display:none !important}
+
+    button,input,textarea,select{
+      font:inherit;
+    }
+
+    button{
+      cursor:pointer;
+    }
+
+    .auth-screen{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .auth-card{
+      width:min(500px,100%);
+      background:rgba(255,250,245,.94);
+      border:1px solid var(--line);
+      border-radius:var(--radius-xl);
+      box-shadow:var(--shadow);
+      padding:28px;
+    }
+
+    .auth-card h1{
+      margin:0 0 8px;
+      font-size:3.1rem;
+      line-height:.9;
+    }
+
+    .auth-card p{
+      margin:0 0 20px;
+      color:var(--brown-soft);
+      line-height:1.7;
+      font-size:.95rem;
+    }
+
+    .top-strip{
+      position:sticky;
+      top:0;
+      z-index:1000;
+      background:linear-gradient(135deg,var(--gold-deep),var(--gold));
+      color:#fffdfa;
+      padding:11px 16px;
+      text-align:center;
+      font-size:.84rem;
+      box-shadow:0 10px 22px rgba(174,127,67,.18);
+    }
+
+    .app{
+      width:min(1540px,calc(100% - 24px));
+      margin:16px auto 28px;
+      display:grid;
+      grid-template-columns:340px minmax(0,1fr);
+      gap:16px;
+      align-items:start;
+    }
+
+    .panel{
+      background:rgba(255,250,245,.94);
+      border:1px solid var(--line);
+      border-radius:var(--radius-xl);
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+
+    .side{
+      position:sticky;
+      top:58px;
+      max-height:calc(100vh - 74px);
+      overflow:auto;
+    }
+
+    .side::-webkit-scrollbar{width:9px}
+    .side::-webkit-scrollbar-thumb{
+      background:rgba(101,79,67,.14);
+      border-radius:999px;
+    }
+
+    .brand-head{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+      margin-bottom:14px;
+    }
+
+    .brand-head h1{
+      margin:0;
+      font-size:2.45rem;
+      line-height:.9;
+    }
+
+    .brand-head p{
+      margin:6px 0 0;
+      color:var(--brown-soft);
+      font-size:.86rem;
+      line-height:1.6;
+    }
+
+    .tabs{
+      display:grid;
+      gap:8px;
+      margin:16px 0;
+    }
+
+    .tab-btn{
+      width:100%;
+      text-align:left;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--brown);
+      border-radius:16px;
+      padding:12px 14px;
+      transition:transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+
+    .tab-btn:hover{
+      transform:translateY(-1px);
+    }
+
+    .tab-btn.active{
+      border-color:rgba(174,127,67,.35);
+      background:linear-gradient(180deg,#fffdfb,#fff7f0);
+      box-shadow:0 10px 22px rgba(174,127,67,.10);
+      font-weight:700;
+    }
+
+    .btn-row{
+      display:flex;
+      gap:9px;
+      flex-wrap:wrap;
+      margin:12px 0;
+    }
+
+    .btn{
+      border:none;
+      border-radius:999px;
+      min-height:42px;
+      padding:11px 16px;
+      background:linear-gradient(135deg,var(--gold-deep),var(--gold));
+      color:#fff;
+      font-weight:700;
+      box-shadow:0 12px 24px rgba(174,127,67,.18);
+    }
+
+    .btn-secondary{
+      border:1px solid var(--line);
+      border-radius:999px;
+      min-height:42px;
+      padding:11px 16px;
+      background:#fff;
+      color:var(--brown);
+    }
+
+    .btn-soft{
+      border:1px dashed var(--line);
+      border-radius:999px;
+      min-height:42px;
+      padding:11px 16px;
+      background:rgba(255,255,255,.65);
+      color:var(--brown-soft);
+    }
+
+    .btn-danger{
+      border:1px solid rgba(155,82,72,.22);
+      border-radius:999px;
+      min-height:42px;
+      padding:11px 16px;
+      background:#fff6f4;
+      color:var(--danger);
+    }
+
+    .btn:disabled,
+    .btn-secondary:disabled,
+    .btn-soft:disabled,
+    .btn-danger:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+      box-shadow:none;
+    }
+
+    .message{
+      min-height:22px;
+      color:var(--brown-soft);
+      font-size:.88rem;
+      line-height:1.5;
+      margin-top:10px;
+      white-space:pre-wrap;
+    }
+
+    .message.error{color:var(--danger)}
+    .message.success{color:var(--success)}
+
+    .field{
+      display:grid;
+      gap:7px;
+      margin-bottom:13px;
+    }
+
+    .field-row{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+
+    .field-row-3{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
+    }
+
+    label{
+      font-size:.74rem;
+      text-transform:uppercase;
+      letter-spacing:.1em;
+      color:var(--brown-soft);
+      font-weight:700;
+    }
+
+    input,textarea,select{
+      width:100%;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:14px;
+      padding:12px 13px;
+      color:var(--brown);
+      outline:none;
+    }
+
+    textarea{
+      resize:vertical;
+      min-height:88px;
+      line-height:1.6;
+    }
+
+    input[type="color"]{
+      padding:4px;
+      height:44px;
+    }
+
+    .main{
+      display:grid;
+      gap:16px;
+    }
+
+    .section-title{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .section-title h2{
+      margin:0;
+      font-size:2rem;
+      line-height:.95;
+    }
+
+    .section-title p{
+      margin:5px 0 0;
+      color:var(--brown-soft);
+      font-size:.88rem;
+      line-height:1.55;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+      gap:16px;
+      align-items:start;
+    }
+
+    .product-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .product-card{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:18px;
+      padding:13px;
+      display:grid;
+      gap:10px;
+    }
+
+    .product-card.active{
+      border-color:rgba(174,127,67,.42);
+      background:linear-gradient(180deg,#fffdfb,#fff8f1);
+    }
+
+    .product-card h3{
+      margin:0;
+      font-size:1.45rem;
+      line-height:1;
+    }
+
+    .product-meta{
+      color:var(--brown-soft);
+      font-size:.84rem;
+      line-height:1.5;
+    }
+
+    .pill-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:7px;
+    }
+
+    .pill{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.75);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:.72rem;
+      color:var(--brown-soft);
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-weight:700;
+    }
+
+    .pill.active{
+      color:var(--success);
+      background:#f4fbf7;
+      border-color:rgba(95,125,91,.2);
+    }
+
+    .pill.inactive{
+      color:var(--danger);
+      background:#fff6f4;
+      border-color:rgba(155,82,72,.2);
+    }
+
+    .editor-layout{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 430px;
+      gap:16px;
+      align-items:start;
+    }
+
+    .form-column{
+      display:grid;
+      gap:16px;
+    }
+
+    .mini-list{
+      display:grid;
+      gap:9px;
+    }
+
+    .mini-item{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:16px;
+      padding:11px;
+      display:grid;
+      gap:9px;
+    }
+
+    .mini-item.active{
+      border-color:rgba(174,127,67,.45);
+      box-shadow:0 10px 20px rgba(174,127,67,.09);
+      background:linear-gradient(180deg,#fffdfb,#fff8f1);
+    }
+
+    .mini-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+    }
+
+    .mini-title{
+      font-weight:800;
+      line-height:1.3;
+    }
+
+    .mini-actions{
+      display:flex;
+      gap:6px;
+      flex-wrap:wrap;
+    }
+
+    .tiny-btn{
+      min-height:32px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--brown);
+      padding:7px 10px;
+      font-size:.78rem;
+    }
+
+    .tiny-btn.danger{
+      color:var(--danger);
+      background:#fff6f4;
+      border-color:rgba(155,82,72,.2);
+    }
+
+    .visual-panel{
+      position:sticky;
+      top:58px;
+      display:grid;
+      gap:12px;
+    }
+
+    .preview-card{
+      padding:14px;
+    }
+
+    .preview-head{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .preview-head h3{
+      margin:0;
+      font-size:1.45rem;
+      line-height:1;
+    }
+
+    .preview-head p{
+      margin:4px 0 0;
+      color:var(--brown-soft);
+      font-size:.8rem;
+      line-height:1.35;
+    }
+
+    .preview-badge{
+      align-self:flex-start;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:999px;
+      padding:7px 9px;
+      color:var(--brown-soft);
+      font-size:.62rem;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .preview-stage{
+      position:relative;
+      width:100%;
+      aspect-ratio:.92 / 1;
+      min-height:440px;
+      border-radius:24px;
+      overflow:hidden;
+      background:linear-gradient(180deg,#f5f3f1,#ebe8e3);
+      border:1px solid rgba(185,177,170,.52);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.75);
+      user-select:none;
+      touch-action:none;
+    }
+
+    .stage-glow{
+      position:absolute;
+      width:250px;
+      height:250px;
+      left:50%;
+      top:18px;
+      transform:translateX(-50%);
+      border-radius:50%;
+      background:radial-gradient(circle,rgba(255,255,255,.92),rgba(255,255,255,.48),transparent 72%);
+      z-index:1;
+      pointer-events:none;
+    }
+
+    .stage-floor{
+      position:absolute;
+      left:10%;
+      right:10%;
+      bottom:18px;
+      height:58px;
+      border-radius:50%;
+      background:radial-gradient(ellipse at center,rgba(0,0,0,.16),rgba(0,0,0,.07) 38%,transparent 72%);
+      filter:blur(8px);
+      z-index:1;
+      pointer-events:none;
+    }
+
+    .preview-layer{
+      position:absolute;
+      max-width:none;
+      transform-origin:center center;
+      user-select:none;
+      touch-action:none;
+      cursor:grab;
+    }
+
+    .preview-layer.selected{
+      outline:1.5px dashed rgba(174,127,67,.75);
+      outline-offset:4px;
+    }
+
+    .preview-layer:active{
+      cursor:grabbing;
+    }
+
+    .empty-layer{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%,-50%);
+      color:var(--muted);
+      text-align:center;
+      font-size:.86rem;
+      line-height:1.55;
+      width:80%;
+      z-index:3;
+    }
+
+    .control-card{
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:22px;
+      padding:13px;
+    }
+
+    .control-card h3{
+      margin:0 0 10px;
+      font-size:1.4rem;
+      line-height:1;
+    }
+
+    .range-row{
+      display:grid;
+      grid-template-columns:80px 1fr 70px;
+      align-items:center;
+      gap:8px;
+      margin-bottom:9px;
+    }
+
+    .range-row span{
+      color:var(--brown-soft);
+      font-size:.78rem;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    input[type="range"]{
+      padding:0;
+      border:none;
+      background:transparent;
+    }
+
+    .json-box{
+      min-height:220px;
+      font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size:.78rem;
+      white-space:pre;
+    }
+
+    @media(max-width:1180px){
+      .app{
+        grid-template-columns:1fr;
+      }
+      .side{
+        position:relative;
+        top:auto;
+        max-height:none;
+      }
+      .editor-layout{
+        grid-template-columns:1fr;
+      }
+      .visual-panel{
+        position:relative;
+        top:auto;
+      }
+    }
+
+    @media(max-width:760px){
+      .app{
+        width:min(100%,calc(100% - 12px));
+        margin:8px auto 18px;
+      }
+      .panel{
+        border-radius:22px;
+        padding:14px;
+      }
+      .brand-head h1{
+        font-size:2rem;
+      }
+      .field-row,.field-row-3,.grid-2{
+        grid-template-columns:1fr;
+      }
+      .preview-stage{
+        min-height:300px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section id="authScreen" class="auth-screen">
+    <div class="auth-card">
+      <h1>Customizer Admin</h1>
+      <p>Intră cu emailul și parola din Supabase ca să creezi configuratoare dinamice pentru Maison Doucette.</p>
+
+      <form id="loginForm">
+        <div class="field">
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" type="email" required autocomplete="email" placeholder="emailul tău">
+        </div>
+
+        <div class="field">
+          <label for="loginPassword">Parolă</label>
+          <input id="loginPassword" type="password" required autocomplete="current-password" placeholder="parola ta">
+        </div>
+
+        <div class="btn-row">
+          <button id="loginBtn" class="btn" type="submit">Intră în admin</button>
+        </div>
+      </form>
+
+      <div id="authMessage" class="message">Autentifică-te pentru a continua.</div>
+    </div>
+  </section>
+
+  <section id="appScreen" class="hidden">
+    <div class="top-strip">Zonă privată Maison Doucette — configuratoare produse</div>
+
+    <div class="app">
+      <aside class="panel side">
+        <div class="brand-head">
+          <div>
+            <h1>Maison Editor</h1>
+            <p>Un singur loc pentru configuratoare dinamice, culori, layere și preview.</p>
+          </div>
+          <button id="logoutBtn" class="btn-secondary" type="button">Logout</button>
+        </div>
+
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="products" type="button">Produse configurabile</button>
+          <button class="tab-btn" data-tab="editor" type="button">Editor configurator</button>
+          <button class="tab-btn" data-tab="json" type="button">JSON config</button>
+        </div>
+
+        <div class="btn-row">
+          <button id="newProductBtn" class="btn" type="button">Produs nou</button>
+          <button id="saveProductBtn" class="btn-secondary" type="button">Salvează</button>
+          <button id="reloadBtn" class="btn-soft" type="button">Reîncarcă</button>
+        </div>
+
+        <div id="globalMessage" class="message">Alege un produs sau creează unul nou.</div>
+
+        <div class="pill-row">
+          <span class="pill">customizers</span>
+          <span class="pill">drag & drop</span>
+          <span class="pill">jsonb</span>
+        </div>
+      </aside>
+
+      <main class="main">
+        <section id="tab-products" class="panel">
+          <div class="section-title">
+            <div>
+              <h2>Produse configurabile</h2>
+              <p>Aici vezi configuratoarele salvate în tabela <strong>customizers</strong>.</p>
+            </div>
+          </div>
+
+          <div id="productsList" class="product-list">
+            <div class="product-meta">Se încarcă...</div>
+          </div>
+        </section>
+
+        <section id="tab-editor" class="panel hidden">
+          <div class="section-title">
+            <div>
+              <h2>Editor configurator</h2>
+              <p>Creezi baza produsului, variantele de culoare și opțiunile care apar peste preview.</p>
+            </div>
+          </div>
+
+          <div class="editor-layout">
+            <div class="form-column">
+              <div class="control-card">
+                <h3>Produs</h3>
+
+                <div class="field-row">
+                  <div class="field">
+                    <label for="titleInput">Titlu</label>
+                    <input id="titleInput" type="text" placeholder="Iepuraș">
+                  </div>
+
+                  <div class="field">
+                    <label for="slugInput">Slug</label>
+                    <input id="slugInput" type="text" placeholder="iepuras">
+                  </div>
+                </div>
+
+                <div class="field-row">
+                  <div class="field">
+                    <label for="basePriceInput">Preț de bază</label>
+                    <input id="basePriceInput" type="number" min="0" step="1" placeholder="45">
+                  </div>
+
+                  <div class="field">
+                    <label for="activeInput">Activ pe site</label>
+                    <select id="activeInput">
+                      <option value="true">Da</option>
+                      <option value="false">Nu</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="field-row">
+                  <div class="field">
+                    <label for="previewTitleInput">Titlu preview</label>
+                    <input id="previewTitleInput" type="text" placeholder="Iepurașul tău">
+                  </div>
+
+                  <div class="field">
+                    <label for="addButtonInput">Text buton</label>
+                    <input id="addButtonInput" type="text" placeholder="Adaugă în coș">
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="previewSubtitleInput">Text preview</label>
+                  <textarea id="previewSubtitleInput" placeholder="Creează-ți propriul companion delicat, un detaliu după altul."></textarea>
+                </div>
+
+                <div class="field">
+                  <label for="detailNoteInput">Notă detalii</label>
+                  <textarea id="detailNoteInput" placeholder="Fiecare piesă este handmade, special pentru tine."></textarea>
+                </div>
+              </div>
+
+              <div class="control-card">
+                <div class="section-title">
+                  <div>
+                    <h2 style="font-size:1.65rem;">Culori / imagini de bază</h2>
+                    <p>Maxim 8 variante. Selectează una ca să îi reglezi poziția în preview.</p>
+                  </div>
+                  <button id="addBaseBtn" class="btn-secondary" type="button">+ Bază</button>
+                </div>
+
+                <div id="baseList" class="mini-list"></div>
+              </div>
+
+              <div class="control-card">
+                <div class="section-title">
+                  <div>
+                    <h2 style="font-size:1.65rem;">Opțiuni / accesorii</h2>
+                    <p>Maxim 6 opțiuni. Fiecare poate avea variante de culoare.</p>
+                  </div>
+                  <button id="addOptionBtn" class="btn-secondary" type="button">+ Opțiune</button>
+                </div>
+
+                <div id="optionList" class="mini-list"></div>
+              </div>
+            </div>
+
+            <aside class="visual-panel">
+              <div class="panel preview-card">
+                <div class="preview-head">
+                  <div>
+                    <h3 id="visualTitle">Preview live</h3>
+                    <p id="visualSubtitle">Alege un layer și mută-l direct în preview.</p>
+                  </div>
+                  <div class="preview-badge">drag & drop</div>
+                </div>
+
+                <div id="previewStage" class="preview-stage">
+                  <div class="stage-glow"></div>
+                  <div class="stage-floor"></div>
+                  <div id="emptyLayer" class="empty-layer">Adaugă o bază sau un accesoriu pentru a edita poziția.</div>
+                </div>
+              </div>
+
+              <div class="control-card">
+                <h3>Poziție layer selectat</h3>
+
+                <div id="selectedLayerName" class="product-meta" style="margin-bottom:10px;">Nimic selectat.</div>
+
+                <div class="range-row">
+                  <span>X</span>
+                  <input id="xRange" type="range" min="0" max="100" step="0.1">
+                  <input id="xNumber" type="number" min="0" max="100" step="0.1">
+                </div>
+
+                <div class="range-row">
+                  <span>Y</span>
+                  <input id="yRange" type="range" min="0" max="100" step="0.1">
+                  <input id="yNumber" type="number" min="0" max="100" step="0.1">
+                </div>
+
+                <div class="range-row">
+                  <span>Size</span>
+                  <input id="wRange" type="range" min="20" max="900" step="1">
+                  <input id="wNumber" type="number" min="20" max="900" step="1">
+                </div>
+
+                <div class="range-row">
+                  <span>Rot</span>
+                  <input id="rRange" type="range" min="-180" max="180" step="1">
+                  <input id="rNumber" type="number" min="-180" max="180" step="1">
+                </div>
+
+                <div class="range-row">
+                  <span>Z</span>
+                  <input id="zRange" type="range" min="1" max="20" step="1">
+                  <input id="zNumber" type="number" min="1" max="20" step="1">
+                </div>
+
+                <div class="btn-row">
+                  <button id="centerLayerBtn" class="btn-secondary" type="button">Centrează</button>
+                  <button id="sendBackBtn" class="btn-soft" type="button">Z jos</button>
+                  <button id="bringFrontBtn" class="btn-soft" type="button">Z sus</button>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="tab-json" class="panel hidden">
+          <div class="section-title">
+            <div>
+              <h2>JSON config</h2>
+              <p>Poți verifica exact ce se salvează în Supabase.</p>
+            </div>
+            <button id="copyJsonBtn" class="btn-secondary" type="button">Copiază JSON</button>
+          </div>
+
+          <textarea id="jsonOutput" class="json-box"></textarea>
+        </section>
+      </main>
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+
+  <script>
+    const db = window.supabase.createClient(
+      window.SUPABASE_URL,
+      window.SUPABASE_ANON_KEY
+    );
+
+    const TABLE = 'customizers';
+
+    const authScreen = document.getElementById('authScreen');
+    const appScreen = document.getElementById('appScreen');
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const authMessage = document.getElementById('authMessage');
+    const globalMessage = document.getElementById('globalMessage');
+
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabProducts = document.getElementById('tab-products');
+    const tabEditor = document.getElementById('tab-editor');
+    const tabJson = document.getElementById('tab-json');
+
+    const productsList = document.getElementById('productsList');
+    const newProductBtn = document.getElementById('newProductBtn');
+    const saveProductBtn = document.getElementById('saveProductBtn');
+    const reloadBtn = document.getElementById('reloadBtn');
+
+    const titleInput = document.getElementById('titleInput');
+    const slugInput = document.getElementById('slugInput');
+    const basePriceInput = document.getElementById('basePriceInput');
+    const activeInput = document.getElementById('activeInput');
+    const previewTitleInput = document.getElementById('previewTitleInput');
+    const previewSubtitleInput = document.getElementById('previewSubtitleInput');
+    const detailNoteInput = document.getElementById('detailNoteInput');
+    const addButtonInput = document.getElementById('addButtonInput');
+
+    const baseList = document.getElementById('baseList');
+    const optionList = document.getElementById('optionList');
+    const addBaseBtn = document.getElementById('addBaseBtn');
+    const addOptionBtn = document.getElementById('addOptionBtn');
+
+    const previewStage = document.getElementById('previewStage');
+    const emptyLayer = document.getElementById('emptyLayer');
+    const visualTitle = document.getElementById('visualTitle');
+    const visualSubtitle = document.getElementById('visualSubtitle');
+    const selectedLayerName = document.getElementById('selectedLayerName');
+
+    const xRange = document.getElementById('xRange');
+    const yRange = document.getElementById('yRange');
+    const wRange = document.getElementById('wRange');
+    const rRange = document.getElementById('rRange');
+    const zRange = document.getElementById('zRange');
+
+    const xNumber = document.getElementById('xNumber');
+    const yNumber = document.getElementById('yNumber');
+    const wNumber = document.getElementById('wNumber');
+    const rNumber = document.getElementById('rNumber');
+    const zNumber = document.getElementById('zNumber');
+
+    const centerLayerBtn = document.getElementById('centerLayerBtn');
+    const sendBackBtn = document.getElementById('sendBackBtn');
+    const bringFrontBtn = document.getElementById('bringFrontBtn');
+
+    const jsonOutput = document.getElementById('jsonOutput');
+    const copyJsonBtn = document.getElementById('copyJsonBtn');
+
+    let currentId = null;
+    let productsCache = [];
+    let slugTouched = false;
+
+    let config = createEmptyConfig();
+    let selectedBaseIndex = 0;
+    let selectedOptionIndex = null;
+    let selectedVariantIndex = null;
+    let selectedLayerType = 'base';
+
+    function createId(prefix = 'item') {
+      return `${prefix}-${Date.now()}-${Math.floor(Math.random() * 9999)}`;
+    }
+
+    function createDefaultStyle(type = 'base') {
+      if (type === 'base') {
+        return { x: 50, y: 55, width: 620, rotate: 0, zIndex: 4 };
+      }
+      return { x: 50, y: 60, width: 220, rotate: 0, zIndex: 6 };
+    }
+
+    function createEmptyConfig() {
+      return {
+        previewTitle: 'Produsul tău',
+        previewSubtitle: 'Alege detaliile și vezi preview-ul live.',
+        detailNote: 'Fiecare piesă este handmade, special pentru tine.',
+        addButtonText: 'Adaugă în coș',
+        baseVariants: [],
+        options: []
+      };
+    }
+
+    function normalizeRomanian(text) {
+      return String(text || '')
+        .replace(/[ăâ]/g, 'a').replace(/[ĂÂ]/g, 'A')
+        .replace(/[î]/g, 'i').replace(/[Î]/g, 'I')
+        .replace(/[șş]/g, 's').replace(/[ȘŞ]/g, 'S')
+        .replace(/[țţ]/g, 't').replace(/[ȚŢ]/g, 'T');
+    }
+
+    function slugify(text) {
+      return normalizeRomanian(text)
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/-{2,}/g, '-')
+        .replace(/^-+|-+$/g, '');
+    }
+
+    function escapeHtml(value = '') {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+
+    function setAuthMessage(text, type = '') {
+      authMessage.textContent = text;
+      authMessage.className = `message ${type}`;
+    }
+
+    function setGlobalMessage(text, type = '') {
+      globalMessage.textContent = text;
+      globalMessage.className = `message ${type}`;
+    }
+
+    function showApp() {
+      authScreen.classList.add('hidden');
+      appScreen.classList.remove('hidden');
+    }
+
+    function showAuth() {
+      appScreen.classList.add('hidden');
+      authScreen.classList.remove('hidden');
+    }
+
+    function showTab(name) {
+      tabButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === name));
+      tabProducts.classList.toggle('hidden', name !== 'products');
+      tabEditor.classList.toggle('hidden', name !== 'editor');
+      tabJson.classList.toggle('hidden', name !== 'json');
+      updateJsonOutput();
+    }
+
+    function getSelectedLayer() {
+      if (selectedLayerType === 'base') {
+        return config.baseVariants[selectedBaseIndex] || null;
+      }
+
+      if (selectedLayerType === 'option') {
+        const opt = config.options[selectedOptionIndex];
+        if (!opt) return null;
+        return opt.variants[selectedVariantIndex] || null;
+      }
+
+      return null;
+    }
+
+    function getSelectedLayerLabel() {
+      const layer = getSelectedLayer();
+      if (!layer) return 'Nimic selectat.';
+
+      if (selectedLayerType === 'base') {
+        return `Bază: ${layer.name || 'fără nume'}`;
+      }
+
+      const opt = config.options[selectedOptionIndex];
+      return `Opțiune: ${opt?.name || ''} / variantă: ${layer.name || 'fără nume'}`;
+    }
+
+    function syncMainFieldsToConfig() {
+      config.previewTitle = previewTitleInput.value.trim();
+      config.previewSubtitle = previewSubtitleInput.value.trim();
+      config.detailNote = detailNoteInput.value.trim();
+      config.addButtonText = addButtonInput.value.trim();
+    }
+
+    function syncConfigToMainFields() {
+      previewTitleInput.value = config.previewTitle || '';
+      previewSubtitleInput.value = config.previewSubtitle || '';
+      detailNoteInput.value = config.detailNote || '';
+      addButtonInput.value = config.addButtonText || '';
+    }
+
+    function resetEditor() {
+      currentId = null;
+      slugTouched = false;
+      config = createEmptyConfig();
+
+      titleInput.value = '';
+      slugInput.value = '';
+      basePriceInput.value = '';
+      activeInput.value = 'true';
+
+      syncConfigToMainFields();
+
+      selectedBaseIndex = 0;
+      selectedOptionIndex = null;
+      selectedVariantIndex = null;
+      selectedLayerType = 'base';
+
+      renderAll();
+      setGlobalMessage('Produs nou pregătit.', '');
+      showTab('editor');
+    }
+
+    function fillEditor(row) {
+      currentId = row.id;
+      slugTouched = true;
+
+      titleInput.value = row.title || '';
+      slugInput.value = row.slug || '';
+      basePriceInput.value = row.base_price ?? 0;
+      activeInput.value = String(row.is_active ?? true);
+
+      config = row.config || createEmptyConfig();
+      config.baseVariants = Array.isArray(config.baseVariants) ? config.baseVariants : [];
+      config.options = Array.isArray(config.options) ? config.options : [];
+
+      syncConfigToMainFields();
+
+      selectedBaseIndex = 0;
+      selectedOptionIndex = config.options.length ? 0 : null;
+      selectedVariantIndex = config.options[0]?.variants?.length ? 0 : null;
+      selectedLayerType = config.baseVariants.length ? 'base' : 'option';
+
+      renderAll();
+      setGlobalMessage(`Editezi „${row.title}”.`, '');
+      showTab('editor');
+    }
+
+    function buildPayload() {
+      syncMainFieldsToConfig();
+
+      return {
+        title: titleInput.value.trim(),
+        slug: slugify(slugInput.value.trim() || titleInput.value.trim()),
+        base_price: Number(basePriceInput.value || 0),
+        is_active: activeInput.value === 'true',
+        config
+      };
+    }
+
+    function renderAll() {
+      renderBaseList();
+      renderOptionList();
+      renderPreview();
+      syncLayerControls();
+      updateJsonOutput();
+
+      visualTitle.textContent = config.previewTitle || 'Preview live';
+      visualSubtitle.textContent = config.previewSubtitle || 'Alege un layer și mută-l direct în preview.';
+    }
+
+    function renderBaseList() {
+      if (!config.baseVariants.length) {
+        baseList.innerHTML = `<div class="product-meta">Nu ai adăugat încă nicio variantă de bază.</div>`;
+        return;
+      }
+
+      baseList.innerHTML = config.baseVariants.map((item, index) => `
+        <div class="mini-item ${selectedLayerType === 'base' && selectedBaseIndex === index ? 'active' : ''}">
+          <div class="mini-top">
+            <div>
+              <div class="mini-title">${escapeHtml(item.name || 'Variantă fără nume')}</div>
+              <div class="product-meta">${escapeHtml(item.src || 'fără imagine')}</div>
+            </div>
+            <div class="mini-actions">
+              <button class="tiny-btn" data-base-select="${index}" type="button">Selectează</button>
+              <button class="tiny-btn danger" data-base-delete="${index}" type="button">Șterge</button>
+            </div>
+          </div>
+
+          <div class="field-row-3">
+            <div class="field">
+              <label>Nume</label>
+              <input data-base-field="name" data-index="${index}" value="${escapeHtml(item.name || '')}">
+            </div>
+            <div class="field">
+              <label>Hex</label>
+              <input type="color" data-base-field="hex" data-index="${index}" value="${escapeHtml(item.hex || '#f4efe7')}">
+            </div>
+            <div class="field">
+              <label>Extra preț</label>
+              <input type="number" data-base-field="price" data-index="${index}" value="${Number(item.price || 0)}">
+            </div>
+          </div>
+
+          <div class="field">
+            <label>URL imagine bază</label>
+            <input data-base-field="src" data-index="${index}" value="${escapeHtml(item.src || '')}" placeholder="Bunny_Colors/bunny-cream.png">
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderOptionList() {
+      if (!config.options.length) {
+        optionList.innerHTML = `<div class="product-meta">Nu ai adăugat încă nicio opțiune/accesoriu.</div>`;
+        return;
+      }
+
+      optionList.innerHTML = config.options.map((opt, optIndex) => `
+        <div class="mini-item ${selectedLayerType === 'option' && selectedOptionIndex === optIndex ? 'active' : ''}">
+          <div class="mini-top">
+            <div>
+              <div class="mini-title">${escapeHtml(opt.name || 'Opțiune fără nume')}</div>
+              <div class="product-meta">${(opt.variants || []).length} variante</div>
+            </div>
+            <div class="mini-actions">
+              <button class="tiny-btn" data-option-select="${optIndex}" type="button">Selectează</button>
+              <button class="tiny-btn" data-option-add-variant="${optIndex}" type="button">+ Variantă</button>
+              <button class="tiny-btn danger" data-option-delete="${optIndex}" type="button">Șterge</button>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label>Nume opțiune</label>
+              <input data-option-field="name" data-option-index="${optIndex}" value="${escapeHtml(opt.name || '')}">
+            </div>
+            <div class="field">
+              <label>Preț extra</label>
+              <input type="number" data-option-field="price" data-option-index="${optIndex}" value="${Number(opt.price || 0)}">
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Thumbnail opțiune</label>
+            <input data-option-field="thumbnail" data-option-index="${optIndex}" value="${escapeHtml(opt.thumbnail || '')}" placeholder="Accessories/heart-red.png">
+          </div>
+
+          <div class="mini-list">
+            ${(opt.variants || []).map((variant, variantIndex) => `
+              <div class="mini-item ${selectedLayerType === 'option' && selectedOptionIndex === optIndex && selectedVariantIndex === variantIndex ? 'active' : ''}" style="box-shadow:none;">
+                <div class="mini-top">
+                  <div>
+                    <div class="mini-title">${escapeHtml(variant.name || 'Variantă culoare')}</div>
+                    <div class="product-meta">${escapeHtml(variant.src || 'fără imagine')}</div>
+                  </div>
+                  <div class="mini-actions">
+                    <button class="tiny-btn" data-variant-select="${optIndex}:${variantIndex}" type="button">Layer</button>
+                    <button class="tiny-btn danger" data-variant-delete="${optIndex}:${variantIndex}" type="button">Șterge</button>
+                  </div>
+                </div>
+
+                <div class="field-row-3">
+                  <div class="field">
+                    <label>Nume</label>
+                    <input data-variant-field="name" data-option-index="${optIndex}" data-variant-index="${variantIndex}" value="${escapeHtml(variant.name || '')}">
+                  </div>
+                  <div class="field">
+                    <label>Hex</label>
+                    <input type="color" data-variant-field="hex" data-option-index="${optIndex}" data-variant-index="${variantIndex}" value="${escapeHtml(variant.hex || '#d44848')}">
+                  </div>
+                  <div class="field">
+                    <label>Z activ</label>
+                    <input readonly value="${Number(variant.style?.zIndex || 6)}">
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label>URL imagine layer</label>
+                  <input data-variant-field="src" data-option-index="${optIndex}" data-variant-index="${variantIndex}" value="${escapeHtml(variant.src || '')}" placeholder="Accessories/heart-red.png">
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function styleToCss(style) {
+      const x = Number(style?.x ?? 50);
+      const y = Number(style?.y ?? 50);
+      const width = Number(style?.width ?? 220);
+      const rotate = Number(style?.rotate ?? 0);
+      const zIndex = Number(style?.zIndex ?? 5);
+
+      return {
+        left: `${x}%`,
+        top: `${y}%`,
+        width: `${width}px`,
+        zIndex: String(zIndex),
+        transform: `translate(-50%,-50%) rotate(${rotate}deg)`
+      };
+    }
+
+    function renderPreview() {
+      previewStage.querySelectorAll('.preview-layer').forEach(el => el.remove());
+
+      let hasLayer = false;
+
+      const base = config.baseVariants[selectedBaseIndex] || config.baseVariants[0];
+      if (base?.src) {
+        const img = document.createElement('img');
+        img.src = base.src;
+        img.alt = base.name || 'Bază';
+        img.className = 'preview-layer';
+        img.dataset.layerType = 'base';
+        Object.assign(img.style, styleToCss(base.style || createDefaultStyle('base')));
+
+        if (selectedLayerType === 'base') img.classList.add('selected');
+
+        previewStage.appendChild(img);
+        hasLayer = true;
+      }
+
+      const opt = config.options[selectedOptionIndex];
+      const variant = opt?.variants?.[selectedVariantIndex];
+
+      if (variant?.src) {
+        const img = document.createElement('img');
+        img.src = variant.src;
+        img.alt = variant.name || 'Layer';
+        img.className = 'preview-layer';
+        img.dataset.layerType = 'option';
+        Object.assign(img.style, styleToCss(variant.style || createDefaultStyle('option')));
+
+        if (selectedLayerType === 'option') img.classList.add('selected');
+
+        previewStage.appendChild(img);
+        hasLayer = true;
+      }
+
+      emptyLayer.classList.toggle('hidden', hasLayer);
+
+      previewStage.querySelectorAll('.preview-layer').forEach(el => {
+        el.addEventListener('pointerdown', startDrag);
+      });
+    }
+
+    let dragging = false;
+    let dragLayerType = null;
+
+    function startDrag(event) {
+      event.preventDefault();
+
+      const type = event.currentTarget.dataset.layerType;
+      selectedLayerType = type;
+
+      if (type === 'base') {
+        selectedBaseIndex = selectedBaseIndex || 0;
+      }
+
+      dragging = true;
+      dragLayerType = type;
+
+      event.currentTarget.setPointerCapture(event.pointerId);
+
+      renderAll();
+    }
+
+    window.addEventListener('pointermove', event => {
+      if (!dragging) return;
+
+      const layer = getSelectedLayer();
+      if (!layer) return;
+
+      const rect = previewStage.getBoundingClientRect();
+
+      const x = ((event.clientX - rect.left) / rect.width) * 100;
+      const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+      layer.style = layer.style || createDefaultStyle(selectedLayerType);
+      layer.style.x = Math.max(0, Math.min(100, Number(x.toFixed(1))));
+      layer.style.y = Math.max(0, Math.min(100, Number(y.toFixed(1))));
+
+      renderPreview();
+      syncLayerControls();
+      updateJsonOutput();
+    });
+
+    window.addEventListener('pointerup', () => {
+      dragging = false;
+      dragLayerType = null;
+    });
+
+    function syncLayerControls() {
+      const layer = getSelectedLayer();
+      const disabled = !layer;
+
+      [xRange,yRange,wRange,rRange,zRange,xNumber,yNumber,wNumber,rNumber,zNumber,centerLayerBtn,sendBackBtn,bringFrontBtn].forEach(el => {
+        el.disabled = disabled;
+      });
+
+      selectedLayerName.textContent = getSelectedLayerLabel();
+
+      if (!layer) return;
+
+      layer.style = layer.style || createDefaultStyle(selectedLayerType);
+
+      xRange.value = xNumber.value = Number(layer.style.x ?? 50);
+      yRange.value = yNumber.value = Number(layer.style.y ?? 50);
+      wRange.value = wNumber.value = Number(layer.style.width ?? 220);
+      rRange.value = rNumber.value = Number(layer.style.rotate ?? 0);
+      zRange.value = zNumber.value = Number(layer.style.zIndex ?? 5);
+    }
+
+    function updateSelectedLayerStyle(key, value) {
+      const layer = getSelectedLayer();
+      if (!layer) return;
+
+      layer.style = layer.style || createDefaultStyle(selectedLayerType);
+      layer.style[key] = Number(value);
+
+      renderPreview();
+      syncLayerControls();
+      updateJsonOutput();
+    }
+
+    function updateJsonOutput() {
+      const payload = buildPayload();
+      jsonOutput.value = JSON.stringify(payload.config, null, 2);
+    }
+
+    async function loadProducts() {
+      productsList.innerHTML = `<div class="product-meta">Se încarcă...</div>`;
+
+      const { data, error } = await db
+        .from(TABLE)
+        .select('id,title,slug,base_price,is_active,config,updated_at,created_at')
+        .order('updated_at', { ascending:false });
+
+      if (error) {
+        productsList.innerHTML = `<div class="product-meta">Nu am putut încărca lista.</div>`;
+        setGlobalMessage(error.message, 'error');
+        return;
+      }
+
+      productsCache = data || [];
+
+      if (!productsCache.length) {
+        productsList.innerHTML = `<div class="product-meta">Nu există configuratoare încă.</div>`;
+        return;
+      }
+
+      productsList.innerHTML = productsCache.map(row => `
+        <div class="product-card ${row.id === currentId ? 'active' : ''}">
+          <div>
+            <h3>${escapeHtml(row.title || 'Fără titlu')}</h3>
+            <div class="product-meta">customizer.html?slug=${escapeHtml(row.slug || '')}</div>
+            <div class="product-meta">Preț: ${Number(row.base_price || 0)} RON</div>
+          </div>
+
+          <div class="pill-row">
+            <span class="pill ${row.is_active ? 'active' : 'inactive'}">${row.is_active ? 'activ' : 'inactiv'}</span>
+            <span class="pill">${(row.config?.baseVariants || []).length} baze</span>
+            <span class="pill">${(row.config?.options || []).length} opțiuni</span>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn-secondary" data-open-id="${row.id}" type="button">Editează</button>
+            <a class="btn-soft" href="customizer.html?slug=${encodeURIComponent(row.slug || '')}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">Vezi pagina</a>
+            <button class="btn-danger" data-delete-id="${row.id}" type="button">Șterge</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function saveProduct() {
+      saveProductBtn.disabled = true;
+      setGlobalMessage('Se salvează...', '');
+
+      try {
+        const payload = buildPayload();
+
+        if (!payload.title) throw new Error('Titlul este obligatoriu.');
+        if (!payload.slug) throw new Error('Slug-ul este obligatoriu.');
+        if (!payload.config.baseVariants.length) throw new Error('Adaugă cel puțin o variantă de bază.');
+
+        let response;
+
+        if (currentId) {
+          response = await db
+            .from(TABLE)
+            .update(payload)
+            .eq('id', currentId)
+            .select()
+            .single();
+        } else {
+          response = await db
+            .from(TABLE)
+            .insert(payload)
+            .select()
+            .single();
+        }
+
+        if (response.error) throw response.error;
+
+        fillEditor(response.data);
+        await loadProducts();
+        setGlobalMessage('Configurarea a fost salvată cu succes.', 'success');
+      } catch (error) {
+        setGlobalMessage(error.message || 'Eroare la salvare.', 'error');
+      } finally {
+        saveProductBtn.disabled = false;
+      }
+    }
+
+    async function deleteProduct(id) {
+      const ok = confirm('Sigur vrei să ștergi acest configurator?');
+      if (!ok) return;
+
+      const { error } = await db.from(TABLE).delete().eq('id', id);
+
+      if (error) {
+        setGlobalMessage(error.message, 'error');
+        return;
+      }
+
+      if (currentId === id) resetEditor();
+      await loadProducts();
+      setGlobalMessage('Configurator șters.', 'success');
+    }
+
+    titleInput.addEventListener('input', () => {
+      if (!slugTouched || !slugInput.value.trim()) {
+        slugInput.value = slugify(titleInput.value);
+      }
+      updateJsonOutput();
+    });
+
+    slugInput.addEventListener('input', () => {
+      slugTouched = true;
+      slugInput.value = slugify(slugInput.value);
+    });
+
+    [basePriceInput, activeInput, previewTitleInput, previewSubtitleInput, detailNoteInput, addButtonInput].forEach(el => {
+      el.addEventListener('input', () => {
+        syncMainFieldsToConfig();
+        renderAll();
+      });
+      el.addEventListener('change', () => {
+        syncMainFieldsToConfig();
+        renderAll();
+      });
+    });
+
+    addBaseBtn.addEventListener('click', () => {
+      if (config.baseVariants.length >= 8) {
+        setGlobalMessage('Poți avea maxim 8 variante de bază.', 'error');
+        return;
+      }
+
+      config.baseVariants.push({
+        id: createId('base'),
+        name: `Culoare ${config.baseVariants.length + 1}`,
+        hex: '#f4efe7',
+        price: 0,
+        src: '',
+        style: createDefaultStyle('base')
+      });
+
+      selectedBaseIndex = config.baseVariants.length - 1;
+      selectedLayerType = 'base';
+      renderAll();
+    });
+
+    addOptionBtn.addEventListener('click', () => {
+      if (config.options.length >= 6) {
+        setGlobalMessage('Poți avea maxim 6 opțiuni/accesorii.', 'error');
+        return;
+      }
+
+      config.options.push({
+        id: createId('option'),
+        name: `Opțiune ${config.options.length + 1}`,
+        price: 0,
+        thumbnail: '',
+        variants: [
+          {
+            id: createId('variant'),
+            name: 'Variantă 1',
+            hex: '#d44848',
+            src: '',
+            style: createDefaultStyle('option')
+          }
+        ]
+      });
+
+      selectedOptionIndex = config.options.length - 1;
+      selectedVariantIndex = 0;
+      selectedLayerType = 'option';
+      renderAll();
+    });
+
+    baseList.addEventListener('click', event => {
+      const selectBtn = event.target.closest('[data-base-select]');
+      const deleteBtn = event.target.closest('[data-base-delete]');
+
+      if (selectBtn) {
+        selectedBaseIndex = Number(selectBtn.dataset.baseSelect);
+        selectedLayerType = 'base';
+        renderAll();
+      }
+
+      if (deleteBtn) {
+        const index = Number(deleteBtn.dataset.baseDelete);
+        config.baseVariants.splice(index, 1);
+        selectedBaseIndex = Math.max(0, selectedBaseIndex - 1);
+        renderAll();
+      }
+    });
+
+    baseList.addEventListener('input', event => {
+      const field = event.target.dataset.baseField;
+      const index = Number(event.target.dataset.index);
+      if (!field || Number.isNaN(index)) return;
+
+      const item = config.baseVariants[index];
+      if (!item) return;
+
+      item[field] = field === 'price' ? Number(event.target.value || 0) : event.target.value;
+      renderPreview();
+      updateJsonOutput();
+    });
+
+    optionList.addEventListener('click', event => {
+      const optionSelect = event.target.closest('[data-option-select]');
+      const optionDelete = event.target.closest('[data-option-delete]');
+      const optionAddVariant = event.target.closest('[data-option-add-variant]');
+      const variantSelect = event.target.closest('[data-variant-select]');
+      const variantDelete = event.target.closest('[data-variant-delete]');
+
+      if (optionSelect) {
+        selectedOptionIndex = Number(optionSelect.dataset.optionSelect);
+        selectedVariantIndex = 0;
+        selectedLayerType = 'option';
+        renderAll();
+      }
+
+      if (optionDelete) {
+        const index = Number(optionDelete.dataset.optionDelete);
+        config.options.splice(index, 1);
+        selectedOptionIndex = config.options.length ? 0 : null;
+        selectedVariantIndex = config.options[0]?.variants?.length ? 0 : null;
+        selectedLayerType = config.baseVariants.length ? 'base' : 'option';
+        renderAll();
+      }
+
+      if (optionAddVariant) {
+        const index = Number(optionAddVariant.dataset.optionAddVariant);
+        const opt = config.options[index];
+        if (!opt) return;
+
+        opt.variants = Array.isArray(opt.variants) ? opt.variants : [];
+
+        if (opt.variants.length >= 8) {
+          setGlobalMessage('Poți avea maxim 8 variante de culoare pentru o opțiune.', 'error');
+          return;
+        }
+
+        opt.variants.push({
+          id: createId('variant'),
+          name: `Variantă ${opt.variants.length + 1}`,
+          hex: '#d44848',
+          src: '',
+          style: createDefaultStyle('option')
+        });
+
+        selectedOptionIndex = index;
+        selectedVariantIndex = opt.variants.length - 1;
+        selectedLayerType = 'option';
+        renderAll();
+      }
+
+      if (variantSelect) {
+        const [optIndex, varIndex] = variantSelect.dataset.variantSelect.split(':').map(Number);
+        selectedOptionIndex = optIndex;
+        selectedVariantIndex = varIndex;
+        selectedLayerType = 'option';
+        renderAll();
+      }
+
+      if (variantDelete) {
+        const [optIndex, varIndex] = variantDelete.dataset.variantDelete.split(':').map(Number);
+        const opt = config.options[optIndex];
+        if (!opt) return;
+
+        opt.variants.splice(varIndex, 1);
+        selectedOptionIndex = optIndex;
+        selectedVariantIndex = opt.variants.length ? 0 : null;
+        renderAll();
+      }
+    });
+
+    optionList.addEventListener('input', event => {
+      const optionField = event.target.dataset.optionField;
+      const variantField = event.target.dataset.variantField;
+
+      if (optionField) {
+        const optIndex = Number(event.target.dataset.optionIndex);
+        const opt = config.options[optIndex];
+        if (!opt) return;
+
+        opt[optionField] = optionField === 'price' ? Number(event.target.value || 0) : event.target.value;
+        updateJsonOutput();
+        return;
+      }
+
+      if (variantField) {
+        const optIndex = Number(event.target.dataset.optionIndex);
+        const varIndex = Number(event.target.dataset.variantIndex);
+        const variant = config.options[optIndex]?.variants?.[varIndex];
+        if (!variant) return;
+
+        variant[variantField] = event.target.value;
+        renderPreview();
+        updateJsonOutput();
+      }
+    });
+
+    [
+      [xRange, xNumber, 'x'],
+      [yRange, yNumber, 'y'],
+      [wRange, wNumber, 'width'],
+      [rRange, rNumber, 'rotate'],
+      [zRange, zNumber, 'zIndex']
+    ].forEach(([range, number, key]) => {
+      range.addEventListener('input', () => updateSelectedLayerStyle(key, range.value));
+      number.addEventListener('input', () => updateSelectedLayerStyle(key, number.value));
+    });
+
+    centerLayerBtn.addEventListener('click', () => {
+      const layer = getSelectedLayer();
+      if (!layer) return;
+
+      layer.style = layer.style || createDefaultStyle(selectedLayerType);
+      layer.style.x = 50;
+      layer.style.y = 50;
+      renderAll();
+    });
+
+    sendBackBtn.addEventListener('click', () => updateSelectedLayerStyle('zIndex', 2));
+    bringFrontBtn.addEventListener('click', () => updateSelectedLayerStyle('zIndex', 10));
+
+    productsList.addEventListener('click', async event => {
+      const openBtn = event.target.closest('[data-open-id]');
+      const deleteBtn = event.target.closest('[data-delete-id]');
+
+      if (openBtn) {
+        const row = productsCache.find(item => item.id === openBtn.dataset.openId);
+        if (row) fillEditor(row);
+      }
+
+      if (deleteBtn) {
+        await deleteProduct(deleteBtn.dataset.deleteId);
+      }
+    });
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => showTab(btn.dataset.tab));
+    });
+
+    loginForm.addEventListener('submit', async event => {
+      event.preventDefault();
+
+      loginBtn.disabled = true;
+      setAuthMessage('Se verifică autentificarea...');
+
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      const { data, error } = await db.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        setAuthMessage(error.message, 'error');
+        loginBtn.disabled = false;
+        return;
+      }
+
+      if (!data.session) {
+        setAuthMessage('Nu s-a putut crea sesiunea.', 'error');
+        loginBtn.disabled = false;
+        return;
+      }
+
+      showApp();
+      await loadProducts();
+      resetEditor();
+      loginBtn.disabled = false;
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+      await db.auth.signOut();
+      showAuth();
+      setAuthMessage('Te-ai delogat.', 'success');
+    });
+
+    newProductBtn.addEventListener('click', resetEditor);
+    saveProductBtn.addEventListener('click', saveProduct);
+    reloadBtn.addEventListener('click', loadProducts);
+
+    copyJsonBtn.addEventListener('click', async () => {
+      await navigator.clipboard.writeText(jsonOutput.value);
+      setGlobalMessage('JSON copiat.', 'success');
+    });
+
+    async function boot() {
+      const { data } = await db.auth.getSession();
+
+      if (data?.session) {
+        showApp();
+        await loadProducts();
+        resetEditor();
+      } else {
+        showAuth();
+      }
+    }
+
+    boot();
+  </script>
+</body>
+</html>
