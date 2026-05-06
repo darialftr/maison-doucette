@@ -398,7 +398,10 @@
     const PRODUCTS_BUCKET = 'products';
     const ATELIER_BUCKET = 'atelier-images';
 
-    let currentDetailId = null;
+let currentProductId = null;
+let currentProductImage = '';
+
+let currentDetailId = null;
     let currentCustomizerId = null;
     let currentConfig = null;
     let selectedLayer = null;
@@ -564,27 +567,92 @@
     }
 
     document.getElementById('productForm').addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const message = document.getElementById('productsMessage');
-      showMessage(message, 'Se salvează produsul...');
-      try {
-        const name = document.getElementById('productName').value.trim();
-        const text = document.getElementById('productText').value.trim();
-        const description = document.getElementById('productDescription').value.trim();
-        const link = document.getElementById('productLink').value.trim();
-        const file = document.getElementById('productImageFile').files?.[0] || null;
-        const image = file ? await uploadToBucket(file, PRODUCTS_BUCKET, 'homepage-products') : '';
-        const sort_order = await getNextSortOrder();
-        const { error } = await db.from('products').insert({ name, text, description, link, image, is_visible:true, sort_order });
-        if (error) throw error;
-        event.target.reset();
-        showMessage(message, 'Produsul a fost salvat.', 'success');
-        await loadProducts();
-        await loadStats();
-      } catch (error) {
-        showMessage(message, error.message || 'Nu am putut salva produsul.', 'error');
-      }
-    });
+  event.preventDefault();
+
+  const message = document.getElementById('productsMessage');
+
+  showMessage(
+    message,
+    currentProductId
+      ? 'Se actualizează produsul...'
+      : 'Se salvează produsul...'
+  );
+
+  try {
+    const name = document.getElementById('productName').value.trim();
+    const text = document.getElementById('productText').value.trim();
+    const description = document.getElementById('productDescription').value.trim();
+    const link = document.getElementById('productLink').value.trim();
+
+    const file =
+      document.getElementById('productImageFile').files?.[0] || null;
+
+    let image = currentProductImage || '';
+
+    if (file) {
+      image = await uploadToBucket(
+        file,
+        PRODUCTS_BUCKET,
+        'homepage-products'
+      );
+    }
+
+    if (!name || !text || !description || !link) {
+      throw new Error('Completează toate câmpurile.');
+    }
+
+    let response;
+
+    if (currentProductId) {
+      response = await db
+        .from('products')
+        .update({
+          name,
+          text,
+          description,
+          link,
+          image
+        })
+        .eq('id', currentProductId);
+    } else {
+      const sort_order = await getNextSortOrder();
+
+      response = await db
+        .from('products')
+        .insert({
+          name,
+          text,
+          description,
+          link,
+          image,
+          is_visible: true,
+          sort_order
+        });
+    }
+
+    if (response.error) throw response.error;
+
+    resetProductForm();
+
+    showMessage(
+      message,
+      currentProductId
+        ? 'Produs actualizat.'
+        : 'Produs salvat.',
+      'success'
+    );
+
+    await loadProducts();
+    await loadStats();
+
+  } catch (error) {
+    showMessage(
+      message,
+      error.message || 'Nu am putut salva produsul.',
+      'error'
+    );
+  }
+});
 
     document.getElementById('reloadProductsBtn').addEventListener('click', loadProducts);
 
@@ -603,12 +671,74 @@
             <div class="badge ${product.is_visible === false ? 'inactive' : 'active'}">${product.is_visible === false ? 'Ascuns' : 'Vizibil'}</div>
           </div>
           <div class="mini-actions">
-            <button class="mini-btn ${product.is_visible === false ? 'success' : ''}" onclick="toggleProduct('${product.id}', ${product.is_visible === false ? 'true' : 'false'})">${product.is_visible === false ? 'Afișează' : 'Ascunde'}</button>
-            <button class="mini-btn danger" onclick="deleteProduct('${product.id}')">Șterge</button>
-          </div>
+  <button class="mini-btn blue" onclick="openProduct('${product.id}')">
+    Editează
+  </button>
+
+  <button
+    class="mini-btn ${product.is_visible === false ? 'success' : ''}"
+    onclick="toggleProduct('${product.id}', ${product.is_visible === false ? 'true' : 'false'})"
+  >
+    ${product.is_visible === false ? 'Afișează' : 'Ascunde'}
+  </button>
+
+  <button
+    class="mini-btn danger"
+    onclick="deleteProduct('${product.id}')"
+  >
+    Șterge
+  </button>
+</div>
         </div>
       `).join('');
     }
+    async function openProduct(id) {
+
+  const { data, error } = await db
+    .from('products')
+    .select('*')
+    .eq('id', id)
+    .single();
+
+  if (error || !data) {
+    showMessage(
+      document.getElementById('productsMessage'),
+      'Nu am putut deschide produsul.',
+      'error'
+    );
+    return;
+  }
+
+  currentProductId = data.id;
+  currentProductImage = data.image || '';
+
+  document.getElementById('productName').value =
+    data.name || '';
+
+  document.getElementById('productText').value =
+    data.text || '';
+
+  document.getElementById('productDescription').value =
+    data.description || '';
+
+  document.getElementById('productLink').value =
+    data.link || '';
+
+  document.getElementById('productImageFile').value = '';
+
+  showMessage(
+    document.getElementById('productsMessage'),
+    `Editezi produsul "${data.name || 'Produs'}".`
+  );
+}
+
+function resetProductForm() {
+
+  currentProductId = null;
+  currentProductImage = '';
+
+  document.getElementById('productForm').reset();
+}
 
     async function toggleProduct(id, visible) {
       await db.from('products').update({ is_visible: visible }).eq('id', id);
@@ -624,6 +754,7 @@
 
     window.toggleProduct = toggleProduct;
     window.deleteProduct = deleteProduct;
+    window.openProduct = openProduct;
 
     const detailInputs = {
       title: document.getElementById('detailTitle'),
