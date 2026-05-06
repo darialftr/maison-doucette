@@ -1007,10 +1007,10 @@
   <script src="supabase-config.js"></script>
 
   <script>
-    const db = window.supabase.createClient(
-      window.SUPABASE_URL,
-      window.SUPABASE_ANON_KEY
-    );
+   const db = window.supabase.createClient({
+  supabaseUrl: window.SUPABASE_URL,
+  supabaseKey: window.SUPABASE_ANON_KEY
+});
 
     const PRODUCTS_BUCKET = 'products';
 
