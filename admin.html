@@ -156,6 +156,18 @@
     .preview-layer{position:absolute;max-width:none;cursor:grab;user-select:none;transform-origin:center center;filter:drop-shadow(0 15px 24px rgba(0,0,0,.12))}
     .preview-layer.selected{outline:2px dashed rgba(184,132,79,.7);outline-offset:6px;border-radius:6px}
     .preview-layer:active{cursor:grabbing}
+    .resize-handle{
+  position:absolute;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--gold-2),var(--gold));
+  border:2px solid #fff;
+  box-shadow:0 8px 18px rgba(52,40,32,.18);
+  cursor:nwse-resize;
+  z-index:999;
+  transform:translate(-50%,-50%);
+}
     .mini-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
     .swatch{width:25px;height:25px;border-radius:50%;border:1px solid rgba(0,0,0,.10);box-shadow:0 0 0 3px rgba(255,255,255,.85);flex:0 0 auto}
     .json-box{min-height:170px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.74rem}
@@ -1235,7 +1247,30 @@ function resetProductForm() {
         if (variant?.src) layers.push({ type:'variant', obj:variant, html:`<img data-layer-kind="variant" class="preview-layer ${layerMatchesSelected('variant', variant) ? 'selected' : ''}" src="${escapeHtml(variant.src)}" style="${styleToCss(variant.style)}" alt="">` });
       });
       stage.innerHTML = layers.map(l => l.html).join('') || '<div class="stage-help">Adaugă imagini pentru baze și opțiuni.</div>';
-      stage.querySelectorAll('.preview-layer').forEach(img => img.addEventListener('pointerdown', startDrag));
+      stage.querySelectorAll('.preview-layer').forEach(img => {
+  img.addEventListener('pointerdown', startDrag);
+});
+
+if (selectedLayer) {
+  const layer = getSelectedLayerObject();
+
+  if (layer?.src) {
+    const handle = document.createElement('div');
+    handle.className = 'resize-handle';
+
+    const x = Number(layer.style?.x ?? 50);
+    const y = Number(layer.style?.y ?? 55);
+    const w = Number(layer.style?.width ?? 420);
+    const r = Number(layer.style?.rotate ?? 0);
+
+    handle.style.left = `calc(${x}% + ${w / 2}px)`;
+    handle.style.top = `${y}%`;
+    handle.style.transform = `translate(-50%,-50%) rotate(${r}deg)`;
+
+    handle.addEventListener('pointerdown', startResize);
+    stage.appendChild(handle);
+  }
+}
       syncCustomizerJson();
     }
 
@@ -1267,6 +1302,45 @@ function resetProductForm() {
       document.removeEventListener('pointermove', onDrag);
       document.removeEventListener('pointerup', stopDrag);
     }
+    let resizeState = null;
+
+function startResize(event) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  const layer = getSelectedLayerObject();
+  if (!layer) return;
+
+  resizeState = {
+    layer,
+    startX: event.clientX,
+    startWidth: Number(layer.style?.width ?? 420)
+  };
+
+  event.target.setPointerCapture(event.pointerId);
+  document.addEventListener('pointermove', onResize);
+  document.addEventListener('pointerup', stopResize);
+}
+
+function onResize(event) {
+  if (!resizeState) return;
+
+  const delta = event.clientX - resizeState.startX;
+  const newWidth = Math.max(40, resizeState.startWidth + delta);
+
+  resizeState.layer.style = resizeState.layer.style || {};
+  resizeState.layer.style.width = Math.round(newWidth);
+
+  document.getElementById('layerW').value = Math.round(newWidth);
+
+  renderPreviewOnly();
+}
+
+function stopResize() {
+  resizeState = null;
+  document.removeEventListener('pointermove', onResize);
+  document.removeEventListener('pointerup', stopResize);
+}
 
     function renderCustomizerEditor() {
       if (!currentConfig) currentConfig = ensureConfig();
