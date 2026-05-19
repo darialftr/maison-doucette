@@ -6,46 +6,55 @@
   <title>Maison Doucette — Admin</title>
 
   <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root{
+      --bg:#fff4f7;
+      --bg2:#f7e7ec;
+      --card:#fffdfc;
+      --card2:#fff7fa;
+      --text:#4d3138;
+      --text2:#7d5f67;
+      --muted:#a88b94;
+      --line:rgba(130,82,96,.14);
+      --pink:#eeb8c8;
+      --pink2:#d98fa8;
+      --rose:#b85f7a;
+      --rose-dark:#7f354d;
       --cream:#fffaf4;
-      --paper:#fffdf9;
-      --bg:#f5ede4;
-      --brown:#5f493d;
-      --brown2:#7d6658;
-      --muted:#a08d7f;
-      --dark:#2f241e;
-      --line:rgba(95,73,61,.13);
-      --gold:#d8b47b;
-      --gold2:#b8844f;
-      --green:#4f7a57;
-      --red:#9b3f3f;
-      --blue:#536f95;
-      --shadow:0 18px 42px rgba(52,40,32,.10);
+      --gold:#d9b77c;
+      --green:#577a5f;
+      --red:#a74857;
+      --blue:#617999;
+      --shadow:0 18px 45px rgba(90,45,58,.10);
+      --shadow2:0 30px 80px rgba(90,45,58,.16);
       --radius:24px;
+      --side:276px;
     }
 
     *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{
       margin:0;
-      font-family:Manrope,sans-serif;
-      color:var(--brown);
+      min-height:100vh;
+      font-family:'Manrope',sans-serif;
+      color:var(--text);
       background:
-        radial-gradient(circle at top left, rgba(255,255,255,.95), transparent 28%),
-        radial-gradient(circle at bottom right, rgba(216,180,123,.20), transparent 32%),
-        linear-gradient(135deg,#f8f1ea,#ead9c8);
+        radial-gradient(circle at top left, rgba(255,255,255,.9), transparent 28%),
+        radial-gradient(circle at 80% 15%, rgba(238,184,200,.38), transparent 26%),
+        linear-gradient(135deg,var(--bg),var(--bg2));
+      overflow-x:hidden;
     }
 
-    h1,h2,h3,.brand{font-family:"Cormorant Garamond",serif;letter-spacing:-.025em}
+    h1,h2,h3,.brand{font-family:'Cormorant Garamond',serif;letter-spacing:-.025em}
     button,input,textarea,select{font:inherit}
     button{cursor:pointer}
     img{display:block;max-width:100%}
     a{text-decoration:none;color:inherit}
     .hidden{display:none!important}
 
-    .auth{
+    .auth-screen{
       min-height:100vh;
       display:grid;
       place-items:center;
@@ -54,18 +63,32 @@
 
     .auth-card{
       width:min(460px,100%);
-      background:rgba(255,250,244,.94);
-      border:1px solid rgba(255,255,255,.8);
+      position:relative;
+      overflow:hidden;
       border-radius:34px;
-      box-shadow:0 28px 80px rgba(52,40,32,.18);
+      background:rgba(255,253,252,.94);
+      border:1px solid rgba(255,255,255,.8);
+      box-shadow:var(--shadow2);
       padding:28px;
     }
 
+    .auth-card::before{
+      content:"";
+      position:absolute;
+      inset:-90px -80px auto auto;
+      width:230px;
+      height:230px;
+      border-radius:50%;
+      background:rgba(238,184,200,.35);
+      filter:blur(4px);
+    }
+
     .auth-logo{
+      position:relative;
       width:72px;
       height:72px;
-      border-radius:50%;
       object-fit:contain;
+      border-radius:50%;
       background:#fff;
       padding:6px;
       box-shadow:var(--shadow);
@@ -73,135 +96,238 @@
     }
 
     .auth-card h1{
+      position:relative;
       margin:0 0 8px;
       font-size:3.1rem;
       line-height:.9;
-      color:var(--dark);
+      color:var(--rose-dark);
     }
 
     .auth-card p{
+      position:relative;
       margin:0 0 20px;
-      color:var(--brown2);
+      color:var(--text2);
       line-height:1.65;
       font-size:.9rem;
     }
 
     .app{
-      min-height:100vh;
       display:grid;
-      grid-template-columns:245px minmax(0,1fr);
+      grid-template-columns:var(--side) minmax(0,1fr);
+      min-height:100vh;
     }
 
     .sidebar{
       position:sticky;
       top:0;
       height:100vh;
-      padding:16px;
-      background:linear-gradient(180deg,#30241d,#46352b);
-      color:#fffaf4;
-      box-shadow:18px 0 50px rgba(52,40,32,.16);
+      overflow:auto;
       z-index:20;
+      background:
+        radial-gradient(circle at top left, rgba(238,184,200,.24), transparent 30%),
+        linear-gradient(180deg,#58323d,#3d222b);
+      color:#fffaf8;
+      padding:16px;
+      box-shadow:20px 0 60px rgba(70,32,43,.18);
     }
 
-    .side-card{
+    .side-brand{
       padding:16px;
       border-radius:26px;
-      background:rgba(255,255,255,.07);
-      border:1px solid rgba(255,255,255,.11);
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
       margin-bottom:14px;
     }
 
-    .side-card img{
+    .side-brand img{
       width:58px;
       height:58px;
-      border-radius:50%;
       object-fit:contain;
+      border-radius:50%;
       background:#fff;
       padding:5px;
-      margin-bottom:10px;
+      margin-bottom:11px;
     }
 
     .brand{
-      font-size:1.75rem;
-      line-height:.92;
+      font-size:1.72rem;
+      line-height:.9;
       font-weight:700;
     }
 
     .side-small{
-      margin-top:7px;
-      color:rgba(255,250,244,.62);
-      font-size:.66rem;
+      margin-top:8px;
+      color:rgba(255,250,248,.62);
+      font-size:.65rem;
       text-transform:uppercase;
       letter-spacing:.16em;
-    }
-
-    .nav{
-      display:grid;
-      gap:8px;
-    }
-
-    .nav button,
-    .logout{
-      min-height:44px;
-      border:none;
-      border-radius:16px;
-      padding:10px 12px;
-      text-align:left;
       font-weight:800;
-      color:rgba(255,250,244,.75);
-      background:transparent;
-      transition:.2s ease;
     }
 
-    .nav button.active,
-    .nav button:hover{
+    .nav-tabs{
+      display:grid;
+      gap:7px;
+    }
+
+    .tab-btn{
+      width:100%;
+      min-height:43px;
+      border:none;
+      border-radius:15px;
+      background:transparent;
+      color:rgba(255,250,248,.74);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:10px 12px;
+      transition:.2s ease;
+      text-align:left;
+    }
+
+    .tab-btn span{
+      font-weight:800;
+      font-size:.84rem;
+    }
+
+    .tab-btn small{
+      opacity:.58;
+      font-size:.66rem;
+    }
+
+    .tab-btn:hover,
+    .tab-btn.active{
+      background:linear-gradient(135deg,rgba(238,184,200,.3),rgba(217,143,168,.22));
       color:#fff;
-      background:linear-gradient(135deg,rgba(216,180,123,.30),rgba(184,132,79,.22));
       transform:translateY(-1px);
     }
 
-    .logout{
+    .logout-btn{
       width:100%;
       margin-top:14px;
-      text-align:center;
+      min-height:43px;
+      border-radius:15px;
+      border:1px solid rgba(255,255,255,.14);
       background:rgba(255,255,255,.07);
-      border:1px solid rgba(255,255,255,.12);
       color:#fff;
+      font-weight:900;
+    }
+
+    .mobile-top{
+      display:none;
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:rgba(255,253,252,.9);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--line);
+      padding:10px;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    .hamburger{
+      width:42px;
+      height:42px;
+      border:none;
+      border-radius:14px;
+      background:#fff;
+      color:var(--rose-dark);
+      box-shadow:var(--shadow);
+      font-size:1.2rem;
+      font-weight:900;
+    }
+
+    .mobile-title{
+      font-weight:900;
+      color:var(--rose-dark);
+      font-size:.86rem;
     }
 
     .main{
       padding:18px;
-      max-width:1500px;
       width:100%;
+      max-width:1660px;
     }
 
     .topbar{
       display:flex;
       justify-content:space-between;
-      gap:16px;
+      gap:14px;
       align-items:flex-start;
-      margin-bottom:16px;
+      margin-bottom:14px;
     }
 
     .topbar h1{
       margin:0;
-      font-size:clamp(2.6rem,5vw,4.6rem);
-      line-height:.86;
-      color:var(--dark);
+      font-size:clamp(2.4rem,4.2vw,4.2rem);
+      line-height:.88;
+      color:var(--rose-dark);
     }
 
     .topbar p{
       margin:7px 0 0;
-      color:var(--brown2);
-      font-size:.88rem;
-      line-height:1.55;
+      color:var(--text2);
+      line-height:1.6;
+      font-size:.86rem;
     }
 
+    .status-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      white-space:nowrap;
+      padding:9px 13px;
+      border-radius:999px;
+      background:rgba(255,253,252,.82);
+      border:1px solid var(--line);
+      color:var(--text2);
+      box-shadow:var(--shadow);
+      font-size:.76rem;
+      font-weight:900;
+    }
+
+    .status-dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:var(--green);
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:12px;
+      margin-bottom:14px;
+    }
+
+    .stat-card,
     .panel{
-      background:rgba(255,253,249,.9);
+      background:rgba(255,253,252,.88);
       border:1px solid rgba(255,255,255,.75);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
+    }
+
+    .stat-card{
+      padding:15px;
+    }
+
+    .stat-number{
+      font-family:'Cormorant Garamond',serif;
+      font-size:2.35rem;
+      line-height:.85;
+      color:var(--rose-dark);
+      margin-bottom:7px;
+    }
+
+    .stat-label{
+      color:var(--text2);
+      font-size:.74rem;
+      line-height:1.4;
+      font-weight:800;
+    }
+
+    .panel{
       padding:16px;
       margin-bottom:14px;
     }
@@ -210,343 +336,403 @@
       display:flex;
       justify-content:space-between;
       align-items:flex-start;
-      gap:12px;
-      margin-bottom:12px;
+      gap:10px;
+      margin-bottom:13px;
     }
 
     .panel h2{
       margin:0;
-      font-size:2.1rem;
+      font-size:1.95rem;
       line-height:.9;
-      color:var(--dark);
+      color:var(--rose-dark);
+    }
+
+    .panel h3{
+      margin:14px 0 8px;
+      font-size:1.25rem;
+      line-height:.9;
+      color:var(--rose-dark);
     }
 
     .panel p{
-      margin:6px 0 0;
-      color:var(--brown2);
-      font-size:.82rem;
-      line-height:1.5;
+      margin:7px 0 0;
+      color:var(--text2);
+      line-height:1.55;
+      font-size:.8rem;
     }
 
-    .btn{
-      min-height:38px;
-      border-radius:13px;
-      padding:9px 13px;
-      border:none;
-      font-size:.76rem;
-      font-weight:900;
-      transition:.18s ease;
-    }
-
-    .btn:hover{transform:translateY(-1px)}
-    .btn-primary{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#fff;box-shadow:0 14px 24px rgba(184,132,79,.18)}
-    .btn-secondary{background:#fff;border:1px solid var(--line);color:var(--brown)}
-    .btn-danger{background:#fff5f5;border:1px solid rgba(155,63,63,.20);color:var(--red)}
-    .btn-success{background:#f3fbf5;border:1px solid rgba(79,122,87,.20);color:var(--green)}
-    .btn-blue{background:#f2f6fb;border:1px solid rgba(83,111,149,.20);color:var(--blue)}
-
-    .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-
-    .grid{
+    .form-grid{
       display:grid;
       grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:9px;
+      gap:10px;
     }
 
     .full{grid-column:1/-1}
 
     label{
       display:grid;
-      gap:5px;
+      gap:6px;
       color:var(--muted);
       font-size:.62rem;
-      font-weight:900;
       text-transform:uppercase;
-      letter-spacing:.11em;
+      letter-spacing:.105em;
+      font-weight:900;
     }
 
     input,textarea,select{
       width:100%;
       border:1px solid var(--line);
       background:#fff;
-      color:var(--brown);
+      color:var(--text);
       border-radius:13px;
-      padding:9px 10px;
+      padding:10px 11px;
       outline:none;
       font-size:.8rem;
     }
 
     textarea{
-      min-height:74px;
+      min-height:78px;
       resize:vertical;
       line-height:1.55;
     }
 
-    input:focus,textarea:focus,select:focus{
-      border-color:rgba(184,132,79,.55);
-      box-shadow:0 0 0 4px rgba(216,180,123,.14);
+    input:focus,
+    textarea:focus,
+    select:focus{
+      border-color:rgba(184,95,122,.55);
+      box-shadow:0 0 0 4px rgba(238,184,200,.22);
+    }
+
+    input[type="file"]{
+      padding:8px;
+      background:#fffdf9;
+    }
+
+    .actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+
+    .btn{
+      min-height:39px;
+      padding:9px 13px;
+      border-radius:13px;
+      cursor:pointer;
+      border:none;
+      font-size:.76rem;
+      font-weight:900;
+      transition:.18s ease;
+    }
+
+    .btn:hover{
+      transform:translateY(-1px);
+    }
+
+    .btn-primary{
+      color:#fff;
+      background:linear-gradient(135deg,var(--rose),var(--pink2));
+      box-shadow:0 14px 24px rgba(184,95,122,.18);
+    }
+
+    .btn-secondary{
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--text);
+    }
+
+    .btn-danger{
+      background:#fff4f5;
+      border:1px solid rgba(167,72,87,.20);
+      color:var(--red);
+    }
+
+    .btn-success{
+      background:#f3fbf5;
+      border:1px solid rgba(87,122,95,.20);
+      color:var(--green);
+    }
+
+    .btn-blue{
+      background:#f2f6fb;
+      border:1px solid rgba(97,121,153,.20);
+      color:var(--blue);
     }
 
     .message{
-      margin-top:9px;
-      color:var(--brown2);
-      font-size:.78rem;
-      line-height:1.5;
+      margin-top:10px;
+      color:var(--text2);
+      font-size:.76rem;
+      line-height:1.55;
       white-space:pre-wrap;
     }
 
     .message.error{color:var(--red)}
     .message.success{color:var(--green)}
 
-    .products-layout{
+    .dashboard-grid{
       display:grid;
-      grid-template-columns:430px minmax(0,1fr);
+      grid-template-columns:minmax(0,1.45fr) minmax(330px,.75fr);
       gap:14px;
-      align-items:start;
     }
 
-    .product-list{
-      display:grid;
-      gap:9px;
+    .chart-wrap{
+      position:relative;
+      height:310px;
+      border-radius:20px;
+      background:
+        linear-gradient(180deg,rgba(255,255,255,.74),rgba(255,247,250,.9));
+      border:1px solid var(--line);
+      padding:14px;
+      overflow:hidden;
     }
 
-    .product-row{
-      display:grid;
-      grid-template-columns:54px 34px minmax(0,1fr) auto;
+    .chart-bars{
+      position:absolute;
+      inset:54px 18px 42px 18px;
+      display:flex;
+      align-items:end;
       gap:10px;
-      align-items:center;
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:9px;
-      transition:.2s ease;
+      border-bottom:1px solid rgba(130,82,96,.13);
     }
 
-    .product-row:hover{
-      transform:translateY(-1px);
-      box-shadow:0 12px 25px rgba(52,40,32,.08);
+    .bar-group{
+      flex:1;
+      height:100%;
+      display:flex;
+      align-items:end;
+      justify-content:center;
+      gap:4px;
+      position:relative;
     }
 
-    .product-row.selected{
-      border-color:rgba(184,132,79,.42);
-      box-shadow:0 0 0 4px rgba(216,180,123,.14);
+    .bar{
+      width:34%;
+      min-height:6px;
+      border-radius:999px 999px 4px 4px;
+      background:linear-gradient(180deg,var(--pink2),var(--pink));
     }
 
-    .product-row.dragging{opacity:.55}
+    .bar.profit{
+      background:linear-gradient(180deg,var(--rose),#f2c7d3);
+    }
 
-    .drag-handle{
-      width:34px;
-      height:34px;
-      border-radius:11px;
-      border:1px solid var(--line);
-      background:#fffdf9;
-      display:grid;
-      place-items:center;
+    .bar-label{
+      position:absolute;
+      bottom:-27px;
+      left:50%;
+      transform:translateX(-50%);
+      font-size:.64rem;
       color:var(--muted);
       font-weight:900;
-      cursor:grab;
     }
 
-    .eye-btn{
-      width:34px;
-      height:34px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:#fff;
+    .chart-legend{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      color:var(--text2);
+      font-size:.72rem;
+      font-weight:900;
+    }
+
+    .legend-dot{
+      width:9px;
+      height:9px;
+      border-radius:50%;
+      display:inline-block;
+      margin-right:5px;
+      background:var(--pink2);
+    }
+
+    .legend-dot.profit{
+      background:var(--rose);
+    }
+
+    .recent-list,
+    .list{
       display:grid;
-      place-items:center;
-      font-size:1rem;
+      gap:10px;
     }
 
-    .thumb{
-      width:54px;
-      height:54px;
-      object-fit:cover;
-      border-radius:14px;
-      background:#efe4d8;
+    .recent-item{
+      padding:11px;
+      border-radius:17px;
+      background:#fff;
       border:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
     }
 
-    .product-name{
-      margin:0 0 3px;
-      font-family:"Cormorant Garamond",serif;
-      font-size:1.35rem;
-      line-height:.9;
-      color:var(--dark);
+    .recent-item strong{
+      font-size:.84rem;
+      color:var(--rose-dark);
     }
 
     .meta{
-      color:var(--brown2);
+      color:var(--text2);
       font-size:.74rem;
-      line-height:1.42;
+      line-height:1.48;
       word-break:break-word;
+    }
+
+    .item-card{
+      display:grid;
+      grid-template-columns:68px 1fr auto;
+      gap:12px;
+      align-items:start;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:10px;
+      transition:.18s ease;
+    }
+
+    .item-card:hover{
+      transform:translateY(-1px);
+      box-shadow:0 14px 26px rgba(90,45,58,.08);
+    }
+
+    .item-card.is-clickable{
+      cursor:pointer;
+    }
+
+    .item-img{
+      width:68px;
+      height:68px;
+      object-fit:cover;
+      border-radius:14px;
+      background:#f0dfe5;
+      border:1px solid var(--line);
+    }
+
+    .item-title{
+      margin:0 0 5px;
+      font-family:'Cormorant Garamond',serif;
+      font-size:1.35rem;
+      line-height:.92;
+      color:var(--rose-dark);
     }
 
     .badge{
       display:inline-flex;
+      align-items:center;
+      justify-content:center;
       width:max-content;
       padding:5px 8px;
       border-radius:999px;
       font-size:.6rem;
+      font-weight:900;
       text-transform:uppercase;
       letter-spacing:.08em;
-      font-weight:900;
-      margin-top:5px;
+      margin-top:6px;
     }
 
-    .badge.on{background:#f2fbf4;color:var(--green);border:1px solid rgba(79,122,87,.18)}
-    .badge.off{background:#fff5f5;color:var(--red);border:1px solid rgba(155,63,63,.18)}
-
-    .product-workspace{
-      display:grid;
-      gap:14px;
+    .badge.active{
+      background:#f2fbf4;
+      color:var(--green);
+      border:1px solid rgba(87,122,95,.18);
     }
 
-    .workspace-empty{
-      min-height:300px;
+    .badge.inactive{
+      background:#fff5f5;
+      color:var(--red);
+      border:1px solid rgba(167,72,87,.18);
+    }
+
+    .mini-actions{
+      display:flex;
+      gap:7px;
+      align-items:center;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+      min-width:86px;
+    }
+
+    .icon-mini{
+      width:34px;
+      height:34px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--rose-dark);
       display:grid;
       place-items:center;
-      text-align:center;
-      color:var(--brown2);
-      line-height:1.7;
-    }
-
-    .subtabs{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin-bottom:12px;
-    }
-
-    .subtab{
-      border:none;
-      border-radius:999px;
-      background:#fff;
-      border:1px solid var(--line);
-      color:var(--brown);
-      padding:9px 13px;
-      font-size:.75rem;
+      font-size:.98rem;
       font-weight:900;
     }
 
-    .subtab.active{
-      background:linear-gradient(135deg,var(--gold2),var(--gold));
-      color:#fff;
-      border-color:transparent;
-    }
-
-    .compact-list{
+    .drag-handle{
+      width:34px;
+      height:34px;
+      border-radius:12px;
+      border:1px dashed var(--line);
+      background:var(--card2);
+      color:var(--muted);
       display:grid;
-      gap:8px;
-    }
-
-    .mini-card{
-      background:#fff;
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:10px;
-    }
-
-    .mini-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:8px;
-      margin-bottom:8px;
-    }
-
-    .mini-head strong{font-size:.86rem;color:var(--dark)}
-
-    .preview-stage{
-      position:relative;
-      width:100%;
-      min-height:430px;
-      aspect-ratio:.98/1;
-      border-radius:22px;
-      overflow:hidden;
-      background:linear-gradient(180deg,#f5f3f1,#ebe8e3);
-      border:1px solid rgba(185,177,170,.52);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.75);
-      touch-action:none;
-    }
-
-    .stage-help{
-      position:absolute;
-      left:14px;
-      right:14px;
-      bottom:14px;
-      background:rgba(255,255,255,.84);
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:10px;
-      text-align:center;
-      color:var(--brown2);
-      font-size:.74rem;
-      line-height:1.45;
-      pointer-events:none;
-    }
-
-    .layer{
-      position:absolute;
-      max-width:none;
-      user-select:none;
+      place-items:center;
       cursor:grab;
-      transform-origin:center center;
-      filter:drop-shadow(0 15px 24px rgba(0,0,0,.12));
+      font-weight:900;
     }
 
-    .layer.selected{
-      outline:2px dashed rgba(184,132,79,.75);
-      outline-offset:7px;
-      border-radius:6px;
+    .dragging{
+      opacity:.55;
     }
 
-    .resize-dot{
-      position:absolute;
-      width:16px;
-      height:16px;
-      border-radius:50%;
-      background:var(--gold2);
-      border:2px solid #fff;
-      box-shadow:0 6px 14px rgba(0,0,0,.18);
-      z-index:999;
-      cursor:nwse-resize;
-      transform:translate(-50%,-50%);
-    }
-
-    .swatch{
-      width:24px;
-      height:24px;
-      border-radius:50%;
-      border:1px solid rgba(0,0,0,.10);
-      box-shadow:0 0 0 3px rgba(255,255,255,.85);
-      flex:0 0 auto;
-    }
-
-    .orders-layout{
+    .product-detail-layout{
       display:grid;
-      grid-template-columns:minmax(0,1fr) 270px;
+      grid-template-columns:360px minmax(0,1fr);
       gap:14px;
       align-items:start;
     }
 
-    .calendar{
-      background:#fff;
+    .product-side{
+      position:sticky;
+      top:18px;
+    }
+
+    .page-choice-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+
+    .choice-card{
       border:1px solid var(--line);
+      background:#fff;
       border-radius:20px;
-      padding:12px;
+      padding:14px;
+      box-shadow:var(--shadow);
+    }
+
+    .choice-card h3{
+      margin:0 0 6px;
+      font-size:1.5rem;
+      color:var(--rose-dark);
+    }
+
+    .choice-card p{
+      font-size:.78rem;
+    }
+
+    .calendar{
+      max-width:310px;
+      margin-left:auto;
     }
 
     .calendar-head{
       display:flex;
       justify-content:space-between;
       align-items:center;
-      margin-bottom:8px;
+      margin-bottom:10px;
     }
 
     .calendar-title{
       font-weight:900;
-      color:var(--dark);
+      color:var(--rose-dark);
       font-size:.86rem;
     }
 
@@ -556,108 +742,154 @@
       gap:5px;
     }
 
-    .day-name{
+    .cal-day-name{
       text-align:center;
       font-size:.58rem;
       color:var(--muted);
       font-weight:900;
+      text-transform:uppercase;
     }
 
-    .day{
-      width:28px;
-      height:28px;
+    .cal-day{
+      aspect-ratio:1;
       border-radius:50%;
+      border:1px solid var(--line);
+      background:#fff;
       display:grid;
       place-items:center;
-      font-size:.7rem;
-      margin:auto;
-      color:var(--brown2);
-      border:1px solid transparent;
-    }
-
-    .day.has-order{
-      background:linear-gradient(135deg,var(--gold2),var(--gold));
-      color:#fff;
+      font-size:.68rem;
+      color:var(--text2);
       font-weight:900;
-      box-shadow:0 8px 14px rgba(184,132,79,.20);
+      position:relative;
     }
 
-    .order-list{
-      display:grid;
-      gap:10px;
+    .cal-day.has-order{
+      background:linear-gradient(135deg,var(--pink),#fff);
+      color:var(--rose-dark);
+      border-color:rgba(184,95,122,.28);
+      box-shadow:0 8px 18px rgba(184,95,122,.14);
+    }
+
+    .cal-day.today{
+      outline:2px solid rgba(184,95,122,.32);
+      outline-offset:2px;
     }
 
     .order-card{
       background:#fff;
       border:1px solid var(--line);
-      border-radius:18px;
-      padding:12px;
+      border-radius:20px;
+      padding:14px;
+      box-shadow:var(--shadow);
     }
 
-    .order-top{
+    .order-head{
       display:flex;
       justify-content:space-between;
-      gap:10px;
-      align-items:flex-start;
-      margin-bottom:8px;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
     }
 
-    .order-top h3{
+    .order-head h3{
       margin:0;
+      color:var(--rose-dark);
       font-size:1.55rem;
-      line-height:.92;
-      color:var(--dark);
+      line-height:.95;
     }
 
     .order-items{
-      border-top:1px solid var(--line);
-      padding-top:9px;
       display:grid;
-      gap:7px;
-      margin-top:9px;
+      gap:8px;
+      padding-top:11px;
+      border-top:1px solid var(--line);
     }
 
     .order-item{
       border:1px solid var(--line);
-      background:#fffdf9;
-      border-radius:13px;
-      padding:8px;
-      font-size:.74rem;
-      color:var(--brown2);
-      line-height:1.45;
+      border-radius:15px;
+      padding:9px;
+      color:var(--text2);
+      line-height:1.5;
+      font-size:.76rem;
+      background:var(--card);
     }
 
-    @media(max-width:1100px){
+    .expense-row{
+      display:grid;
+      grid-template-columns:1fr 100px 110px 90px;
+      gap:8px;
+      align-items:end;
+    }
+
+    .compact-list{
+      display:grid;
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .compact-item{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:15px;
+      padding:10px;
+    }
+
+    @media(max-width:1180px){
       .app{grid-template-columns:1fr}
-      .sidebar{position:relative;height:auto}
-      .products-layout,.orders-layout{grid-template-columns:1fr}
-      .nav{grid-template-columns:1fr 1fr}
+      .mobile-top{display:flex}
+      .sidebar{
+        position:fixed;
+        inset:0 auto 0 0;
+        width:min(310px,86vw);
+        transform:translateX(-105%);
+        transition:.25s ease;
+      }
+      .sidebar.open{transform:translateX(0)}
+      .main{padding:12px}
+      .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .dashboard-grid,
+      .product-detail-layout{grid-template-columns:1fr}
+      .product-side{position:relative;top:auto}
     }
 
     @media(max-width:760px){
-      .main{padding:10px}
       .topbar{flex-direction:column}
-      .grid{grid-template-columns:1fr}
-      .product-row{grid-template-columns:46px 34px 1fr}
-      .thumb{width:46px;height:46px}
-      .product-row .actions{grid-column:1/-1}
+      .stats{grid-template-columns:1fr}
+      .form-grid,
+      .expense-row{grid-template-columns:1fr}
+      .page-choice-grid{grid-template-columns:1fr}
+      .item-card{grid-template-columns:58px 1fr}
+      .item-img{width:58px;height:58px}
+      .mini-actions{grid-column:1/-1;justify-content:flex-start}
       .actions{flex-direction:column}
       .btn{width:100%}
       .panel{padding:13px}
-      .panel h2{font-size:1.8rem}
+      .panel h2{font-size:1.7rem}
+      .calendar{margin-left:0;max-width:100%}
     }
   </style>
 </head>
 
 <body>
-  <section id="authScreen" class="auth">
+  <div class="mobile-top">
+    <button class="hamburger" id="openSidebarBtn" type="button">☰</button>
+    <div class="mobile-title">Maison Doucette Admin</div>
+    <span></span>
+  </div>
+
+  <section id="authScreen" class="auth-screen">
     <div class="auth-card">
       <img src="images/logo.jpg" class="auth-logo" alt="Maison Doucette">
       <h1>Admin Maison</h1>
-      <p>Intră în panoul privat pentru produse, detalii, customizere și comenzi.</p>
+      <p>Dashboard, produse, comenzi, rapoarte, cheltuieli, mesaje și notificări într-un singur panou.</p>
 
       <form id="loginForm">
-        <div class="grid">
+        <div class="form-grid">
           <label>Email <input id="loginEmail" type="email" required autocomplete="email"></label>
           <label>Parolă <input id="loginPassword" type="password" required autocomplete="current-password"></label>
         </div>
@@ -671,79 +903,356 @@
   </section>
 
   <section id="adminApp" class="app hidden">
-    <aside class="sidebar">
-      <div class="side-card">
+    <aside class="sidebar" id="sidebar">
+      <div class="side-brand">
         <img src="images/logo.jpg" alt="Maison Doucette">
         <div class="brand">Maison Doucette</div>
-        <div class="side-small">private admin</div>
+        <div class="side-small">coquette admin</div>
       </div>
 
-      <div class="nav">
-        <button class="nav-btn active" data-tab="products">Produse</button>
-        <button class="nav-btn" data-tab="orders">Comenzi</button>
+      <div class="nav-tabs">
+        <button class="tab-btn active" data-tab="dashboard"><span>Dashboard</span><small>01</small></button>
+        <button class="tab-btn" data-tab="products"><span>Produse</span><small>02</small></button>
+        <button class="tab-btn" data-tab="orders"><span>Comenzi</span><small>03</small></button>
+        <button class="tab-btn" data-tab="reports"><span>Rapoarte</span><small>04</small></button>
+        <button class="tab-btn" data-tab="expenses"><span>Cheltuieli</span><small>05</small></button>
+        <button class="tab-btn" data-tab="messages"><span>Mesaje</span><small>06</small></button>
+        <button class="tab-btn" data-tab="notifications"><span>Notificări</span><small>07</small></button>
+        <button class="tab-btn" data-tab="settings"><span>Setări</span><small>08</small></button>
       </div>
 
-      <button class="logout" id="logoutBtn" type="button">Logout</button>
+      <button class="logout-btn" id="logoutBtn" type="button">Logout</button>
     </aside>
 
     <main class="main">
       <div class="topbar">
         <div>
-          <h1 id="pageTitle">Produse</h1>
-          <p id="pageSubtitle">Lista produselor, vizibilitate, ordine, detalii și customizare.</p>
+          <h1 id="pageTitle">Dashboard</h1>
+          <p id="pageSubtitle">Imaginea de ansamblu a atelierului tău.</p>
         </div>
+        <div class="status-pill"><span class="status-dot"></span> Conectat</div>
       </div>
 
-      <section id="tab-products" class="tab-panel">
-        <div class="products-layout">
-          <aside>
+      <section id="tab-dashboard" class="tab-panel">
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-number" id="statOrders">0</div>
+            <div class="stat-label">Comenzi</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="statRevenue">0</div>
+            <div class="stat-label">Venituri produse</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="statExpenses">0</div>
+            <div class="stat-label">Cheltuieli</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="statProfit">0</div>
+            <div class="stat-label">Profit estimat</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="statProducts">0</div>
+            <div class="stat-label">Produse</div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Vânzări & profit</h2>
+                <p>Grafic calculat pe baza comenzilor și cheltuielilor introduse.</p>
+              </div>
+              <div class="chart-legend">
+                <span><i class="legend-dot"></i>Venituri</span>
+                <span><i class="legend-dot profit"></i>Profit</span>
+              </div>
+            </div>
+            <div class="chart-wrap">
+              <div class="chart-bars" id="dashboardChart"></div>
+            </div>
+          </div>
+
+          <div>
             <div class="panel">
               <div class="panel-head">
                 <div>
-                  <h2>Produse</h2>
-                  <p>Trage produsele pentru ordine. Ochiul ascunde/afișează produsul.</p>
+                  <h2>Activitate recentă</h2>
+                  <p>Ultimele mișcări din atelier.</p>
                 </div>
-                <button class="btn btn-primary" id="newProductBtn" type="button">Produs nou</button>
               </div>
-
-              <div id="productsMessage" class="message"></div>
-              <div id="productsList" class="product-list"></div>
+              <div id="activityList" class="recent-list"></div>
             </div>
-          </aside>
 
-          <main id="productWorkspace" class="product-workspace">
-            <div class="panel workspace-empty">
-              Alege un produs din stânga sau creează unul nou.
+            <div class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Comenzi recente</h2>
+                  <p>Ultimele comenzi primite.</p>
+                </div>
+              </div>
+              <div id="recentOrdersList" class="recent-list"></div>
             </div>
-          </main>
+          </div>
         </div>
       </section>
 
-      <section id="tab-orders" class="tab-panel hidden">
-        <div class="orders-layout">
-          <main>
+      <section id="tab-products" class="tab-panel hidden">
+        <div id="productsHomeView">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Produse</h2>
+                <p>Lista produselor. Poți ascunde/afișa, reordona prin drag & drop și intra în editare.</p>
+              </div>
+              <button class="btn btn-primary" id="newProductBtn" type="button">Produs nou</button>
+            </div>
+            <div id="productsMessage" class="message"></div>
+          </div>
+
+          <div class="panel">
+            <div id="productsList" class="list"></div>
+          </div>
+        </div>
+
+        <div id="productEditView" class="hidden">
+          <div class="actions" style="margin-bottom:12px;">
+            <button class="btn btn-secondary" id="backToProductsBtn" type="button">← Înapoi la produse</button>
+          </div>
+
+          <div class="product-detail-layout">
+            <aside class="panel product-side">
+              <div class="panel-head">
+                <div>
+                  <h2 id="editingProductTitle">Produs</h2>
+                  <p>Editează cardul produsului și legăturile către detalii/customizare.</p>
+                </div>
+              </div>
+
+              <form id="productForm">
+                <div class="form-grid">
+                  <label>Nume produs <input id="productName" required></label>
+                  <label>Slug automat <input id="productSlug" readonly></label>
+                  <label>Text / preț <input id="productText" required placeholder="Ex: De la 45 RON"></label>
+                  <label>Apare pe site <select id="productVisible"><option value="true">Da</option><option value="false">Nu</option></select></label>
+                  <label class="full">Descriere <textarea id="productDescription" required></textarea></label>
+                  <label class="full">Link card <input id="productLink" required></label>
+                  <label class="full">Imagine din calculator/telefon <input id="productImageFile" type="file" accept="image/*"></label>
+                </div>
+
+                <div class="actions">
+                  <button class="btn btn-primary" type="submit">Salvează produsul</button>
+                  <button class="btn btn-danger" id="deleteProductBtn" type="button">Șterge produsul</button>
+                </div>
+              </form>
+            </aside>
+
+            <main>
+              <div class="panel">
+                <div class="panel-head">
+                  <div>
+                    <h2>Pagini legate de produs</h2>
+                    <p>De aici editezi pagina de detalii și pagina de customizare pentru produsul selectat.</p>
+                  </div>
+                </div>
+
+                <div class="page-choice-grid">
+                  <div class="choice-card">
+                    <h3>Pagina de detalii</h3>
+                    <p>Text, imagini, descriere, buton către customizare.</p>
+                    <div class="actions">
+                      <button class="btn btn-primary" id="editDetailsBtn" type="button">Editează detalii</button>
+                    </div>
+                  </div>
+
+                  <div class="choice-card">
+                    <h3>Customizer</h3>
+                    <p>Baze, accesorii/opțiuni, imagini, poziții, prețuri.</p>
+                    <div class="actions">
+                      <button class="btn btn-primary" id="editCustomizerBtn" type="button">Editează customizare</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel hidden" id="detailsEditorPanel">
+                <div class="panel-head">
+                  <div>
+                    <h2>Editor detalii</h2>
+                    <p>Câmpuri compacte pentru pagina de detalii.</p>
+                  </div>
+                  <button class="btn btn-secondary" id="closeDetailsEditorBtn" type="button">Închide</button>
+                </div>
+
+                <div class="form-grid">
+                  <label>Titlu <input id="detailTitle"></label>
+                  <label>Slug <input id="detailSlug" readonly></label>
+                  <label>Preț de bază <input id="detailBasePrice" type="number" min="0" step="1"></label>
+                  <label>Apare pe site <select id="detailActive"><option value="true">Da</option><option value="false">Nu</option></select></label>
+                  <label class="full">Paragraf 1 <textarea id="detailP1"></textarea></label>
+                  <label class="full">Paragraf 2 <textarea id="detailP2"></textarea></label>
+                  <label>Detail 1 <textarea id="detailD1"></textarea></label>
+                  <label>Detail 2 <textarea id="detailD2"></textarea></label>
+                  <label class="full">Detail 3 <textarea id="detailD3"></textarea></label>
+                  <label>Text buton <input id="detailButtonText"></label>
+                  <label>Link customizare <input id="detailButtonUrl"></label>
+                  <label>Imagine 1 <input id="detailFile1" type="file" accept="image/*"></label>
+                  <label>Imagine 2 <input id="detailFile2" type="file" accept="image/*"></label>
+                  <label>Imagine 3 <input id="detailFile3" type="file" accept="image/*"></label>
+                </div>
+
+                <div class="actions">
+                  <button class="btn btn-primary" id="saveDetailsBtn" type="button">Salvează detalii</button>
+                  <button class="btn btn-secondary" id="openDetailsPreviewBtn" type="button">Deschide preview</button>
+                </div>
+                <div id="detailsMessage" class="message"></div>
+              </div>
+
+              <div class="panel hidden" id="customizerEditorPanel">
+                <div class="panel-head">
+                  <div>
+                    <h2>Editor customizare</h2>
+                    <p>Varianta completă pentru baze și opțiuni va veni în partea 2.</p>
+                  </div>
+                  <button class="btn btn-secondary" id="closeCustomizerEditorBtn" type="button">Închide</button>
+                </div>
+
+                <div class="form-grid">
+                  <label>Titlu customizer <input id="custTitle"></label>
+                  <label>Slug <input id="custSlug" readonly></label>
+                  <label>Preț bază <input id="custBasePrice" type="number" min="0" step="1"></label>
+                  <label>Apare pe site <select id="custActive"><option value="true">Da</option><option value="false">Nu</option></select></label>
+                  <label class="full">Titlu preview <input id="custPreviewTitle"></label>
+                  <label class="full">Subtitlu preview <input id="custPreviewSubtitle"></label>
+                </div>
+
+                <div class="actions">
+                  <button class="btn btn-primary" id="saveCustomizerBtn" type="button">Salvează customizer</button>
+                </div>
+                <div id="customizerMessage" class="message"></div>
+              </div>
+            </main>
+          </div>
+        </div>
+      </section>
+            <section id="tab-orders" class="tab-panel hidden">
+        <div class="dashboard-grid">
+          <div>
             <div class="panel">
               <div class="panel-head">
                 <div>
                   <h2>Comenzi</h2>
-                  <p>Lista comenzilor, client, adresă, produse și total.</p>
+                  <p>Lista comenzilor, cu client, adresă, produse, total și status.</p>
                 </div>
                 <button class="btn btn-secondary" id="reloadOrdersBtn" type="button">Reîncarcă</button>
               </div>
               <div id="ordersMessage" class="message"></div>
             </div>
+            <div id="ordersList" class="list"></div>
+          </div>
 
-            <div id="ordersList" class="order-list"></div>
-          </main>
-
-          <aside class="calendar">
+          <div class="panel calendar">
             <div class="calendar-head">
               <button class="btn btn-secondary" id="prevMonthBtn" type="button">‹</button>
               <div class="calendar-title" id="calendarTitle">Calendar</div>
               <button class="btn btn-secondary" id="nextMonthBtn" type="button">›</button>
             </div>
             <div class="calendar-grid" id="calendarGrid"></div>
-          </aside>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-reports" class="tab-panel hidden">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Rapoarte</h2>
+              <p>Venituri, cheltuieli și profit pe luni.</p>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <div class="chart-bars" id="reportsChart"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-expenses" class="tab-panel hidden">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Cheltuieli</h2>
+              <p>Adaugă manual cheltuielile atelierului: materiale, ambalaje, livrări, alte costuri.</p>
+            </div>
+          </div>
+
+          <form id="expenseForm">
+            <div class="expense-row">
+              <label>Titlu <input id="expenseTitle" required placeholder="Ex: Fire plușate"></label>
+              <label>Sumă <input id="expenseAmount" required type="number" min="0" step="0.01"></label>
+              <label>Categorie <input id="expenseCategory" placeholder="materiale"></label>
+              <label>Dată <input id="expenseDate" type="date"></label>
+            </div>
+            <label style="margin-top:10px;">Notițe <textarea id="expenseNote"></textarea></label>
+            <div class="actions">
+              <button class="btn btn-primary" type="submit">Adaugă cheltuială</button>
+            </div>
+          </form>
+
+          <div id="expensesMessage" class="message"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Lista cheltuielilor</h2>
+              <p>Cheltuielile sunt scăzute automat din venituri.</p>
+            </div>
+          </div>
+          <div id="expensesList" class="compact-list"></div>
+        </div>
+      </section>
+
+      <section id="tab-messages" class="tab-panel hidden">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Mesaje</h2>
+              <p>Mesajele venite din formularul de contact.</p>
+            </div>
+            <button class="btn btn-secondary" id="reloadMessagesBtn" type="button">Reîncarcă</button>
+          </div>
+          <div id="messagesList" class="compact-list"></div>
+        </div>
+      </section>
+
+      <section id="tab-notifications" class="tab-panel hidden">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Notificări</h2>
+              <p>Notificări interne pentru admin.</p>
+            </div>
+            <button class="btn btn-secondary" id="reloadNotificationsBtn" type="button">Reîncarcă</button>
+          </div>
+          <div id="notificationsList" class="compact-list"></div>
+        </div>
+      </section>
+
+      <section id="tab-settings" class="tab-panel hidden">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Setări</h2>
+              <p>Setări simple pentru panoul de administrare.</p>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <label>Nume brand <input value="Maison Doucette"></label>
+            <label>Email contact <input placeholder="contact@maisondoucette.com"></label>
+            <label class="full">Notițe admin <textarea placeholder="Idei, lucruri de făcut, observații..."></textarea></label>
+          </div>
         </div>
       </section>
     </main>
@@ -758,104 +1267,151 @@
     const PRODUCTS_BUCKET = 'products';
     const ATELIER_BUCKET = 'atelier-images';
 
-    let products = [];
-    let selectedProduct = null;
-    let selectedSubtab = 'product';
-    let currentDetail = null;
-    let currentCustomizer = null;
-    let currentConfig = null;
-    let selectedLayer = null;
-    let dragState = null;
-    let orders = [];
-    let calendarDate = new Date();
+    let productsCache = [];
+    let ordersCache = [];
+    let expensesCache = [];
+    let messagesCache = [];
+    let notificationsCache = [];
+
+    let currentProductId = null;
+    let currentDetailId = null;
+    let currentCustomizerId = null;
+    let currentCalendarDate = new Date();
 
     const authScreen = document.getElementById('authScreen');
     const adminApp = document.getElementById('adminApp');
+    const sidebar = document.getElementById('sidebar');
+
     const loginForm = document.getElementById('loginForm');
     const loginBtn = document.getElementById('loginBtn');
     const authMessage = document.getElementById('authMessage');
     const logoutBtn = document.getElementById('logoutBtn');
+
     const pageTitle = document.getElementById('pageTitle');
     const pageSubtitle = document.getElementById('pageSubtitle');
-    const productsList = document.getElementById('productsList');
-    const productWorkspace = document.getElementById('productWorkspace');
 
-    function msg(el, text, type=''){
-      if(!el) return;
+    function showMessage(el, text, type = '') {
+      if (!el) return;
       el.textContent = text || '';
       el.className = `message ${type}`;
     }
 
-    function escapeHtml(value=''){
+    function escapeHtml(value = '') {
       return String(value)
-        .replaceAll('&','&amp;')
-        .replaceAll('<','&lt;')
-        .replaceAll('>','&gt;')
-        .replaceAll('"','&quot;')
-        .replaceAll("'","&#039;");
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
     }
 
-    function normalizeRomanian(value){
+    function normalizeRomanian(value) {
       return String(value || '')
-        .replace(/[ăâĂÂ]/g,'a')
-        .replace(/[îÎ]/g,'i')
-        .replace(/[șşȘŞ]/g,'s')
-        .replace(/[țţȚŢ]/g,'t');
+        .replace(/[ăâĂÂ]/g, 'a')
+        .replace(/[îÎ]/g, 'i')
+        .replace(/[șşȘŞ]/g, 's')
+        .replace(/[țţȚŢ]/g, 't');
     }
 
-    function slugify(value){
+    function slugify(value) {
       return normalizeRomanian(value)
         .toLowerCase()
         .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g,'')
-        .replace(/[^a-z0-9]+/g,'-')
-        .replace(/^-+|-+$/g,'');
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
     }
 
-    function makeId(prefix='id'){
-      return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2,8)}`;
-    }
-
-    function money(value){
+    function formatMoney(value) {
       return `${Number(value || 0).toFixed(0)} RON`;
     }
 
-    async function uploadFile(file, bucket, folder){
-      if(!file) return '';
-      const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
-      const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-      const { error } = await db.storage.from(bucket).upload(path, file, { upsert:false });
-      if(error) throw error;
-      const { data } = db.storage.from(bucket).getPublicUrl(path);
-      return data.publicUrl;
+    function formatDate(value) {
+      if (!value) return '';
+      return new Date(value).toLocaleString('ro-RO');
     }
 
-    function showAuth(){
+    function showAuth() {
       authScreen.classList.remove('hidden');
       adminApp.classList.add('hidden');
     }
 
-    function showAdmin(){
+    function showAdmin() {
       authScreen.classList.add('hidden');
       adminApp.classList.remove('hidden');
     }
 
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    async function uploadToBucket(file, bucket, folder = 'admin') {
+      if (!file) return '';
+      const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+      const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+
+      const { error } = await db.storage.from(bucket).upload(path, file, { upsert: false });
+      if (error) throw error;
+
+      const { data } = db.storage.from(bucket).getPublicUrl(path);
+      return data.publicUrl;
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tab);
+      });
+
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.toggle('hidden', panel.id !== `tab-${tab}`);
+      });
+
+      const titles = {
+        dashboard: ['Dashboard', 'Imaginea de ansamblu a atelierului tău.'],
+        products: ['Produse', 'Produse, pagini de detalii și customizare.'],
+        orders: ['Comenzi', 'Comenzile clienților și calendarul comenzilor.'],
+        reports: ['Rapoarte', 'Grafice pentru venituri, cheltuieli și profit.'],
+        expenses: ['Cheltuieli', 'Costurile atelierului, introduse manual.'],
+        messages: ['Mesaje', 'Mesaje trimise prin formularul de contact.'],
+        notifications: ['Notificări', 'Notificări interne pentru admin.'],
+        settings: ['Setări', 'Setări simple pentru panoul tău.']
+      };
+
+      pageTitle.textContent = titles[tab][0];
+      pageSubtitle.textContent = titles[tab][1];
+      sidebar.classList.remove('open');
+
+      if (tab === 'dashboard') loadDashboard();
+      if (tab === 'products') loadProducts();
+      if (tab === 'orders') loadOrders();
+      if (tab === 'reports') renderReports();
+      if (tab === 'expenses') loadExpenses();
+      if (tab === 'messages') loadMessages();
+      if (tab === 'notifications') loadNotifications();
+    }
+
+    document.getElementById('openSidebarBtn').addEventListener('click', () => {
+      sidebar.classList.add('open');
+    });
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+    });
+
+    loginForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
       loginBtn.disabled = true;
-      msg(authMessage, 'Se verifică datele...');
-      try{
+      showMessage(authMessage, 'Se verifică datele...');
+
+      try {
         const email = document.getElementById('loginEmail').value.trim();
         const password = document.getElementById('loginPassword').value;
+
         const { data, error } = await db.auth.signInWithPassword({ email, password });
-        if(error) throw error;
-        if(!data.session) throw new Error('Nu s-a putut crea sesiunea.');
+        if (error) throw error;
+        if (!data.session) throw new Error('Nu s-a putut crea sesiunea.');
+
         showAdmin();
-        await loadProducts();
-        await loadOrders();
-      }catch(error){
-        msg(authMessage, error.message || 'Autentificarea a eșuat.', 'error');
-      }finally{
+        await loadAll();
+      } catch (error) {
+        showMessage(authMessage, error.message || 'Autentificarea a eșuat.', 'error');
+      } finally {
         loginBtn.disabled = false;
       }
     });
@@ -865,1021 +1421,584 @@
       showAuth();
     });
 
-    async function boot(){
-      const { data, error } = await db.auth.getSession();
-      if(error || !data.session){
+    async function boot() {
+      const { data } = await db.auth.getSession();
+      if (data?.session) {
+        showAdmin();
+        await loadAll();
+      } else {
         showAuth();
-        return;
-      }
-      showAdmin();
-      await loadProducts();
-      await loadOrders();
-    }
-
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
-    });
-
-    function switchTab(tab){
-      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tab));
-      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.toggle('hidden', panel.id !== `tab-${tab}`));
-
-      if(tab === 'products'){
-        pageTitle.textContent = 'Produse';
-        pageSubtitle.textContent = 'Lista produselor, vizibilitate, ordine, detalii și customizare.';
-        loadProducts();
-      }
-
-      if(tab === 'orders'){
-        pageTitle.textContent = 'Comenzi';
-        pageSubtitle.textContent = 'Comenzile apar formal în listă, iar calendarul marchează zilele cu comenzi.';
-        loadOrders();
       }
     }
 
-    document.getElementById('newProductBtn').addEventListener('click', () => {
-      selectedProduct = {
-        id:null,
-        name:'',
-        text:'',
-        description:'',
-        link:'',
-        image:'',
-        is_visible:true,
-        sort_order:products.length
-      };
-      currentDetail = null;
-      currentCustomizer = null;
-      currentConfig = ensureConfig();
-      selectedSubtab = 'product';
-      renderWorkspace();
-    });
+    async function loadAll() {
+      await Promise.all([
+        loadProducts(),
+        loadOrders(),
+        loadExpenses(),
+        loadMessages(),
+        loadNotifications()
+      ]);
+      loadDashboard();
+    }
 
-    async function loadProducts(){
-      productsList.innerHTML = '<div class="meta">Se încarcă...</div>';
+    function getRevenue() {
+      return ordersCache.reduce((sum, order) => {
+        const total = Number(order.total || 0);
+        const shipping = Number(order.shipping || order.transport || order.delivery_price || 0);
+        return sum + Math.max(0, total - shipping);
+      }, 0);
+    }
+
+    function getExpensesTotal() {
+      return expensesCache.reduce((sum, item) => sum + Number(item.amount || 0), 0);
+    }
+
+    function updateStats() {
+      const revenue = getRevenue();
+      const expenses = getExpensesTotal();
+      const profit = revenue - expenses;
+
+      document.getElementById('statOrders').textContent = ordersCache.length;
+      document.getElementById('statRevenue').textContent = Number(revenue).toFixed(0);
+      document.getElementById('statExpenses').textContent = Number(expenses).toFixed(0);
+      document.getElementById('statProfit').textContent = Number(profit).toFixed(0);
+      document.getElementById('statProducts').textContent = productsCache.length;
+    }
+
+    function getMonthlyData() {
+      const months = [];
+      const now = new Date();
+
+      for (let i = 5; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        months.push({
+          key: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`,
+          label: d.toLocaleDateString('ro-RO', { month: 'short' }),
+          revenue: 0,
+          expenses: 0,
+          profit: 0
+        });
+      }
+
+      ordersCache.forEach(order => {
+        if (!order.created_at) return;
+        const d = new Date(order.created_at);
+        const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        const item = months.find(m => m.key === key);
+        if (!item) return;
+
+        const total = Number(order.total || 0);
+        const shipping = Number(order.shipping || order.transport || order.delivery_price || 0);
+        item.revenue += Math.max(0, total - shipping);
+      });
+
+      expensesCache.forEach(expense => {
+        const d = new Date(expense.expense_date || expense.created_at);
+        const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        const item = months.find(m => m.key === key);
+        if (!item) return;
+        item.expenses += Number(expense.amount || 0);
+      });
+
+      months.forEach(m => {
+        m.profit = m.revenue - m.expenses;
+      });
+
+      return months;
+    }
+
+    function renderChart(elementId) {
+      const el = document.getElementById(elementId);
+      if (!el) return;
+
+      const data = getMonthlyData();
+      const max = Math.max(1, ...data.map(m => Math.max(m.revenue, m.profit, 0)));
+
+      el.innerHTML = data.map(month => {
+        const revenueHeight = Math.max(4, (month.revenue / max) * 100);
+        const profitHeight = Math.max(4, (Math.max(0, month.profit) / max) * 100);
+
+        return `
+          <div class="bar-group">
+            <div class="bar" style="height:${revenueHeight}%"></div>
+            <div class="bar profit" style="height:${profitHeight}%"></div>
+            <div class="bar-label">${escapeHtml(month.label)}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function loadDashboard() {
+      updateStats();
+      renderChart('dashboardChart');
+
+      const activity = [
+        ...ordersCache.slice(0, 3).map(o => ({
+          title: `Comandă: ${o.customer_name || 'Client'}`,
+          date: o.created_at,
+          info: formatMoney(o.total || 0)
+        })),
+        ...expensesCache.slice(0, 3).map(e => ({
+          title: `Cheltuială: ${e.title}`,
+          date: e.created_at,
+          info: formatMoney(e.amount || 0)
+        })),
+        ...messagesCache.slice(0, 2).map(m => ({
+          title: `Mesaj: ${m.name || 'Anonim'}`,
+          date: m.created_at,
+          info: m.subject || 'Contact'
+        }))
+      ].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0)).slice(0, 6);
+
+      document.getElementById('activityList').innerHTML = activity.length ? activity.map(item => `
+        <div class="recent-item">
+          <div>
+            <strong>${escapeHtml(item.title)}</strong>
+            <div class="meta">${formatDate(item.date)}</div>
+          </div>
+          <div class="meta">${escapeHtml(item.info)}</div>
+        </div>
+      `).join('') : `<div class="meta">Nu există activitate încă.</div>`;
+
+      document.getElementById('recentOrdersList').innerHTML = ordersCache.slice(0, 4).map(order => `
+        <div class="recent-item">
+          <div>
+            <strong>${escapeHtml(order.customer_name || 'Client')}</strong>
+            <div class="meta">${formatDate(order.created_at)}</div>
+          </div>
+          <div class="meta">${formatMoney(order.total || 0)}</div>
+        </div>
+      `).join('') || `<div class="meta">Nu există comenzi încă.</div>`;
+    }
+
+    function renderReports() {
+      renderChart('reportsChart');
+    }
+
+    async function getNextSortOrder() {
+      const { data } = await db
+        .from('products')
+        .select('sort_order')
+        .order('sort_order', { ascending: false })
+        .limit(1);
+
+      if (!data || !data.length) return 0;
+      return Number(data[0].sort_order || 0) + 1;
+    }
+
+    async function loadProducts() {
       const { data, error } = await db
         .from('products')
         .select('*')
-        .order('sort_order', { ascending:true })
-        .order('created_at', { ascending:true });
+        .order('sort_order', { ascending: true })
+        .order('created_at', { ascending: true });
 
-      if(error){
-        productsList.innerHTML = '<div class="meta">Nu am putut încărca produsele.</div>';
+      if (error) {
+        showMessage(document.getElementById('productsMessage'), error.message, 'error');
         return;
       }
 
-      products = data || [];
+      productsCache = data || [];
       renderProducts();
+      updateStats();
     }
 
-    function renderProducts(){
-      if(!products.length){
-        productsList.innerHTML = '<div class="meta">Nu există produse încă.</div>';
+    function renderProducts() {
+      const list = document.getElementById('productsList');
+
+      if (!productsCache.length) {
+        list.innerHTML = `<div class="meta">Nu există produse încă.</div>`;
         return;
       }
 
-      productsList.innerHTML = products.map((product, index) => `
-        <div class="product-row ${selectedProduct?.id === product.id ? 'selected' : ''}" draggable="true" data-id="${product.id}">
-          <img class="thumb" src="${escapeHtml(product.image || 'images/placeholder-product.jpg')}" alt="">
-          <button class="eye-btn" type="button" title="Ascunde/Afișează" onclick="event.stopPropagation(); toggleProductVisibility('${product.id}', ${product.is_visible === false ? 'true' : 'false'})">
-            ${product.is_visible === false ? '🙈' : '👁️'}
-          </button>
-          <div onclick="selectProduct('${product.id}')">
-            <h3 class="product-name">${escapeHtml(product.name || 'Produs fără nume')}</h3>
-            <div class="meta">${escapeHtml(product.text || '')}</div>
-            <div class="badge ${product.is_visible === false ? 'off' : 'on'}">${product.is_visible === false ? 'Ascuns' : 'Vizibil'}</div>
+      list.innerHTML = productsCache.map(product => `
+        <div class="item-card is-clickable" draggable="true" data-product-id="${product.id}">
+          <img class="item-img" src="${escapeHtml(product.image || 'images/placeholder-product.jpg')}" alt="">
+          <div onclick="openProductEditor('${product.id}')">
+            <h3 class="item-title">${escapeHtml(product.name || 'Produs')}</h3>
+            <div class="meta">
+              <strong>${escapeHtml(product.text || '')}</strong><br>
+              ${escapeHtml(product.description || '')}<br>
+              ${escapeHtml(product.link || '')}
+            </div>
+            <div class="badge ${product.is_visible === false ? 'inactive' : 'active'}">
+              ${product.is_visible === false ? 'Ascuns' : 'Vizibil'}
+            </div>
           </div>
-          <div class="drag-handle" title="Trage pentru ordine">⋮⋮</div>
+          <div class="mini-actions">
+            <button class="icon-mini" title="Ascunde / afișează" onclick="event.stopPropagation(); toggleProductVisibility('${product.id}')">
+              ${product.is_visible === false ? '🙈' : '👁'}
+            </button>
+            <span class="drag-handle" title="Trage pentru ordine">☰</span>
+          </div>
         </div>
       `).join('');
 
       enableProductDrag();
     }
 
-    function enableProductDrag(){
+    function enableProductDrag() {
       let draggedId = null;
 
-      document.querySelectorAll('.product-row').forEach(row => {
-        row.addEventListener('dragstart', () => {
-          draggedId = row.dataset.id;
-          row.classList.add('dragging');
+      document.querySelectorAll('[data-product-id]').forEach(card => {
+        card.addEventListener('dragstart', () => {
+          draggedId = card.dataset.productId;
+          card.classList.add('dragging');
         });
 
-        row.addEventListener('dragend', () => {
-          row.classList.remove('dragging');
+        card.addEventListener('dragend', () => {
+          card.classList.remove('dragging');
         });
 
-        row.addEventListener('dragover', e => {
-          e.preventDefault();
+        card.addEventListener('dragover', event => {
+          event.preventDefault();
         });
 
-        row.addEventListener('drop', async e => {
-          e.preventDefault();
-          const targetId = row.dataset.id;
-          if(!draggedId || draggedId === targetId) return;
+        card.addEventListener('drop', async event => {
+          event.preventDefault();
+          const targetId = card.dataset.productId;
+          if (!draggedId || draggedId === targetId) return;
 
-          const oldIndex = products.findIndex(p => String(p.id) === String(draggedId));
-          const newIndex = products.findIndex(p => String(p.id) === String(targetId));
-          const [moved] = products.splice(oldIndex,1);
-          products.splice(newIndex,0,moved);
+          const oldIndex = productsCache.findIndex(p => String(p.id) === String(draggedId));
+          const newIndex = productsCache.findIndex(p => String(p.id) === String(targetId));
+          const [moved] = productsCache.splice(oldIndex, 1);
+          productsCache.splice(newIndex, 0, moved);
 
           renderProducts();
-          await saveProductOrder();
+
+          for (let i = 0; i < productsCache.length; i++) {
+            await db.from('products').update({ sort_order: i }).eq('id', productsCache[i].id);
+          }
+
+          await loadProducts();
         });
       });
     }
 
-    async function saveProductOrder(){
-      const updates = products.map((product, index) =>
-        db.from('products').update({ sort_order:index }).eq('id', product.id)
-      );
-      await Promise.all(updates);
-      msg(document.getElementById('productsMessage'), 'Ordinea a fost salvată.', 'success');
-    }
+    async function toggleProductVisibility(id) {
+      const product = productsCache.find(p => String(p.id) === String(id));
+      if (!product) return;
 
-    async function selectProduct(id){
-      selectedProduct = products.find(p => String(p.id) === String(id));
-      selectedSubtab = 'product';
-      currentDetail = null;
-      currentCustomizer = null;
-      currentConfig = ensureConfig();
-      renderProducts();
-      await loadLinkedPages();
-      renderWorkspace();
-    }
+      await db
+        .from('products')
+        .update({ is_visible: product.is_visible === false ? true : false })
+        .eq('id', id);
 
-    async function loadLinkedPages(){
-      if(!selectedProduct) return;
-      const slug = slugify(selectedProduct.name || '');
-
-      const detailResult = await db.from('atelier_products').select('*').eq('slug', slug).maybeSingle();
-      currentDetail = detailResult.data || null;
-
-      const customizerResult = await db.from('customizers').select('*').eq('slug', slug).maybeSingle();
-      currentCustomizer = customizerResult.data || null;
-      currentConfig = ensureConfig(currentCustomizer?.config || {});
-    }
-
-    async function toggleProductVisibility(id, visible){
-      await db.from('products').update({ is_visible:visible }).eq('id', id);
       await loadProducts();
     }
 
-    function renderWorkspace(){
-      if(!selectedProduct){
-        productWorkspace.innerHTML = `
-          <div class="panel workspace-empty">
-            Alege un produs din stânga sau creează unul nou.
-          </div>
-        `;
+    document.getElementById('newProductBtn').addEventListener('click', () => {
+      currentProductId = null;
+      document.getElementById('productsHomeView').classList.add('hidden');
+      document.getElementById('productEditView').classList.remove('hidden');
+      document.getElementById('editingProductTitle').textContent = 'Produs nou';
+      document.getElementById('productForm').reset();
+      document.getElementById('productVisible').value = 'true';
+      document.getElementById('productSlug').value = '';
+      document.getElementById('detailsEditorPanel').classList.add('hidden');
+      document.getElementById('customizerEditorPanel').classList.add('hidden');
+    });
+
+    document.getElementById('backToProductsBtn').addEventListener('click', () => {
+      document.getElementById('productEditView').classList.add('hidden');
+      document.getElementById('productsHomeView').classList.remove('hidden');
+      loadProducts();
+    });
+
+    function openProductEditor(id) {
+      const product = productsCache.find(p => String(p.id) === String(id));
+      if (!product) return;
+
+      currentProductId = id;
+      document.getElementById('productsHomeView').classList.add('hidden');
+      document.getElementById('productEditView').classList.remove('hidden');
+
+      document.getElementById('editingProductTitle').textContent = product.name || 'Produs';
+      document.getElementById('productName').value = product.name || '';
+      document.getElementById('productSlug').value = slugify(product.name || '');
+      document.getElementById('productText').value = product.text || '';
+      document.getElementById('productDescription').value = product.description || '';
+      document.getElementById('productLink').value = product.link || `product-details.html?slug=${slugify(product.name || '')}`;
+      document.getElementById('productVisible').value = String(product.is_visible !== false);
+
+      document.getElementById('detailsEditorPanel').classList.add('hidden');
+      document.getElementById('customizerEditorPanel').classList.add('hidden');
+    }
+
+    document.getElementById('productName').addEventListener('input', () => {
+      const slug = slugify(document.getElementById('productName').value);
+      document.getElementById('productSlug').value = slug;
+      document.getElementById('productLink').value = `product-details.html?slug=${slug}`;
+    });
+
+    document.getElementById('productForm').addEventListener('submit', async event => {
+      event.preventDefault();
+
+      const name = document.getElementById('productName').value.trim();
+      const slug = slugify(name);
+      const file = document.getElementById('productImageFile').files?.[0] || null;
+      const existing = productsCache.find(p => String(p.id) === String(currentProductId));
+
+      let image = existing?.image || '';
+      if (file) image = await uploadToBucket(file, PRODUCTS_BUCKET, 'homepage-products');
+
+      const payload = {
+        name,
+        text: document.getElementById('productText').value.trim(),
+        description: document.getElementById('productDescription').value.trim(),
+        link: document.getElementById('productLink').value.trim() || `product-details.html?slug=${slug}`,
+        image,
+        is_visible: document.getElementById('productVisible').value === 'true'
+      };
+
+      let response;
+      if (currentProductId) {
+        response = await db.from('products').update(payload).eq('id', currentProductId);
+      } else {
+        payload.sort_order = await getNextSortOrder();
+        response = await db.from('products').insert(payload).select().single();
+        if (!response.error) currentProductId = response.data.id;
+      }
+
+      if (response.error) {
+        showMessage(document.getElementById('productsMessage'), response.error.message, 'error');
         return;
       }
 
-      const slug = slugify(selectedProduct.name || '');
-      productWorkspace.innerHTML = `
-        <div class="panel">
-          <div class="panel-head">
-            <div>
-              <h2>${selectedProduct.id ? escapeHtml(selectedProduct.name || 'Produs') : 'Produs nou'}</h2>
-              <p>Slug automat: <strong>${slug || 'se-genereaza-dupa-nume'}</strong></p>
-            </div>
-          </div>
-
-          <div class="subtabs">
-            <button class="subtab ${selectedSubtab === 'product' ? 'active' : ''}" onclick="setSubtab('product')">Produs</button>
-            <button class="subtab ${selectedSubtab === 'details' ? 'active' : ''}" onclick="setSubtab('details')">Pagina detalii</button>
-            <button class="subtab ${selectedSubtab === 'customizer' ? 'active' : ''}" onclick="setSubtab('customizer')">Customizer</button>
-          </div>
-
-          <div id="workspaceContent"></div>
-        </div>
-      `;
-
-      renderSubtab();
-    }
-
-    function setSubtab(tab){
-      selectedSubtab = tab;
-      renderWorkspace();
-    }
-    window.setSubtab = setSubtab;
-
-    function renderSubtab(){
-      if(selectedSubtab === 'product') renderProductEditor();
-      if(selectedSubtab === 'details') renderDetailsEditor();
-      if(selectedSubtab === 'customizer') renderCustomizerEditor();
-    }
-
-    function renderProductEditor(){
-      document.getElementById('workspaceContent').innerHTML = `
-        <form id="editProductForm">
-          <div class="grid">
-            <label>Nume produs
-              <input id="editProductName" value="${escapeHtml(selectedProduct.name || '')}" required>
-            </label>
-
-            <label>Text / preț
-              <input id="editProductText" value="${escapeHtml(selectedProduct.text || '')}" placeholder="Ex: De la 45 RON">
-            </label>
-
-            <label class="full">Descriere scurtă
-              <textarea id="editProductDescription">${escapeHtml(selectedProduct.description || '')}</textarea>
-            </label>
-
-            <label class="full">Link automat
-              <input id="editProductLink" value="${escapeHtml(selectedProduct.link || '')}" placeholder="product-details.html?slug=...">
-            </label>
-
-            <label>Vizibil
-              <select id="editProductVisible">
-                <option value="true" ${selectedProduct.is_visible === false ? '' : 'selected'}>Da</option>
-                <option value="false" ${selectedProduct.is_visible === false ? 'selected' : ''}>Nu</option>
-              </select>
-            </label>
-
-            <label>Imagine din calculator/telefon
-              <input id="editProductFile" type="file" accept="image/*">
-            </label>
-          </div>
-
-          <div class="actions">
-            <button class="btn btn-primary" type="submit">Salvează produs</button>
-            ${selectedProduct.id ? '<button class="btn btn-danger" type="button" id="deleteProductBtn">Șterge produs</button>' : ''}
-          </div>
-
-          <div id="editProductMessage" class="message"></div>
-        </form>
-      `;
-
-      const nameInput = document.getElementById('editProductName');
-      const linkInput = document.getElementById('editProductLink');
-
-      nameInput.addEventListener('input', () => {
-        const slug = slugify(nameInput.value);
-        if(!linkInput.dataset.touched){
-          linkInput.value = `product-details.html?slug=${slug}`;
-        }
-      });
-
-      linkInput.addEventListener('input', () => {
-        linkInput.dataset.touched = 'true';
-      });
-
-      if(!linkInput.value && nameInput.value){
-        linkInput.value = `product-details.html?slug=${slugify(nameInput.value)}`;
-      }
-
-      document.getElementById('editProductForm').addEventListener('submit', saveProduct);
-
-      document.getElementById('deleteProductBtn')?.addEventListener('click', deleteSelectedProduct);
-    }
-
-    async function saveProduct(e){
-      e.preventDefault();
-      const message = document.getElementById('editProductMessage');
-      msg(message, 'Se salvează produsul...');
-
-      try{
-        const name = document.getElementById('editProductName').value.trim();
-        const text = document.getElementById('editProductText').value.trim();
-        const description = document.getElementById('editProductDescription').value.trim();
-        const link = document.getElementById('editProductLink').value.trim() || `product-details.html?slug=${slugify(name)}`;
-        const is_visible = document.getElementById('editProductVisible').value === 'true';
-        const file = document.getElementById('editProductFile').files?.[0] || null;
-
-        let image = selectedProduct.image || '';
-        if(file) image = await uploadFile(file, PRODUCTS_BUCKET, 'homepage-products');
-
-        const payload = {
-          name,
-          text,
-          description,
-          link,
-          image,
-          is_visible,
-          sort_order: selectedProduct.sort_order ?? products.length
-        };
-
-        let response;
-        if(selectedProduct.id){
-          response = await db.from('products').update(payload).eq('id', selectedProduct.id).select().single();
-        }else{
-          response = await db.from('products').insert(payload).select().single();
-        }
-
-        if(response.error) throw response.error;
-
-        selectedProduct = response.data;
-        msg(message, 'Produsul a fost salvat.', 'success');
-        await loadProducts();
-        await loadLinkedPages();
-        renderWorkspace();
-      }catch(error){
-        msg(message, error.message || 'Nu am putut salva produsul.', 'error');
-      }
-    }
-
-    async function deleteSelectedProduct(){
-      if(!selectedProduct?.id) return;
-      if(!confirm('Sigur ștergi produsul?')) return;
-      await db.from('products').delete().eq('id', selectedProduct.id);
-      selectedProduct = null;
+      showMessage(document.getElementById('productsMessage'), 'Produs salvat.', 'success');
       await loadProducts();
-      renderWorkspace();
+    });
+
+    document.getElementById('deleteProductBtn').addEventListener('click', async () => {
+      if (!currentProductId) return;
+      if (!confirm('Sigur ștergi produsul?')) return;
+
+      await db.from('products').delete().eq('id', currentProductId);
+      currentProductId = null;
+
+      document.getElementById('productEditView').classList.add('hidden');
+      document.getElementById('productsHomeView').classList.remove('hidden');
+      await loadProducts();
+    });
+
+    async function ensureDetailsRow() {
+      const slug = document.getElementById('productSlug').value;
+      if (!slug) return null;
+
+      let { data } = await db.from('atelier_products').select('*').eq('slug', slug).maybeSingle();
+
+      if (!data) {
+        const title = document.getElementById('productName').value.trim();
+        const { data: inserted, error } = await db.from('atelier_products').insert({
+          title,
+          slug,
+          base_price: 0,
+          customize_button_text: 'Personalizează',
+          customize_url: `customizer.html?slug=${slug}`,
+          is_active: true
+        }).select().single();
+
+        if (error) throw error;
+        data = inserted;
+      }
+
+      currentDetailId = data.id;
+      return data;
     }
 
-    function detailDefaults(){
-      const slug = slugify(selectedProduct?.name || '');
-      return {
-        id:null,
-        title:selectedProduct?.name || '',
+    document.getElementById('editDetailsBtn').addEventListener('click', async () => {
+      try {
+        const row = await ensureDetailsRow();
+
+        document.getElementById('detailsEditorPanel').classList.remove('hidden');
+        document.getElementById('customizerEditorPanel').classList.add('hidden');
+
+        document.getElementById('detailTitle').value = row.title || '';
+        document.getElementById('detailSlug').value = row.slug || '';
+        document.getElementById('detailBasePrice').value = row.base_price || 0;
+        document.getElementById('detailActive').value = String(row.is_active ?? true);
+        document.getElementById('detailP1').value = row.short_paragraph_1 || '';
+        document.getElementById('detailP2').value = row.short_paragraph_2 || '';
+        document.getElementById('detailD1').value = row.detail_1 || '';
+        document.getElementById('detailD2').value = row.detail_2 || '';
+        document.getElementById('detailD3').value = row.detail_3 || '';
+        document.getElementById('detailButtonText').value = row.customize_button_text || 'Personalizează';
+        document.getElementById('detailButtonUrl').value = row.customize_url || `customizer.html?slug=${row.slug}`;
+      } catch (error) {
+        showMessage(document.getElementById('detailsMessage'), error.message, 'error');
+      }
+    });
+
+    document.getElementById('closeDetailsEditorBtn').addEventListener('click', () => {
+      document.getElementById('detailsEditorPanel').classList.add('hidden');
+    });
+
+    document.getElementById('saveDetailsBtn').addEventListener('click', async () => {
+      if (!currentDetailId) return;
+
+      const slug = document.getElementById('detailSlug').value;
+      let image1 = '';
+      let image2 = '';
+      let image3 = '';
+
+      const f1 = document.getElementById('detailFile1').files?.[0] || null;
+      const f2 = document.getElementById('detailFile2').files?.[0] || null;
+      const f3 = document.getElementById('detailFile3').files?.[0] || null;
+
+      if (f1) image1 = await uploadToBucket(f1, ATELIER_BUCKET, 'details');
+      if (f2) image2 = await uploadToBucket(f2, ATELIER_BUCKET, 'details');
+      if (f3) image3 = await uploadToBucket(f3, ATELIER_BUCKET, 'details');
+
+      const payload = {
+        title: document.getElementById('detailTitle').value.trim(),
         slug,
-        base_price:0,
-        short_paragraph_1:'',
-        short_paragraph_2:'',
-        detail_1:'',
-        detail_2:'',
-        detail_3:'',
-        customize_button_text:'Personalizează',
-        customize_url:`customizer.html?slug=${slug}`,
-        image_1:selectedProduct?.image || '',
-        image_2:'',
-        image_3:'',
-        is_active:true
+        base_price: Number(document.getElementById('detailBasePrice').value || 0),
+        is_active: document.getElementById('detailActive').value === 'true',
+        short_paragraph_1: document.getElementById('detailP1').value.trim(),
+        short_paragraph_2: document.getElementById('detailP2').value.trim(),
+        detail_1: document.getElementById('detailD1').value.trim(),
+        detail_2: document.getElementById('detailD2').value.trim(),
+        detail_3: document.getElementById('detailD3').value.trim(),
+        customize_button_text: document.getElementById('detailButtonText').value.trim(),
+        customize_url: document.getElementById('detailButtonUrl').value.trim()
       };
-    }
 
-    function renderDetailsEditor(){
-      const d = currentDetail || detailDefaults();
+      if (image1) payload.image_1 = image1;
+      if (image2) payload.image_2 = image2;
+      if (image3) payload.image_3 = image3;
 
-      document.getElementById('workspaceContent').innerHTML = `
-        <div class="grid">
-          <label>Titlu <input id="detailTitle" value="${escapeHtml(d.title || '')}"></label>
-          <label>Slug automat <input id="detailSlug" value="${escapeHtml(d.slug || '')}"></label>
-          <label>Preț bază <input id="detailBasePrice" type="number" value="${Number(d.base_price || 0)}"></label>
-          <label>Apare pe site
-            <select id="detailActive">
-              <option value="true" ${d.is_active === false ? '' : 'selected'}>Da</option>
-              <option value="false" ${d.is_active === false ? 'selected' : ''}>Nu</option>
-            </select>
-          </label>
+      const { error } = await db.from('atelier_products').update(payload).eq('id', currentDetailId);
 
-          <label class="full">Paragraf 1 <textarea id="detailP1">${escapeHtml(d.short_paragraph_1 || '')}</textarea></label>
-          <label class="full">Paragraf 2 <textarea id="detailP2">${escapeHtml(d.short_paragraph_2 || '')}</textarea></label>
-          <label class="full">Detaliu 1 <textarea id="detailD1">${escapeHtml(d.detail_1 || '')}</textarea></label>
-          <label class="full">Detaliu 2 <textarea id="detailD2">${escapeHtml(d.detail_2 || '')}</textarea></label>
-          <label class="full">Detaliu 3 <textarea id="detailD3">${escapeHtml(d.detail_3 || '')}</textarea></label>
-
-          <label>Text buton <input id="detailButtonText" value="${escapeHtml(d.customize_button_text || '')}"></label>
-          <label>Link customizare <input id="detailButtonUrl" value="${escapeHtml(d.customize_url || '')}"></label>
-
-          <label>Imagine 1 URL <input id="detailImage1" value="${escapeHtml(d.image_1 || '')}"></label>
-          <label>Upload imagine 1 <input id="detailFile1" type="file" accept="image/*"></label>
-          <label>Imagine 2 URL <input id="detailImage2" value="${escapeHtml(d.image_2 || '')}"></label>
-          <label>Upload imagine 2 <input id="detailFile2" type="file" accept="image/*"></label>
-          <label>Imagine 3 URL <input id="detailImage3" value="${escapeHtml(d.image_3 || '')}"></label>
-          <label>Upload imagine 3 <input id="detailFile3" type="file" accept="image/*"></label>
-        </div>
-
-        <div class="actions">
-          <button class="btn btn-primary" id="saveDetailBtn" type="button">Salvează detalii</button>
-          <button class="btn btn-secondary" id="openDetailBtn" type="button">Deschide pagina</button>
-          ${currentDetail ? '<button class="btn btn-danger" id="deleteDetailBtn" type="button">Șterge pagina detalii</button>' : ''}
-        </div>
-
-        <div id="detailsEditMessage" class="message"></div>
-      `;
-
-      document.getElementById('detailTitle').addEventListener('input', () => {
-        document.getElementById('detailSlug').value = slugify(document.getElementById('detailTitle').value);
-        document.getElementById('detailButtonUrl').value = `customizer.html?slug=${document.getElementById('detailSlug').value}`;
-      });
-
-      document.getElementById('saveDetailBtn').addEventListener('click', saveDetail);
-      document.getElementById('openDetailBtn').addEventListener('click', () => {
-        const slug = document.getElementById('detailSlug').value.trim();
-        if(slug) window.open(`product-details.html?slug=${encodeURIComponent(slug)}`, '_blank');
-      });
-      document.getElementById('deleteDetailBtn')?.addEventListener('click', deleteDetail);
-    }
-
-    async function saveDetail(){
-      const message = document.getElementById('detailsEditMessage');
-      msg(message, 'Se salvează pagina de detalii...');
-
-      try{
-        const file1 = document.getElementById('detailFile1').files?.[0] || null;
-        const file2 = document.getElementById('detailFile2').files?.[0] || null;
-        const file3 = document.getElementById('detailFile3').files?.[0] || null;
-
-        let image_1 = document.getElementById('detailImage1').value.trim();
-        let image_2 = document.getElementById('detailImage2').value.trim();
-        let image_3 = document.getElementById('detailImage3').value.trim();
-
-        if(file1) image_1 = await uploadFile(file1, ATELIER_BUCKET, 'details');
-        if(file2) image_2 = await uploadFile(file2, ATELIER_BUCKET, 'details');
-        if(file3) image_3 = await uploadFile(file3, ATELIER_BUCKET, 'details');
-
-        const payload = {
-          title: document.getElementById('detailTitle').value.trim(),
-          slug: slugify(document.getElementById('detailSlug').value.trim() || document.getElementById('detailTitle').value.trim()),
-          base_price: Number(document.getElementById('detailBasePrice').value || 0),
-          short_paragraph_1: document.getElementById('detailP1').value.trim(),
-          short_paragraph_2: document.getElementById('detailP2').value.trim(),
-          detail_1: document.getElementById('detailD1').value.trim(),
-          detail_2: document.getElementById('detailD2').value.trim(),
-          detail_3: document.getElementById('detailD3').value.trim(),
-          customize_button_text: document.getElementById('detailButtonText').value.trim(),
-          customize_url: document.getElementById('detailButtonUrl').value.trim(),
-          image_1,
-          image_2,
-          image_3,
-          is_active: document.getElementById('detailActive').value === 'true'
-        };
-
-        let response;
-        if(currentDetail?.id){
-          response = await db.from('atelier_products').update(payload).eq('id', currentDetail.id).select().single();
-        }else{
-          response = await db.from('atelier_products').insert(payload).select().single();
-        }
-
-        if(response.error) throw response.error;
-
-        currentDetail = response.data;
-        msg(message, 'Pagina de detalii a fost salvată.', 'success');
-        renderDetailsEditor();
-      }catch(error){
-        msg(message, error.message || 'Nu am putut salva detaliile.', 'error');
-      }
-    }
-
-    async function deleteDetail(){
-      if(!currentDetail?.id) return;
-      if(!confirm('Sigur ștergi pagina de detalii?')) return;
-      await db.from('atelier_products').delete().eq('id', currentDetail.id);
-      currentDetail = null;
-      renderDetailsEditor();
-    }
-
-    function defaultStyle(zIndex){ return { x:50, y:55, width:360, rotate:0, zIndex }; }
-
-    function ensureConfig(config={}){
-      return {
-        previewTitle: config.previewTitle || selectedProduct?.name || '',
-        previewSubtitle: config.previewSubtitle || 'Creează produsul tău, un detaliu după altul.',
-        addButtonText: config.addButtonText || 'Adaugă în coș',
-        defaultBaseId: config.defaultBaseId || '',
-        baseVariants: Array.isArray(config.baseVariants) ? config.baseVariants : [],
-        optionGroups: Array.isArray(config.optionGroups) ? config.optionGroups : []
-      };
-    }
-
-    function renderCustomizerEditor(){
-      const slug = slugify(selectedProduct?.name || '');
-      if(!currentConfig) currentConfig = ensureConfig();
-
-      document.getElementById('workspaceContent').innerHTML = `
-        <div class="grid">
-          <label>Titlu customizer <input id="custTitle" value="${escapeHtml(currentCustomizer?.title || selectedProduct?.name || '')}"></label>
-          <label>Slug automat <input id="custSlug" value="${escapeHtml(currentCustomizer?.slug || slug)}"></label>
-          <label>Preț bază <input id="custBasePrice" type="number" value="${Number(currentCustomizer?.base_price || 0)}"></label>
-          <label>Apare pe site
-            <select id="custActive">
-              <option value="true" ${currentCustomizer?.is_active === false ? '' : 'selected'}>Da</option>
-              <option value="false" ${currentCustomizer?.is_active === false ? 'selected' : ''}>Nu</option>
-            </select>
-          </label>
-          <label>Titlu preview <input id="custPreviewTitle" value="${escapeHtml(currentConfig.previewTitle || '')}"></label>
-          <label>Subtitlu preview <input id="custPreviewSubtitle" value="${escapeHtml(currentConfig.previewSubtitle || '')}"></label>
-        </div>
-
-        <div class="actions">
-          <button class="btn btn-primary" id="saveCustomizerBtn" type="button">Salvează customizer</button>
-          <button class="btn btn-secondary" id="addBaseBtn" type="button">Adaugă culoare/bază</button>
-          <button class="btn btn-secondary" id="addGroupBtn" type="button">Adaugă opțiune peste bază</button>
-          ${currentCustomizer ? '<button class="btn btn-danger" id="deleteCustomizerBtn" type="button">Șterge customizer</button>' : ''}
-        </div>
-
-        <div id="customizerEditMessage" class="message"></div>
-
-        <div class="panel" style="margin-top:14px;">
-          <div class="panel-head">
-            <div>
-              <h2>Preview drag & resize</h2>
-              <p>Click pe layer, trage-l pentru poziție. Trage punctul auriu pentru mărime.</p>
-            </div>
-          </div>
-
-          <div class="preview-stage" id="customizerStage"></div>
-
-          <div class="grid" style="margin-top:10px;">
-            <label>X % <input id="layerX" type="number"></label>
-            <label>Y % <input id="layerY" type="number"></label>
-            <label>Lățime px <input id="layerW" type="number"></label>
-            <label>Rotire <input id="layerR" type="number"></label>
-            <label>Z-index <input id="layerZ" type="number"></label>
-            <label>Setează default
-              <select id="layerDefault">
-                <option value="false">Nu</option>
-                <option value="true">Da</option>
-              </select>
-            </label>
-          </div>
-          <div class="actions">
-            <button class="btn btn-blue" id="applyLayerBtn" type="button">Aplică layer</button>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-head"><h2>Baze / culori</h2></div>
-          <div id="baseList" class="compact-list"></div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-head"><h2>Opțiuni peste bază</h2></div>
-          <div id="groupsList" class="compact-list"></div>
-        </div>
-      `;
-
-      document.getElementById('custTitle').addEventListener('input', () => {
-        document.getElementById('custSlug').value = slugify(document.getElementById('custTitle').value);
-      });
-
-      document.getElementById('saveCustomizerBtn').addEventListener('click', saveCustomizer);
-      document.getElementById('addBaseBtn').addEventListener('click', addBase);
-      document.getElementById('addGroupBtn').addEventListener('click', addGroup);
-      document.getElementById('applyLayerBtn').addEventListener('click', applyLayerFields);
-      document.getElementById('deleteCustomizerBtn')?.addEventListener('click', deleteCustomizer);
-
-      renderBaseList();
-      renderGroupList();
-      renderCustomizerPreview();
-    }
-
-    function renderBaseList(){
-      const list = document.getElementById('baseList');
-      if(!list) return;
-
-      list.innerHTML = currentConfig.baseVariants.map((item,index) => `
-        <div class="mini-card">
-          <div class="mini-head">
-            <div style="display:flex;gap:8px;align-items:center">
-              <div class="swatch" style="background:${escapeHtml(item.hex || '#f4efe7')}"></div>
-              <strong>${escapeHtml(item.name || 'Bază')}</strong>
-            </div>
-            <div>
-              <button class="btn btn-blue" type="button" onclick="selectLayer({type:'base', index:${index}})">Select</button>
-              <button class="btn btn-secondary" type="button" onclick="setDefaultBase('${item.id}')">Default</button>
-              <button class="btn btn-danger" type="button" onclick="removeBase(${index})">Șterge</button>
-            </div>
-          </div>
-          <div class="grid">
-            <label>Nume <input value="${escapeHtml(item.name || '')}" oninput="updateBase(${index}, 'name', this.value)"></label>
-            <label>HEX <input value="${escapeHtml(item.hex || '')}" oninput="updateBase(${index}, 'hex', this.value)"></label>
-            <label>Preț extra <input type="number" value="${Number(item.price || 0)}" oninput="updateBase(${index}, 'price', this.value)"></label>
-            <label>URL imagine <input value="${escapeHtml(item.src || '')}" oninput="updateBase(${index}, 'src', this.value)"></label>
-            <label class="full">Upload imagine <input type="file" accept="image/*" onchange="uploadBaseImage(${index}, this)"></label>
-          </div>
-        </div>
-      `).join('') || '<div class="meta">Nu ai adăugat baze încă.</div>';
-    }
-
-    function renderGroupList(){
-      const list = document.getElementById('groupsList');
-      if(!list) return;
-
-      list.innerHTML = currentConfig.optionGroups.map((group, groupIndex) => `
-        <div class="mini-card">
-          <div class="mini-head">
-            <strong>${escapeHtml(group.name || 'Opțiune')}</strong>
-            <div>
-              <button class="btn btn-success" type="button" onclick="addVariant(${groupIndex})">Variantă</button>
-              <button class="btn btn-danger" type="button" onclick="removeGroup(${groupIndex})">Șterge</button>
-            </div>
-          </div>
-
-          <div class="grid">
-            <label>Nume categorie <input value="${escapeHtml(group.name || '')}" oninput="updateGroup(${groupIndex}, 'name', this.value)"></label>
-            <label>Obligatoriu
-              <select onchange="updateGroup(${groupIndex}, 'required', this.value)">
-                <option value="false" ${group.required ? '' : 'selected'}>Nu</option>
-                <option value="true" ${group.required ? 'selected' : ''}>Da</option>
-              </select>
-            </label>
-          </div>
-
-          ${(group.variants || []).map((variant, variantIndex) => `
-            <div class="mini-card" style="margin-top:8px;">
-              <div class="mini-head">
-                <div style="display:flex;gap:8px;align-items:center">
-                  <div class="swatch" style="background:${escapeHtml(variant.hex || '#d44848')}"></div>
-                  <strong>${escapeHtml(variant.name || 'Variantă')}</strong>
-                </div>
-                <div>
-                  <button class="btn btn-blue" type="button" onclick="selectLayer({type:'variant', groupIndex:${groupIndex}, variantIndex:${variantIndex}})">Select</button>
-                  <button class="btn btn-secondary" type="button" onclick="setDefaultVariant(${groupIndex}, '${variant.id}')">Default</button>
-                  <button class="btn btn-danger" type="button" onclick="removeVariant(${groupIndex}, ${variantIndex})">Șterge</button>
-                </div>
-              </div>
-              <div class="grid">
-                <label>Nume <input value="${escapeHtml(variant.name || '')}" oninput="updateVariant(${groupIndex}, ${variantIndex}, 'name', this.value)"></label>
-                <label>HEX <input value="${escapeHtml(variant.hex || '')}" oninput="updateVariant(${groupIndex}, ${variantIndex}, 'hex', this.value)"></label>
-                <label>Preț extra <input type="number" value="${Number(variant.price || 0)}" oninput="updateVariant(${groupIndex}, ${variantIndex}, 'price', this.value)"></label>
-                <label>URL imagine <input value="${escapeHtml(variant.src || '')}" oninput="updateVariant(${groupIndex}, ${variantIndex}, 'src', this.value)"></label>
-                <label class="full">Upload imagine <input type="file" accept="image/*" onchange="uploadVariantImage(${groupIndex}, ${variantIndex}, this)"></label>
-              </div>
-            </div>
-          `).join('')}
-        </div>
-      `).join('') || '<div class="meta">Nu ai adăugat opțiuni încă.</div>';
-    }
-
-    function addBase(){
-      const id = makeId('base');
-      currentConfig.baseVariants.push({
-        id,
-        name:'Bază nouă',
-        hex:'#f4efe7',
-        src:'',
-        price:0,
-        style:defaultStyle(4)
-      });
-      if(!currentConfig.defaultBaseId) currentConfig.defaultBaseId = id;
-      renderCustomizerEditor();
-    }
-
-    function addGroup(){
-      currentConfig.optionGroups.push({
-        id:makeId('group'),
-        name:'Opțiune nouă',
-        required:false,
-        defaultVariantId:'',
-        variants:[]
-      });
-      renderCustomizerEditor();
-    }
-
-    function addVariant(groupIndex){
-      const group = currentConfig.optionGroups[groupIndex];
-      if(!group) return;
-      const id = makeId('variant');
-      group.variants.push({
-        id,
-        name:'Variantă nouă',
-        hex:'#d44848',
-        src:'',
-        price:0,
-        style:defaultStyle(7)
-      });
-      if(!group.defaultVariantId) group.defaultVariantId = id;
-      renderCustomizerEditor();
-    }
-
-    function updateBase(index, field, value){
-      const item = currentConfig.baseVariants[index];
-      if(!item) return;
-      item[field] = field === 'price' ? Number(value || 0) : value;
-      renderCustomizerPreview();
-    }
-
-    function updateGroup(index, field, value){
-      const group = currentConfig.optionGroups[index];
-      if(!group) return;
-      group[field] = field === 'required' ? value === 'true' : value;
-    }
-
-    function updateVariant(groupIndex, variantIndex, field, value){
-      const item = currentConfig.optionGroups[groupIndex]?.variants?.[variantIndex];
-      if(!item) return;
-      item[field] = field === 'price' ? Number(value || 0) : value;
-      renderCustomizerPreview();
-    }
-
-    function removeBase(index){
-      currentConfig.baseVariants.splice(index,1);
-      currentConfig.defaultBaseId = currentConfig.baseVariants[0]?.id || '';
-      selectedLayer = null;
-      renderCustomizerEditor();
-    }
-
-    function removeGroup(index){
-      currentConfig.optionGroups.splice(index,1);
-      selectedLayer = null;
-      renderCustomizerEditor();
-    }
-
-    function removeVariant(groupIndex, variantIndex){
-      const group = currentConfig.optionGroups[groupIndex];
-      group.variants.splice(variantIndex,1);
-      group.defaultVariantId = group.variants[0]?.id || '';
-      selectedLayer = null;
-      renderCustomizerEditor();
-    }
-
-    function setDefaultBase(id){
-      currentConfig.defaultBaseId = id;
-      renderCustomizerEditor();
-    }
-
-    function setDefaultVariant(groupIndex, id){
-      currentConfig.optionGroups[groupIndex].defaultVariantId = id;
-      renderCustomizerEditor();
-    }
-
-    async function uploadBaseImage(index, input){
-      const file = input.files?.[0] || null;
-      if(!file) return;
-      currentConfig.baseVariants[index].src = await uploadFile(file, ATELIER_BUCKET, 'customizer-base');
-      renderCustomizerEditor();
-    }
-
-    async function uploadVariantImage(groupIndex, variantIndex, input){
-      const file = input.files?.[0] || null;
-      if(!file) return;
-      currentConfig.optionGroups[groupIndex].variants[variantIndex].src = await uploadFile(file, ATELIER_BUCKET, 'customizer-options');
-      renderCustomizerEditor();
-    }
-
-    function getSelectedLayerObject(){
-      if(!selectedLayer) return null;
-      if(selectedLayer.type === 'base') return currentConfig.baseVariants[selectedLayer.index];
-      if(selectedLayer.type === 'variant') return currentConfig.optionGroups[selectedLayer.groupIndex]?.variants?.[selectedLayer.variantIndex];
-      return null;
-    }
-
-    function selectLayer(data){
-      selectedLayer = data;
-      const layer = getSelectedLayerObject();
-      if(!layer) return;
-
-      document.getElementById('layerX').value = layer.style?.x ?? 50;
-      document.getElementById('layerY').value = layer.style?.y ?? 55;
-      document.getElementById('layerW').value = layer.style?.width ?? 360;
-      document.getElementById('layerR').value = layer.style?.rotate ?? 0;
-      document.getElementById('layerZ').value = layer.style?.zIndex ?? 5;
-
-      const isDefault =
-        selectedLayer.type === 'base'
-          ? currentConfig.defaultBaseId === layer.id
-          : currentConfig.optionGroups[selectedLayer.groupIndex]?.defaultVariantId === layer.id;
-
-      document.getElementById('layerDefault').value = isDefault ? 'true' : 'false';
-      renderCustomizerPreview();
-    }
-
-    function applyLayerFields(){
-      const layer = getSelectedLayerObject();
-      if(!layer) return;
-
-      layer.style = layer.style || {};
-      layer.style.x = Number(document.getElementById('layerX').value || 50);
-      layer.style.y = Number(document.getElementById('layerY').value || 55);
-      layer.style.width = Number(document.getElementById('layerW').value || 360);
-      layer.style.rotate = Number(document.getElementById('layerR').value || 0);
-      layer.style.zIndex = Number(document.getElementById('layerZ').value || 5);
-
-      if(document.getElementById('layerDefault').value === 'true'){
-        if(selectedLayer.type === 'base') currentConfig.defaultBaseId = layer.id;
-        if(selectedLayer.type === 'variant') currentConfig.optionGroups[selectedLayer.groupIndex].defaultVariantId = layer.id;
+      if (error) {
+        showMessage(document.getElementById('detailsMessage'), error.message, 'error');
+        return;
       }
 
-      renderCustomizerPreview();
-    }
-
-    function cssForLayer(style={}){
-      return `
-        left:${Number(style.x ?? 50)}%;
-        top:${Number(style.y ?? 55)}%;
-        width:${Number(style.width ?? 360)}px;
-        z-index:${Number(style.zIndex ?? 5)};
-        transform:translate(-50%,-50%) rotate(${Number(style.rotate ?? 0)}deg);
-      `;
-    }
-
-    function getPreviewBase(){
-      return currentConfig.baseVariants.find(b => b.id === currentConfig.defaultBaseId) || currentConfig.baseVariants[0] || null;
-    }
-
-    function getPreviewVariants(){
-      return currentConfig.optionGroups
-        .map(group => group.variants.find(v => v.id === group.defaultVariantId) || group.variants[0])
-        .filter(Boolean);
-    }
-
-    function isLayerSelected(obj){
-      const selected = getSelectedLayerObject();
-      return selected && obj && selected.id === obj.id;
-    }
-
-    function renderCustomizerPreview(){
-      const stage = document.getElementById('customizerStage');
-      if(!stage) return;
-
-      const base = getPreviewBase();
-      const variants = getPreviewVariants();
-      const layers = [];
-
-      if(base?.src){
-        layers.push(`<img class="layer ${isLayerSelected(base) ? 'selected' : ''}" src="${escapeHtml(base.src)}" style="${cssForLayer(base.style)}" data-layer-id="${base.id}" alt="">`);
-      }
-
-      variants.forEach(v => {
-        if(v?.src){
-          layers.push(`<img class="layer ${isLayerSelected(v) ? 'selected' : ''}" src="${escapeHtml(v.src)}" style="${cssForLayer(v.style)}" data-layer-id="${v.id}" alt="">`);
-        }
-      });
-
-      stage.innerHTML = layers.join('') || '<div class="stage-help">Adaugă imagini pentru baze și opțiuni.</div>';
-
-      const selected = getSelectedLayerObject();
-      if(selected?.src){
-        const x = selected.style?.x ?? 50;
-        const y = selected.style?.y ?? 55;
-        const w = selected.style?.width ?? 360;
-        const stageRect = stage.getBoundingClientRect();
-        const dot = document.createElement('div');
-        dot.className = 'resize-dot';
-        dot.style.left = `${x}%`;
-        dot.style.top = `${y}%`;
-        dot.style.marginLeft = `${w / 2}px`;
-        dot.dataset.resize = 'true';
-        stage.appendChild(dot);
-      }
-
-      stage.querySelectorAll('.layer').forEach(layer => {
-        layer.addEventListener('pointerdown', startLayerDrag);
-      });
-
-      stage.querySelector('.resize-dot')?.addEventListener('pointerdown', startResize);
-    }
-
-    function startLayerDrag(e){
-      const layer = getSelectedLayerObject();
-      if(!layer) return;
-      const stage = document.getElementById('customizerStage');
-      dragState = {
-        mode:'move',
-        layer,
-        rect: stage.getBoundingClientRect()
-      };
-      e.target.setPointerCapture(e.pointerId);
-      document.addEventListener('pointermove', onLayerMove);
-      document.addEventListener('pointerup', stopLayerAction);
-    }
-
-    function startResize(e){
-      e.stopPropagation();
-      const layer = getSelectedLayerObject();
-      if(!layer) return;
-      dragState = {
-        mode:'resize',
-        layer,
-        startX:e.clientX,
-        startWidth:Number(layer.style?.width || 360)
-      };
-      document.addEventListener('pointermove', onLayerMove);
-      document.addEventListener('pointerup', stopLayerAction);
-    }
-
-    function onLayerMove(e){
-      if(!dragState) return;
-
-      const layer = dragState.layer;
-      layer.style = layer.style || {};
-
-      if(dragState.mode === 'move'){
-        const x = ((e.clientX - dragState.rect.left) / dragState.rect.width) * 100;
-        const y = ((e.clientY - dragState.rect.top) / dragState.rect.height) * 100;
-        layer.style.x = Math.max(0, Math.min(100, x));
-        layer.style.y = Math.max(0, Math.min(100, y));
-        document.getElementById('layerX').value = Math.round(layer.style.x);
-        document.getElementById('layerY').value = Math.round(layer.style.y);
-      }
-
-      if(dragState.mode === 'resize'){
-        const delta = e.clientX - dragState.startX;
-        layer.style.width = Math.max(40, dragState.startWidth + delta);
-        document.getElementById('layerW').value = Math.round(layer.style.width);
-      }
-
-      renderCustomizerPreview();
-    }
-
-    function stopLayerAction(){
-      dragState = null;
-      document.removeEventListener('pointermove', onLayerMove);
-      document.removeEventListener('pointerup', stopLayerAction);
-    }
-
-    async function saveCustomizer(){
-      const message = document.getElementById('customizerEditMessage');
-      msg(message, 'Se salvează customizerul...');
-
-      try{
-        currentConfig.previewTitle = document.getElementById('custPreviewTitle').value.trim();
-        currentConfig.previewSubtitle = document.getElementById('custPreviewSubtitle').value.trim();
-
-        const payload = {
-          title: document.getElementById('custTitle').value.trim(),
-          slug: slugify(document.getElementById('custSlug').value.trim() || document.getElementById('custTitle').value.trim()),
-          base_price: Number(document.getElementById('custBasePrice').value || 0),
-          is_active: document.getElementById('custActive').value === 'true',
-          config: currentConfig
-        };
-
-        let response;
-        if(currentCustomizer?.id){
-          response = await db.from('customizers').update(payload).eq('id', currentCustomizer.id).select().single();
-        }else{
-          response = await db.from('customizers').insert(payload).select().single();
-        }
-
-        if(response.error) throw response.error;
-
-        currentCustomizer = response.data;
-        msg(message, 'Customizerul a fost salvat.', 'success');
-        renderCustomizerEditor();
-      }catch(error){
-        msg(message, error.message || 'Nu am putut salva customizerul.', 'error');
-      }
-    }
-
-    async function deleteCustomizer(){
-      if(!currentCustomizer?.id) return;
-      if(!confirm('Sigur ștergi customizerul?')) return;
-      await db.from('customizers').delete().eq('id', currentCustomizer.id);
-      currentCustomizer = null;
-      currentConfig = ensureConfig();
-      renderCustomizerEditor();
-    }
-
-    window.selectProduct = selectProduct;
-    window.toggleProductVisibility = toggleProductVisibility;
-    window.selectLayer = selectLayer;
-    window.setDefaultBase = setDefaultBase;
-    window.setDefaultVariant = setDefaultVariant;
-    window.addVariant = addVariant;
-    window.removeBase = removeBase;
-    window.removeGroup = removeGroup;
-    window.removeVariant = removeVariant;
-    window.updateBase = updateBase;
-    window.updateGroup = updateGroup;
-    window.updateVariant = updateVariant;
-    window.uploadBaseImage = uploadBaseImage;
-    window.uploadVariantImage = uploadVariantImage;
-
-    document.getElementById('reloadOrdersBtn').addEventListener('click', loadOrders);
-    document.getElementById('prevMonthBtn').addEventListener('click', () => {
-      calendarDate.setMonth(calendarDate.getMonth() - 1);
-      renderCalendar();
-    });
-    document.getElementById('nextMonthBtn').addEventListener('click', () => {
-      calendarDate.setMonth(calendarDate.getMonth() + 1);
-      renderCalendar();
+      showMessage(document.getElementById('detailsMessage'), 'Pagina de detalii a fost salvată.', 'success');
     });
 
-    async function loadOrders(){
-      const list = document.getElementById('ordersList');
-      const message = document.getElementById('ordersMessage');
-      list.innerHTML = '<div class="panel">Se încarcă...</div>';
+    document.getElementById('openDetailsPreviewBtn').addEventListener('click', () => {
+      const slug = document.getElementById('detailSlug').value;
+      if (slug) window.open(`product-details.html?slug=${encodeURIComponent(slug)}`, '_blank');
+    });
 
+    async function ensureCustomizerRow() {
+      const slug = document.getElementById('productSlug').value;
+      if (!slug) return null;
+
+      let { data } = await db.from('customizers').select('*').eq('slug', slug).maybeSingle();
+
+      if (!data) {
+        const title = document.getElementById('productName').value.trim();
+        const { data: inserted, error } = await db.from('customizers').insert({
+          title,
+          slug,
+          base_price: 0,
+          is_active: true,
+          config: {
+            previewTitle: title,
+            previewSubtitle: 'Creează produsul tău, un detaliu după altul.',
+            baseVariants: [],
+            optionGroups: []
+          }
+        }).select().single();
+
+        if (error) throw error;
+        data = inserted;
+      }
+
+      currentCustomizerId = data.id;
+      return data;
+    }
+
+    document.getElementById('editCustomizerBtn').addEventListener('click', async () => {
+      try {
+        const row = await ensureCustomizerRow();
+
+        document.getElementById('customizerEditorPanel').classList.remove('hidden');
+        document.getElementById('detailsEditorPanel').classList.add('hidden');
+
+        document.getElementById('custTitle').value = row.title || '';
+        document.getElementById('custSlug').value = row.slug || '';
+        document.getElementById('custBasePrice').value = row.base_price || 0;
+        document.getElementById('custActive').value = String(row.is_active ?? true);
+        document.getElementById('custPreviewTitle').value = row.config?.previewTitle || row.title || '';
+        document.getElementById('custPreviewSubtitle').value = row.config?.previewSubtitle || '';
+      } catch (error) {
+        showMessage(document.getElementById('customizerMessage'), error.message, 'error');
+      }
+    });
+
+    document.getElementById('closeCustomizerEditorBtn').addEventListener('click', () => {
+      document.getElementById('customizerEditorPanel').classList.add('hidden');
+    });
+
+    document.getElementById('saveCustomizerBtn').addEventListener('click', async () => {
+      if (!currentCustomizerId) return;
+
+      const payload = {
+        title: document.getElementById('custTitle').value.trim(),
+        slug: document.getElementById('custSlug').value.trim(),
+        base_price: Number(document.getElementById('custBasePrice').value || 0),
+        is_active: document.getElementById('custActive').value === 'true',
+        config: {
+          previewTitle: document.getElementById('custPreviewTitle').value.trim(),
+          previewSubtitle: document.getElementById('custPreviewSubtitle').value.trim()
+        }
+      };
+
+      const { error } = await db.from('customizers').update(payload).eq('id', currentCustomizerId);
+
+      if (error) {
+        showMessage(document.getElementById('customizerMessage'), error.message, 'error');
+        return;
+      }
+
+      showMessage(document.getElementById('customizerMessage'), 'Customizer salvat.', 'success');
+    });
+
+    async function loadOrders() {
       const { data, error } = await db
         .from('orders')
         .select('*')
-        .order('created_at', { ascending:false });
+        .order('created_at', { ascending: false });
 
-      if(error){
-        list.innerHTML = '';
-        msg(message, error.message, 'error');
-        renderCalendar();
+      if (error) {
+        showMessage(document.getElementById('ordersMessage'), error.message, 'error');
         return;
       }
 
-      orders = data || [];
-      msg(message, '');
+      ordersCache = data || [];
+      renderOrders();
+      renderCalendar();
+      updateStats();
+    }
 
-      if(!orders.length){
-        list.innerHTML = '<div class="panel">Nu există comenzi încă.</div>';
-        renderCalendar();
+    function renderOrders() {
+      const list = document.getElementById('ordersList');
+
+      if (!ordersCache.length) {
+        list.innerHTML = `<div class="panel">Nu există comenzi încă.</div>`;
         return;
       }
 
-      list.innerHTML = orders.map(order => `
+      list.innerHTML = ordersCache.map(order => `
         <div class="order-card">
-          <div class="order-top">
+          <div class="order-head">
             <div>
               <h3>${escapeHtml(order.customer_name || 'Client fără nume')}</h3>
               <div class="meta">
                 ${escapeHtml(order.customer_email || '')}<br>
                 ${escapeHtml(order.customer_phone || '')}<br>
-                ${escapeHtml(order.customer_address || '')} ${escapeHtml(order.customer_city || '')}
+                ${escapeHtml(order.customer_address || '')}
+                ${escapeHtml(order.customer_city || '')}
               </div>
             </div>
-            <div style="text-align:right">
-              <div class="badge on">${escapeHtml(order.status || 'nouă')}</div>
-              <div class="meta">${order.created_at ? new Date(order.created_at).toLocaleString('ro-RO') : ''}</div>
-              <strong>${money(order.total || 0)}</strong>
+            <div>
+              <div class="badge active">${escapeHtml(order.status || 'nouă')}</div>
+              <div class="meta">${formatDate(order.created_at)}</div>
+              <strong>${formatMoney(order.total || 0)}</strong>
             </div>
           </div>
 
@@ -1888,71 +2007,247 @@
               <div class="order-item">
                 <strong>${escapeHtml(item.name || 'Produs')}</strong><br>
                 Cantitate: ${Number(item.quantity || 1)}<br>
-                Preț/unitate: ${money(item.price || 0)}<br>
+                Preț: ${formatMoney(item.price || 0)}<br>
                 Detalii: ${escapeHtml(JSON.stringify(item))}
               </div>
             `).join('')}
           </div>
 
           <div class="actions">
-            <button class="btn btn-success" onclick="updateOrderStatus('${order.id}', 'procesata')">Procesată</button>
-            <button class="btn btn-secondary" onclick="updateOrderStatus('${order.id}', 'trimisa')">Trimisă</button>
+            <button class="btn btn-success" onclick="updateOrderStatus('${order.id}', 'procesată')">Procesată</button>
+            <button class="btn btn-secondary" onclick="updateOrderStatus('${order.id}', 'trimisă')">Trimisă</button>
             <button class="btn btn-danger" onclick="deleteOrder('${order.id}')">Șterge</button>
           </div>
         </div>
       `).join('');
-
-      renderCalendar();
     }
 
-    function renderCalendar(){
+    async function updateOrderStatus(id, status) {
+      await db.from('orders').update({ status }).eq('id', id);
+      await loadOrders();
+    }
+
+    async function deleteOrder(id) {
+      if (!confirm('Sigur ștergi comanda?')) return;
+      await db.from('orders').delete().eq('id', id);
+      await loadOrders();
+    }
+
+    document.getElementById('reloadOrdersBtn').addEventListener('click', loadOrders);
+
+    function renderCalendar() {
       const grid = document.getElementById('calendarGrid');
       const title = document.getElementById('calendarTitle');
-      const year = calendarDate.getFullYear();
-      const month = calendarDate.getMonth();
 
-      const monthNames = ['Ianuarie','Februarie','Martie','Aprilie','Mai','Iunie','Iulie','August','Septembrie','Octombrie','Noiembrie','Decembrie'];
-      title.textContent = `${monthNames[month]} ${year}`;
-
-      const orderDays = new Set(
-        orders
-          .filter(order => order.created_at)
-          .map(order => new Date(order.created_at))
-          .filter(date => date.getFullYear() === year && date.getMonth() === month)
-          .map(date => date.getDate())
-      );
-
+      const year = currentCalendarDate.getFullYear();
+      const month = currentCalendarDate.getMonth();
       const first = new Date(year, month, 1);
       const last = new Date(year, month + 1, 0);
-      const startDay = (first.getDay() + 6) % 7;
+      const startOffset = (first.getDay() + 6) % 7;
 
-      const names = ['L','M','M','J','V','S','D'];
-      let html = names.map(n => `<div class="day-name">${n}</div>`).join('');
+      title.textContent = currentCalendarDate.toLocaleDateString('ro-RO', {
+        month: 'long',
+        year: 'numeric'
+      });
 
-      for(let i=0;i<startDay;i++){
-        html += '<div></div>';
+      const dayNames = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+      let html = dayNames.map(d => `<div class="cal-day-name">${d}</div>`).join('');
+
+      for (let i = 0; i < startOffset; i++) {
+        html += `<div></div>`;
       }
 
-      for(let day=1; day<=last.getDate(); day++){
-        html += `<div class="day ${orderDays.has(day) ? 'has-order' : ''}">${day}</div>`;
+      const today = new Date();
+
+      for (let day = 1; day <= last.getDate(); day++) {
+        const hasOrder = ordersCache.some(order => {
+          if (!order.created_at) return false;
+          const d = new Date(order.created_at);
+          return d.getFullYear() === year && d.getMonth() === month && d.getDate() === day;
+        });
+
+        const isToday =
+          today.getFullYear() === year &&
+          today.getMonth() === month &&
+          today.getDate() === day;
+
+        html += `
+          <div class="cal-day ${hasOrder ? 'has-order' : ''} ${isToday ? 'today' : ''}">
+            ${day}
+          </div>
+        `;
       }
 
       grid.innerHTML = html;
     }
 
-    async function updateOrderStatus(id, status){
-      await db.from('orders').update({ status }).eq('id', id);
-      await loadOrders();
+    document.getElementById('prevMonthBtn').addEventListener('click', () => {
+      currentCalendarDate = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth() - 1, 1);
+      renderCalendar();
+    });
+
+    document.getElementById('nextMonthBtn').addEventListener('click', () => {
+      currentCalendarDate = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth() + 1, 1);
+      renderCalendar();
+    });
+
+    async function loadExpenses() {
+      const { data, error } = await db
+        .from('expenses')
+        .select('*')
+        .order('expense_date', { ascending: false })
+        .order('created_at', { ascending: false });
+
+      if (error) return;
+
+      expensesCache = data || [];
+      renderExpenses();
+      updateStats();
     }
 
-    async function deleteOrder(id){
-      if(!confirm('Sigur ștergi comanda?')) return;
-      await db.from('orders').delete().eq('id', id);
-      await loadOrders();
+    document.getElementById('expenseDate').valueAsDate = new Date();
+
+    document.getElementById('expenseForm').addEventListener('submit', async event => {
+      event.preventDefault();
+
+      const payload = {
+        title: document.getElementById('expenseTitle').value.trim(),
+        amount: Number(document.getElementById('expenseAmount').value || 0),
+        category: document.getElementById('expenseCategory').value.trim() || 'general',
+        expense_date: document.getElementById('expenseDate').value || new Date().toISOString().slice(0, 10),
+        note: document.getElementById('expenseNote').value.trim()
+      };
+
+      const { error } = await db.from('expenses').insert(payload);
+
+      if (error) {
+        showMessage(document.getElementById('expensesMessage'), error.message, 'error');
+        return;
+      }
+
+      event.target.reset();
+      document.getElementById('expenseDate').valueAsDate = new Date();
+      showMessage(document.getElementById('expensesMessage'), 'Cheltuiala a fost adăugată.', 'success');
+      await loadExpenses();
+    });
+
+    function renderExpenses() {
+      const list = document.getElementById('expensesList');
+
+      if (!expensesCache.length) {
+        list.innerHTML = `<div class="meta">Nu ai introdus cheltuieli încă.</div>`;
+        return;
+      }
+
+      list.innerHTML = expensesCache.map(expense => `
+        <div class="compact-item">
+          <div>
+            <strong>${escapeHtml(expense.title || 'Cheltuială')}</strong>
+            <div class="meta">
+              ${escapeHtml(expense.category || 'general')} •
+              ${expense.expense_date || ''}
+              ${expense.note ? `<br>${escapeHtml(expense.note)}` : ''}
+            </div>
+          </div>
+          <div>
+            <strong>${formatMoney(expense.amount || 0)}</strong>
+            <div class="actions">
+              <button class="btn btn-danger" onclick="deleteExpense('${expense.id}')">Șterge</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
     }
 
+    async function deleteExpense(id) {
+      if (!confirm('Sigur ștergi cheltuiala?')) return;
+      await db.from('expenses').delete().eq('id', id);
+      await loadExpenses();
+      loadDashboard();
+    }
+
+    async function loadMessages() {
+      const { data, error } = await db
+        .from('contact_messages')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) return;
+
+      messagesCache = data || [];
+      renderMessages();
+    }
+
+    function renderMessages() {
+      const list = document.getElementById('messagesList');
+
+      if (!messagesCache.length) {
+        list.innerHTML = `<div class="meta">Nu există mesaje încă.</div>`;
+        return;
+      }
+
+      list.innerHTML = messagesCache.map(message => `
+        <div class="compact-item">
+          <div>
+            <strong>${escapeHtml(message.name || 'Anonim')}</strong>
+            <div class="meta">
+              ${escapeHtml(message.email || '')}
+              ${message.phone ? ` • ${escapeHtml(message.phone)}` : ''}<br>
+              ${escapeHtml(message.subject || 'Fără subiect')}<br>
+              ${escapeHtml(message.message || '')}<br>
+              ${formatDate(message.created_at)}
+            </div>
+          </div>
+          <div>
+            <span class="badge ${message.status === 'citit' ? 'active' : 'inactive'}">${escapeHtml(message.status || 'nou')}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('reloadMessagesBtn').addEventListener('click', loadMessages);
+
+    async function loadNotifications() {
+      const { data, error } = await db
+        .from('notifications')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) return;
+
+      notificationsCache = data || [];
+      renderNotifications();
+    }
+
+    function renderNotifications() {
+      const list = document.getElementById('notificationsList');
+
+      if (!notificationsCache.length) {
+        list.innerHTML = `<div class="meta">Nu există notificări încă.</div>`;
+        return;
+      }
+
+      list.innerHTML = notificationsCache.map(item => `
+        <div class="compact-item">
+          <div>
+            <strong>${escapeHtml(item.title || 'Notificare')}</strong>
+            <div class="meta">
+              ${escapeHtml(item.message || '')}<br>
+              ${formatDate(item.created_at)}
+            </div>
+          </div>
+          <span class="badge ${item.is_read ? 'active' : 'inactive'}">${item.is_read ? 'citită' : 'nouă'}</span>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('reloadNotificationsBtn').addEventListener('click', loadNotifications);
+
+    window.openProductEditor = openProductEditor;
+    window.toggleProductVisibility = toggleProductVisibility;
     window.updateOrderStatus = updateOrderStatus;
     window.deleteOrder = deleteOrder;
+    window.deleteExpense = deleteExpense;
 
     boot();
   </script>
