@@ -110,13 +110,14 @@
       position:absolute;
       right:12px;
       top:12px;
-      width:34px;
-      height:34px;
+      width:36px;
+      height:36px;
       border-radius:50%;
-      border:1px solid rgba(255,255,255,.16);
-      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.20);
+      background:rgba(255,255,255,.14);
       color:#fff;
       font-weight:900;
+      z-index:5;
     }
     .nav-tabs{display:grid;gap:7px}
     .tab-btn{
@@ -302,8 +303,9 @@
     .preview-empty{position:absolute;inset:auto 16px 16px;background:rgba(255,255,255,.82);border:1px solid var(--line);border-radius:16px;padding:10px;text-align:center;color:var(--muted);font-size:.76rem}
     .admin-layer{position:absolute;max-width:none;user-select:none;cursor:grab;transform-origin:center center;filter:drop-shadow(0 15px 24px rgba(0,0,0,.12))}
     .admin-layer.selected{outline:2px dashed rgba(186,96,124,.7);outline-offset:6px}
-    .mini-tools{margin-top:10px;display:flex;align-items:center;justify-content:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:10px}
-    #selectedLayerInfo{font-size:.74rem;color:var(--text2);font-weight:900}
+    .mini-tools{margin-top:10px;display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:10px;flex-wrap:wrap}
+    .round-action[disabled]{opacity:.38;cursor:not-allowed;transform:none}
+    #selectedLayerInfo{font-size:.74rem;color:var(--text2);font-weight:900;min-width:120px;text-align:center}
 
     .upload-box{
       display:flex;
@@ -370,7 +372,7 @@
 
 <body>
   <div class="mobile-top">
-    <button class="hamburger" id="openSidebarBtn" type="button">☰</button>
+    <button class="hamburger" id="openSidebarBtn" type="button" aria-label="Deschide meniul" aria-expanded="false">☰</button>
     <div class="mobile-title">Maison Doucette Admin</div>
     <span></span>
   </div>
@@ -616,12 +618,14 @@
                 </div>
 
                 <div class="mini-tools">
-                  <button class="round-action" id="scaleDownBtn" type="button">−</button>
+                  <button class="round-action" id="scaleDownBtn" type="button" title="Micșorează">−</button>
+                  <button class="round-action rotate-only" id="rotateLeftBtn" type="button" title="Înclină stânga">↺</button>
                   <span id="selectedLayerInfo">Nimic selectat</span>
-                  <button class="round-action" id="scaleUpBtn" type="button">+</button>
+                  <button class="round-action rotate-only" id="rotateRightBtn" type="button" title="Înclină dreapta">↻</button>
+                  <button class="round-action" id="scaleUpBtn" type="button" title="Mărește">+</button>
                 </div>
 
-                <p class="meta">Click pe bulină ca să apară imaginea în preview. Trage imaginea ca să o muți. Cu + / − îi modifici mărimea. Body rămâne mereu centrat pe orizontală.</p>
+                <p class="meta">Click pe bulină ca să apară imaginea în preview. Trage imaginea ca să o muți. Cu + / − îi modifici mărimea. Pentru accesorii ai și ↺ / ↻ ca să modifici înclinarea ca la o poză. Body rămâne mereu centrat pe orizontală.</p>
               </div>
             </div>
 
@@ -851,19 +855,35 @@
       adminApp.classList.remove('hidden');
     }
 
+    function syncSidebarButton() {
+      const btn = document.getElementById('openSidebarBtn');
+      const isOpen = sidebar.classList.contains('open');
+      if (!btn) return;
+      btn.textContent = isOpen ? '×' : '☰';
+      btn.setAttribute('aria-expanded', String(isOpen));
+      btn.setAttribute('aria-label', isOpen ? 'Închide meniul' : 'Deschide meniul');
+    }
+
     function openSidebar() {
       sidebar.classList.add('open');
       sidebarOverlay.classList.add('open');
       document.body.style.overflow = 'hidden';
+      syncSidebarButton();
     }
 
     function closeSidebar() {
       sidebar.classList.remove('open');
       sidebarOverlay.classList.remove('open');
       document.body.style.overflow = '';
+      syncSidebarButton();
     }
 
-    document.getElementById('openSidebarBtn').addEventListener('click', openSidebar);
+    function toggleSidebar() {
+      if (sidebar.classList.contains('open')) closeSidebar();
+      else openSidebar();
+    }
+
+    document.getElementById('openSidebarBtn').addEventListener('click', toggleSidebar);
     document.getElementById('closeSidebarBtn').addEventListener('click', closeSidebar);
     sidebarOverlay.addEventListener('click', closeSidebar);
 
@@ -1524,6 +1544,7 @@
     function renderCustomizerEditor() {
       renderBodyColors();
       renderAccessories();
+      if (typeof updateLayerToolState === 'function') updateLayerToolState();
       renderAdminPreview();
     }
 
@@ -1620,6 +1641,14 @@
       box.innerHTML = layers.join('') || `<div class="preview-empty">Adaugă o imagine și apasă pe bulina culorii.</div>`;
     }
 
+    function updateLayerToolState() {
+      const isAccessory = selectedLayer?.type === 'accessory';
+      document.querySelectorAll('.rotate-only').forEach(btn => {
+        btn.disabled = !isAccessory;
+        btn.title = isAccessory ? btn.title : 'Înclinarea este disponibilă doar pentru accesorii';
+      });
+    }
+
     function selectLayerInPreview(type, id) {
       selectedLayer = { type, id };
       const layer = getSelectedLayerObject();
@@ -1628,6 +1657,7 @@
         ? `${type === 'body' ? 'Body' : 'Accesoriu'}: ${layer.name || 'fără nume'}`
         : 'Nimic selectat';
 
+      updateLayerToolState();
       renderAdminPreview();
     }
 
@@ -1689,6 +1719,18 @@
       layer.style.width = Math.max(40, Number(layer.style.width || 160) - 16);
       renderAdminPreview();
     });
+
+    function rotateSelectedAccessory(delta) {
+      if (selectedLayer?.type !== 'accessory') return;
+      const layer = getSelectedLayerObject();
+      if (!layer) return;
+      layer.style = layer.style || defaultLayerStyle('accessory');
+      layer.style.rotate = Number(layer.style.rotate || 0) + delta;
+      renderAdminPreview();
+    }
+
+    document.getElementById('rotateLeftBtn').addEventListener('click', () => rotateSelectedAccessory(-8));
+    document.getElementById('rotateRightBtn').addEventListener('click', () => rotateSelectedAccessory(8));
 
     document.getElementById('addBodyColorBtn').addEventListener('click', () => {
       customizerConfig.bodyColors.push({
@@ -2103,6 +2145,8 @@
     window.removeAccessoryColor = removeAccessoryColor;
     window.uploadAccessoryImage = uploadAccessoryImage;
 
+    syncSidebarButton();
+    if (typeof updateLayerToolState === 'function') updateLayerToolState();
     boot();
   </script>
 </body>
