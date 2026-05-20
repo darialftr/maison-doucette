@@ -1654,9 +1654,43 @@
       }
 
       productRow = data;
-      config = data.config || {};
-      config.baseVariants = Array.isArray(config.baseVariants) ? config.baseVariants : [];
-      config.options = Array.isArray(config.options) ? config.options : [];
+
+      const rawConfig = data.config || {};
+
+      const normalizedBaseVariants = Array.isArray(rawConfig.bodyColors)
+        ? rawConfig.bodyColors
+        : Array.isArray(rawConfig.baseVariants)
+          ? rawConfig.baseVariants
+          : [];
+
+      const rawOptions = Array.isArray(rawConfig.accessories)
+        ? rawConfig.accessories
+        : Array.isArray(rawConfig.options)
+          ? rawConfig.options
+          : Array.isArray(rawConfig.optionGroups)
+            ? rawConfig.optionGroups
+            : [];
+
+      const normalizedOptions = rawOptions.map(option => {
+        const variants = Array.isArray(option.colors)
+          ? option.colors
+          : Array.isArray(option.variants)
+            ? option.variants
+            : [];
+
+        return {
+          ...option,
+          price: Number(option.price || 0),
+          thumbnail: option.thumbnail || variants.find(v => v.src)?.src || '',
+          variants
+        };
+      });
+
+      config = {
+        ...rawConfig,
+        baseVariants: normalizedBaseVariants,
+        options: normalizedOptions
+      };
 
       if (!config.baseVariants.length) {
         app.innerHTML = `<div class="error-state">Configuratorul nu are încă imagini de bază.</div>`;
