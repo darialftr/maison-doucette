@@ -72,7 +72,7 @@
     .auth-card p{position:relative;margin:0 0 20px;color:var(--text2);line-height:1.65;font-size:.9rem}
 
     .mobile-top{
-      display:none;position:sticky;top:0;z-index:50;background:rgba(255,253,252,.9);
+      display:none;position:sticky;top:0;z-index:80;background:rgba(255,253,252,.9);
       backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:10px;
       align-items:center;justify-content:space-between
     }
@@ -82,16 +82,42 @@
     }
     .mobile-title{font-weight:900;color:var(--rose-dark);font-size:.86rem}
 
+    .sidebar-overlay{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(65,31,42,.28);
+      backdrop-filter:blur(2px);
+      z-index:60;
+      opacity:0;
+      pointer-events:none;
+      transition:.22s ease;
+    }
+    .sidebar-overlay.open{opacity:1;pointer-events:auto}
+
     .app{display:grid;grid-template-columns:var(--side) minmax(0,1fr);min-height:100vh}
     .sidebar{
-      position:sticky;top:0;height:100vh;overflow:auto;z-index:20;
+      position:sticky;top:0;height:100vh;overflow:auto;z-index:70;
       background:radial-gradient(circle at top left, rgba(241,189,204,.24), transparent 30%), linear-gradient(180deg,#58323d,#3d222b);
       color:#fffaf8;padding:16px;box-shadow:20px 0 60px rgba(70,32,43,.18)
     }
-    .side-brand{padding:16px;border-radius:26px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);margin-bottom:14px}
+    .side-brand{padding:16px;border-radius:26px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);margin-bottom:14px;position:relative}
     .side-brand img{width:58px;height:58px;object-fit:contain;border-radius:50%;background:#fff;padding:5px;margin-bottom:11px}
     .brand{font-size:1.72rem;line-height:.9;font-weight:700}
     .side-small{margin-top:8px;color:rgba(255,250,248,.62);font-size:.65rem;text-transform:uppercase;letter-spacing:.16em;font-weight:800}
+    .close-side{
+      display:none;
+      position:absolute;
+      right:12px;
+      top:12px;
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.10);
+      color:#fff;
+      font-weight:900;
+    }
     .nav-tabs{display:grid;gap:7px}
     .tab-btn{
       width:100%;min-height:43px;border:none;border-radius:15px;background:transparent;color:rgba(255,250,248,.74);
@@ -174,22 +200,80 @@
     .drag-handle{width:34px;height:34px;border-radius:12px;border:1px dashed var(--line);background:var(--soft);color:var(--muted);display:grid;place-items:center;cursor:grab;font-weight:900}
     .dragging{opacity:.55}
 
-    .product-detail-layout{display:grid;grid-template-columns:360px minmax(0,1fr);gap:14px;align-items:start}
-    .product-side{position:sticky;top:18px}
     .page-choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
     .choice-card{border:1px solid var(--line);background:#fff;border-radius:20px;padding:14px;box-shadow:var(--shadow)}
     .choice-card h3{margin:0 0 6px;font-size:1.5rem;color:var(--rose-dark)}
     .choice-card p{font-size:.78rem}
 
-    .calendar{max-width:280px;width:100%;overflow:hidden;margin-left:auto}
-    .calendar .btn{width:auto;min-height:32px;padding:6px 10px}
-    .calendar-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-    .calendar-title{font-weight:900;color:var(--rose-dark);font-size:.86rem}
-    .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
-    .cal-day-name{text-align:center;font-size:.58rem;color:var(--muted);font-weight:900;text-transform:uppercase}
-    .cal-day{aspect-ratio:1;min-width:0;border-radius:50%;border:1px solid var(--line);background:#fff;display:grid;place-items:center;font-size:.62rem;color:var(--text2);font-weight:900;position:relative}
-    .cal-day.has-order{background:linear-gradient(135deg,var(--pink),#fff);color:var(--rose-dark);border-color:rgba(186,96,124,.28);box-shadow:0 8px 18px rgba(186,96,124,.14)}
-    .cal-day.today{outline:2px solid rgba(186,96,124,.32);outline-offset:2px}
+    .calendar-card{
+      width:100%;
+      max-width:100%;
+      overflow:hidden;
+      border-radius:24px;
+      background:#fff;
+      border:1px solid var(--line);
+      padding:14px;
+      box-shadow:var(--shadow);
+    }
+    .calendar-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:12px;
+    }
+    .calendar-title{
+      font-size:.9rem;
+      font-weight:900;
+      color:var(--rose-dark);
+      text-align:center;
+    }
+    .calendar-nav{
+      width:28px;
+      height:28px;
+      border:none;
+      border-radius:50%;
+      background:#f7dfe8;
+      color:#8a5c70;
+      cursor:pointer;
+      font-size:.8rem;
+      display:grid;
+      place-items:center;
+    }
+    .calendar-grid{
+      display:grid;
+      grid-template-columns:repeat(7,minmax(0,1fr));
+      gap:6px;
+      width:100%;
+    }
+    .cal-day-name{
+      text-align:center;
+      font-size:.65rem;
+      color:#b08b9d;
+      font-weight:900;
+    }
+    .cal-day{
+      aspect-ratio:1/1;
+      width:100%;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:.72rem;
+      color:#6d5462;
+      background:#fff8fb;
+      position:relative;
+      min-width:0;
+    }
+    .cal-day.today{
+      border:2px solid #e7a8bf;
+      font-weight:900;
+    }
+    .cal-day.has-order{
+      background:#f7c8d9;
+      color:#7c3953;
+      font-weight:900;
+    }
 
     .order-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:14px;box-shadow:var(--shadow)}
     .order-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}
@@ -197,7 +281,7 @@
     .order-items{display:grid;gap:8px;padding-top:11px;border-top:1px solid var(--line)}
     .order-item{border:1px solid var(--line);border-radius:15px;padding:9px;color:var(--text2);line-height:1.5;font-size:.76rem;background:var(--card)}
 
-    .expense-row{display:grid;grid-template-columns:1fr 90px 100px 90px;gap:8px;align-items:end}
+    .expense-row{display:grid;grid-template-columns:1fr 90px 100px 120px;gap:8px;align-items:end}
     .compact-list{display:grid;gap:8px;margin-top:12px}
     .compact-item{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;border:1px solid var(--line);background:#fff;border-radius:15px;padding:10px}
 
@@ -218,20 +302,50 @@
     .preview-empty{position:absolute;inset:auto 16px 16px;background:rgba(255,255,255,.82);border:1px solid var(--line);border-radius:16px;padding:10px;text-align:center;color:var(--muted);font-size:.76rem}
     .admin-layer{position:absolute;max-width:none;user-select:none;cursor:grab;transform-origin:center center;filter:drop-shadow(0 15px 24px rgba(0,0,0,.12))}
     .admin-layer.selected{outline:2px dashed rgba(186,96,124,.7);outline-offset:6px}
-    .resize-handle{position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;border:2px solid var(--rose);box-shadow:0 8px 18px rgba(90,45,58,.18);z-index:50;display:none}
-    .resize-handle.show{display:block}
     .mini-tools{margin-top:10px;display:flex;align-items:center;justify-content:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:10px}
     #selectedLayerInfo{font-size:.74rem;color:var(--text2);font-weight:900}
+
+    .upload-box{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .uploaded-preview{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:8px;
+      border-radius:14px;
+      background:#fff7fa;
+      border:1px solid rgba(0,0,0,.05);
+    }
+    .uploaded-preview img{
+      width:54px;
+      height:54px;
+      object-fit:cover;
+      border-radius:12px;
+    }
+    .uploaded-preview small{
+      color:#9b7384;
+      font-size:.7rem;
+    }
 
     @media(max-width:1180px){
       .app{grid-template-columns:1fr}
       .mobile-top{display:flex}
-      .sidebar{position:fixed;inset:0 auto 0 0;width:min(310px,86vw);transform:translateX(-105%);transition:.25s ease}
+      .sidebar-overlay{display:block}
+      .sidebar{
+        position:fixed;
+        inset:0 auto 0 0;
+        width:min(310px,86vw);
+        transform:translateX(-105%);
+        transition:.25s ease;
+      }
       .sidebar.open{transform:translateX(0)}
+      .close-side{display:grid}
       .main{padding:12px}
       .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .dashboard-grid,.product-detail-layout,.customizer-layout{grid-template-columns:1fr}
-      .product-side{position:relative;top:auto}
+      .dashboard-grid,.customizer-layout{grid-template-columns:1fr}
     }
     @media(max-width:760px){
       .topbar{flex-direction:column}
@@ -243,9 +357,13 @@
       .btn{width:100%}
       .panel{padding:13px}
       .panel h2{font-size:1.7rem}
-      .calendar{margin-left:0;max-width:100%}
+      .calendar-card{padding:10px}
+      .calendar-grid{gap:4px}
+      .cal-day{font-size:.62rem}
       .preview-editor-box{min-height:360px}
       .color-row{grid-template-columns:28px 1fr 68px 28px}
+      .accessory-head{grid-template-columns:1fr}
+      .add-text-btn{justify-content:center}
     }
   </style>
 </head>
@@ -256,6 +374,8 @@
     <div class="mobile-title">Maison Doucette Admin</div>
     <span></span>
   </div>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
   <section id="authScreen" class="auth-screen">
     <div class="auth-card">
@@ -280,9 +400,10 @@
   <section id="adminApp" class="app hidden">
     <aside class="sidebar" id="sidebar">
       <div class="side-brand">
+        <button class="close-side" id="closeSidebarBtn" type="button">×</button>
         <img src="images/logo.jpg" alt="Maison Doucette">
         <div class="brand">Maison Doucette</div>
-        <div class="side-small">admin panel</div>
+        <div class="side-small">coquette admin</div>
       </div>
 
       <div class="nav-tabs">
@@ -307,7 +428,8 @@
         </div>
         <div class="status-pill"><span class="status-dot"></span> Conectat</div>
       </div>
-            <section id="tab-dashboard" class="tab-panel">
+
+      <section id="tab-dashboard" class="tab-panel">
         <div class="stats">
           <div class="stat-card"><div class="stat-number" id="statOrders">0</div><div class="stat-label">Comenzi</div></div>
           <div class="stat-card"><div class="stat-number" id="statRevenue">0</div><div class="stat-label">Venituri fără transport</div></div>
@@ -389,7 +511,11 @@
                 <label>Apare pe site <select id="productVisible"><option value="true">Da</option><option value="false">Nu</option></select></label>
                 <label class="full">Descriere <textarea id="productDescription"></textarea></label>
                 <label class="full">Link automat <input id="productLink"></label>
-                <label class="full">Imagine produs <input id="productImageFile" type="file" accept="image/*"></label>
+                <label class="full upload-box">
+                  Imagine produs
+                  <span id="productImagePreview"></span>
+                  <input id="productImageFile" type="file" accept="image/*">
+                </label>
               </div>
 
               <div class="actions">
@@ -438,9 +564,9 @@
               <label class="full">Detail 3 <textarea id="detailD3"></textarea></label>
               <label>Text buton <input id="detailButtonText" placeholder="Personalizează"></label>
               <label>Link customizare <input id="detailButtonUrl"></label>
-              <label>Imagine 1 <input id="detailFile1" type="file" accept="image/*"></label>
-              <label>Imagine 2 <input id="detailFile2" type="file" accept="image/*"></label>
-              <label>Imagine 3 <input id="detailFile3" type="file" accept="image/*"></label>
+              <label class="upload-box">Imagine 1 <span id="detailPreview1"></span><input id="detailFile1" type="file" accept="image/*"></label>
+              <label class="upload-box">Imagine 2 <span id="detailPreview2"></span><input id="detailFile2" type="file" accept="image/*"></label>
+              <label class="upload-box">Imagine 3 <span id="detailPreview3"></span><input id="detailFile3" type="file" accept="image/*"></label>
             </div>
 
             <div class="actions">
@@ -524,11 +650,11 @@
             <div id="ordersList" class="list"></div>
           </div>
 
-          <div class="panel calendar">
-            <div class="calendar-head">
-              <button class="btn btn-secondary" id="prevMonthBtn" type="button">‹</button>
+          <div class="calendar-card">
+            <div class="calendar-top">
+              <button class="calendar-nav" id="prevMonthBtn" type="button">‹</button>
               <div class="calendar-title" id="calendarTitle">Calendar</div>
-              <button class="btn btn-secondary" id="nextMonthBtn" type="button">›</button>
+              <button class="calendar-nav" id="nextMonthBtn" type="button">›</button>
             </div>
             <div class="calendar-grid" id="calendarGrid"></div>
           </div>
@@ -631,7 +757,7 @@
           </div>
         </div>
       </section>
-          </main>
+    </main>
   </section>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -651,20 +777,18 @@
 
     let currentProductId = null;
     let currentDetailId = null;
+    let currentDetailImages = {};
     let currentCustomizerId = null;
     let currentCalendarDate = new Date();
 
-    let customizerConfig = {
-      bodyColors: [],
-      accessories: []
-    };
-
+    let customizerConfig = { bodyColors: [], accessories: [] };
     let selectedLayer = null;
     let dragState = null;
 
     const authScreen = document.getElementById('authScreen');
     const adminApp = document.getElementById('adminApp');
     const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
     const loginForm = document.getElementById('loginForm');
     const loginBtn = document.getElementById('loginBtn');
     const authMessage = document.getElementById('authMessage');
@@ -727,6 +851,26 @@
       adminApp.classList.remove('hidden');
     }
 
+    function openSidebar() {
+      sidebar.classList.add('open');
+      sidebarOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSidebar() {
+      sidebar.classList.remove('open');
+      sidebarOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('openSidebarBtn').addEventListener('click', openSidebar);
+    document.getElementById('closeSidebarBtn').addEventListener('click', closeSidebar);
+    sidebarOverlay.addEventListener('click', closeSidebar);
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeSidebar();
+    });
+
     async function uploadToBucket(file, bucket, folder = 'admin') {
       if (!file) return '';
       const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
@@ -737,6 +881,16 @@
 
       const { data } = db.storage.from(bucket).getPublicUrl(path);
       return data.publicUrl;
+    }
+
+    function imagePreview(src, text = 'Imagine încărcată') {
+      if (!src) return '';
+      return `
+        <div class="uploaded-preview">
+          <img src="${escapeHtml(src)}" alt="">
+          <small>${escapeHtml(text)}</small>
+        </div>
+      `;
     }
 
     function switchTab(tab) {
@@ -761,7 +915,7 @@
 
       pageTitle.textContent = titles[tab][0];
       pageSubtitle.textContent = titles[tab][1];
-      sidebar.classList.remove('open');
+      closeSidebar();
 
       if (tab === 'dashboard') loadDashboard();
       if (tab === 'products') loadProducts();
@@ -771,10 +925,6 @@
       if (tab === 'messages') loadMessages();
       if (tab === 'notifications') loadNotifications();
     }
-
-    document.getElementById('openSidebarBtn').addEventListener('click', () => {
-      sidebar.classList.add('open');
-    });
 
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => switchTab(btn.dataset.tab));
@@ -1062,6 +1212,8 @@
 
     document.getElementById('newProductBtn').addEventListener('click', () => {
       currentProductId = null;
+      currentDetailImages = {};
+
       document.getElementById('productsHomeView').classList.add('hidden');
       document.getElementById('productEditView').classList.remove('hidden');
       document.getElementById('editingProductTitle').textContent = 'Produs nou';
@@ -1069,6 +1221,7 @@
       document.getElementById('productVisible').value = 'true';
       document.getElementById('productSlug').value = '';
       document.getElementById('productLink').value = '';
+      document.getElementById('productImagePreview').innerHTML = '';
       document.getElementById('detailsEditorPanel').classList.add('hidden');
       document.getElementById('customizerEditorPanel').classList.add('hidden');
     });
@@ -1084,6 +1237,8 @@
       if (!product) return;
 
       currentProductId = id;
+      currentDetailImages = {};
+
       document.getElementById('productsHomeView').classList.add('hidden');
       document.getElementById('productEditView').classList.remove('hidden');
 
@@ -1096,6 +1251,7 @@
       document.getElementById('productDescription').value = product.description || '';
       document.getElementById('productLink').value = product.link || `product-details.html?slug=${slug}`;
       document.getElementById('productVisible').value = String(product.is_visible !== false);
+      document.getElementById('productImagePreview').innerHTML = imagePreview(product.image, 'Imagine produs existentă');
 
       document.getElementById('detailsEditorPanel').classList.add('hidden');
       document.getElementById('customizerEditorPanel').classList.add('hidden');
@@ -1142,6 +1298,7 @@
       }
 
       document.getElementById('editingProductTitle').textContent = name;
+      document.getElementById('productImagePreview').innerHTML = imagePreview(image, 'Imagine produs salvată');
       showMessage(document.getElementById('productsMessage'), 'Produs salvat.', 'success');
       await loadProducts();
     });
@@ -1190,6 +1347,12 @@
         document.getElementById('detailsEditorPanel').classList.remove('hidden');
         document.getElementById('customizerEditorPanel').classList.add('hidden');
 
+        currentDetailImages = {
+          image_1: row.image_1 || '',
+          image_2: row.image_2 || '',
+          image_3: row.image_3 || ''
+        };
+
         document.getElementById('detailTitle').value = row.title || '';
         document.getElementById('detailSlug').value = row.slug || '';
         document.getElementById('detailBasePrice').value = row.base_price || 0;
@@ -1201,6 +1364,10 @@
         document.getElementById('detailD3').value = row.detail_3 || '';
         document.getElementById('detailButtonText').value = row.customize_button_text || 'Personalizează';
         document.getElementById('detailButtonUrl').value = row.customize_url || `customizer.html?slug=${row.slug}`;
+
+        document.getElementById('detailPreview1').innerHTML = imagePreview(currentDetailImages.image_1, 'Imagine 1 existentă');
+        document.getElementById('detailPreview2').innerHTML = imagePreview(currentDetailImages.image_2, 'Imagine 2 existentă');
+        document.getElementById('detailPreview3').innerHTML = imagePreview(currentDetailImages.image_3, 'Imagine 3 existentă');
       } catch (error) {
         showMessage(document.getElementById('detailsMessage'), error.message, 'error');
       }
@@ -1231,9 +1398,18 @@
         customize_url: document.getElementById('detailButtonUrl').value.trim()
       };
 
-      if (f1) payload.image_1 = await uploadToBucket(f1, ATELIER_BUCKET, 'details');
-      if (f2) payload.image_2 = await uploadToBucket(f2, ATELIER_BUCKET, 'details');
-      if (f3) payload.image_3 = await uploadToBucket(f3, ATELIER_BUCKET, 'details');
+      if (f1) {
+        payload.image_1 = await uploadToBucket(f1, ATELIER_BUCKET, 'details');
+        currentDetailImages.image_1 = payload.image_1;
+      }
+      if (f2) {
+        payload.image_2 = await uploadToBucket(f2, ATELIER_BUCKET, 'details');
+        currentDetailImages.image_2 = payload.image_2;
+      }
+      if (f3) {
+        payload.image_3 = await uploadToBucket(f3, ATELIER_BUCKET, 'details');
+        currentDetailImages.image_3 = payload.image_3;
+      }
 
       const { error } = await db.from('atelier_products').update(payload).eq('id', currentDetailId);
 
@@ -1241,6 +1417,10 @@
         showMessage(document.getElementById('detailsMessage'), error.message, 'error');
         return;
       }
+
+      document.getElementById('detailPreview1').innerHTML = imagePreview(currentDetailImages.image_1, 'Imagine 1 salvată');
+      document.getElementById('detailPreview2').innerHTML = imagePreview(currentDetailImages.image_2, 'Imagine 2 salvată');
+      document.getElementById('detailPreview3').innerHTML = imagePreview(currentDetailImages.image_3, 'Imagine 3 salvată');
 
       showMessage(document.getElementById('detailsMessage'), 'Pagina de detalii a fost salvată.', 'success');
     });
@@ -1356,8 +1536,9 @@
           <input value="${escapeHtml(item.name || '')}" oninput="updateBodyColor('${item.id}','name',this.value)" placeholder="Nume">
           <input value="${escapeHtml(item.hex || '')}" oninput="updateBodyColor('${item.id}','hex',this.value)" placeholder="#hex">
           <button class="x-btn" onclick="removeBodyColor('${item.id}')" type="button">×</button>
-          <label class="full" style="grid-column:1/-1;">
-            Imagine body
+          <label class="full upload-box" style="grid-column:1/-1;">
+            <span>Imagine body</span>
+            ${imagePreview(item.src, 'Imagine body încărcată')}
             <input type="file" accept="image/*" onchange="uploadBodyImage('${item.id}', this)">
           </label>
         </div>
@@ -1382,8 +1563,9 @@
                 <input value="${escapeHtml(color.name || '')}" oninput="updateAccessoryColor('${accessory.id}','${color.id}','name',this.value)" placeholder="Nume">
                 <input value="${escapeHtml(color.hex || '')}" oninput="updateAccessoryColor('${accessory.id}','${color.id}','hex',this.value)" placeholder="#hex">
                 <button class="x-btn" onclick="removeAccessoryColor('${accessory.id}','${color.id}')" type="button">×</button>
-                <label class="full" style="grid-column:1/-1;">
-                  Imagine accesoriu
+                <label class="full upload-box" style="grid-column:1/-1;">
+                  <span>Imagine accesoriu</span>
+                  ${imagePreview(color.src, 'Imagine accesoriu încărcată')}
                   <input type="file" accept="image/*" onchange="uploadAccessoryImage('${accessory.id}','${color.id}', this)">
                 </label>
               </div>
@@ -1635,6 +1817,10 @@
 
       showMessage(document.getElementById('customizerMessage'), 'Customizer salvat.', 'success');
     });
+
+    function getAccessory(id) {
+      return customizerConfig.accessories.find(item => item.id === id);
+    }
 
     async function loadOrders() {
       const { data, error } = await db.from('orders').select('*').order('created_at', { ascending: false });
