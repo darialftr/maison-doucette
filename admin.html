@@ -610,6 +610,18 @@
                   <button class="add-text-btn" id="addAccessoryGroupBtn" type="button">+ Accesoriu</button>
                 </div>
                 <div id="accessoryGroupsList" class="color-list"></div>
+
+                <div class="mini-editor-head">
+                  <h3>Întrebări</h3>
+                  <button class="add-text-btn" id="addQuestionBtn" type="button">+ Întrebare</button>
+                </div>
+                <div id="questionsList" class="color-list"></div>
+
+                <div class="mini-editor-head">
+                  <h3>Seturi accesorii</h3>
+                  <button class="add-text-btn" id="addAccessorySetBtn" type="button">+ Set</button>
+                </div>
+                <div id="accessorySetsList" class="color-list"></div>
               </div>
 
               <div>
@@ -785,7 +797,7 @@
     let currentCustomizerId = null;
     let currentCalendarDate = new Date();
 
-    let customizerConfig = { bodyColors: [], accessories: [] };
+    let customizerConfig = { bodyColors: [], questions: [], accessories: [], accessorySets: [] };
     let selectedLayer = null;
     let dragState = null;
 
@@ -1456,9 +1468,12 @@
     }
 
     function normalizeCustomizerConfig(config = {}) {
+      const accessories = config.accessories || config.accessoryGroups || config.optionGroups || [];
       return {
-        bodyColors: config.bodyColors || config.baseVariants || [],
-        accessories: config.accessories || config.accessoryGroups || config.optionGroups || []
+        bodyColors: Array.isArray(config.bodyColors) ? config.bodyColors : (Array.isArray(config.baseVariants) ? config.baseVariants : []),
+        questions: Array.isArray(config.questions) ? config.questions : [],
+        accessories: Array.isArray(accessories) ? accessories : [],
+        accessorySets: Array.isArray(config.accessorySets) ? config.accessorySets : []
       };
     }
 
@@ -1480,7 +1495,9 @@
             previewTitle: title,
             previewSubtitle: 'Creează produsul tău, un detaliu după altul.',
             bodyColors: [],
-            accessories: []
+            questions: [],
+            accessories: [],
+            accessorySets: []
           }
         }).select().single();
 
@@ -1544,6 +1561,8 @@
     function renderCustomizerEditor() {
       renderBodyColors();
       renderAccessories();
+      renderQuestions();
+      renderAccessorySets();
       if (typeof updateLayerToolState === 'function') updateLayerToolState();
       renderAdminPreview();
     }
@@ -1594,6 +1613,133 @@
           </div>
         </div>
       `).join('') || `<div class="meta">Apasă + Accesoriu ca să adaugi fundă, inimă, stea etc.</div>`;
+    }
+
+
+    function renderQuestions() {
+      const box = document.getElementById('questionsList');
+      if (!box) return;
+
+      box.innerHTML = (customizerConfig.questions || []).map((question) => `
+        <div class="accessory-card">
+          <div class="accessory-head">
+            <input value="${escapeHtml(question.label || '')}" oninput="updateQuestion('${question.id}','label',this.value)" placeholder="Ex: Size">
+            <select onchange="updateQuestion('${question.id}','required',this.value)">
+              <option value="true" ${question.required !== false ? 'selected' : ''}>Obligatoriu</option>
+              <option value="false" ${question.required === false ? 'selected' : ''}>Opțional</option>
+            </select>
+            <button class="x-btn" onclick="removeQuestion('${question.id}')" type="button">×</button>
+          </div>
+
+          <div class="color-list">
+            ${(question.options || []).map(option => `
+              <div class="color-row" style="grid-template-columns:1fr 82px 28px;">
+                <input value="${escapeHtml(option.label || '')}" oninput="updateQuestionOption('${question.id}','${option.id}','label',this.value)" placeholder="Variantă, ex: Medium">
+                <input type="number" value="${Number(option.price || 0)}" oninput="updateQuestionOption('${question.id}','${option.id}','price',this.value)" placeholder="+ RON">
+                <button class="x-btn" onclick="removeQuestionOption('${question.id}','${option.id}')" type="button">×</button>
+              </div>
+            `).join('') || `<div class="meta">Nu ai variante încă.</div>`}
+          </div>
+
+          <button class="add-text-btn" onclick="addQuestionOption('${question.id}')" type="button">+ Variantă</button>
+        </div>
+      `).join('') || `<div class="meta">Apasă + Întrebare pentru dropdown-uri cu preț: Size, Yarn Type, Gift Box etc.</div>`;
+    }
+
+    function addQuestion() {
+      customizerConfig.questions.push({
+        id: uid('question'),
+        label: 'Întrebare nouă',
+        type: 'dropdown',
+        required: true,
+        options: [{ id: uid('answer'), label: 'Variantă 1', price: 0 }]
+      });
+      renderCustomizerEditor();
+    }
+
+    function updateQuestion(questionId, field, value) {
+      const question = customizerConfig.questions.find(q => q.id === questionId);
+      if (!question) return;
+      if (field === 'required') question.required = value === 'true';
+      else question[field] = value;
+      renderQuestions();
+    }
+
+    function removeQuestion(questionId) {
+      customizerConfig.questions = customizerConfig.questions.filter(q => q.id !== questionId);
+      renderCustomizerEditor();
+    }
+
+    function addQuestionOption(questionId) {
+      const question = customizerConfig.questions.find(q => q.id === questionId);
+      if (!question) return;
+      if (!Array.isArray(question.options)) question.options = [];
+      question.options.push({ id: uid('answer'), label: 'Variantă nouă', price: 0 });
+      renderQuestions();
+    }
+
+    function updateQuestionOption(questionId, optionId, field, value) {
+      const question = customizerConfig.questions.find(q => q.id === questionId);
+      const option = question?.options?.find(o => o.id === optionId);
+      if (!option) return;
+      option[field] = field === 'price' ? Number(value || 0) : value;
+    }
+
+    function removeQuestionOption(questionId, optionId) {
+      const question = customizerConfig.questions.find(q => q.id === questionId);
+      if (!question) return;
+      question.options = (question.options || []).filter(o => o.id !== optionId);
+      renderQuestions();
+    }
+
+    function renderAccessorySets() {
+      const box = document.getElementById('accessorySetsList');
+      if (!box) return;
+
+      box.innerHTML = (customizerConfig.accessorySets || []).map(set => `
+        <div class="accessory-card">
+          <div class="accessory-head">
+            <input value="${escapeHtml(set.name || '')}" oninput="updateAccessorySet('${set.id}','name',this.value)" placeholder="Ex: Inimă + Fundă">
+            <input type="number" value="${Number(set.price || 0)}" oninput="updateAccessorySet('${set.id}','price',this.value)" placeholder="+ RON">
+            <button class="x-btn" onclick="removeAccessorySet('${set.id}')" type="button">×</button>
+          </div>
+
+          <div class="meta">Alege accesoriile care intră în acest set. Pe site vor apărea cu culorile lor deja adăugate.</div>
+
+          <div class="color-list">
+            ${(customizerConfig.accessories || []).map(accessory => `
+              <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:.76rem;background:#fff7fa;border:1px solid var(--line);padding:8px;border-radius:14px;">
+                <input type="checkbox" style="width:auto" ${Array.isArray(set.items) && set.items.includes(accessory.id) ? 'checked' : ''} onchange="toggleAccessoryInSet('${set.id}','${accessory.id}',this.checked)">
+                ${escapeHtml(accessory.name || 'Accesoriu')}
+              </label>
+            `).join('') || `<div class="meta">Adaugă întâi accesorii ca să le poți combina.</div>`}
+          </div>
+        </div>
+      `).join('') || `<div class="meta">Apasă + Set pentru combinații ca Inimă + Fundă sau Stea + Fundă.</div>`;
+    }
+
+    function addAccessorySet() {
+      customizerConfig.accessorySets.push({ id: uid('set'), name: 'Set nou', price: 0, items: [] });
+      renderAccessorySets();
+    }
+
+    function updateAccessorySet(setId, field, value) {
+      const set = customizerConfig.accessorySets.find(s => s.id === setId);
+      if (!set) return;
+      set[field] = field === 'price' ? Number(value || 0) : value;
+    }
+
+    function removeAccessorySet(setId) {
+      customizerConfig.accessorySets = customizerConfig.accessorySets.filter(s => s.id !== setId);
+      renderAccessorySets();
+    }
+
+    function toggleAccessoryInSet(setId, accessoryId, checked) {
+      const set = customizerConfig.accessorySets.find(s => s.id === setId);
+      if (!set) return;
+      if (!Array.isArray(set.items)) set.items = [];
+      if (checked && !set.items.includes(accessoryId)) set.items.push(accessoryId);
+      if (!checked) set.items = set.items.filter(id => id !== accessoryId);
     }
 
     function styleToCss(style = {}, type) {
@@ -1752,6 +1898,9 @@
       renderCustomizerEditor();
     });
 
+    document.getElementById('addQuestionBtn').addEventListener('click', addQuestion);
+    document.getElementById('addAccessorySetBtn').addEventListener('click', addAccessorySet);
+
     function updateBodyColor(id, field, value) {
       const item = getBodyColor(id);
       if (!item) return;
@@ -1846,7 +1995,9 @@
           previewTitle: document.getElementById('custPreviewTitle').value.trim(),
           previewSubtitle: document.getElementById('custPreviewSubtitle').value.trim(),
           bodyColors: customizerConfig.bodyColors,
-          accessories: customizerConfig.accessories
+          questions: customizerConfig.questions,
+          accessories: customizerConfig.accessories,
+          accessorySets: customizerConfig.accessorySets
         }
       };
 
@@ -2144,6 +2295,16 @@
     window.updateAccessoryColor = updateAccessoryColor;
     window.removeAccessoryColor = removeAccessoryColor;
     window.uploadAccessoryImage = uploadAccessoryImage;
+    window.addQuestion = addQuestion;
+    window.updateQuestion = updateQuestion;
+    window.removeQuestion = removeQuestion;
+    window.addQuestionOption = addQuestionOption;
+    window.updateQuestionOption = updateQuestionOption;
+    window.removeQuestionOption = removeQuestionOption;
+    window.addAccessorySet = addAccessorySet;
+    window.updateAccessorySet = updateAccessorySet;
+    window.removeAccessorySet = removeAccessorySet;
+    window.toggleAccessoryInSet = toggleAccessoryInSet;
 
     syncSidebarButton();
     if (typeof updateLayerToolState === 'function') updateLayerToolState();
