@@ -409,10 +409,11 @@
         id: accessory.id || accessory.name,
         name: accessory.name || 'Accesoriu',
         price: 0,
+        sortOrder: Number(accessory.sortOrder ?? 999),
         items: [accessory.id || accessory.name]
       }));
 
-      const customSets = Array.isArray(raw.accessorySets) ? raw.accessorySets : [];
+      const customSets = sortByOrder(Array.isArray(raw.accessorySets) ? raw.accessorySets : []);
       const accessorySets = [
         { id: 'none', name: 'Fără accesoriu', price: 0, items: [] },
         ...simpleAccessorySets,
@@ -643,7 +644,7 @@
 
       const items = (set.items || []).map(accessoryId => {
         const accessory = getAccessoryById(accessoryId);
-        const color = getSelectedAccessoryColor(accessory) || (accessory?.colors || [])[0];
+        const color = getSelectedAccessoryColor(accessory) || getPrimaryItem(accessory?.colors || []);
         return { accessory, color };
       }).filter(item => item.color?.src);
 
