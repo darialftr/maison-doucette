@@ -191,6 +191,17 @@
     .mobile-close{border:none;background:none;font-size:1.5rem;color:var(--muted)}
     .mobile-menu a{padding:12px 0;border-bottom:1px solid var(--line);font-size:1rem;color:var(--text)}
 
+
+
+    .md-fade-up{animation:mdFadeUp .42s cubic-bezier(.22,.61,.36,1) both}
+    .md-fade-soft{animation:mdFadeSoft .36s cubic-bezier(.22,.61,.36,1) both}
+    .preview-layer{animation:mdLayerIn .32s cubic-bezier(.22,.61,.36,1) both}
+    @keyframes mdFadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes mdFadeSoft{from{opacity:0;transform:scale(.985)}to{opacity:1;transform:scale(1)}}
+    @keyframes mdLayerIn{from{opacity:0;transform:translate(-50%,-47%) scale(.985)}to{opacity:1}}
+    .step-card.active .control-block,.step-card.active .option-card,.step-card.active .helper-box,.step-card.active .step-actions,.step-card.active .swatch-btn{animation:mdFadeUp .34s cubic-bezier(.22,.61,.36,1) both}
+    .step-card.active .control-block:nth-child(2){animation-delay:.03s}.step-card.active .control-block:nth-child(3){animation-delay:.06s}.step-card.active .option-card:nth-child(2){animation-delay:.04s}.step-card.active .option-card:nth-child(3){animation-delay:.08s}.step-card.active .option-card:nth-child(4){animation-delay:.12s}
+
     @media(max-width:980px){.customizer-layout{grid-template-columns:1fr}.preview-card{position:relative;top:auto}}
     @media(max-width:760px){
       .top-bar{padding:10px 12px;font-size:.8rem}.top-bar a{display:block;width:max-content;margin:8px auto 0}
@@ -198,7 +209,7 @@
       .nav-left,.nav-right{display:none}.mobile-left,.mobile-right{display:flex}
       .logo-wrap img{width:54px;height:54px}.brand-text{font-size:1.42rem}.brand-sub{display:none}
       .app-shell{padding:10px}.preview-card{position:sticky;top:130px;z-index:1200;padding:10px;border-radius:22px}
-      .preview-stage{min-height:235px;max-height:250px;border-radius:20px}
+      .preview-stage{min-height:235px;max-height:250px;border-radius:20px;--preview-scale:.55}
       .preview-head h1{font-size:1.16rem}.preview-head p{font-size:.74rem}.preview-badge{font-size:.58rem;padding:7px 8px}
       .summary-row{gap:7px}.summary-chip{min-height:auto;padding:8px}.summary-chip .k{font-size:.54rem}.summary-chip .v{font-size:.68rem}
       .step-card,.stepper-card{padding:12px;border-radius:22px}.step-btn{width:100%}.swatch-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
@@ -353,68 +364,81 @@
       localStorage.setItem(cartKey, JSON.stringify(cart));
     }
 
-   function normalizeConfig(raw = {}) {
-  const bodyColors = Array.isArray(raw.bodyColors)
-    ? raw.bodyColors
-    : Array.isArray(raw.baseVariants)
-      ? raw.baseVariants
-      : [];
+    function sortByOrder(list = []) {
+      return [...list].sort((a, b) => Number(a.sortOrder ?? 999) - Number(b.sortOrder ?? 999));
+    }
 
-  const accessoriesRaw = Array.isArray(raw.accessories)
-    ? raw.accessories
-    : Array.isArray(raw.options)
-      ? raw.options
-      : Array.isArray(raw.optionGroups)
-        ? raw.optionGroups
-        : [];
+    function getPrimaryIndex(list = []) {
+      const ordered = sortByOrder(list);
+      const index = ordered.findIndex(item => item.isPrimary);
+      return index >= 0 ? index : 0;
+    }
 
-  const accessories = accessoriesRaw.map(accessory => {
-    const colors = Array.isArray(accessory.colors)
-      ? accessory.colors
-      : Array.isArray(accessory.variants)
-        ? accessory.variants
-        : [];
+    function getPrimaryItem(list = []) {
+      const ordered = sortByOrder(list);
+      return ordered.find(item => item.isPrimary) || ordered[0] || null;
+    }
 
-    return { ...accessory, colors };
-  });
+    function normalizeConfig(raw = {}) {
+      const bodyColorsRaw = Array.isArray(raw.bodyColors)
+        ? raw.bodyColors
+        : Array.isArray(raw.baseVariants)
+          ? raw.baseVariants
+          : [];
 
-  const simpleAccessorySets = accessories.map(accessory => ({
-    id: accessory.id || accessory.name,
-    name: accessory.name || 'Accesoriu',
-    price: 0,
-    items: [accessory.id || accessory.name]
-  }));
+      const bodyColors = sortByOrder(bodyColorsRaw);
 
-  const customSets = Array.isArray(raw.accessorySets)
-    ? raw.accessorySets
-    : [];
+      const accessoriesRaw = Array.isArray(raw.accessories)
+        ? raw.accessories
+        : Array.isArray(raw.options)
+          ? raw.options
+          : Array.isArray(raw.optionGroups)
+            ? raw.optionGroups
+            : [];
 
-  const accessorySets = [
-    { id: 'none', name: 'Fără accesoriu', price: 0, items: [] },
-    ...simpleAccessorySets,
-    ...customSets
-  ];
+      const accessories = sortByOrder(accessoriesRaw).map(accessory => {
+        const colorsRaw = Array.isArray(accessory.colors)
+          ? accessory.colors
+          : Array.isArray(accessory.variants)
+            ? accessory.variants
+            : [];
+        return { ...accessory, colors: sortByOrder(colorsRaw) };
+      });
 
-  return {
-    ...raw,
-    bodyColors,
-    questions: Array.isArray(raw.questions) ? raw.questions : [],
-    accessories,
-    accessorySets
-  };
-}
+      const simpleAccessorySets = accessories.map(accessory => ({
+        id: accessory.id || accessory.name,
+        name: accessory.name || 'Accesoriu',
+        price: 0,
+        items: [accessory.id || accessory.name]
+      }));
+
+      const customSets = Array.isArray(raw.accessorySets) ? raw.accessorySets : [];
+      const accessorySets = [
+        { id: 'none', name: 'Fără accesoriu', price: 0, items: [] },
+        ...simpleAccessorySets,
+        ...customSets
+      ];
+
+      return {
+        ...raw,
+        bodyColors,
+        questions: Array.isArray(raw.questions) ? raw.questions : [],
+        accessories,
+        accessorySets
+      };
+    }
 
     function getStyleCss(style = {}, type = 'accessory') {
       const x = type === 'body' ? 50 : Number(style.x ?? 50);
       const y = Number(style.y ?? (type === 'body' ? 56 : 50));
       const width = Number(style.width ?? (type === 'body' ? 420 : 160));
-      const rotate = Number(style.rotate ?? 0);
+      const rotate = type === 'body' ? 0 : Number(style.rotate ?? 0);
       const zIndex = Number(style.zIndex ?? (type === 'body' ? 4 : 8));
-      return `left:${x}%;top:${y}%;width:${width}px;z-index:${zIndex};transform:translate(-50%,-50%) rotate(${rotate}deg);`;
+      return `left:${x}%;top:${y}%;width:clamp(36px, calc(${width}px * var(--preview-scale, 1)), ${width}px);z-index:${zIndex};transform:translate(-50%,-50%) rotate(${rotate}deg);`;
     }
 
     function getBody() {
-      return config.bodyColors?.[selectedBodyIndex] || config.bodyColors?.[0] || null;
+      return sortByOrder(config.bodyColors || [])[selectedBodyIndex] || getPrimaryItem(config.bodyColors || []) || null;
     }
 
     function getQuestionOption(question) {
@@ -433,7 +457,7 @@
     function getSelectedAccessoryColor(accessory) {
       if (!accessory) return null;
       const colorId = selectedAccessoryColors[accessory.id];
-      return (accessory.colors || []).find(c => c.id === colorId) || (accessory.colors || [])[0] || null;
+      return sortByOrder(accessory.colors || []).find(c => c.id === colorId) || getPrimaryItem(accessory.colors || []) || null;
     }
 
     function getUnitPrice() {
@@ -465,14 +489,14 @@
       const layers = [];
 
       if (body?.src) {
-        layers.push(`<img class="preview-layer" src="${escapeHtml(body.src)}" alt="${escapeHtml(body.name || 'Body')}" style="${getStyleCss(body.style, 'body')}">`);
+        layers.push(`<img class="preview-layer md-fade-soft" src="${escapeHtml(body.src)}" alt="${escapeHtml(body.name || 'Body')}" style="${getStyleCss(body.style, 'body')}">`);
       }
 
       (set?.items || []).forEach(accessoryId => {
         const accessory = getAccessoryById(accessoryId);
         const color = getSelectedAccessoryColor(accessory);
         if (color?.src) {
-          layers.push(`<img class="preview-layer" src="${escapeHtml(color.src)}" alt="${escapeHtml(color.name || accessory?.name || 'Accesoriu')}" style="${getStyleCss(color.style, 'accessory')}">`);
+          layers.push(`<img class="preview-layer md-fade-soft" src="${escapeHtml(color.src)}" alt="${escapeHtml(color.name || accessory?.name || 'Accesoriu')}" style="${getStyleCss(color.style, 'accessory')}">`);
         }
       });
 
@@ -578,7 +602,7 @@
           <div class="control-block">
             <label class="control-label">${escapeHtml(accessory.name || 'Accesoriu')}</label>
             <div class="swatch-grid">
-              ${(accessory.colors || []).map(color => `
+              ${sortByOrder(accessory.colors || []).map(color => `
                 <button class="swatch-btn" type="button" data-accessory-color="${escapeHtml(accessory.id)}::${escapeHtml(color.id)}" aria-label="${escapeHtml(color.name || '')}">
                   <span class="swatch-circle" style="background:${escapeHtml(color.hex || '#eeb8c8')}"></span>
                 </button>
@@ -674,7 +698,7 @@
             </div>
 
             <div class="right-column">
-              <section class="card step-card active" id="step-1">
+              <section class="card step-card active md-fade-up" id="step-1">
                 <h2 class="section-title">Alege detaliile corpului</h2>
                 <p class="section-text">Alege întrebările produsului, apoi culoarea corpului.</p>
 
@@ -683,7 +707,7 @@
                 <div class="control-block">
                   <label class="control-label">Culoarea corpului</label>
                   <div class="swatch-grid">
-                    ${(config.bodyColors || []).map((item, index) => `
+                    ${sortByOrder(config.bodyColors || []).map((item, index) => `
                       <button class="swatch-btn ${index === selectedBodyIndex ? 'active' : ''}" type="button" data-body-index="${index}" aria-label="${escapeHtml(item.name || '')}">
                         <span class="swatch-circle" style="background:${escapeHtml(item.hex || '#f4efe7')}"></span>
                       </button>
@@ -696,7 +720,7 @@
                 </div>
               </section>
 
-              <section class="card step-card" id="step-2">
+              <section class="card step-card md-fade-up" id="step-2">
                 <h2 class="section-title">Alege accesoriile</h2>
                 <p class="section-text">Poți alege un accesoriu simplu sau un grup de accesorii. Previzualizarea din casetă îți arată combinația.</p>
 
@@ -720,7 +744,7 @@
                 </div>
               </section>
 
-              <section class="card step-card" id="step-3">
+              <section class="card step-card md-fade-up" id="step-3">
                 <h2 class="section-title">Detalii</h2>
                 <p class="section-text">Verifică produsul creat înainte să îl adaugi în coș.</p>
 
@@ -740,7 +764,7 @@
                 </div>
               </section>
 
-              <section class="card step-card" id="step-4">
+              <section class="card step-card md-fade-up" id="step-4">
                 <h2 class="section-title">Finalizează alegerea</h2>
 
                 <div class="helper-box" style="margin-bottom:14px;">
@@ -903,17 +927,17 @@
         return;
       }
 
-      selectedBodyIndex = 0;
+      selectedBodyIndex = getPrimaryIndex(config.bodyColors || []);
       selectedAnswers = {};
       (config.questions || []).forEach(question => {
         const first = (question.options || [])[0];
         if (first) selectedAnswers[question.id] = first.id;
       });
 
-      selectedAccessorySetId = (config.accessorySets || [])[0]?.id || '';
+      selectedAccessorySetId = (config.accessorySets || []).find(s => s.id === 'none')?.id || (config.accessorySets || [])[0]?.id || 'none';
       selectedAccessoryColors = {};
       (config.accessories || []).forEach(accessory => {
-        const first = (accessory.colors || [])[0];
+        const first = getPrimaryItem(accessory.colors || []);
         if (first) selectedAccessoryColors[accessory.id] = first.id;
       });
 
