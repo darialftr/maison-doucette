@@ -10,23 +10,23 @@
 
   <style>
     :root{
-      --bg:#fff4f7;
-      --bg2:#f7e3ea;
-      --card:#fffdfc;
-      --soft:#fff7fa;
-      --text:#4d3138;
-      --text2:#7c5c65;
-      --muted:#aa8b96;
-      --line:rgba(125,72,88,.14);
-      --pink:#f1bdcc;
-      --pink2:#df92aa;
-      --rose:#ba607c;
-      --rose-dark:#793149;
+      --bg:#f7f1eb;
+      --bg2:#f4ece4;
+      --card:#fffaf6;
+      --soft:#f7f2ec;
+      --text:#6a5145;
+      --text2:#8b6f61;
+      --muted:#a19389;
+      --line:rgba(184,142,103,.20);
+      --pink:#d2b08d;
+      --pink2:#d2b08d;
+      --rose:#b88e67;
+      --rose-dark:#6a5145;
       --gold:#d2b08d;
       --gold-deep:#b88e67;
-      --shadow:0 18px 45px rgba(90,45,58,.10);
-      --shadow2:0 30px 80px rgba(90,45,58,.16);
-      --radius:26px;
+      --shadow:0 20px 50px rgba(106,81,69,.10);
+      --shadow2:0 30px 80px rgba(106,81,69,.16);
+      --radius:30px;
       --ease:cubic-bezier(.22,.61,.36,1);
     }
 
@@ -94,11 +94,20 @@
 
     .preview-stage{
       position:relative;width:100%;aspect-ratio:.92/1;min-height:450px;border-radius:24px;overflow:hidden;
-      background:linear-gradient(180deg,#fbf6f8,#ede1e7);border:1px solid var(--line);
+      background:linear-gradient(180deg,#f5f3f1,#ebe8e3);border:1px solid rgba(185,177,170,.52);
       box-shadow:inset 0 1px 0 rgba(255,255,255,.8);
     }
     .stage-glow{position:absolute;width:250px;height:250px;left:50%;top:16px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.92),rgba(255,255,255,.5) 38%,transparent 72%);z-index:1}
     .stage-floor{position:absolute;left:8%;right:8%;bottom:18px;height:58px;border-radius:50%;background:radial-gradient(ellipse at center,rgba(0,0,0,.16),rgba(0,0,0,.06) 42%,transparent 72%);filter:blur(8px);z-index:1}
+
+    .stage-block{position:absolute;background:#d9d4ce;border-radius:18px;opacity:.62;box-shadow:inset 0 1px 0 rgba(255,255,255,.35);z-index:0}
+    .b1{width:98px;height:122px;left:-26px;top:26px}
+    .b2{width:116px;height:88px;right:10px;top:34px}
+    .b3{width:128px;height:138px;left:10px;bottom:94px}
+    .b4{width:142px;height:96px;right:-24px;bottom:118px}
+    .b5{width:78px;height:78px;left:50%;transform:translateX(-50%);top:32px}
+    .b6{width:168px;height:62px;left:50%;transform:translateX(-50%);bottom:58px;border-radius:22px}
+    .set-thumb-img{position:absolute;object-fit:contain;max-width:none;filter:drop-shadow(0 8px 12px rgba(0,0,0,.10))}
     .preview-layer{position:absolute;max-width:none;pointer-events:none;user-select:none;filter:drop-shadow(0 18px 26px rgba(0,0,0,.12))}
 
     .summary-row{margin-top:12px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
@@ -133,7 +142,7 @@
     .option-card.active{border-color:var(--rose);box-shadow:0 0 0 3px rgba(241,189,204,.4),0 12px 24px rgba(90,45,58,.08)}
     .option-card h3{margin:0 0 4px;font-size:.8rem;font-family:'Manrope',sans-serif;line-height:1.2}
     .option-card p{margin:0;font-size:.7rem;color:var(--text2);line-height:1.35}
-    .option-thumb{width:100%;aspect-ratio:1/1;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#fff7fa;border:1px solid var(--line);overflow:hidden;margin-bottom:8px;position:relative}
+    .option-thumb{width:100%;aspect-ratio:1/1;border-radius:12px;display:flex;align-items:center;justify-content:center;background:#f7f2ec;border:1px solid var(--line);overflow:hidden;margin-bottom:8px;position:relative}
     .option-thumb img{width:74%;height:74%;object-fit:contain}
 
     .helper-box{border:1px solid var(--line);background:#fff;border-radius:18px;padding:14px;color:var(--text2);font-size:.84rem;line-height:1.6}
@@ -467,6 +476,12 @@
 
       return `
         <div class="stage-glow"></div>
+        <div class="stage-block b1"></div>
+        <div class="stage-block b2"></div>
+        <div class="stage-block b3"></div>
+        <div class="stage-block b4"></div>
+        <div class="stage-block b5"></div>
+        <div class="stage-block b6"></div>
         <div class="stage-floor"></div>
         ${layers.join('')}
       `;
@@ -574,9 +589,7 @@
 
     function renderQuestionsHtml() {
       const questions = config.questions || [];
-      if (!questions.length) {
-        return `<div class="helper-box">Nu există întrebări suplimentare pentru acest produs.</div>`;
-      }
+      if (!questions.length) return '';
 
       return questions.map(question => {
         const current = getQuestionOption(question);
@@ -596,6 +609,32 @@
       }).join('');
     }
 
+
+    function renderAccessorySetThumb(set) {
+      if (!set || !(set.items || []).length) {
+        return `<div style="width:46px;height:46px;border-radius:50%;border:2px solid rgba(184,142,103,.34);position:relative;background:rgba(255,255,255,.78);box-shadow:0 8px 16px rgba(106,81,69,.06);"><span style="position:absolute;left:50%;top:50%;width:2px;height:34px;background:#b88e67;transform:translate(-50%,-50%) rotate(45deg);border-radius:999px;"></span></div>`;
+      }
+
+      const items = (set.items || []).map(accessoryId => {
+        const accessory = getAccessoryById(accessoryId);
+        const color = getSelectedAccessoryColor(accessory) || (accessory?.colors || [])[0];
+        return { accessory, color };
+      }).filter(item => item.color?.src);
+
+      if (!items.length) {
+        return `<span style="color:#9b9087;font-size:.74rem;text-align:center;padding:8px;">${escapeHtml(set.name || 'Set')}</span>`;
+      }
+
+      return items.map((item, index) => {
+        const count = items.length;
+        const width = count === 1 ? 62 : count === 2 ? 52 : 45;
+        const left = count === 1 ? 50 : count === 2 ? (index === 0 ? 42 : 60) : 34 + index * 16;
+        const top = count === 1 ? 52 : index % 2 === 0 ? 55 : 43;
+        const rot = Number(item.color?.style?.rotate || 0) / 2;
+        return `<img class="set-thumb-img" src="${escapeHtml(item.color.src)}" alt="" style="width:${width}%;left:${left}%;top:${top}%;transform:translate(-50%,-50%) rotate(${rot}deg);z-index:${index + 1};">`;
+      }).join('');
+    }
+
     function renderCustomizer() {
       document.title = `Maison Doucette — ${productRow.title}`;
 
@@ -607,7 +646,7 @@
                 <div class="preview-head">
                   <div>
                     <h1>${escapeHtml(config.previewTitle || productRow.title)}</h1>
-                    <p>${escapeHtml(config.previewSubtitle || 'Alege detaliile și vezi preview-ul live.')}</p>
+                    <p>${escapeHtml(config.previewSubtitle || 'Creează-ți propriul companion delicat, un detaliu după altul.')}</p>
                   </div>
                   <div class="preview-badge">Preview live</div>
                 </div>
@@ -615,8 +654,8 @@
                 <div class="preview-stage" id="previewStage">${renderPreviewLayers()}</div>
 
                 <div class="summary-row">
-                  <div class="summary-chip"><div class="k">Body</div><div class="v" id="summaryBase">${escapeHtml(getBodyName())}</div></div>
-                  <div class="summary-chip"><div class="k">Accesorii</div><div class="v" id="summaryOption">${escapeHtml(getAccessorySummary())}</div></div>
+                  <div class="summary-chip"><div class="k">Corp</div><div class="v" id="summaryBase">${escapeHtml(getBodyName())}</div></div>
+                  <div class="summary-chip"><div class="k">Accesoriu</div><div class="v" id="summaryOption">${escapeHtml(getAccessorySummary())}</div></div>
                   <div class="summary-chip"><div class="k">Total</div><div class="v" id="summaryPrice">${formatPrice(getTotalPrice())}</div></div>
                 </div>
               </section>
@@ -624,9 +663,9 @@
               <section class="card stepper-card">
                 <h2 class="stepper-title">Creează produsul</h2>
                 <div class="stepper">
-                  <div class="step-badge active" data-step-badge="1"><div class="dot">1</div><div class="txt">Întrebări</div></div>
-                  <div class="step-badge" data-step-badge="2"><div class="dot">2</div><div class="txt">Body</div></div>
-                  <div class="step-badge" data-step-badge="3"><div class="dot">3</div><div class="txt">Accesorii</div></div>
+                  <div class="step-badge active" data-step-badge="1"><div class="dot">1</div><div class="txt">Corp</div></div>
+                  <div class="step-badge" data-step-badge="2"><div class="dot">2</div><div class="txt">Accesorii</div></div>
+                  <div class="step-badge" data-step-badge="3"><div class="dot">3</div><div class="txt">Detalii</div></div>
                   <div class="step-badge" data-step-badge="4"><div class="dot">4</div><div class="txt">Comandă</div></div>
                 </div>
               </section>
@@ -634,19 +673,13 @@
 
             <div class="right-column">
               <section class="card step-card active" id="step-1">
-                <h2 class="section-title">Întrebări</h2>
-                <p class="section-text">Alege întâi variantele configurate în admin. Prețurile extra se adaugă automat.</p>
-                ${renderQuestionsHtml()}
-                <div class="step-actions">
-                  <button class="step-btn primary" type="button" data-next-step="2">Mai departe — body</button>
-                </div>
-              </section>
+                <h2 class="section-title">Alege detaliile corpului</h2>
+                <p class="section-text">Alege întrebările produsului, apoi culoarea corpului.</p>
 
-              <section class="card step-card" id="step-2">
-                <h2 class="section-title">Alege body-ul</h2>
-                <p class="section-text">Alege culoarea sau varianta principală a produsului.</p>
+                ${renderQuestionsHtml()}
+
                 <div class="control-block">
-                  <label class="control-label">Culori disponibile</label>
+                  <label class="control-label">Culoarea corpului</label>
                   <div class="swatch-grid">
                     ${(config.bodyColors || []).map((item, index) => `
                       <button class="swatch-btn ${index === selectedBodyIndex ? 'active' : ''}" type="button" data-body-index="${index}" aria-label="${escapeHtml(item.name || '')}">
@@ -655,21 +688,21 @@
                     `).join('')}
                   </div>
                 </div>
+
                 <div class="step-actions">
-                  <button class="step-btn soft" type="button" data-prev-step="1">Înapoi</button>
-                  <button class="step-btn primary" type="button" data-next-step="3">Mai departe — accesorii</button>
+                  <button class="step-btn primary" type="button" data-next-step="2">Mai departe — accesorii</button>
                 </div>
               </section>
 
-              <section class="card step-card" id="step-3">
-                <h2 class="section-title">Accesorii</h2>
-                <p class="section-text">Alege un set de accesorii, apoi culoarea fiecăruia.</p>
+              <section class="card step-card" id="step-2">
+                <h2 class="section-title">Alege accesoriile</h2>
+                <p class="section-text">Poți alege un accesoriu simplu sau un grup de accesorii. Previzualizarea din casetă îți arată combinația.</p>
 
                 <div class="option-grid">
                   ${(config.accessorySets || []).map(set => `
                     <button class="option-card ${set.id === selectedAccessorySetId ? 'active' : ''}" type="button" data-accessory-set="${escapeHtml(set.id)}">
                       <div class="option-thumb">
-                        <span style="color:#9b7384;font-size:.78rem;text-align:center;padding:8px;">${escapeHtml(set.name || 'Set')}</span>
+                        ${renderAccessorySetThumb(set)}
                       </div>
                       <h3>${escapeHtml(set.name || 'Set accesorii')}</h3>
                       <p>+${Number(set.price || 0) + (set.items || []).reduce((sum, accessoryId) => sum + Number(getAccessoryById(accessoryId)?.price || 0), 0)} RON</p>
@@ -680,6 +713,26 @@
                 <div id="accessoryColorsArea" style="margin-top:18px;">${renderAccessoryColorControls()}</div>
 
                 <div class="step-actions">
+                  <button class="step-btn soft" type="button" data-prev-step="1">Înapoi</button>
+                  <button class="step-btn primary" type="button" data-next-step="3">Mai departe — detalii</button>
+                </div>
+              </section>
+
+              <section class="card step-card" id="step-3">
+                <h2 class="section-title">Detalii</h2>
+                <p class="section-text">Verifică produsul creat înainte să îl adaugi în coș.</p>
+
+                <div class="helper-box" style="margin-bottom:14px;">
+                  <strong>Corp ales:</strong> <span id="detailsBase">${escapeHtml(getBodyName())}</span><br>
+                  <strong>Detalii:</strong> <span id="detailsQuestions">${escapeHtml(getQuestionSummary())}</span><br>
+                  <strong>Accesoriu ales:</strong> <span id="detailsAccessory">${escapeHtml(getAccessorySummary())}</span>
+                </div>
+
+                <div class="helper-box">
+                  ${escapeHtml(config.detailNote || 'Fiecare piesă este handmade, special pentru tine.')}
+                </div>
+
+                <div class="step-actions">
                   <button class="step-btn soft" type="button" data-prev-step="2">Înapoi</button>
                   <button class="step-btn primary" type="button" data-next-step="4">Mai departe — comandă</button>
                 </div>
@@ -687,12 +740,6 @@
 
               <section class="card step-card" id="step-4">
                 <h2 class="section-title">Finalizează alegerea</h2>
-
-                <div class="helper-box" style="margin-bottom:14px;">
-                  <strong>Body:</strong> <span id="detailsBase">${escapeHtml(getBodyName())}</span><br>
-                  <strong>Detalii:</strong> <span id="detailsQuestions">${escapeHtml(getQuestionSummary())}</span><br>
-                  <strong>Accesorii:</strong> <span id="detailsAccessory">${escapeHtml(getAccessorySummary())}</span>
-                </div>
 
                 <div class="helper-box" style="margin-bottom:14px;">
                   <strong>Total:</strong> <span id="price">${formatPrice(getTotalPrice())}</span>
@@ -711,7 +758,7 @@
                   <button class="step-btn primary" id="addBtn" type="button">${escapeHtml(config.addButtonText || 'Adaugă în coș')}</button>
                   <button class="step-btn soft" type="button" id="openCartFinalBtn">Vezi coșul</button>
                   <button class="step-btn soft" type="button" onclick="window.location.href='index.html#atelier-products'">Continuă cumpărăturile</button>
-                  <button class="step-btn soft" type="button" data-prev-step="3">Înapoi</button>
+                  <button class="step-btn soft" type="button" data-prev-step="3">Înapoi la detalii</button>
                 </div>
               </section>
             </div>
