@@ -345,6 +345,15 @@
       font-size:.7rem;
     }
 
+
+
+    .position-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;grid-column:1/-1;background:#fff7fa;border:1px solid var(--line);border-radius:14px;padding:8px}
+    .position-grid label{font-size:.54rem;letter-spacing:.08em}.position-grid input{padding:7px 8px;font-size:.7rem;border-radius:10px}
+    .primary-btn{height:28px;min-width:28px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--muted);font-size:.72rem;font-weight:900}
+    .primary-btn.active{background:linear-gradient(135deg,var(--rose),var(--pink2));color:#fff;border-color:transparent;box-shadow:0 8px 18px rgba(186,96,124,.18)}
+    .order-slider{grid-column:1/-1;display:grid;grid-template-columns:72px 1fr 42px;gap:8px;align-items:center;color:var(--muted);font-size:.62rem;text-transform:uppercase;letter-spacing:.09em;font-weight:900}
+    .order-slider input[type=range]{padding:0;accent-color:var(--rose)}.color-row.is-primary{box-shadow:0 0 0 2px rgba(223,146,170,.24), var(--shadow);border-color:rgba(186,96,124,.24)}
+
     @media(max-width:1180px){
       .app{grid-template-columns:1fr}
       .mobile-top{display:flex}
@@ -901,14 +910,16 @@
       sidebar.classList.add('open');
       sidebarOverlay.classList.add('open');
       document.body.style.overflow = 'hidden';
-      syncSidebarButton();
+  
+    syncSidebarButton();
     }
 
     function closeSidebar() {
       sidebar.classList.remove('open');
       sidebarOverlay.classList.remove('open');
       document.body.style.overflow = '';
-      syncSidebarButton();
+  
+    syncSidebarButton();
     }
 
     function toggleSidebar() {
@@ -1483,6 +1494,34 @@
       if (slug) window.open(`product-details.html?slug=${encodeURIComponent(slug)}`, '_blank');
     });
 
+    function sortByOrder(list = []) {
+      return [...list].sort((a, b) => Number(a.sortOrder ?? 999) - Number(b.sortOrder ?? 999));
+    }
+
+    function setPrimaryBodyColor(id) {
+      customizerConfig.bodyColors.forEach(item => item.isPrimary = item.id === id);
+      renderCustomizerEditor();
+    }
+
+    function setPrimaryAccessoryColor(accessoryId, colorId) {
+      const accessory = getAccessory(accessoryId);
+      if (!accessory) return;
+      (accessory.colors || []).forEach(color => color.isPrimary = color.id === colorId);
+      renderCustomizerEditor();
+    }
+
+    function updateLayerStyle(type, id, field, value) {
+      const layer = type === 'body' ? getBodyColor(id) : getAccessoryColor(id)?.color;
+      if (!layer) return;
+      layer.style = layer.style || defaultLayerStyle(type);
+      layer.style[field] = Number(value || 0);
+      if (type === 'body') {
+        layer.style.x = 50;
+        layer.style.rotate = 0;
+      }
+      renderAdminPreview();
+    }
+
     function defaultLayerStyle(type) {
       if (type === 'body') return { x: 50, y: 56, width: 420, rotate: 0, zIndex: 4 };
       return { x: 50, y: 50, width: 160, rotate: 0, zIndex: 8 };
@@ -1589,26 +1628,42 @@
 
     function renderBodyColors() {
       const box = document.getElementById('bodyColorsList');
+      customizerConfig.bodyColors = sortByOrder(customizerConfig.bodyColors);
 
-      box.innerHTML = customizerConfig.bodyColors.map(item => `
-        <div class="color-row">
+      box.innerHTML = customizerConfig.bodyColors.map((item, index) => {
+        item.style = item.style || defaultLayerStyle('body');
+        if (item.sortOrder === undefined) item.sortOrder = index + 1;
+        return `
+        <div class="color-row ${item.isPrimary ? 'is-primary' : ''}">
           <button class="color-dot" style="background:${escapeHtml(item.hex || '#f4efe7')}" onclick="selectLayerInPreview('body','${item.id}')" type="button"></button>
           <input value="${escapeHtml(item.name || '')}" oninput="updateBodyColor('${item.id}','name',this.value)" placeholder="Nume">
           <input value="${escapeHtml(item.hex || '')}" oninput="updateBodyColor('${item.id}','hex',this.value)" placeholder="#hex">
           <button class="x-btn" onclick="removeBodyColor('${item.id}')" type="button">×</button>
-          <label class="full upload-box" style="grid-column:1/-1;">
-            <span>Imagine body</span>
-            ${imagePreview(item.src, 'Imagine body încărcată')}
-            <input type="file" accept="image/*" onchange="uploadBodyImage('${item.id}', this)">
-          </label>
-        </div>
-      `).join('') || `<div class="meta">Apasă + Culoare ca să adaugi body.</div>`;
+
+          <button class="primary-btn ${item.isPrimary ? 'active' : ''}" onclick="setPrimaryBodyColor('${item.id}')" type="button" title="Setează ca primary">★</button>
+          <div class="order-slider"><span>Ordine</span><input type="range" min="1" max="20" value="${Number(item.sortOrder || index + 1)}" oninput="updateBodyColor('${item.id}','sortOrder',this.value)"><strong>${Number(item.sortOrder || index + 1)}</strong></div>
+
+          <div class="position-grid">
+            <label>X % <input type="number" value="50" disabled></label>
+            <label>Y % <input type="number" value="${Number(item.style.y ?? 56)}" oninput="updateLayerStyle('body','${item.id}','y',this.value)"></label>
+            <label>Size <input type="number" value="${Number(item.style.width ?? 420)}" oninput="updateLayerStyle('body','${item.id}','width',this.value)"></label>
+            <label>Rot <input type="number" value="0" disabled></label>
+            <label>Z <input type="number" value="${Number(item.style.zIndex ?? 4)}" oninput="updateLayerStyle('body','${item.id}','zIndex',this.value)"></label>
+          </div>
+
+          <label class="full upload-box" style="grid-column:1/-1;"><span>Imagine body</span>${imagePreview(item.src, 'Imagine body încărcată')}<input type="file" accept="image/*" onchange="uploadBodyImage('${item.id}', this)"></label>
+        </div>`;
+      }).join('') || `<div class="meta">Apasă + Culoare ca să adaugi body.</div>`;
     }
 
     function renderAccessories() {
       const box = document.getElementById('accessoryGroupsList');
+      customizerConfig.accessories = sortByOrder(customizerConfig.accessories);
 
-      box.innerHTML = customizerConfig.accessories.map(accessory => `
+      box.innerHTML = customizerConfig.accessories.map((accessory, accessoryIndex) => {
+        if (accessory.sortOrder === undefined) accessory.sortOrder = accessoryIndex + 1;
+        accessory.colors = sortByOrder(accessory.colors || []);
+        return `
         <div class="accessory-card">
           <div class="accessory-head">
             <input value="${escapeHtml(accessory.name || '')}" oninput="updateAccessory('${accessory.id}', 'name', this.value)" placeholder="Nume accesoriu">
@@ -1616,27 +1671,36 @@
             <button class="add-text-btn" onclick="addAccessoryColor('${accessory.id}')" type="button">+ Culoare</button>
             <button class="x-btn" onclick="removeAccessory('${accessory.id}')" type="button">×</button>
           </div>
+          <div class="order-slider"><span>Ordine</span><input type="range" min="1" max="20" value="${Number(accessory.sortOrder || accessoryIndex + 1)}" oninput="updateAccessory('${accessory.id}', 'sortOrder', this.value)"><strong>${Number(accessory.sortOrder || accessoryIndex + 1)}</strong></div>
 
-          <details class="collapse-block" open>
-            <summary><span>Culori ${escapeHtml(accessory.name || 'accesoriu')}</span><span class="chev">›</span></summary>
-            <div class="collapse-body color-list">
-            ${(accessory.colors || []).map(color => `
-              <div class="color-row">
+          <details class="collapse-block" open><summary><span>Culori ${escapeHtml(accessory.name || 'accesoriu')}</span><span class="chev">›</span></summary><div class="collapse-body color-list">
+            ${(accessory.colors || []).map((color, colorIndex) => {
+              color.style = color.style || defaultLayerStyle('accessory');
+              if (color.sortOrder === undefined) color.sortOrder = colorIndex + 1;
+              return `
+              <div class="color-row ${color.isPrimary ? 'is-primary' : ''}">
                 <button class="color-dot" style="background:${escapeHtml(color.hex || '#eeb8c8')}" onclick="selectLayerInPreview('accessory','${color.id}')" type="button"></button>
                 <input value="${escapeHtml(color.name || '')}" oninput="updateAccessoryColor('${accessory.id}','${color.id}','name',this.value)" placeholder="Nume">
                 <input value="${escapeHtml(color.hex || '')}" oninput="updateAccessoryColor('${accessory.id}','${color.id}','hex',this.value)" placeholder="#hex">
                 <button class="x-btn" onclick="removeAccessoryColor('${accessory.id}','${color.id}')" type="button">×</button>
-                <label class="full upload-box" style="grid-column:1/-1;">
-                  <span>Imagine accesoriu</span>
-                  ${imagePreview(color.src, 'Imagine accesoriu încărcată')}
-                  <input type="file" accept="image/*" onchange="uploadAccessoryImage('${accessory.id}','${color.id}', this)">
-                </label>
-              </div>
-            `).join('') || `<div class="meta">Apasă + Culoare pentru acest accesoriu.</div>`}
-            </div>
-          </details>
-        </div>
-      `).join('') || `<div class="meta">Apasă + Accesoriu ca să adaugi fundă, inimă, stea etc.</div>`;
+
+                <button class="primary-btn ${color.isPrimary ? 'active' : ''}" onclick="setPrimaryAccessoryColor('${accessory.id}','${color.id}')" type="button" title="Setează ca primary">★</button>
+                <div class="order-slider"><span>Ordine</span><input type="range" min="1" max="20" value="${Number(color.sortOrder || colorIndex + 1)}" oninput="updateAccessoryColor('${accessory.id}','${color.id}','sortOrder',this.value)"><strong>${Number(color.sortOrder || colorIndex + 1)}</strong></div>
+
+                <div class="position-grid">
+                  <label>X % <input type="number" value="${Number(color.style.x ?? 50)}" oninput="updateLayerStyle('accessory','${color.id}','x',this.value)"></label>
+                  <label>Y % <input type="number" value="${Number(color.style.y ?? 50)}" oninput="updateLayerStyle('accessory','${color.id}','y',this.value)"></label>
+                  <label>Size <input type="number" value="${Number(color.style.width ?? 160)}" oninput="updateLayerStyle('accessory','${color.id}','width',this.value)"></label>
+                  <label>Rot <input type="number" value="${Number(color.style.rotate ?? 0)}" oninput="updateLayerStyle('accessory','${color.id}','rotate',this.value)"></label>
+                  <label>Z <input type="number" value="${Number(color.style.zIndex ?? 8)}" oninput="updateLayerStyle('accessory','${color.id}','zIndex',this.value)"></label>
+                </div>
+
+                <label class="full upload-box" style="grid-column:1/-1;"><span>Imagine accesoriu</span>${imagePreview(color.src, 'Imagine accesoriu încărcată')}<input type="file" accept="image/*" onchange="uploadAccessoryImage('${accessory.id}','${color.id}', this)"></label>
+              </div>`;
+            }).join('') || `<div class="meta">Apasă + Culoare pentru acest accesoriu.</div>`}
+          </div></details>
+        </div>`;
+      }).join('') || `<div class="meta">Apasă + Accesoriu ca să adaugi fundă, inimă, stea etc.</div>`;
     }
 
     function renderQuestions() {
@@ -1689,10 +1753,10 @@
 
     function styleToCss(style = {}, type) {
       const x = type === 'body' ? 50 : Number(style.x ?? 50);
-      const y = Number(style.y ?? 55);
-      const width = Number(style.width ?? 160);
-      const rotate = Number(style.rotate ?? 0);
-      const zIndex = Number(style.zIndex ?? 8);
+      const y = Number(style.y ?? (type === 'body' ? 56 : 50));
+      const width = Number(style.width ?? (type === 'body' ? 420 : 160));
+      const rotate = type === 'body' ? 0 : Number(style.rotate ?? 0);
+      const zIndex = Number(style.zIndex ?? (type === 'body' ? 4 : 8));
       return `left:${x}%;top:${y}%;width:${width}px;z-index:${zIndex};transform:translate(-50%,-50%) rotate(${rotate}deg);`;
     }
 
@@ -1701,7 +1765,7 @@
 
       const body = selectedLayer?.type === 'body'
         ? getBodyColor(selectedLayer.id)
-        : customizerConfig.bodyColors[0];
+        : sortByOrder(customizerConfig.bodyColors).find(item => item.isPrimary) || sortByOrder(customizerConfig.bodyColors)[0];
 
       const selectedAccessoryColor = selectedLayer?.type === 'accessory'
         ? getAccessoryColor(selectedLayer.id)?.color
@@ -1829,7 +1893,9 @@
         name: 'Culoare nouă',
         hex: '#f4efe7',
         src: '',
-        style: defaultLayerStyle('body')
+        style: defaultLayerStyle('body'),
+        sortOrder: customizerConfig.bodyColors.length + 1,
+        isPrimary: customizerConfig.bodyColors.length === 0
       });
       renderCustomizerEditor();
     });
@@ -1839,6 +1905,7 @@
         id: uid('accessory'),
         name: 'Accesoriu nou',
         price: 0,
+        sortOrder: customizerConfig.accessories.length + 1,
         colors: []
       });
       renderCustomizerEditor();
@@ -1930,7 +1997,7 @@
     function updateBodyColor(id, field, value) {
       const item = getBodyColor(id);
       if (!item) return;
-      item[field] = value;
+      item[field] = ['sortOrder','price'].includes(field) ? Number(value || 0) : value;
       renderAdminPreview();
     }
 
@@ -1953,7 +2020,7 @@
     function updateAccessory(id, field, value) {
       const item = getAccessory(id);
       if (!item) return;
-      item[field] = field === 'price' ? Number(value || 0) : value;
+      item[field] = ['price','sortOrder'].includes(field) ? Number(value || 0) : value;
       renderAdminPreview();
     }
 
@@ -1976,7 +2043,9 @@
         name: 'Culoare nouă',
         hex: '#eeb8c8',
         src: '',
-        style: defaultLayerStyle('accessory')
+        style: defaultLayerStyle('accessory'),
+        sortOrder: accessory.colors.length + 1,
+        isPrimary: accessory.colors.length === 0
       });
 
       renderCustomizerEditor();
@@ -1987,7 +2056,7 @@
       const color = accessory?.colors?.find(c => c.id === colorId);
       if (!color) return;
 
-      color[field] = value;
+      color[field] = ['sortOrder','price'].includes(field) ? Number(value || 0) : value;
       renderAdminPreview();
     }
 
@@ -2325,6 +2394,11 @@
     window.updateAccessoryColor = updateAccessoryColor;
     window.removeAccessoryColor = removeAccessoryColor;
     window.uploadAccessoryImage = uploadAccessoryImage;
+
+
+    window.setPrimaryBodyColor = setPrimaryBodyColor;
+    window.setPrimaryAccessoryColor = setPrimaryAccessoryColor;
+    window.updateLayerStyle = updateLayerStyle;
 
     syncSidebarButton();
     if (typeof updateLayerToolState === 'function') updateLayerToolState();
