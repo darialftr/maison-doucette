@@ -287,7 +287,9 @@
     .compact-item{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;border:1px solid var(--line);background:#fff;border-radius:15px;padding:10px}
 
     .customizer-layout{display:grid;grid-template-columns:360px minmax(0,1fr);gap:14px;margin-top:14px}
-    .customizer-col{display:grid;gap:10px}
+    .customizer-col{display:grid;gap:10px;max-height:690px;overflow-y:auto;padding-right:6px;align-content:start}
+    .customizer-col::-webkit-scrollbar{width:7px}
+    .customizer-col::-webkit-scrollbar-thumb{background:rgba(186,96,124,.22);border-radius:999px}
     .mini-editor-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:4px 0 0}
     .mini-editor-head h3{margin:0}
     .round-action{width:34px;height:34px;font-size:1rem;box-shadow:0 8px 18px rgba(90,45,58,.08)}
@@ -298,7 +300,18 @@
     .color-row input{padding:8px;font-size:.72rem}
     .x-btn{width:28px;height:28px;background:#fff4f5;color:var(--red);border-color:rgba(167,72,87,.2)}
     .accessory-card{border:1px solid var(--line);background:#fff;border-radius:18px;padding:10px;display:grid;gap:8px}
-    .accessory-head{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center}
+    .question-option-row{display:grid;grid-template-columns:1fr 86px 32px;gap:7px;align-items:center;margin-top:7px}
+    .set-items{display:grid;gap:6px;margin-top:8px;background:rgba(255,255,255,.72);border:1px solid var(--line);border-radius:14px;padding:8px}
+    .collapse-block{border:1px solid var(--line);background:rgba(255,253,252,.72);border-radius:20px;padding:9px;box-shadow:0 10px 22px rgba(90,45,58,.045)}
+    .collapse-block>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;color:var(--rose-dark);font-weight:900;font-size:.86rem}
+    .collapse-block>summary::-webkit-details-marker{display:none}
+    .collapse-block .chev{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid var(--line);transition:.2s ease}
+    .collapse-block[open] .chev{transform:rotate(90deg)}
+    .collapse-body{margin-top:10px;display:grid;gap:8px}
+    .check-row{display:flex;align-items:center;gap:7px;font-size:.72rem;color:var(--text2);text-transform:none;letter-spacing:0;font-weight:800}
+    .check-row input{width:auto;padding:0}
+
+    .accessory-head{display:grid;grid-template-columns:1fr 78px auto auto;gap:8px;align-items:center}
     .preview-editor-box{position:relative;min-height:500px;border-radius:24px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(180deg,#f8f2f4,#eee2e7);box-shadow:inset 0 1px 0 rgba(255,255,255,.8);touch-action:none}
     .preview-empty{position:absolute;inset:auto 16px 16px;background:rgba(255,255,255,.82);border:1px solid var(--line);border-radius:16px;padding:10px;text-align:center;color:var(--muted);font-size:.76rem}
     .admin-layer{position:absolute;max-width:none;user-select:none;cursor:grab;transform-origin:center center;filter:drop-shadow(0 15px 24px rgba(0,0,0,.12))}
@@ -405,7 +418,7 @@
         <button class="close-side" id="closeSidebarBtn" type="button">×</button>
         <img src="images/logo.jpg" alt="Maison Doucette">
         <div class="brand">Maison Doucette</div>
-        <div class="side-small">admin panel</div>
+        <div class="side-small">coquette admin</div>
       </div>
 
       <div class="nav-tabs">
@@ -599,29 +612,37 @@
 
             <div class="customizer-layout">
               <div class="customizer-col">
-                <div class="mini-editor-head">
-                  <h3>Body</h3>
-                  <button class="add-text-btn" id="addBodyColorBtn" type="button">+ Culoare</button>
-                </div>
-                <div id="bodyColorsList" class="color-list"></div>
+                <details class="collapse-block" open>
+                  <summary><span>Întrebări dropdown</span><span class="chev">›</span></summary>
+                  <div class="collapse-body">
+                    <button class="add-text-btn" id="addQuestionBtn" type="button">+ Întrebare</button>
+                    <div id="questionsList" class="color-list"></div>
+                  </div>
+                </details>
 
-                <div class="mini-editor-head">
-                  <h3>Accesorii</h3>
-                  <button class="add-text-btn" id="addAccessoryGroupBtn" type="button">+ Accesoriu</button>
-                </div>
-                <div id="accessoryGroupsList" class="color-list"></div>
+                <details class="collapse-block" open>
+                  <summary><span>Body / culori bază</span><span class="chev">›</span></summary>
+                  <div class="collapse-body">
+                    <button class="add-text-btn" id="addBodyColorBtn" type="button">+ Culoare</button>
+                    <div id="bodyColorsList" class="color-list"></div>
+                  </div>
+                </details>
 
-                <div class="mini-editor-head">
-                  <h3>Întrebări</h3>
-                  <button class="add-text-btn" id="addQuestionBtn" type="button">+ Întrebare</button>
-                </div>
-                <div id="questionsList" class="color-list"></div>
+                <details class="collapse-block" open>
+                  <summary><span>Accesorii</span><span class="chev">›</span></summary>
+                  <div class="collapse-body">
+                    <button class="add-text-btn" id="addAccessoryGroupBtn" type="button">+ Accesoriu</button>
+                    <div id="accessoryGroupsList" class="color-list"></div>
+                  </div>
+                </details>
 
-                <div class="mini-editor-head">
-                  <h3>Seturi accesorii</h3>
-                  <button class="add-text-btn" id="addAccessorySetBtn" type="button">+ Set</button>
-                </div>
-                <div id="accessorySetsList" class="color-list"></div>
+                <details class="collapse-block">
+                  <summary><span>Seturi accesorii</span><span class="chev">›</span></summary>
+                  <div class="collapse-body">
+                    <button class="add-text-btn" id="addAccessorySetBtn" type="button">+ Set</button>
+                    <div id="accessorySetsList" class="color-list"></div>
+                  </div>
+                </details>
               </div>
 
               <div>
@@ -1468,12 +1489,11 @@
     }
 
     function normalizeCustomizerConfig(config = {}) {
-      const accessories = config.accessories || config.accessoryGroups || config.optionGroups || [];
       return {
         bodyColors: Array.isArray(config.bodyColors) ? config.bodyColors : (Array.isArray(config.baseVariants) ? config.baseVariants : []),
         questions: Array.isArray(config.questions) ? config.questions : [],
-        accessories: Array.isArray(accessories) ? accessories : [],
-        accessorySets: Array.isArray(config.accessorySets) ? config.accessorySets : []
+        accessories: Array.isArray(config.accessories) ? config.accessories : (Array.isArray(config.accessoryGroups) ? config.accessoryGroups : (Array.isArray(config.optionGroups) ? config.optionGroups : [])),
+        accessorySets: Array.isArray(config.accessorySets) ? config.accessorySets : (Array.isArray(config.accessory_sets) ? config.accessory_sets : [])
       };
     }
 
@@ -1560,8 +1580,8 @@
 
     function renderCustomizerEditor() {
       renderBodyColors();
-      renderAccessories();
       renderQuestions();
+      renderAccessories();
       renderAccessorySets();
       if (typeof updateLayerToolState === 'function') updateLayerToolState();
       renderAdminPreview();
@@ -1591,12 +1611,15 @@
       box.innerHTML = customizerConfig.accessories.map(accessory => `
         <div class="accessory-card">
           <div class="accessory-head">
-            <input value="${escapeHtml(accessory.name || '')}" oninput="updateAccessory('${accessory.id}', this.value)" placeholder="Nume accesoriu">
+            <input value="${escapeHtml(accessory.name || '')}" oninput="updateAccessory('${accessory.id}', 'name', this.value)" placeholder="Nume accesoriu">
+            <input type="number" value="${Number(accessory.price || 0)}" oninput="updateAccessory('${accessory.id}', 'price', this.value)" placeholder="+RON">
             <button class="add-text-btn" onclick="addAccessoryColor('${accessory.id}')" type="button">+ Culoare</button>
             <button class="x-btn" onclick="removeAccessory('${accessory.id}')" type="button">×</button>
           </div>
 
-          <div class="color-list">
+          <details class="collapse-block" open>
+            <summary><span>Culori ${escapeHtml(accessory.name || 'accesoriu')}</span><span class="chev">›</span></summary>
+            <div class="collapse-body color-list">
             ${(accessory.colors || []).map(color => `
               <div class="color-row">
                 <button class="color-dot" style="background:${escapeHtml(color.hex || '#eeb8c8')}" onclick="selectLayerInPreview('accessory','${color.id}')" type="button"></button>
@@ -1610,136 +1633,58 @@
                 </label>
               </div>
             `).join('') || `<div class="meta">Apasă + Culoare pentru acest accesoriu.</div>`}
-          </div>
+            </div>
+          </details>
         </div>
       `).join('') || `<div class="meta">Apasă + Accesoriu ca să adaugi fundă, inimă, stea etc.</div>`;
     }
-
 
     function renderQuestions() {
       const box = document.getElementById('questionsList');
       if (!box) return;
 
-      box.innerHTML = (customizerConfig.questions || []).map((question) => `
+      box.innerHTML = customizerConfig.questions.map(question => `
         <div class="accessory-card">
           <div class="accessory-head">
-            <input value="${escapeHtml(question.label || '')}" oninput="updateQuestion('${question.id}','label',this.value)" placeholder="Ex: Size">
-            <select onchange="updateQuestion('${question.id}','required',this.value)">
-              <option value="true" ${question.required !== false ? 'selected' : ''}>Obligatoriu</option>
-              <option value="false" ${question.required === false ? 'selected' : ''}>Opțional</option>
-            </select>
+            <input value="${escapeHtml(question.label || '')}" oninput="updateQuestion('${question.id}','label',this.value)" placeholder="Întrebare, ex: Size">
+            <button class="add-text-btn" onclick="addQuestionOption('${question.id}')" type="button">+ Opțiune</button>
             <button class="x-btn" onclick="removeQuestion('${question.id}')" type="button">×</button>
           </div>
 
           <div class="color-list">
             ${(question.options || []).map(option => `
-              <div class="color-row" style="grid-template-columns:1fr 82px 28px;">
+              <div class="question-option-row">
                 <input value="${escapeHtml(option.label || '')}" oninput="updateQuestionOption('${question.id}','${option.id}','label',this.value)" placeholder="Variantă, ex: Medium">
                 <input type="number" value="${Number(option.price || 0)}" oninput="updateQuestionOption('${question.id}','${option.id}','price',this.value)" placeholder="+ RON">
                 <button class="x-btn" onclick="removeQuestionOption('${question.id}','${option.id}')" type="button">×</button>
               </div>
-            `).join('') || `<div class="meta">Nu ai variante încă.</div>`}
+            `).join('') || `<div class="meta">Apasă + Opțiune ca să adaugi variante.</div>`}
           </div>
-
-          <button class="add-text-btn" onclick="addQuestionOption('${question.id}')" type="button">+ Variantă</button>
         </div>
-      `).join('') || `<div class="meta">Apasă + Întrebare pentru dropdown-uri cu preț: Size, Yarn Type, Gift Box etc.</div>`;
-    }
-
-    function addQuestion() {
-      customizerConfig.questions.push({
-        id: uid('question'),
-        label: 'Întrebare nouă',
-        type: 'dropdown',
-        required: true,
-        options: [{ id: uid('answer'), label: 'Variantă 1', price: 0 }]
-      });
-      renderCustomizerEditor();
-    }
-
-    function updateQuestion(questionId, field, value) {
-      const question = customizerConfig.questions.find(q => q.id === questionId);
-      if (!question) return;
-      if (field === 'required') question.required = value === 'true';
-      else question[field] = value;
-      renderQuestions();
-    }
-
-    function removeQuestion(questionId) {
-      customizerConfig.questions = customizerConfig.questions.filter(q => q.id !== questionId);
-      renderCustomizerEditor();
-    }
-
-    function addQuestionOption(questionId) {
-      const question = customizerConfig.questions.find(q => q.id === questionId);
-      if (!question) return;
-      if (!Array.isArray(question.options)) question.options = [];
-      question.options.push({ id: uid('answer'), label: 'Variantă nouă', price: 0 });
-      renderQuestions();
-    }
-
-    function updateQuestionOption(questionId, optionId, field, value) {
-      const question = customizerConfig.questions.find(q => q.id === questionId);
-      const option = question?.options?.find(o => o.id === optionId);
-      if (!option) return;
-      option[field] = field === 'price' ? Number(value || 0) : value;
-    }
-
-    function removeQuestionOption(questionId, optionId) {
-      const question = customizerConfig.questions.find(q => q.id === questionId);
-      if (!question) return;
-      question.options = (question.options || []).filter(o => o.id !== optionId);
-      renderQuestions();
+      `).join('') || `<div class="meta">Apasă + Întrebare ca să adaugi dropdown-uri cu preț extra, de exemplu Size.</div>`;
     }
 
     function renderAccessorySets() {
       const box = document.getElementById('accessorySetsList');
       if (!box) return;
 
-      box.innerHTML = (customizerConfig.accessorySets || []).map(set => `
+      box.innerHTML = customizerConfig.accessorySets.map(set => `
         <div class="accessory-card">
           <div class="accessory-head">
-            <input value="${escapeHtml(set.name || '')}" oninput="updateAccessorySet('${set.id}','name',this.value)" placeholder="Ex: Inimă + Fundă">
-            <input type="number" value="${Number(set.price || 0)}" oninput="updateAccessorySet('${set.id}','price',this.value)" placeholder="+ RON">
+            <input value="${escapeHtml(set.name || '')}" oninput="updateAccessorySet('${set.id}','name',this.value)" placeholder="Nume set, ex: Inimă + Fundă">
+            <input type="number" value="${Number(set.price || 0)}" oninput="updateAccessorySet('${set.id}','price',this.value)" placeholder="Preț">
             <button class="x-btn" onclick="removeAccessorySet('${set.id}')" type="button">×</button>
           </div>
-
-          <div class="meta">Alege accesoriile care intră în acest set. Pe site vor apărea cu culorile lor deja adăugate.</div>
-
-          <div class="color-list">
-            ${(customizerConfig.accessories || []).map(accessory => `
-              <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:.76rem;background:#fff7fa;border:1px solid var(--line);padding:8px;border-radius:14px;">
-                <input type="checkbox" style="width:auto" ${Array.isArray(set.items) && set.items.includes(accessory.id) ? 'checked' : ''} onchange="toggleAccessoryInSet('${set.id}','${accessory.id}',this.checked)">
+          <div class="set-items">
+            ${customizerConfig.accessories.map(accessory => `
+              <label class="check-row">
+                <input type="checkbox" ${Array.isArray(set.items) && set.items.includes(accessory.id) ? 'checked' : ''} onchange="toggleAccessoryInSet('${set.id}','${accessory.id}',this.checked)">
                 ${escapeHtml(accessory.name || 'Accesoriu')}
               </label>
-            `).join('') || `<div class="meta">Adaugă întâi accesorii ca să le poți combina.</div>`}
+            `).join('') || `<div class="meta">Adaugă întâi accesorii, apoi le poți combina în seturi.</div>`}
           </div>
         </div>
-      `).join('') || `<div class="meta">Apasă + Set pentru combinații ca Inimă + Fundă sau Stea + Fundă.</div>`;
-    }
-
-    function addAccessorySet() {
-      customizerConfig.accessorySets.push({ id: uid('set'), name: 'Set nou', price: 0, items: [] });
-      renderAccessorySets();
-    }
-
-    function updateAccessorySet(setId, field, value) {
-      const set = customizerConfig.accessorySets.find(s => s.id === setId);
-      if (!set) return;
-      set[field] = field === 'price' ? Number(value || 0) : value;
-    }
-
-    function removeAccessorySet(setId) {
-      customizerConfig.accessorySets = customizerConfig.accessorySets.filter(s => s.id !== setId);
-      renderAccessorySets();
-    }
-
-    function toggleAccessoryInSet(setId, accessoryId, checked) {
-      const set = customizerConfig.accessorySets.find(s => s.id === setId);
-      if (!set) return;
-      if (!Array.isArray(set.items)) set.items = [];
-      if (checked && !set.items.includes(accessoryId)) set.items.push(accessoryId);
-      if (!checked) set.items = set.items.filter(id => id !== accessoryId);
+      `).join('') || `<div class="meta">Apasă + Set ca să creezi combinații, ex: Inimă + Fundă.</div>`;
     }
 
     function styleToCss(style = {}, type) {
@@ -1893,13 +1838,94 @@
       customizerConfig.accessories.push({
         id: uid('accessory'),
         name: 'Accesoriu nou',
+        price: 0,
         colors: []
       });
       renderCustomizerEditor();
     });
 
-    document.getElementById('addQuestionBtn').addEventListener('click', addQuestion);
-    document.getElementById('addAccessorySetBtn').addEventListener('click', addAccessorySet);
+    document.getElementById('addQuestionBtn').addEventListener('click', () => {
+      const id = uid('question');
+      customizerConfig.questions.push({
+        id,
+        label: 'Întrebare nouă',
+        type: 'dropdown',
+        options: [
+          { id: uid('option'), label: 'Variantă 1', price: 0 }
+        ]
+      });
+      renderCustomizerEditor();
+    });
+
+    document.getElementById('addAccessorySetBtn').addEventListener('click', () => {
+      customizerConfig.accessorySets.push({
+        id: uid('set'),
+        name: 'Set nou',
+        price: 0,
+        items: []
+      });
+      renderCustomizerEditor();
+    });
+
+    function getQuestion(id) {
+      return customizerConfig.questions.find(q => q.id === id);
+    }
+
+    function updateQuestion(id, field, value) {
+      const q = getQuestion(id);
+      if (!q) return;
+      q[field] = value;
+    }
+
+    function removeQuestion(id) {
+      customizerConfig.questions = customizerConfig.questions.filter(q => q.id !== id);
+      renderCustomizerEditor();
+    }
+
+    function addQuestionOption(questionId) {
+      const q = getQuestion(questionId);
+      if (!q) return;
+      if (!Array.isArray(q.options)) q.options = [];
+      q.options.push({ id: uid('option'), label: 'Variantă nouă', price: 0 });
+      renderCustomizerEditor();
+    }
+
+    function updateQuestionOption(questionId, optionId, field, value) {
+      const q = getQuestion(questionId);
+      const option = q?.options?.find(o => o.id === optionId);
+      if (!option) return;
+      option[field] = field === 'price' ? Number(value || 0) : value;
+    }
+
+    function removeQuestionOption(questionId, optionId) {
+      const q = getQuestion(questionId);
+      if (!q) return;
+      q.options = (q.options || []).filter(o => o.id !== optionId);
+      renderCustomizerEditor();
+    }
+
+    function getAccessorySet(id) {
+      return customizerConfig.accessorySets.find(set => set.id === id);
+    }
+
+    function updateAccessorySet(id, field, value) {
+      const set = getAccessorySet(id);
+      if (!set) return;
+      set[field] = field === 'price' ? Number(value || 0) : value;
+    }
+
+    function removeAccessorySet(id) {
+      customizerConfig.accessorySets = customizerConfig.accessorySets.filter(set => set.id !== id);
+      renderCustomizerEditor();
+    }
+
+    function toggleAccessoryInSet(setId, accessoryId, checked) {
+      const set = getAccessorySet(setId);
+      if (!set) return;
+      if (!Array.isArray(set.items)) set.items = [];
+      if (checked && !set.items.includes(accessoryId)) set.items.push(accessoryId);
+      if (!checked) set.items = set.items.filter(id => id !== accessoryId);
+    }
 
     function updateBodyColor(id, field, value) {
       const item = getBodyColor(id);
@@ -1924,14 +1950,18 @@
       renderCustomizerEditor();
     }
 
-    function updateAccessory(id, value) {
+    function updateAccessory(id, field, value) {
       const item = getAccessory(id);
       if (!item) return;
-      item.name = value;
+      item[field] = field === 'price' ? Number(value || 0) : value;
+      renderAdminPreview();
     }
 
     function removeAccessory(id) {
       customizerConfig.accessories = customizerConfig.accessories.filter(x => x.id !== id);
+      customizerConfig.accessorySets.forEach(set => {
+        set.items = (set.items || []).filter(itemId => itemId !== id);
+      });
       renderCustomizerEditor();
     }
 
@@ -2295,16 +2325,6 @@
     window.updateAccessoryColor = updateAccessoryColor;
     window.removeAccessoryColor = removeAccessoryColor;
     window.uploadAccessoryImage = uploadAccessoryImage;
-    window.addQuestion = addQuestion;
-    window.updateQuestion = updateQuestion;
-    window.removeQuestion = removeQuestion;
-    window.addQuestionOption = addQuestionOption;
-    window.updateQuestionOption = updateQuestionOption;
-    window.removeQuestionOption = removeQuestionOption;
-    window.addAccessorySet = addAccessorySet;
-    window.updateAccessorySet = updateAccessorySet;
-    window.removeAccessorySet = removeAccessorySet;
-    window.toggleAccessoryInSet = toggleAccessoryInSet;
 
     syncSidebarButton();
     if (typeof updateLayerToolState === 'function') updateLayerToolState();
