@@ -353,54 +353,56 @@
       localStorage.setItem(cartKey, JSON.stringify(cart));
     }
 
-    function normalizeConfig(raw = {}) {
-      const bodyColors = Array.isArray(raw.bodyColors)
-        ? raw.bodyColors
-        : Array.isArray(raw.baseVariants)
-          ? raw.baseVariants
-          : [];
+   function normalizeConfig(raw = {}) {
+  const bodyColors = Array.isArray(raw.bodyColors)
+    ? raw.bodyColors
+    : Array.isArray(raw.baseVariants)
+      ? raw.baseVariants
+      : [];
 
-      const accessoriesRaw = Array.isArray(raw.accessories)
-        ? raw.accessories
-        : Array.isArray(raw.options)
-          ? raw.options
-          : Array.isArray(raw.optionGroups)
-            ? raw.optionGroups
-            : [];
+  const accessoriesRaw = Array.isArray(raw.accessories)
+    ? raw.accessories
+    : Array.isArray(raw.options)
+      ? raw.options
+      : Array.isArray(raw.optionGroups)
+        ? raw.optionGroups
+        : [];
 
-      const accessories = accessoriesRaw.map(accessory => {
-        const colors = Array.isArray(accessory.colors)
-          ? accessory.colors
-          : Array.isArray(accessory.variants)
-            ? accessory.variants
-            : [];
-        return { ...accessory, colors };
-      });
+  const accessories = accessoriesRaw.map(accessory => {
+    const colors = Array.isArray(accessory.colors)
+      ? accessory.colors
+      : Array.isArray(accessory.variants)
+        ? accessory.variants
+        : [];
 
-      let accessorySets = Array.isArray(raw.accessorySets) ? raw.accessorySets : [];
+    return { ...accessory, colors };
+  });
 
-      if (!accessorySets.length && accessories.length) {
-        accessorySets = [
-          { id: 'none', name: 'Fără accesoriu', price: 0, items: [] },
-          ...accessories.map(accessory => ({
-            id: accessory.id || accessory.name,
-            name: accessory.name || 'Accesoriu',
-            price: Number(accessory.price || 0),
-            items: [accessory.id || accessory.name]
-          }))
-        ];
-      } else if (accessorySets.length && !accessorySets.some(s => !s.items || !s.items.length)) {
-        accessorySets = [{ id: 'none', name: 'Fără accesoriu', price: 0, items: [] }, ...accessorySets];
-      }
+  const simpleAccessorySets = accessories.map(accessory => ({
+    id: accessory.id || accessory.name,
+    name: accessory.name || 'Accesoriu',
+    price: 0,
+    items: [accessory.id || accessory.name]
+  }));
 
-      return {
-        ...raw,
-        bodyColors,
-        questions: Array.isArray(raw.questions) ? raw.questions : [],
-        accessories,
-        accessorySets
-      };
-    }
+  const customSets = Array.isArray(raw.accessorySets)
+    ? raw.accessorySets
+    : [];
+
+  const accessorySets = [
+    { id: 'none', name: 'Fără accesoriu', price: 0, items: [] },
+    ...simpleAccessorySets,
+    ...customSets
+  ];
+
+  return {
+    ...raw,
+    bodyColors,
+    questions: Array.isArray(raw.questions) ? raw.questions : [],
+    accessories,
+    accessorySets
+  };
+}
 
     function getStyleCss(style = {}, type = 'accessory') {
       const x = type === 'body' ? 50 : Number(style.x ?? 50);
