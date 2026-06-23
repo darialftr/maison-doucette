@@ -911,40 +911,14 @@
       sidebar.classList.add('open');
       sidebarOverlay.classList.add('open');
       document.body.style.overflow = 'hidden';
-  
-    window.setPrimaryBodyColor = setPrimaryBodyColor;
-    window.setPrimaryAccessoryColor = setPrimaryAccessoryColor;
-    window.updateLayerStyle = updateLayerStyle;
-    window.updateQuestion = updateQuestion;
-    window.removeQuestion = removeQuestion;
-    window.addQuestionOption = addQuestionOption;
-    window.updateQuestionOption = updateQuestionOption;
-    window.removeQuestionOption = removeQuestionOption;
-    window.updateAccessorySet = updateAccessorySet;
-    window.removeAccessorySet = removeAccessorySet;
-    window.toggleAccessoryInSet = toggleAccessoryInSet;
-
-    syncSidebarButton();
+      syncSidebarButton();
     }
 
     function closeSidebar() {
       sidebar.classList.remove('open');
       sidebarOverlay.classList.remove('open');
       document.body.style.overflow = '';
-  
-    window.setPrimaryBodyColor = setPrimaryBodyColor;
-    window.setPrimaryAccessoryColor = setPrimaryAccessoryColor;
-    window.updateLayerStyle = updateLayerStyle;
-    window.updateQuestion = updateQuestion;
-    window.removeQuestion = removeQuestion;
-    window.addQuestionOption = addQuestionOption;
-    window.updateQuestionOption = updateQuestionOption;
-    window.removeQuestionOption = removeQuestionOption;
-    window.updateAccessorySet = updateAccessorySet;
-    window.removeAccessorySet = removeAccessorySet;
-    window.toggleAccessoryInSet = toggleAccessoryInSet;
-
-    syncSidebarButton();
+      syncSidebarButton();
     }
 
     function toggleSidebar() {
@@ -1623,11 +1597,48 @@
       renderAdminPreview();
     }
 
+    function normalizeOrder(list) {
+      if (!Array.isArray(list)) return;
+
+      list.forEach((item, index) => {
+        item.sortOrder = index + 1;
+      });
+    }
+
+    function moveItemToPosition(list, itemId, newPosition) {
+      if (!Array.isArray(list)) return;
+
+      const oldIndex = list.findIndex(item => item.id === itemId);
+      if (oldIndex === -1) return;
+
+      const [item] = list.splice(oldIndex, 1);
+      const targetIndex = Math.max(0, Math.min(list.length, Number(newPosition || 1) - 1));
+
+      list.splice(targetIndex, 0, item);
+      normalizeOrder(list);
+      renderCustomizerEditor();
+    }
+
+    function moveBodyColorToPosition(id, newPosition) {
+      moveItemToPosition(customizerConfig.bodyColors, id, newPosition);
+    }
+
+    function moveAccessoryToPosition(id, newPosition) {
+      moveItemToPosition(customizerConfig.accessories, id, newPosition);
+    }
+
+    function moveAccessoryColorToPosition(accessoryId, colorId, newPosition) {
+      const accessory = getAccessory(accessoryId);
+      if (!accessory || !Array.isArray(accessory.colors)) return;
+
+      moveItemToPosition(accessory.colors, colorId, newPosition);
+    }
+
     function renderBodyColors() {
       const box = document.getElementById('bodyColorsList');
       const ordered = [...customizerConfig.bodyColors].sort((a,b)=>Number(a.sortOrder ?? 999)-Number(b.sortOrder ?? 999));
 
-      box.innerHTML = ordered.map(item => {
+      box.innerHTML = ordered.map((item, index) => {
         item.style = item.style || defaultLayerStyle('body');
         return `
         <div class="color-row fade-in-admin">
@@ -1638,8 +1649,8 @@
 
           <div style="grid-column:1/-1;display:flex;gap:7px;flex-wrap:wrap;align-items:center;">
             <button class="mini-toggle ${item.isPrimary ? 'active' : ''}" onclick="setPrimaryBodyColor('${item.id}')" type="button">Primary</button>
-            <label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:.68rem;min-width:170px;">Ordine
-              <input type="range" min="0" max="20" value="${Number(item.sortOrder ?? 0)}" oninput="updateBodyColor('${item.id}','sortOrder',this.value)" style="width:110px;">
+            <label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:.68rem;min-width:118px;">Ordine
+              <input type="number" min="1" value="${Number(item.sortOrder || index + 1)}" onchange="moveBodyColorToPosition('${item.id}', this.value)" style="width:70px;">
             </label>
             <label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:.68rem;min-width:110px;">+RON
               <input type="number" value="${Number(item.price || 0)}" oninput="updateBodyColor('${item.id}','price',this.value)" style="width:74px;">
@@ -1665,7 +1676,7 @@
       const box = document.getElementById('accessoryGroupsList');
       const accessories = [...customizerConfig.accessories].sort((a,b)=>Number(a.sortOrder ?? 999)-Number(b.sortOrder ?? 999));
 
-      box.innerHTML = accessories.map(accessory => `
+      box.innerHTML = accessories.map((accessory, index) => `
         <div class="accessory-card fade-in-admin">
           <div class="accessory-head">
             <input value="${escapeHtml(accessory.name || '')}" oninput="updateAccessory('${accessory.id}', 'name', this.value)" placeholder="Nume accesoriu">
@@ -1674,13 +1685,13 @@
             <button class="x-btn" onclick="removeAccessory('${accessory.id}')" type="button">×</button>
           </div>
           <label style="text-transform:none;letter-spacing:0;font-size:.68rem;display:flex;align-items:center;gap:8px;">Ordine accesoriu
-            <input type="range" min="0" max="20" value="${Number(accessory.sortOrder ?? 0)}" oninput="updateAccessory('${accessory.id}', 'sortOrder', this.value)" style="width:160px;">
+            <input type="number" min="1" value="${Number(accessory.sortOrder || index + 1)}" onchange="moveAccessoryToPosition('${accessory.id}', this.value)" style="width:70px;">
           </label>
 
           <details class="collapse-block" open>
             <summary><span>Culori ${escapeHtml(accessory.name || 'accesoriu')}</span><span class="chev">›</span></summary>
             <div class="collapse-body color-list">
-            ${[...(accessory.colors || [])].sort((a,b)=>Number(a.sortOrder ?? 999)-Number(b.sortOrder ?? 999)).map(color => {
+            ${[...(accessory.colors || [])].sort((a,b)=>Number(a.sortOrder ?? 999)-Number(b.sortOrder ?? 999)).map((color, colorIndex) => {
               color.style = color.style || defaultLayerStyle('accessory');
               return `
               <div class="color-row fade-in-admin">
@@ -1691,8 +1702,8 @@
 
                 <div style="grid-column:1/-1;display:flex;gap:7px;flex-wrap:wrap;align-items:center;">
                   <button class="mini-toggle ${color.isPrimary ? 'active' : ''}" onclick="setPrimaryAccessoryColor('${accessory.id}','${color.id}')" type="button">Primary</button>
-                  <label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:.68rem;min-width:170px;">Ordine
-                    <input type="range" min="0" max="20" value="${Number(color.sortOrder ?? 0)}" oninput="updateAccessoryColor('${accessory.id}','${color.id}','sortOrder',this.value)" style="width:110px;">
+                  <label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:.68rem;min-width:118px;">Ordine
+                    <input type="number" min="1" value="${Number(color.sortOrder || colorIndex + 1)}" onchange="moveAccessoryColorToPosition('${accessory.id}', '${color.id}', this.value)" style="width:70px;">
                   </label>
                 </div>
 
@@ -2448,6 +2459,9 @@
     window.updateAccessorySet = updateAccessorySet;
     window.removeAccessorySet = removeAccessorySet;
     window.toggleAccessoryInSet = toggleAccessoryInSet;
+    window.moveBodyColorToPosition = moveBodyColorToPosition;
+    window.moveAccessoryToPosition = moveAccessoryToPosition;
+    window.moveAccessoryColorToPosition = moveAccessoryColorToPosition;
 
     syncSidebarButton();
     if (typeof updateLayerToolState === 'function') updateLayerToolState();
