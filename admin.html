@@ -345,16 +345,6 @@
       font-size:.7rem;
     }
 
-
-
-    .layer-field-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;grid-column:1/-1;margin-top:6px;background:#fff7fa;border:1px solid rgba(125,72,88,.10);border-radius:14px;padding:8px}
-    .layer-field-grid label{font-size:.55rem;letter-spacing:.08em}
-    .layer-field-grid input[type="number"],.layer-field-grid input[type="range"]{padding:7px;font-size:.7rem}
-    .mini-toggle{min-height:30px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--rose-dark);font-size:.68rem;font-weight:900;padding:5px 8px}
-    .mini-toggle.active{background:linear-gradient(135deg,var(--rose),var(--pink2));color:#fff;border-color:transparent}
-    .fade-in-admin{animation:adminFadeIn .28s cubic-bezier(.22,.61,.36,1) both}
-    @keyframes adminFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
     @media(max-width:1180px){
       .app{grid-template-columns:1fr}
       .mobile-top{display:flex}
@@ -1599,7 +1589,6 @@
 
     function normalizeOrder(list) {
       if (!Array.isArray(list)) return;
-
       list.forEach((item, index) => {
         item.sortOrder = index + 1;
       });
@@ -1607,7 +1596,6 @@
 
     function moveItemToPosition(list, itemId, newPosition) {
       if (!Array.isArray(list)) return;
-
       const oldIndex = list.findIndex(item => item.id === itemId);
       if (oldIndex === -1) return;
 
@@ -1630,98 +1618,55 @@
     function moveAccessoryColorToPosition(accessoryId, colorId, newPosition) {
       const accessory = getAccessory(accessoryId);
       if (!accessory || !Array.isArray(accessory.colors)) return;
-
       moveItemToPosition(accessory.colors, colorId, newPosition);
     }
 
     function renderBodyColors() {
       const box = document.getElementById('bodyColorsList');
-      const ordered = [...customizerConfig.bodyColors].sort((a,b)=>Number(a.sortOrder ?? 999)-Number(b.sortOrder ?? 999));
 
-      box.innerHTML = ordered.map((item, index) => {
-        item.style = item.style || defaultLayerStyle('body');
-        return `
-        <div class="color-row fade-in-admin">
-          <button class="color-dot" style="background:${escapeHtml(item.hex || '#f4efe7')}" onclick="selectLayerInPreview('body','${item.id}')" type="button" title="Selectează în preview"></button>
+      box.innerHTML = customizerConfig.bodyColors.map(item => `
+        <div class="color-row">
+          <button class="color-dot" style="background:${escapeHtml(item.hex || '#f4efe7')}" onclick="selectLayerInPreview('body','${item.id}')" type="button"></button>
           <input value="${escapeHtml(item.name || '')}" oninput="updateBodyColor('${item.id}','name',this.value)" placeholder="Nume">
           <input value="${escapeHtml(item.hex || '')}" oninput="updateBodyColor('${item.id}','hex',this.value)" placeholder="#hex">
           <button class="x-btn" onclick="removeBodyColor('${item.id}')" type="button">×</button>
-
-          <div style="grid-column:1/-1;display:flex;gap:7px;flex-wrap:wrap;align-items:center;">
-            <button class="mini-toggle ${item.isPrimary ? 'active' : ''}" onclick="setPrimaryBodyColor('${item.id}')" type="button">Primary</button>
-            <label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:.68rem;min-width:118px;">Ordine
-              <input type="number" min="1" value="${Number(item.sortOrder || index + 1)}" onchange="moveBodyColorToPosition('${item.id}', this.value)" style="width:70px;">
-            </label>
-            <label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:.68rem;min-width:110px;">+RON
-              <input type="number" value="${Number(item.price || 0)}" oninput="updateBodyColor('${item.id}','price',this.value)" style="width:74px;">
-            </label>
-          </div>
-
-          <div class="layer-field-grid">
-            <label>Y % <input type="number" step="1" value="${Number(item.style.y ?? 56)}" oninput="updateLayerStyle('body','${item.id}','y',this.value)"></label>
-            <label>Mărime <input type="number" step="5" value="${Number(item.style.width ?? 420)}" oninput="updateLayerStyle('body','${item.id}','width',this.value)"></label>
-            <label>Z <input type="range" min="1" max="30" value="${Number(item.style.zIndex ?? 4)}" oninput="updateLayerStyle('body','${item.id}','zIndex',this.value)"></label>
-          </div>
-
           <label class="full upload-box" style="grid-column:1/-1;">
             <span>Imagine body</span>
             ${imagePreview(item.src, 'Imagine body încărcată')}
             <input type="file" accept="image/*" onchange="uploadBodyImage('${item.id}', this)">
           </label>
-        </div>`;
-      }).join('') || `<div class="meta">Apasă + Culoare ca să adaugi body.</div>`;
+        </div>
+      `).join('') || `<div class="meta">Apasă + Culoare ca să adaugi body.</div>`;
     }
 
     function renderAccessories() {
       const box = document.getElementById('accessoryGroupsList');
-      const accessories = [...customizerConfig.accessories].sort((a,b)=>Number(a.sortOrder ?? 999)-Number(b.sortOrder ?? 999));
 
-      box.innerHTML = accessories.map((accessory, index) => `
-        <div class="accessory-card fade-in-admin">
+      box.innerHTML = customizerConfig.accessories.map(accessory => `
+        <div class="accessory-card">
           <div class="accessory-head">
             <input value="${escapeHtml(accessory.name || '')}" oninput="updateAccessory('${accessory.id}', 'name', this.value)" placeholder="Nume accesoriu">
             <input type="number" value="${Number(accessory.price || 0)}" oninput="updateAccessory('${accessory.id}', 'price', this.value)" placeholder="+RON">
             <button class="add-text-btn" onclick="addAccessoryColor('${accessory.id}')" type="button">+ Culoare</button>
             <button class="x-btn" onclick="removeAccessory('${accessory.id}')" type="button">×</button>
           </div>
-          <label style="text-transform:none;letter-spacing:0;font-size:.68rem;display:flex;align-items:center;gap:8px;">Ordine accesoriu
-            <input type="number" min="1" value="${Number(accessory.sortOrder || index + 1)}" onchange="moveAccessoryToPosition('${accessory.id}', this.value)" style="width:70px;">
-          </label>
 
           <details class="collapse-block" open>
             <summary><span>Culori ${escapeHtml(accessory.name || 'accesoriu')}</span><span class="chev">›</span></summary>
             <div class="collapse-body color-list">
-            ${[...(accessory.colors || [])].sort((a,b)=>Number(a.sortOrder ?? 999)-Number(b.sortOrder ?? 999)).map((color, colorIndex) => {
-              color.style = color.style || defaultLayerStyle('accessory');
-              return `
-              <div class="color-row fade-in-admin">
-                <button class="color-dot" style="background:${escapeHtml(color.hex || '#eeb8c8')}" onclick="selectLayerInPreview('accessory','${color.id}')" type="button" title="Selectează în preview"></button>
+            ${(accessory.colors || []).map(color => `
+              <div class="color-row">
+                <button class="color-dot" style="background:${escapeHtml(color.hex || '#eeb8c8')}" onclick="selectLayerInPreview('accessory','${color.id}')" type="button"></button>
                 <input value="${escapeHtml(color.name || '')}" oninput="updateAccessoryColor('${accessory.id}','${color.id}','name',this.value)" placeholder="Nume">
                 <input value="${escapeHtml(color.hex || '')}" oninput="updateAccessoryColor('${accessory.id}','${color.id}','hex',this.value)" placeholder="#hex">
                 <button class="x-btn" onclick="removeAccessoryColor('${accessory.id}','${color.id}')" type="button">×</button>
-
-                <div style="grid-column:1/-1;display:flex;gap:7px;flex-wrap:wrap;align-items:center;">
-                  <button class="mini-toggle ${color.isPrimary ? 'active' : ''}" onclick="setPrimaryAccessoryColor('${accessory.id}','${color.id}')" type="button">Primary</button>
-                  <label style="display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;font-size:.68rem;min-width:118px;">Ordine
-                    <input type="number" min="1" value="${Number(color.sortOrder || colorIndex + 1)}" onchange="moveAccessoryColorToPosition('${accessory.id}', '${color.id}', this.value)" style="width:70px;">
-                  </label>
-                </div>
-
-                <div class="layer-field-grid">
-                  <label>X % <input type="number" step="1" value="${Number(color.style.x ?? 50)}" oninput="updateLayerStyle('accessory','${color.id}','x',this.value)"></label>
-                  <label>Y % <input type="number" step="1" value="${Number(color.style.y ?? 50)}" oninput="updateLayerStyle('accessory','${color.id}','y',this.value)"></label>
-                  <label>Mărime <input type="number" step="5" value="${Number(color.style.width ?? 160)}" oninput="updateLayerStyle('accessory','${color.id}','width',this.value)"></label>
-                  <label>Rotire <input type="number" step="1" value="${Number(color.style.rotate ?? 0)}" oninput="updateLayerStyle('accessory','${color.id}','rotate',this.value)"></label>
-                  <label style="grid-column:span 2;">Z / layer order <input type="range" min="1" max="30" value="${Number(color.style.zIndex ?? 8)}" oninput="updateLayerStyle('accessory','${color.id}','zIndex',this.value)"></label>
-                </div>
-
                 <label class="full upload-box" style="grid-column:1/-1;">
                   <span>Imagine accesoriu</span>
                   ${imagePreview(color.src, 'Imagine accesoriu încărcată')}
                   <input type="file" accept="image/*" onchange="uploadAccessoryImage('${accessory.id}','${color.id}', this)">
                 </label>
-              </div>`;
-            }).join('') || `<div class="meta">Apasă + Culoare pentru acest accesoriu.</div>`}
+              </div>
+            `).join('') || `<div class="meta">Apasă + Culoare pentru acest accesoriu.</div>`}
             </div>
           </details>
         </div>
@@ -1918,9 +1863,6 @@
         name: 'Culoare nouă',
         hex: '#f4efe7',
         src: '',
-        price: 0,
-        isPrimary: customizerConfig.bodyColors.length === 0,
-        sortOrder: customizerConfig.bodyColors.length,
         style: defaultLayerStyle('body')
       });
       renderCustomizerEditor();
@@ -1931,7 +1873,6 @@
         id: uid('accessory'),
         name: 'Accesoriu nou',
         price: 0,
-        sortOrder: customizerConfig.accessories.length,
         colors: []
       });
       renderCustomizerEditor();
@@ -2023,26 +1964,8 @@
     function updateBodyColor(id, field, value) {
       const item = getBodyColor(id);
       if (!item) return;
-      if (['price','sortOrder'].includes(field)) item[field] = Number(value || 0);
-      else item[field] = value;
-      if (field === 'hex' && value && !String(value).startsWith('#')) item[field] = '#' + value;
+      item[field] = value;
       renderAdminPreview();
-    }
-
-    function setPrimaryBodyColor(id) {
-      customizerConfig.bodyColors.forEach(item => item.isPrimary = item.id === id);
-      renderCustomizerEditor();
-    }
-
-    function updateLayerStyle(type, id, field, value) {
-      let layer = null;
-      if (type === 'body') layer = getBodyColor(id);
-      if (type === 'accessory') layer = getAccessoryColor(id)?.color || null;
-      if (!layer) return;
-      layer.style = layer.style || defaultLayerStyle(type);
-      if (type === 'body' && field === 'x') layer.style.x = 50;
-      else layer.style[field] = Number(value || 0);
-      if (selectedLayer && selectedLayer.id === id) renderAdminPreview();
     }
 
     function removeBodyColor(id) {
@@ -2064,7 +1987,7 @@
     function updateAccessory(id, field, value) {
       const item = getAccessory(id);
       if (!item) return;
-      item[field] = ['price','sortOrder'].includes(field) ? Number(value || 0) : value;
+      item[field] = field === 'price' ? Number(value || 0) : value;
       renderAdminPreview();
     }
 
@@ -2087,8 +2010,6 @@
         name: 'Culoare nouă',
         hex: '#eeb8c8',
         src: '',
-        isPrimary: accessory.colors.length === 0,
-        sortOrder: accessory.colors.length,
         style: defaultLayerStyle('accessory')
       });
 
@@ -2099,17 +2020,9 @@
       const accessory = getAccessory(accessoryId);
       const color = accessory?.colors?.find(c => c.id === colorId);
       if (!color) return;
-      if (['sortOrder'].includes(field)) color[field] = Number(value || 0);
-      else color[field] = value;
-      if (field === 'hex' && value && !String(value).startsWith('#')) color[field] = '#' + value;
-      renderAdminPreview();
-    }
 
-    function setPrimaryAccessoryColor(accessoryId, colorId) {
-      const accessory = getAccessory(accessoryId);
-      if (!accessory) return;
-      (accessory.colors || []).forEach(color => color.isPrimary = color.id === colorId);
-      renderCustomizerEditor();
+      color[field] = value;
+      renderAdminPreview();
     }
 
     function removeAccessoryColor(accessoryId, colorId) {
@@ -2446,22 +2359,6 @@
     window.updateAccessoryColor = updateAccessoryColor;
     window.removeAccessoryColor = removeAccessoryColor;
     window.uploadAccessoryImage = uploadAccessoryImage;
-
-
-    window.setPrimaryBodyColor = setPrimaryBodyColor;
-    window.setPrimaryAccessoryColor = setPrimaryAccessoryColor;
-    window.updateLayerStyle = updateLayerStyle;
-    window.updateQuestion = updateQuestion;
-    window.removeQuestion = removeQuestion;
-    window.addQuestionOption = addQuestionOption;
-    window.updateQuestionOption = updateQuestionOption;
-    window.removeQuestionOption = removeQuestionOption;
-    window.updateAccessorySet = updateAccessorySet;
-    window.removeAccessorySet = removeAccessorySet;
-    window.toggleAccessoryInSet = toggleAccessoryInSet;
-    window.moveBodyColorToPosition = moveBodyColorToPosition;
-    window.moveAccessoryToPosition = moveAccessoryToPosition;
-    window.moveAccessoryColorToPosition = moveAccessoryColorToPosition;
 
     syncSidebarButton();
     if (typeof updateLayerToolState === 'function') updateLayerToolState();
