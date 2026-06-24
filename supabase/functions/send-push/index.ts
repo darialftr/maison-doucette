@@ -11,7 +11,7 @@ const supabaseUrl = Deno.env.get('SUPABASE_URL') || '';
 const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
 const vapidPublicKey = Deno.env.get('VAPID_PUBLIC_KEY') || '';
 const vapidPrivateKey = Deno.env.get('VAPID_PRIVATE_KEY') || '';
-const vapidSubject = Deno.env.get('VAPID_SUBJECT') || 'mailto:contact@maisondoucette.com';
+const vapidSubject = Deno.env.get('VAPID_SUBJECT') || 'mailto:maisondoucette.dd@gmail.com';
 const webhookSecret = Deno.env.get('WEBHOOK_SECRET') || '';
 
 webpush.setVapidDetails(vapidSubject, vapidPublicKey, vapidPrivateKey);
