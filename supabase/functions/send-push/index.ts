@@ -103,7 +103,10 @@ Deno.serve(async (req) => {
     })
   );
 
-  return new Response(JSON.stringify({ sent: results.length, results }), {
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-  });
+  return new Response(JSON.stringify({ 
+  sent: results.length, 
+  results 
+}, null, 2), {
+  headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+});
 });
