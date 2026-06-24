@@ -2678,11 +2678,11 @@
           return;
         }
 
-        if (VAPID_PUBLIC_KEY === 'BNGfsjXLakW0eyJvpS5FxjszTZL-B1w7YM2M1u9G2zdurw1SRWfABEnoXXsWTR6Ni0RhCxrjzVQwPIpsNO6I2Bk') {
-          if (status) status.textContent = 'Lipsește VAPID_PUBLIC_KEY în admin.html.';
-          alert('Trebuie să pui VAPID_PUBLIC_KEY în admin.html înainte să activezi push real.');
-          return;
-        }
+       if (!VAPID_PUBLIC_KEY || VAPID_PUBLIC_KEY.includes('PASTE_VAPID_PUBLIC_KEY_HERE')) {
+  if (status) status.textContent = 'Lipsește VAPID_PUBLIC_KEY în admin.html.';
+  alert('Trebuie să pui VAPID_PUBLIC_KEY în admin.html înainte să activezi push real.');
+  return;
+}
 
         const registration = await navigator.serviceWorker.register('/sw.js');
         await navigator.serviceWorker.ready;
