@@ -312,7 +312,7 @@
     .check-row input{width:auto;padding:0}
 
     .accessory-head{display:grid;grid-template-columns:1fr 78px auto auto;gap:8px;align-items:center}
-    .preview-editor-box{position:relative;width:min(100%,500px);aspect-ratio:.92/1;min-height:0;margin:0 auto;border-radius:24px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(180deg,#f8f2f4,#eee2e7);box-shadow:inset 0 1px 0 rgba(255,255,255,.8);touch-action:none}
+    .preview-editor-box{position:relative;width:min(100%,420px);aspect-ratio:.92/1;min-height:0;margin:0 auto;border-radius:24px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(180deg,#f8f2f4,#eee2e7);box-shadow:inset 0 1px 0 rgba(255,255,255,.8);touch-action:none}
     .preview-empty{position:absolute;inset:auto 16px 16px;background:rgba(255,255,255,.82);border:1px solid var(--line);border-radius:16px;padding:10px;text-align:center;color:var(--muted);font-size:.76rem}
     .admin-layer{position:absolute;max-width:none;user-select:none;cursor:grab;transform-origin:center center;filter:drop-shadow(0 15px 24px rgba(0,0,0,.12))}
     .admin-layer.selected{outline:2px dashed rgba(186,96,124,.7);outline-offset:6px}
@@ -366,15 +366,17 @@
 
 
     .depth-btn{
-      min-height:34px;
-      padding:7px 10px;
-      border-radius:999px;
+      min-height:54px;
+      min-width:96px;
+      padding:12px 18px;
+      border-radius:18px;
       border:1px solid var(--line);
       background:#fff;
       color:var(--rose-dark);
-      font-size:.72rem;
+      font-size:1.02rem;
       font-weight:900;
-      box-shadow:0 8px 16px rgba(90,45,58,.06);
+      box-shadow:0 12px 24px rgba(90,45,58,.10);
+      transition:.18s ease;
     }
     .depth-btn:hover{background:#fff7fa;transform:translateY(-1px)}
     .notify-permission{
@@ -385,6 +387,23 @@
       margin-top:10px;
     }
     .phone-safe-grid{min-width:0}
+
+    .push-status{
+      display:block;
+      color:var(--text2);
+      font-size:.74rem;
+      line-height:1.45;
+      margin-top:4px;
+    }
+    .push-warning{
+      padding:9px 11px;
+      border-radius:14px;
+      background:#fff7fa;
+      border:1px solid var(--line);
+      color:var(--text2);
+      font-size:.72rem;
+      line-height:1.45;
+    }
 
     @media(max-width:1180px){
       .app{grid-template-columns:1fr}
@@ -703,12 +722,12 @@
                   <button class="round-action rotate-only" id="rotateLeftBtn" type="button" title="Înclină stânga">↺</button>
                   <span id="selectedLayerInfo">Nimic selectat</span>
                   <button class="round-action rotate-only" id="rotateRightBtn" type="button" title="Înclină dreapta">↻</button>
-                  <button class="depth-btn" id="sendBackwardBtn" type="button" title="Trimite mai în spate">↓ Spate</button>
-                  <button class="depth-btn" id="bringForwardBtn" type="button" title="Adu mai în față">↑ Față</button>
+                  <button class="depth-btn" id="sendBackwardBtn" type="button" title="Trimite mai în spate">↓<br>Spate</button>
+                  <button class="depth-btn" id="bringForwardBtn" type="button" title="Adu mai în față">↑<br>Față</button>
                   <button class="round-action" id="scaleUpBtn" type="button" title="Mărește">+</button>
                 </div>
 
-                <p class="meta">Click pe bulină ca să apară imaginea în preview. Trage imaginea ca să o muți. Cu + / − îi modifici mărimea. Pentru accesorii ai și ↺ / ↻ pentru înclinare. Cu ↑ Față / ↓ Spate alegi ce imagine se vede peste alta. Body rămâne mereu centrat pe orizontală.</p>
+                <p class="meta">Click pe bulină ca să apară imaginea în preview. Trage imaginea ca să o muți. Cu + / − îi modifici mărimea. Pentru accesorii ai și ↺ / ↻ pentru înclinare. Body rămâne mereu centrat pe orizontală.</p>
               </div>
             </div>
 
@@ -822,8 +841,10 @@
               <h2>Notificări</h2>
               <p>Notificări interne pentru admin. Pe telefon funcționează ca notificări de browser doar dacă pagina de admin este deschisă sau dacă browserul permite notificări pentru site.</p>
               <div class="notify-permission">
-                <button class="btn btn-secondary" id="enableBrowserNotificationsBtn" type="button">Activează notificări browser</button>
-                <span class="meta" id="browserNotificationStatus">Notificările browser nu sunt activate.</span>
+                <button class="btn btn-primary" id="enablePushBtn" type="button">Activează notificările pe telefon</button>
+                <button class="btn btn-secondary" id="enableBrowserNotificationsBtn" type="button">Testează notificare locală</button>
+                <span class="push-status" id="browserNotificationStatus">Notificările nu sunt activate.</span>
+                <div class="push-warning">Pentru notificări reale când adminul nu este deschis, trebuie să existe și fișierul <strong>sw.js</strong> în root, plus Edge Function-ul <strong>send-push</strong> și cheile VAPID setate.</div>
               </div>
             </div>
             <button class="btn btn-secondary" id="reloadNotificationsBtn" type="button">Reîncarcă</button>
@@ -1780,7 +1801,7 @@
           <div class="layer-field-grid">
             <label>Y % <input type="number" step="1" value="${Number(item.style.y ?? 56)}" oninput="updateLayerStyle('body','${item.id}','y',this.value)"></label>
             <label>Mărime <input type="number" step="5" value="${Number(item.style.width ?? 420)}" oninput="updateLayerStyle('body','${item.id}','width',this.value)"></label>
-            <label>Layer <span class="meta">folosește ↑ Față / ↓ Spate în preview</span></label>
+            <label>Layer</label>
           </div>
 
           <label class="full upload-box" style="grid-column:1/-1;">
@@ -1835,7 +1856,7 @@
                   <label>Y % <input type="number" step="1" value="${Number(color.style.y ?? 50)}" oninput="updateLayerStyle('accessory','${color.id}','y',this.value)"></label>
                   <label>Mărime <input type="number" step="5" value="${Number(color.style.width ?? 160)}" oninput="updateLayerStyle('accessory','${color.id}','width',this.value)"></label>
                   <label>Rotire <input type="number" step="1" value="${Number(color.style.rotate ?? 0)}" oninput="updateLayerStyle('accessory','${color.id}','rotate',this.value)"></label>
-                  <label>Layer <span class="meta">folosește ↑ Față / ↓ Spate în preview</span></label>
+                  <label>Layer</label>
                 </div>
 
                 <label class="full upload-box" style="grid-column:1/-1;">
@@ -2627,6 +2648,80 @@
         sendBrowserNotification('Maison Doucette Admin', 'Notificările sunt active pe acest dispozitiv.');
       }
     }
+
+    const VAPID_PUBLIC_KEY = 'BNGfsjXLakW0eyJvpS5FxjszTZL-B1w7YM2M1u9G2zdurw1SRWfABEnoXXsWTR6Ni0RhCxrjzVQwPIpsNO6I2Bk';
+
+    function urlBase64ToUint8Array(base64String) {
+      const padding = '='.repeat((4 - base64String.length % 4) % 4);
+      const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+      const rawData = window.atob(base64);
+      const outputArray = new Uint8Array(rawData.length);
+
+      for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+      }
+
+      return outputArray;
+    }
+
+    async function registerPushNotifications() {
+      const status = document.getElementById('browserNotificationStatus');
+
+      try {
+        if (!('serviceWorker' in navigator)) {
+          if (status) status.textContent = 'Browserul nu suportă Service Worker.';
+          return;
+        }
+
+        if (!('PushManager' in window)) {
+          if (status) status.textContent = 'Browserul nu suportă Push API.';
+          return;
+        }
+
+        if (VAPID_PUBLIC_KEY === 'BNGfsjXLakW0eyJvpS5FxjszTZL-B1w7YM2M1u9G2zdurw1SRWfABEnoXXsWTR6Ni0RhCxrjzVQwPIpsNO6I2Bk') {
+          if (status) status.textContent = 'Lipsește VAPID_PUBLIC_KEY în admin.html.';
+          alert('Trebuie să pui VAPID_PUBLIC_KEY în admin.html înainte să activezi push real.');
+          return;
+        }
+
+        const registration = await navigator.serviceWorker.register('/sw.js');
+        await navigator.serviceWorker.ready;
+
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') {
+          if (status) status.textContent = 'Notificările au fost refuzate sau blocate.';
+          return;
+        }
+
+        let subscription = await registration.pushManager.getSubscription();
+
+        if (!subscription) {
+          subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+          });
+        }
+
+        const { data: authData } = await db.auth.getUser();
+        const userId = authData?.user?.id || null;
+
+        const { error } = await db.from('push_subscriptions').upsert({
+          user_id: userId,
+          endpoint: subscription.endpoint,
+          subscription: subscription.toJSON()
+        }, { onConflict: 'endpoint' });
+
+        if (error) throw error;
+
+        if (status) status.textContent = 'Notificările PUSH sunt active pe acest dispozitiv.';
+        sendBrowserNotification('Maison Doucette', 'Notificările au fost activate pe acest dispozitiv.');
+      } catch (error) {
+        console.error('Activarea push a eșuat:', error);
+        if (status) status.textContent = 'Activarea push a eșuat: ' + (error.message || 'eroare necunoscută');
+      }
+    }
+
+    document.getElementById('enablePushBtn')?.addEventListener('click', registerPushNotifications);
 
     async function addAdminNotification(title, message, type = 'admin') {
       try {
