@@ -364,6 +364,28 @@
     .order-number input{width:64px;padding:7px 8px;font-size:.72rem;text-align:center}
     .compact-inline-tools{grid-column:1/-1;display:flex;gap:7px;flex-wrap:wrap;align-items:center}
 
+
+    .depth-btn{
+      min-height:34px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--rose-dark);
+      font-size:.72rem;
+      font-weight:900;
+      box-shadow:0 8px 16px rgba(90,45,58,.06);
+    }
+    .depth-btn:hover{background:#fff7fa;transform:translateY(-1px)}
+    .notify-permission{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .phone-safe-grid{min-width:0}
+
     @media(max-width:1180px){
       .app{grid-template-columns:1fr}
       .mobile-top{display:flex}
@@ -398,6 +420,13 @@
       .color-row{grid-template-columns:28px 1fr 68px 28px}
       .accessory-head{grid-template-columns:1fr}
       .add-text-btn{justify-content:center}
+      .customizer-col{max-height:none;overflow:visible;padding-right:0}
+      .layer-field-grid{grid-template-columns:1fr}
+      .compact-inline-tools{align-items:stretch}
+      .order-number{width:100%;justify-content:space-between}
+      .order-number input{width:82px}
+      .mini-tools{position:sticky;bottom:8px;z-index:20}
+      .preview-editor-box{border-radius:20px}
     }
   </style>
 </head>
@@ -674,10 +703,12 @@
                   <button class="round-action rotate-only" id="rotateLeftBtn" type="button" title="Înclină stânga">↺</button>
                   <span id="selectedLayerInfo">Nimic selectat</span>
                   <button class="round-action rotate-only" id="rotateRightBtn" type="button" title="Înclină dreapta">↻</button>
+                  <button class="depth-btn" id="sendBackwardBtn" type="button" title="Trimite mai în spate">↓ Spate</button>
+                  <button class="depth-btn" id="bringForwardBtn" type="button" title="Adu mai în față">↑ Față</button>
                   <button class="round-action" id="scaleUpBtn" type="button" title="Mărește">+</button>
                 </div>
 
-                <p class="meta">Click pe bulină ca să apară imaginea în preview. Trage imaginea ca să o muți. Cu + / − îi modifici mărimea. Pentru accesorii ai și ↺ / ↻ ca să modifici înclinarea ca la o poză. Body rămâne mereu centrat pe orizontală.</p>
+                <p class="meta">Click pe bulină ca să apară imaginea în preview. Trage imaginea ca să o muți. Cu + / − îi modifici mărimea. Pentru accesorii ai și ↺ / ↻ pentru înclinare. Cu ↑ Față / ↓ Spate alegi ce imagine se vede peste alta. Body rămâne mereu centrat pe orizontală.</p>
               </div>
             </div>
 
@@ -789,7 +820,11 @@
           <div class="panel-head">
             <div>
               <h2>Notificări</h2>
-              <p>Notificări interne pentru admin.</p>
+              <p>Notificări interne pentru admin. Pe telefon funcționează ca notificări de browser doar dacă pagina de admin este deschisă sau dacă browserul permite notificări pentru site.</p>
+              <div class="notify-permission">
+                <button class="btn btn-secondary" id="enableBrowserNotificationsBtn" type="button">Activează notificări browser</button>
+                <span class="meta" id="browserNotificationStatus">Notificările browser nu sunt activate.</span>
+              </div>
             </div>
             <button class="btn btn-secondary" id="reloadNotificationsBtn" type="button">Reîncarcă</button>
           </div>
@@ -1017,6 +1052,8 @@
 
         showAdmin();
         await loadAll();
+        await logAdminLogin(email);
+        startAdminPolling();
       } catch (error) {
         showMessage(authMessage, error.message || 'Autentificarea a eșuat.', 'error');
       } finally {
@@ -1034,6 +1071,7 @@
       if (data?.session) {
         showAdmin();
         await loadAll();
+        startAdminPolling();
       } else {
         showAuth();
       }
@@ -1047,6 +1085,9 @@
         loadMessages(),
         loadNotifications()
       ]);
+      lastSeenOrderId = ordersCache?.[0]?.id || lastSeenOrderId;
+      lastSeenMessageId = messagesCache?.[0]?.id || lastSeenMessageId;
+      getBrowserNotificationStatus();
       loadDashboard();
     }
 
@@ -1739,7 +1780,7 @@
           <div class="layer-field-grid">
             <label>Y % <input type="number" step="1" value="${Number(item.style.y ?? 56)}" oninput="updateLayerStyle('body','${item.id}','y',this.value)"></label>
             <label>Mărime <input type="number" step="5" value="${Number(item.style.width ?? 420)}" oninput="updateLayerStyle('body','${item.id}','width',this.value)"></label>
-            <label>Z <input type="number" step="1" min="1" max="30" value="${Number(item.style.zIndex ?? 4)}" oninput="updateLayerStyle('body','${item.id}','zIndex',this.value)"></label>
+            <label>Layer <span class="meta">folosește ↑ Față / ↓ Spate în preview</span></label>
           </div>
 
           <label class="full upload-box" style="grid-column:1/-1;">
@@ -1794,7 +1835,7 @@
                   <label>Y % <input type="number" step="1" value="${Number(color.style.y ?? 50)}" oninput="updateLayerStyle('accessory','${color.id}','y',this.value)"></label>
                   <label>Mărime <input type="number" step="5" value="${Number(color.style.width ?? 160)}" oninput="updateLayerStyle('accessory','${color.id}','width',this.value)"></label>
                   <label>Rotire <input type="number" step="1" value="${Number(color.style.rotate ?? 0)}" oninput="updateLayerStyle('accessory','${color.id}','rotate',this.value)"></label>
-                  <label>Z <input type="number" step="1" min="1" max="30" value="${Number(color.style.zIndex ?? 8)}" oninput="updateLayerStyle('accessory','${color.id}','zIndex',this.value)"></label>
+                  <label>Layer <span class="meta">folosește ↑ Față / ↓ Spate în preview</span></label>
                 </div>
 
                 <label class="full upload-box" style="grid-column:1/-1;">
@@ -2008,6 +2049,20 @@
 
     document.getElementById('rotateLeftBtn').addEventListener('click', () => rotateSelectedAccessory(-8));
     document.getElementById('rotateRightBtn').addEventListener('click', () => rotateSelectedAccessory(8));
+
+    function changeSelectedLayerDepth(delta) {
+      const layer = getSelectedLayerObject();
+      if (!layer) return;
+
+      layer.style = layer.style || defaultLayerStyle(selectedLayer?.type || 'accessory');
+      const current = Number(layer.style.zIndex || (selectedLayer?.type === 'body' ? 4 : 8));
+      layer.style.zIndex = Math.max(1, Math.min(50, current + delta));
+      renderAdminPreview();
+    }
+
+    document.getElementById('bringForwardBtn').addEventListener('click', () => changeSelectedLayerDepth(1));
+    document.getElementById('sendBackwardBtn').addEventListener('click', () => changeSelectedLayerDepth(-1));
+
 
     document.getElementById('addBodyColorBtn').addEventListener('click', () => {
       customizerConfig.bodyColors.push({
@@ -2526,6 +2581,129 @@
       `).join('');
     }
 
+
+    function getBrowserNotificationStatus() {
+      const el = document.getElementById('browserNotificationStatus');
+      if (!el) return;
+
+      if (!('Notification' in window)) {
+        el.textContent = 'Browserul acesta nu suportă notificări.';
+        return;
+      }
+
+      if (Notification.permission === 'granted') {
+        el.textContent = 'Notificările browser sunt active.';
+      } else if (Notification.permission === 'denied') {
+        el.textContent = 'Notificările sunt blocate din setările browserului.';
+      } else {
+        el.textContent = 'Apasă butonul ca să permiți notificările browser.';
+      }
+    }
+
+    function sendBrowserNotification(title, body = '') {
+      if (!('Notification' in window)) return;
+      if (Notification.permission !== 'granted') return;
+
+      try {
+        new Notification(title, {
+          body,
+          icon: 'images/logo.jpg'
+        });
+      } catch (error) {
+        console.warn('Notificarea browser nu a putut fi trimisă:', error);
+      }
+    }
+
+    async function requestBrowserNotifications() {
+      if (!('Notification' in window)) {
+        getBrowserNotificationStatus();
+        return;
+      }
+
+      const result = await Notification.requestPermission();
+      getBrowserNotificationStatus();
+
+      if (result === 'granted') {
+        sendBrowserNotification('Maison Doucette Admin', 'Notificările sunt active pe acest dispozitiv.');
+      }
+    }
+
+    async function addAdminNotification(title, message, type = 'admin') {
+      try {
+        await db.from('notifications').insert({
+          title,
+          message,
+          is_read: false
+        });
+      } catch (error) {
+        console.warn('Nu am putut salva notificarea:', error);
+      }
+    }
+
+    async function logAdminLogin(email) {
+      await addAdminNotification(
+        'Login admin',
+        `Cineva s-a logat în admin${email ? ': ' + email : ''}.`,
+        'admin_login'
+      );
+      sendBrowserNotification('Login admin', 'A avut loc o autentificare în panoul Maison Doucette.');
+    }
+
+    let lastSeenOrderId = null;
+    let lastSeenMessageId = null;
+    let adminPollingStarted = false;
+
+    function startAdminPolling() {
+      if (adminPollingStarted) return;
+      adminPollingStarted = true;
+
+      setInterval(async () => {
+        try {
+          const { data: latestOrders } = await db.from('orders').select('*').order('created_at', { ascending:false }).limit(1);
+          const latestOrder = latestOrders?.[0];
+
+          if (latestOrder?.id && lastSeenOrderId && String(latestOrder.id) !== String(lastSeenOrderId)) {
+            sendBrowserNotification(
+              'Comandă nouă Maison Doucette',
+              `${latestOrder.customer_name || 'Client'} • ${formatMoney(latestOrder.total || 0)}`
+            );
+            await addAdminNotification(
+              'Comandă nouă',
+              `${latestOrder.customer_name || 'Client'} a plasat o comandă de ${formatMoney(latestOrder.total || 0)}.`,
+              'new_order'
+            );
+            await loadOrders();
+            await loadNotifications();
+          }
+
+          if (latestOrder?.id) lastSeenOrderId = latestOrder.id;
+
+          const { data: latestMessages } = await db.from('contact_messages').select('*').order('created_at', { ascending:false }).limit(1);
+          const latestMessage = latestMessages?.[0];
+
+          if (latestMessage?.id && lastSeenMessageId && String(latestMessage.id) !== String(lastSeenMessageId)) {
+            sendBrowserNotification(
+              'Mesaj nou Maison Doucette',
+              `${latestMessage.name || 'Anonim'} • ${latestMessage.subject || 'Contact'}`
+            );
+            await addAdminNotification(
+              'Mesaj nou',
+              `${latestMessage.name || 'Anonim'} a trimis un mesaj prin formularul de contact.`,
+              'new_message'
+            );
+            await loadMessages();
+            await loadNotifications();
+          }
+
+          if (latestMessage?.id) lastSeenMessageId = latestMessage.id;
+        } catch (error) {
+          console.warn('Polling notificări eșuat:', error);
+        }
+      }, 30000);
+    }
+
+    document.getElementById('enableBrowserNotificationsBtn')?.addEventListener('click', requestBrowserNotifications);
+
     document.getElementById('reloadNotificationsBtn').addEventListener('click', loadNotifications);
 
     window.openProductEditor = openProductEditor;
@@ -2550,6 +2728,7 @@
     window.setPrimaryBodyColor = setPrimaryBodyColor;
     window.setPrimaryAccessoryColor = setPrimaryAccessoryColor;
     window.updateLayerStyle = updateLayerStyle;
+    window.changeSelectedLayerDepth = changeSelectedLayerDepth;
     window.updateQuestion = updateQuestion;
     window.removeQuestion = removeQuestion;
     window.addQuestionOption = addQuestionOption;
