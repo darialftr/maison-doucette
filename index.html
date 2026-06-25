@@ -269,88 +269,125 @@
       justify-content:flex-end;
     }
 
-
     .hero-shell{
       position:relative;
       overflow:hidden;
-      isolation:isolate;
-      min-height:calc(100vh - 144px);
-      display:flex;
-      align-items:center;
       background:
-        radial-gradient(circle at 50% 20%, rgba(255,252,247,0.96) 0 9%, transparent 27%),
-        radial-gradient(circle at 15% 20%, rgba(255,255,255,0.72), transparent 28%),
-        radial-gradient(circle at 84% 14%, rgba(247,226,197,0.78), transparent 25%),
-        radial-gradient(circle at 22% 82%, rgba(214,184,144,0.30), transparent 26%),
-        linear-gradient(135deg, #fbf5ee 0%, #efe0cf 46%, #d9bc95 100%);
+        radial-gradient(circle at 18% 18%, rgba(255,255,255,0.52), transparent 18%),
+        radial-gradient(circle at 84% 18%, rgba(255,255,255,0.34), transparent 16%),
+        linear-gradient(180deg, #eadccf 0%, #ddc6aa 42%, #d4b48e 100%);
     }
 
     .hero-shell::before{
       content:"";
       position:absolute;
-      inset:-20% -12% auto -12%;
-      height:82%;
-      z-index:0;
+      inset:auto -10% -20px -10%;
+      height:52%;
       background:
-        radial-gradient(circle at 10% 62%, rgba(255,255,255,0.55), transparent 17%),
-        radial-gradient(circle at 28% 32%, rgba(255,250,242,0.58), transparent 18%),
-        radial-gradient(circle at 74% 42%, rgba(255,244,230,0.54), transparent 20%),
-        radial-gradient(circle at 92% 66%, rgba(255,255,255,0.45), transparent 17%);
-      filter:blur(4px);
-      opacity:.95;
-      animation:heroCloudDrift 14s ease-in-out infinite alternate;
+        radial-gradient(ellipse at 6% 46%, rgba(255,248,240,0.98) 0 21%, transparent 22%),
+        radial-gradient(ellipse at 25% 60%, rgba(246,235,223,0.98) 0 20%, transparent 21%),
+        radial-gradient(ellipse at 49% 42%, rgba(255,248,240,0.98) 0 22%, transparent 23%),
+        radial-gradient(ellipse at 72% 58%, rgba(246,235,223,0.98) 0 20%, transparent 21%),
+        radial-gradient(ellipse at 95% 40%, rgba(255,248,240,0.98) 0 21%, transparent 22%);
+      opacity:.96;
       pointer-events:none;
     }
 
-    .hero-shell::after{
-      content:"";
-      position:absolute;
-      inset:auto -12% -2px -12%;
-      height:34%;
-      z-index:1;
-      background:
-        radial-gradient(ellipse at 8% 92%, #fbf6f1 0 20%, transparent 21%),
-        radial-gradient(ellipse at 28% 86%, #fffaf5 0 22%, transparent 23%),
-        radial-gradient(ellipse at 50% 92%, #fbf6f1 0 24%, transparent 25%),
-        radial-gradient(ellipse at 72% 86%, #fffaf5 0 22%, transparent 23%),
-        radial-gradient(ellipse at 94% 92%, #fbf6f1 0 20%, transparent 21%);
-      opacity:.98;
-      pointer-events:none;
+    .hero{
+      position:relative;
+      padding:54px 0 130px;
+      z-index:2;
     }
 
-    .hero-atmosphere{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
-    .hero-glow{position:absolute;width:540px;height:540px;left:50%;top:48%;transform:translate(-50%, -50%);border-radius:50%;background:radial-gradient(circle, rgba(255,246,229,0.80) 0%, rgba(220,180,117,0.18) 42%, transparent 72%);filter:blur(2px);opacity:.92;animation:heroGlowPulse 5.8s ease-in-out infinite;}
-    .hero-watermark{position:absolute;left:50%;top:50%;transform:translate(-50%, -50%);font-family:'Cormorant Garamond', serif;font-size:clamp(13rem, 28vw, 25rem);font-weight:700;letter-spacing:-.08em;color:rgba(101,79,67,0.045);line-height:.8;white-space:nowrap;user-select:none;}
-    .hero-thread{position:absolute;width:360px;height:120px;border:1px solid rgba(174,127,67,0.18);border-color:rgba(174,127,67,0.18) transparent transparent transparent;border-radius:50%;filter:blur(.1px);opacity:.68;animation:threadFloat 8s ease-in-out infinite;}
-    .hero-thread.one{left:5%; top:28%; transform:rotate(-18deg)}
-    .hero-thread.two{right:3%; top:34%; width:430px; animation-delay:-2.8s; transform:rotate(18deg)}
-    .hero-thread.three{left:30%; bottom:16%; width:470px; opacity:.42; animation-delay:-4.2s; transform:rotate(4deg)}
-    .hero-orb{position:absolute;border-radius:999px;background:rgba(255,250,245,0.48);border:1px solid rgba(255,255,255,0.50);box-shadow:inset 0 0 24px rgba(255,255,255,0.46), 0 18px 38px rgba(101,79,67,0.06);backdrop-filter:blur(4px);animation:orbFloat 7s ease-in-out infinite;}
-    .orb-1{width:116px;height:116px;left:8%;top:20%}
-    .orb-2{width:74px;height:74px;right:11%;top:22%;animation-delay:-1.8s}
-    .orb-3{width:96px;height:96px;right:18%;bottom:22%;animation-delay:-3.4s}
-    .hero-sparkle{position:absolute;width:7px;height:7px;border-radius:50%;background:rgba(210,173,115,0.88);box-shadow:0 0 18px rgba(210,173,115,0.42);animation:twinkle 3.4s ease-in-out infinite;}
-    .sparkle-1{left:20%;top:28%}
-    .sparkle-2{left:77%;top:30%;animation-delay:-1.1s}
-    .sparkle-3{left:31%;bottom:30%;animation-delay:-2s}
-    .sparkle-4{right:28%;bottom:27%;animation-delay:-2.8s}
-    .sparkle-5{left:50%;top:18%;animation-delay:-.5s}
+    .hero-inner{
+      max-width:980px;
+      margin:0 auto;
+      text-align:center;
+      animation:heroFadeUp 1s var(--ease) both;
+      will-change:transform;
+    }
 
-    .hero{position:relative;padding:72px 0 154px;z-index:3;}
-    .hero-inner{max-width:990px;margin:0 auto;text-align:center;animation:heroFadeUp 1s var(--ease) both;will-change:transform;}
-    .hero-tag{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:10px 16px;border-radius:999px;background:rgba(255,250,245,.56);border:1px solid rgba(101,79,67,0.10);box-shadow:0 16px 38px rgba(101,79,67,0.06);backdrop-filter:blur(12px);text-transform:uppercase;letter-spacing:.18em;font-size:.74rem;color:var(--brown-soft);margin-bottom:22px;animation:heroFadeUp 1s var(--ease) .08s both;}
-    .hero-tag::before,.hero-tag::after{content:"✦";color:var(--gold-deep);font-size:.72rem;opacity:.72;}
-    .hero h1{margin:0;font-size:clamp(4.2rem, 12vw, 8.7rem);line-height:.78;font-weight:700;color:var(--brown);text-shadow:0 16px 40px rgba(101,79,67,0.10);animation:heroFadeUp 1s var(--ease) .16s both;}
-    .hero-sub{margin:24px auto 0;max-width:790px;font-size:clamp(1.5rem, 4.3vw, 2.55rem);line-height:1.02;color:var(--brown);animation:heroFadeUp 1s var(--ease) .28s both;}
-    .hero-copy{margin:20px auto 0;max-width:720px;font-size:1rem;line-height:1.9;color:var(--brown-soft);animation:heroFadeUp 1s var(--ease) .40s both;}
-    .hero-actions{margin-top:30px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;animation:heroFadeUp 1s var(--ease) .54s both;}
-    .hero-btn,.hero-btn-secondary{display:inline-flex;align-items:center;justify-content:center;min-width:170px;padding:16px 30px;border-radius:999px;transition:transform .24s ease, box-shadow .24s ease, background .24s ease;}
-    .hero-btn{background:linear-gradient(135deg, var(--gold-deep), var(--gold));color:#fff;box-shadow:0 18px 38px rgba(174,127,67,0.28);}
-    .hero-btn-secondary{background:rgba(255,255,255,.66);border:1px solid rgba(101,79,67,0.12);color:var(--brown);backdrop-filter:blur(10px);box-shadow:0 14px 30px rgba(101,79,67,0.07);}
-    .hero-btn:hover,.hero-btn-secondary:hover{transform:translateY(-2px);}
-    .hero-trust{margin:24px auto 0;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;animation:heroFadeUp 1s var(--ease) .68s both;}
-    .hero-trust span{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:999px;background:rgba(255,250,245,.48);border:1px solid rgba(101,79,67,0.09);color:var(--brown-soft);font-size:.82rem;backdrop-filter:blur(8px);}
-    .hero-trust span::before{content:"✓";color:var(--gold-deep);font-weight:700;}
+    .hero-tag{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:9px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.40);
+      border:1px solid rgba(101,79,67,0.10);
+      backdrop-filter:blur(8px);
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      font-size:.74rem;
+      color:var(--brown-soft);
+      margin-bottom:24px;
+      animation:heroFadeUp 1s var(--ease) .08s both;
+    }
+
+    .hero h1{
+      margin:0;
+      font-size:clamp(3.8rem, 11vw, 7rem);
+      line-height:.84;
+      font-weight:700;
+      color:var(--brown);
+      animation:heroFadeUp 1s var(--ease) .16s both;
+    }
+
+    .hero-sub{
+      margin:24px auto 0;
+      max-width:760px;
+      font-size:clamp(1.42rem, 4vw, 2.2rem);
+      line-height:1.02;
+      color:var(--brown);
+      animation:heroFadeUp 1s var(--ease) .28s both;
+    }
+
+    .hero-copy{
+      margin:22px auto 0;
+      max-width:760px;
+      font-size:1rem;
+      line-height:1.9;
+      color:var(--brown-soft);
+      animation:heroFadeUp 1s var(--ease) .40s both;
+    }
+
+    .hero-actions{
+      margin-top:30px;
+      display:flex;
+      justify-content:center;
+      gap:12px;
+      flex-wrap:wrap;
+      animation:heroFadeUp 1s var(--ease) .54s both;
+    }
+
+    .hero-btn,
+    .hero-btn-secondary{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:16px 28px;
+      border-radius:999px;
+      transition:transform .24s ease, box-shadow .24s ease, background .24s ease;
+    }
+
+    .hero-btn{
+      background:linear-gradient(135deg, var(--gold-deep), var(--gold));
+      color:#fff;
+      box-shadow:0 16px 34px rgba(174,127,67,0.24);
+    }
+
+    .hero-btn-secondary{
+      background:rgba(255,255,255,.62);
+      border:1px solid rgba(101,79,67,0.10);
+      color:var(--brown);
+      backdrop-filter:blur(8px);
+    }
+
+    .hero-btn:hover,
+    .hero-btn-secondary:hover{
+      transform:translateY(-2px);
+    }
 
     section{
       padding:78px 0;
@@ -1419,14 +1456,6 @@
       }
     }
 
-
-
-    @keyframes heroCloudDrift{from{transform:translate3d(-18px, -6px, 0) scale(1)}to{transform:translate3d(18px, 10px, 0) scale(1.03)}}
-    @keyframes heroGlowPulse{0%,100%{opacity:.72; transform:translate(-50%, -50%) scale(.98)}50%{opacity:1; transform:translate(-50%, -50%) scale(1.04)}}
-    @keyframes threadFloat{0%,100%{translate:0 0; opacity:.46}50%{translate:0 -14px; opacity:.82}}
-    @keyframes orbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
-    @keyframes twinkle{0%,100%{opacity:.28; transform:scale(.72)}50%{opacity:1; transform:scale(1.2)}}
-
     @media (max-width: 1080px){
       .split-grid,
       .mystery-grid,
@@ -1727,18 +1756,6 @@
         font-size:.86rem;
         line-height:1.65;
       }
-
-      .hero-shell{min-height:auto;}
-      .hero{padding:48px 0 118px;}
-      .hero-watermark{font-size:9rem;top:45%;}
-      .hero-glow{width:360px;height:360px;top:44%;}
-      .hero-thread.two,.hero-thread.three,.orb-2,.orb-3,.sparkle-4{display:none;}
-      .hero-thread.one{width:260px;left:-18%;top:25%;}
-      .orb-1{width:74px;height:74px;left:-20px;top:18%;}
-      .hero h1{font-size:clamp(3.25rem, 15vw, 5rem);}
-      .hero-trust{gap:8px;}
-      .hero-trust span{font-size:.76rem;padding:8px 11px;}
-
     }
   </style>
 </head>
@@ -1814,22 +1831,6 @@
 
   <main id="home">
     <section class="hero-shell">
-      <div class="hero-atmosphere" aria-hidden="true">
-        <div class="hero-glow"></div>
-        <div class="hero-watermark">MD</div>
-        <div class="hero-thread one"></div>
-        <div class="hero-thread two"></div>
-        <div class="hero-thread three"></div>
-        <div class="hero-orb orb-1"></div>
-        <div class="hero-orb orb-2"></div>
-        <div class="hero-orb orb-3"></div>
-        <div class="hero-sparkle sparkle-1"></div>
-        <div class="hero-sparkle sparkle-2"></div>
-        <div class="hero-sparkle sparkle-3"></div>
-        <div class="hero-sparkle sparkle-4"></div>
-        <div class="hero-sparkle sparkle-5"></div>
-      </div>
-
       <div class="container hero">
         <div class="hero-inner">
           <div class="hero-tag">un univers cu adevărat memorabil</div>
@@ -1837,22 +1838,16 @@
           <h1 class="display">Maison Doucette</h1>
 
           <div class="hero-sub">
-            Handmade stories, created just for you.
+            Alege cum dorești să intri în universul nostru.
           </div>
 
           <div class="hero-copy">
-            Fiecare creație începe cu o poveste. Uneori o scrii tu prin culori și detalii, alteori o descoperi printr-o experiență mystery creată cu grijă pentru tine.
+            Îți poți personaliza plușul exact așa cum ți-l imaginezi sau ne poți lăsa să îți creăm propriul univers de poveste, croit cu grijă pentru tine.
           </div>
 
           <div class="hero-actions">
             <a href="#worlds" class="hero-btn">Cumpără acum</a>
             <a href="#contact" class="hero-btn-secondary">Scrie-ne</a>
-          </div>
-
-          <div class="hero-trust">
-            <span>Handmade în România</span>
-            <span>Personalizare completă</span>
-            <span>Creat special pentru tine</span>
           </div>
         </div>
       </div>
@@ -2575,7 +2570,6 @@
     loadProductsFromSupabase();
 
 
-    */
   </script>
 </body>
 </html>
